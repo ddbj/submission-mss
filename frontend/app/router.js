@@ -1,5 +1,5 @@
 import EmberRouter from '@ember/routing/router';
-import config from 'mss-form-web/config/environment';
+import config from 'mssform-web/config/environment';
 
 export default class Router extends EmberRouter {
   location = config.locationType;

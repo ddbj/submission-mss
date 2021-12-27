@@ -2,7 +2,7 @@
 
 module.exports = function (environment) {
   let ENV = {
-    modulePrefix: 'mss-form-web',
+    modulePrefix: 'mssform-web',
     environment,
     rootURL: '/',
     locationType: 'auto',

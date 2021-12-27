@@ -23,15 +23,15 @@ services:
     build: .
 
     environment:
-      - DATABASE_URL=postgresql://postgres@postgres/mss_form
-      - MINIO_ACCESS_KEY_ID=mss_form
+      - DATABASE_URL=postgresql://postgres@postgres/mssform
+      - MINIO_ACCESS_KEY_ID=mssform
       - MINIO_BUCKET=uploads
-      - MINIO_ENDPOINT=http://mss-form.localhost:3000
+      - MINIO_ENDPOINT=http://mssform.localhost:3000
       - MINIO_SECRET_ACCESS_KEY=changeme
       - REDIS_URL=redis://redis
 
     extra_hosts:
-      - mss-form.localhost:host-gateway
+      - mssform.localhost:host-gateway
 
     depends_on:
       - postgres
@@ -42,7 +42,7 @@ services:
     image: postgres:14
 
     environment:
-      - POSTGRES_DB=mss_form
+      - POSTGRES_DB=mssform
       - POSTGRES_HOST_AUTH_METHOD=trust
 
     volumes:

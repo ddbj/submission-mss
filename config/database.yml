@@ -5,8 +5,8 @@ default: &default
 
 development:
   <<: *default
-  database: mss_form_development
+  database: mssform_development
 
 test:
   <<: *default
-  database: mss_form_test
+  database: mssform_test
