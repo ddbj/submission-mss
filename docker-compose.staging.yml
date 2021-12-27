@@ -1,0 +1,17 @@
+services:
+  varnish:
+    ports:
+      - 3000:80
+
+  rails:
+    environment:
+      - MINIO_ENDPOINT=https://mss-staging.ddbj.nig.ac.jp
+      - MINIO_SECRET_ACCESS_KEY=changeme
+
+    extra_hosts:
+      - mss-staging.ddbj.nig.ac.jp:host-gateway
+
+  minio:
+    environment:
+      - MINIO_ROOT_USER=
+      - MINIO_ROOT_PASSWORD=
