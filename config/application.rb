@@ -17,5 +17,7 @@ module MssForm
 
     config.api_only  = true
     config.time_zone = ENV.fetch('TZ')
+
+    config.active_storage.draw_routes = false
   end
 end

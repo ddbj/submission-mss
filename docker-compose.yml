@@ -1,0 +1,63 @@
+version: '3.8'
+
+volumes:
+  postgres:
+  redis:
+  minio:
+
+services:
+  varnish:
+    build: docker/varnish
+
+    tmpfs:
+      - /var/lib/varnish:exec
+
+    ports:
+      - 3000:80
+
+    depends_on:
+      - rails
+      - minio
+
+  rails:
+    build: .
+
+    environment:
+      - DATABASE_URL=postgresql://postgres@postgres/mss_form
+      - MINIO_ACCESS_KEY_ID=mss_form
+      - MINIO_BUCKET=uploads
+      - MINIO_ENDPOINT=http://mss-form.localhost:3000
+      - MINIO_SECRET_ACCESS_KEY=changeme
+      - REDIS_URL=redis://redis
+
+    extra_hosts:
+      - mss-form.localhost:host-gateway
+
+    depends_on:
+      - postgres
+      - redis
+      - minio
+
+  postgres:
+    image: postgres:14
+
+    environment:
+      - POSTGRES_DB=mss_form
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6
+    command: ["--appendonly", "yes"]
+
+    volumes:
+      - redis:/data
+
+  minio:
+    image: minio/minio
+    command: ["server", "/data", "--console-address", ":9001"]
+
+    volumes:
+      - minio:/data

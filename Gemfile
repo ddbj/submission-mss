@@ -4,6 +4,7 @@ ruby '3.0.3'
 
 gem 'rails', '~> 7.0.0'
 
+gem 'aws-sdk-s3'
 gem 'pg'
 gem 'puma'
 

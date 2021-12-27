@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  scope ActiveStorage.routes_prefix do
+    post :direct_uploads, to: 'active_storage/direct_uploads#create', as: :rails_direct_uploads
+  end
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  get '*paths', to: 'frontends#show', constraints: -> (req) {
+    !req.xhr? && req.format.html?
+  }
 end

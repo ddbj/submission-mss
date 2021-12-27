@@ -1,0 +1,9 @@
+<DirectUpload @didUpload={{this.didUpload}} as |upload|>
+  <input {{on 'change' (pick 'target.files' (perform upload.uploadFiles))}} type="file">
+
+  <div>State: {{upload.uploadFiles.state}}</div>
+
+  {{#if upload.uploadFiles.isRunning}}
+    {{upload.progress}} %
+  {{/if}}
+</DirectUpload>
