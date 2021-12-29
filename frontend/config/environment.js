@@ -35,6 +35,7 @@ module.exports = function (environment) {
 
     appauth: {
       clientId: process.env.OPENID_CLIENT_ID,
+      redirectPath: '/auth/callback',
 
       authorizationServiceConfiguration: {
         authorization_endpoint,

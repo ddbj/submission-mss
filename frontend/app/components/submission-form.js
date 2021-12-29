@@ -33,18 +33,13 @@ export default class SubmissionFormComponent extends Component {
       })
     );
 
-    const tokenRes = await this.appauth.makeTokenRequestFromRefreshToken({
-      redirectUrl: new URL('/auth/callback', location),
-      refreshToken: this.session.data.authenticated.refreshToken
-    });
-
-    console.log(tokenRes);
+    await this.session.authenticate('authenticator:appauth');
 
     const res = await fetch('/api/submissions', {
       method: 'POST',
 
       headers: {
-        Authorization: `Bearer ${tokenRes.idToken}`,
+        Authorization: `Bearer ${this.session.data.authenticated.id_token}`,
         'Content-Type': 'application/json',
       },
 

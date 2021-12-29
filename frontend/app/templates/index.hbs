@@ -1,10 +1,10 @@
 {{#if this.session.isAuthenticated}}
   <div>
-    Login as {{this.session.data.authenticated.userinfo.email}}
+    Login as {{this.idToken.preferred_username}}
     <a {{on 'click' this.invalidateSession}} href>Logout</a>
   </div>
 
   <LinkTo @route="submissions.new">New Submission</LinkTo>
 {{else}}
-  <LinkTo @route="auth">Sign in with DDBJ Account</LinkTo>
+  <a {{on 'click' this.authenticate}} href>Sign in with DDBJ Account</a>
 {{/if}}

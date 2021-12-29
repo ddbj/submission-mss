@@ -20,6 +20,8 @@ class ApplicationController < ActionController::API
       error: 'missing token'
     }, status: :unauthorized
   rescue JWT::DecodeError => e
+    Rails.logger.error e
+
     render json: {
       error: e.message
     }, status: :unauthorized
@@ -46,5 +48,3 @@ class ApplicationController < ActionController::API
     )
   end
 end
-
-$stdout.sync = true

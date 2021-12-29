@@ -6,10 +6,7 @@ export default class AuthCallbackRoute extends Route {
   @service session;
 
   async beforeModel() {
-    await this.session.authenticate('authenticator:appauth', {
-      complete:    true,
-      redirectUri: new URL('/auth/callback', location)
-    });
+    await this.session.authenticate('authenticator:appauth');
 
     this.router.transitionTo('index');
   }

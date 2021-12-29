@@ -2,32 +2,30 @@ import { inject as service } from '@ember/service';
 
 import BaseAuthenticator from 'ember-simple-auth/authenticators/base';
 
-const redirectUri = new URL('/auth/callback', location);
-
 export default class AppAuthAuthenticator extends BaseAuthenticator {
   @service appauth;
+  @service session;
 
   async restore(data) {
-    return data;
-  }
-
-  async authenticate({redirectUri, complete}) {
-    if (complete) {
-      const {request, response, error} = await this.appauth.completeAuthorizationRequest();
-
-      if (error) { throw error; }
-
-      return this.appauth.makeTokenRequestFromAuthorizationCode({
-        redirectUri:  new URL('/auth/callback', location),
-        code:         response.code,
-        codeVerifier: request.internal.code_verifier,
-      });
+    if (data.id_token && data.refresh_token) {
+      return data;
     } else {
-      this.appauth.makeAuthorizationRequest({redirectUri});
+      throw new Error('id_token and refresh_token are not stored');
     }
   }
 
-  async invalidate(data) {
-    // TODO revoke token
+  async authenticate() {
+    const {isAuthenticated, data} = this.session;
+
+    const res = isAuthenticated ? await this.appauth.makeTokenRequestFromRefreshToken(data.authenticated.refresh_token)
+                                : await this.appauth.makeTokenRequestFromAuthorizationRequest();
+
+    return res.toJson();
+  }
+
+  async invalidate({refresh_token}) {
+    // Chrome raises a "Failed to fetch" error if the response body is empty, but it actually succeeds.
+    // https://stackoverflow.com/questions/57477805/why-do-i-get-fetch-failed-loading-when-it-actually-worked
+    await this.appauth.makeRevokeTokenRequest(refresh_token, 'refresh_token').catch(err => console.error(err));
   }
 }

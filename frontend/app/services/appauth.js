@@ -10,6 +10,7 @@ import {
   GRANT_TYPE_AUTHORIZATION_CODE,
   GRANT_TYPE_REFRESH_TOKEN,
   RedirectRequestHandler,
+  RevokeTokenRequest,
   TokenRequest,
 } from '@openid/appauth';
 
@@ -24,56 +25,76 @@ export default class AppAuthService extends Service {
     return new AuthorizationServiceConfiguration(this.config.authorizationServiceConfiguration);
   }
 
-  makeAuthorizationRequest({ redirectUri }) {
+  get redirectUri() {
+    return new URL(this.config.redirectPath, location);
+  }
+
+  makeAuthorizationRequest() {
     const handler = new RedirectRequestHandler();
 
     const req = new AuthorizationRequest({
       client_id: this.config.clientId,
-      redirect_uri: redirectUri,
-      scope: 'openid',
+      redirect_uri: this.redirectUri,
+      scope: 'openid offline_access',
       response_type: AuthorizationRequest.RESPONSE_TYPE_CODE,
 
       extras: {
         response_mode: 'fragment',
+        prompt:        'login'
       },
     });
 
     handler.performAuthorizationRequest(this.authorizationServiceConfiguration, req);
   }
 
-  completeAuthorizationRequest() {
+  async makeTokenRequestFromAuthorizationRequest() {
     const handler = new RedirectRequestHandler();
+    const {request, response, error} = await handler.completeAuthorizationRequest();
 
-    return handler.completeAuthorizationRequest();
+    if (error) { throw error; }
+
+    return await this.makeTokenRequestFromAuthorizationCode(response.code, request.internal.code_verifier);
   }
 
-  makeTokenRequestFromAuthorizationCode({ redirectUri, code, codeVerifier }) {
+  async makeTokenRequestFromAuthorizationCode(code, verifier) {
     const handler = new BaseTokenRequestHandler(new FetchRequestor());
 
     const req = new TokenRequest({
       client_id: this.config.clientId,
-      redirect_uri: redirectUri,
+      redirect_uri: this.redirectUri,
       grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
       code,
 
       extras: {
-        code_verifier: codeVerifier,
+        code_verifier: verifier,
       },
     });
 
-    return handler.performTokenRequest(this.authorizationServiceConfiguration, req);
+    return await handler.performTokenRequest(this.authorizationServiceConfiguration, req);
   }
 
-  makeTokenRequestFromRefreshToken({ redirectUri, refreshToken }) {
+  async makeTokenRequestFromRefreshToken(refreshToken) {
     const handler = new BaseTokenRequestHandler(new FetchRequestor());
 
     const req = new TokenRequest({
       client_id: this.config.clientId,
-      redirect_uri: redirectUri,
+      redirect_uri: this.redirectUri,
       grant_type: GRANT_TYPE_REFRESH_TOKEN,
       refresh_token: refreshToken,
     });
 
-    return handler.performTokenRequest(this.authorizationServiceConfiguration, req);
+    return await handler.performTokenRequest(this.authorizationServiceConfiguration, req);
+  }
+
+  async makeRevokeTokenRequest(token, tokenTypeHint) {
+    const handler = new BaseTokenRequestHandler(new FetchRequestor());
+
+    const req = new RevokeTokenRequest({
+      client_id: this.config.clientId,
+      token,
+      token_type_hint: tokenTypeHint
+    });
+
+    return await handler.performRevokeTokenRequest(this.authorizationServiceConfiguration, req);
   }
 }
