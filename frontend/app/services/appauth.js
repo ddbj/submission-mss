@@ -1,6 +1,6 @@
 import Service from '@ember/service';
 import { getOwner } from '@ember/application';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 import {
   AuthorizationRequest,
