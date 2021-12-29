@@ -1,17 +1,40 @@
 services:
   varnish:
+    restart: unless-stopped
+
     ports:
       - 3000:80
 
-  rails:
+  rails: &rails-staging
+    restart: unless-stopped
+
+    build
+      args:
+        - OPENID_CLIENT_ID=mssform
+        - OPENID_CONFIGURATION_ENDPOINT=https://accounts-staging.ddbj.nig.ac.jp/auth/realms/master/.well-known/openid-configuration
+
     environment:
       - MINIO_ENDPOINT=https://mss-staging.ddbj.nig.ac.jp
-      - MINIO_SECRET_ACCESS_KEY=changeme
+      - MINIO_SECRET_ACCESS_KEY=
 
-    extra_hosts:
-      - mss-staging.ddbj.nig.ac.jp:host-gateway
+    volumes:
+      - /home/w3const/submissions:/app/submissions
+
+  sidekiq:
+    <<: *rails-staging
+
+  postgres:
+    restart: unless-stopped
+
+  redis:
+    restart: unless-stopped
+
+  memcached:
+    restart: unless-stopped
 
   minio:
+    restart: unless-stopped
+
     environment:
       - MINIO_ROOT_USER=
       - MINIO_ROOT_PASSWORD=

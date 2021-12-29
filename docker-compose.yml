@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 volumes:
   postgres:
@@ -17,7 +17,12 @@ services:
       - minio
 
   rails: &rails
-    build: .
+    build:
+      context: .
+
+      args:
+        - OPENID_CLIENT_ID=
+        - OPENID_CONFIGURATION_ENDPOINT=
 
     environment:
       - DATABASE_URL=postgresql://postgres@postgres/mssform

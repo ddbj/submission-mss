@@ -27,5 +27,3 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
-
-/config/openid-configuration.json

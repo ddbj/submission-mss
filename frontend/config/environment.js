@@ -11,7 +11,7 @@ module.exports = function (environment) {
     userinfo_endpoint,
     end_session_endpoint,
   } = JSON.parse(
-    fs.readFileSync(path.join(__dirname, '../../config/openid-configuration.json'))
+    fs.readFileSync(process.env.OPENID_CONFIGURATION_PATH)
   );
 
   let ENV = {
@@ -34,7 +34,7 @@ module.exports = function (environment) {
     },
 
     appauth: {
-      clientId: process.env.OIDC_CLIENT_ID,
+      clientId: process.env.OPENID_CLIENT_ID,
 
       authorizationServiceConfiguration: {
         authorization_endpoint,

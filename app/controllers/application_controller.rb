@@ -31,13 +31,13 @@ class ApplicationController < ActionController::API
         return nil unless header = request.headers['Authorization']
         return nil unless token  = /\ABearer (?<token>\S+)\z/.match(header)&.named_captures.fetch('token')
 
-        payload, _header = JWT.decode(token, nil, true, algorithm: ENV.fetch('OIDC_SIG_ALGORITHM'), jwks: ->(opts) {
-          Rails.cache.fetch(:openid_jwks, force: opts[:invalidate]) {
-            Rails.root.join('config/openid-configuration.json').open {|f|
-              json = JSON.load(f)
+        algorithms, jwks_uri = File.open(ENV.fetch('OPENID_CONFIGURATION_PATH')) {|f|
+          JSON.load(f)
+        }.fetch_values('id_token_signing_alg_values_supported', 'jwks_uri')
 
-              HTTP.get(json.fetch('jwks_uri')).parse
-            }
+        payload, _header = JWT.decode(token, nil, true, algorithms: algorithms, jwks: ->(opts) {
+          Rails.cache.fetch(:openid_jwks, force: opts[:invalidate]) {
+            HTTP.get(jwks_uri).parse
           }
         })
 

@@ -1,15 +1,33 @@
+volumes:
+  submissions:
+
 services:
   varnish:
     ports:
       - 3000:80
 
-  rails:
+  rails: &rails-local
+    build:
+      args:
+        - OPENID_CLIENT_ID=mssform
+        - OPENID_CONFIGURATION_ENDPOINT=http://keycloak.localhost:8080/auth/realms/master/.well-known/openid-configuration
+
+      extra_hosts:
+        - keycloak.localhost:172.17.0.1
+
     environment:
       - MINIO_ENDPOINT=http://mssform.localhost:3000
       - MINIO_SECRET_ACCESS_KEY=changeme
 
     extra_hosts:
+      - keycloak.localhost:host-gateway
       - mssform.localhost:host-gateway
+
+    volumes:
+      - submissions:/app/submissions
+
+  sidekiq:
+    <<: *rails-local
 
   minio:
     environment:
