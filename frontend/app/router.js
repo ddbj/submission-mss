@@ -7,6 +7,10 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
+  this.route('auth', function () {
+    this.route('callback');
+  });
+
   this.route('submissions', function () {
     this.route('new');
   });

@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  scope :api do
+    resources :submissions, only: %i(create)
+  end
+
   scope ActiveStorage.routes_prefix do
     post :direct_uploads, to: 'active_storage/direct_uploads#create', as: :rails_direct_uploads
   end

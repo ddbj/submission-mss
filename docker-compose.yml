@@ -16,11 +16,12 @@ services:
       - rails
       - minio
 
-  rails:
+  rails: &rails
     build: .
 
     environment:
       - DATABASE_URL=postgresql://postgres@postgres/mssform
+      - MEMCACHE_SERVERS=memcached
       - MINIO_ACCESS_KEY_ID=mssform
       - MINIO_BUCKET=uploads
       - MINIO_ENDPOINT=
@@ -30,7 +31,12 @@ services:
     depends_on:
       - postgres
       - redis
+      - memcached
       - minio
+
+  sidekiq:
+    <<: *rails
+    command: ["bundle", "exec", "sidekiq"]
 
   postgres:
     image: postgres:14
@@ -49,8 +55,11 @@ services:
     volumes:
       - redis:/data
 
+  memcached:
+    image: memcached:latest
+
   minio:
-    image: minio/minio
+    image: minio/minio:latest
     command: ["server", "/data", "--console-address", ":9001"]
 
     environment:

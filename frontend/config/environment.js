@@ -1,6 +1,19 @@
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
+
 module.exports = function (environment) {
+  const {
+    authorization_endpoint,
+    token_endpoint,
+    revocation_endpoint,
+    userinfo_endpoint,
+    end_session_endpoint,
+  } = JSON.parse(
+    fs.readFileSync(path.join(__dirname, '../../config/openid-configuration.json'))
+  );
+
   let ENV = {
     modulePrefix: 'mssform-web',
     environment,
@@ -18,9 +31,19 @@ module.exports = function (environment) {
     },
 
     APP: {
-      // Here you can pass flags/options to your application instance
-      // when it is created
     },
+
+    appauth: {
+      clientId: process.env.OIDC_CLIENT_ID,
+
+      authorizationServiceConfiguration: {
+        authorization_endpoint,
+        token_endpoint,
+        revocation_endpoint,
+        userinfo_endpoint,
+        end_session_endpoint,
+      },
+    }
   };
 
   if (environment === 'development') {
