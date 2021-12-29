@@ -33,7 +33,11 @@ class ApplicationController < ActionController::API
 
         payload, _header = JWT.decode(token, nil, true, algorithm: ENV.fetch('OIDC_SIG_ALGORITHM'), jwks: ->(opts) {
           Rails.cache.fetch(:openid_jwks, force: opts[:invalidate]) {
-            HTTP.get("#{ENV.fetch('OIDC_HOST')}#{ENV.fetch('OIDC_JWKS_ENDPOINT')}").parse
+            Rails.root.join('config/openid-configuration.json').open {|f|
+              json = JSON.load(f)
+
+              HTTP.get(json.fetch('jwks_uri')).parse
+            }
           }
         })
 
