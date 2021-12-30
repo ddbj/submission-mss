@@ -6,7 +6,7 @@ module ActiveStorageDirectUploadsControllerMonkey
   end
 end
 
-Rails.application.config.after_initialize do
+Rails.application.config.to_prepare do
   ActiveStorage::DirectUploadsController.skip_forgery_protection only: %i(create)
 
   ActiveStorage::DirectUploadsController.prepend ActiveStorageDirectUploadsControllerMonkey
