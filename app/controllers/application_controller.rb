@@ -33,13 +33,16 @@ class ApplicationController < ActionController::API
         return nil unless header = request.headers['Authorization']
         return nil unless token  = /\ABearer (?<token>\S+)\z/.match(header)&.named_captures.fetch('token')
 
-        algorithms, jwks_uri = File.open(ENV.fetch('OPENID_CONFIGURATION_PATH')) {|f|
-          JSON.load(f)
-        }.fetch_values('id_token_signing_alg_values_supported', 'jwks_uri')
+        config               = File.open(ENV.fetch('OPENID_CONFIGURATION_PATH'), &JSON.method(:load))
+        algorithms, jwks_uri = config.fetch_values('id_token_signing_alg_values_supported', 'jwks_uri')
 
         payload, _header = JWT.decode(token, nil, true, algorithms: algorithms, jwks: ->(opts) {
           Rails.cache.fetch(:openid_jwks, force: opts[:invalidate]) {
-            HTTP.get(jwks_uri).parse
+            HTTP.get(jwks_uri).then {|res|
+              raise res.status unless res.status.success?
+
+              res.parse
+            }
           }
         })
 
