@@ -35,7 +35,7 @@ RUN gem install bundler:2.3.3
 
 WORKDIR /app
 
-COPY ./ ./
+COPY ./backend ./
 RUN --mount=type=cache,target=/tmp/bundle BUNDLE_PATH=/tmp/bundle bundle install && cp --recursive --no-target-directory /tmp/bundle ./vendor/bundle
 COPY --from=frontend /frontend/openid-configuration.json ./
 COPY --from=frontend /frontend/dist/ ./public/
