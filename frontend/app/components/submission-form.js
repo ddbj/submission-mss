@@ -27,11 +27,13 @@ export default class SubmissionFormComponent extends Component {
   @action async submit(e) {
     e.preventDefault();
 
-    const blobs = await Promise.all(
-      this.files.map((file) => {
-        return uploadFile(file, (progress) => console.log(file, progress));
-      })
-    );
+    const signedIds = [];
+
+    for (const file of this.files.toArray()) {
+      const {signed_id} = await uploadFile(file, (progress) => console.log(file, progress));
+
+      signedIds.push(signed_id);
+    }
 
     await this.session.authenticate('authenticator:appauth');
 
@@ -45,7 +47,7 @@ export default class SubmissionFormComponent extends Component {
 
       body: JSON.stringify({
         submission: {
-          files: blobs.map(({ signed_id }) => signed_id),
+          files: signedIds
         },
       }),
     });
