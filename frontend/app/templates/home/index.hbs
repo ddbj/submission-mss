@@ -1,0 +1,10 @@
+{{page-title 'ホーム'}}
+
+<h1 class="display-6 my-4">ホーム</h1>
+
+<p>
+  <strong>{{this.session.idToken.preferred_username}}</strong> としてログインしています
+  <small>(<a {{on 'click' (prevent-default this.logout)}} href>ログアウト</a>)</small>
+</p>
+
+<LinkTo @route="submissions.new" class="btn btn-outline-primary btn-lg">新規登録を開始する</LinkTo>

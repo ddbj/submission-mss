@@ -2,12 +2,11 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 
-export default class IndexController extends Controller {
-  @service appauth;
+export default class HomeIndexController extends Controller {
   @service session;
 
   @action
-  authenticate() {
-    this.appauth.makeAuthorizationRequest();
+  async logout() {
+    await this.session.invalidate();
   }
 }

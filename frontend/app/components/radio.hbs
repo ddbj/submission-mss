@@ -1,0 +1,6 @@
+{{#let (unique-id) as |id|}}
+  {{yield (hash
+    input=(component 'radio/input' name=@name id=id)
+    label=(component 'radio/label' for=id)
+  )}}
+{{/let}}

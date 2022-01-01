@@ -1,0 +1,20 @@
+data_types:
+  wgs: draft genome (WGS)
+  complete_genome: complete or nearly complete genome
+  mag: Metagenome-Assembled Genome (MAG)
+  sag: Single amplified genome (SAG)
+  wgs_version_up: WGS version up
+  tls: TLS
+  htg: HTG
+  tsa: TSA
+  htc: full length cDNA (HTC)
+  est: EST
+  dna: Gene sequences (DNA)
+  rna: Gene sequences (RNA)
+  other: Other
+
+data_types_dfast:
+  wgs: Bacterial draft genome (WGS)
+  complete_genome: Bacterial complete or nearly complete genome
+  mag: Bacterial Metagenome-Assembled Genome (MAG)
+  wgs_version_up: Bacterial WGS version up

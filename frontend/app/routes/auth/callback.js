@@ -8,6 +8,8 @@ export default class AuthCallbackRoute extends Route {
   async beforeModel() {
     await this.session.authenticate('authenticator:appauth');
 
-    this.router.transitionTo('index');
+    this.router.transitionTo(this.session.returnTo || 'index');
+
+    delete this.session.returnTo;
   }
 }

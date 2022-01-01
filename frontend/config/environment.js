@@ -10,9 +10,7 @@ module.exports = function (environment) {
     revocation_endpoint,
     userinfo_endpoint,
     end_session_endpoint,
-  } = JSON.parse(
-    fs.readFileSync(process.env.OPENID_CONFIGURATION_PATH)
-  );
+  } = JSON.parse(fs.readFileSync(process.env.OPENID_CONFIGURATION_PATH));
 
   let ENV = {
     modulePrefix: 'mssform-web',
