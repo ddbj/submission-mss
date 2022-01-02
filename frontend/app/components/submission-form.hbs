@@ -302,18 +302,20 @@
   </div>
 </form>
 
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" {{did-insert (set this 'modalElement')}}>
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Uploading</h5>
-      </div>
-      <div class="modal-body">
-        Running! Please wait.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+{{#let (unique-id) as |id|}}
+  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby={{id}} aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" {{did-insert (set this 'progressModalElement')}}>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id={{id}}>ファイルのアップロード中</h5>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary">キャンセル</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+{{/let}}

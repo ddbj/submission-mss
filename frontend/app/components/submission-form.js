@@ -33,7 +33,7 @@ export default class SubmissionFormComponent extends Component {
   @tracked confirmed            = false;
 
   @tracked dragOver = false;
-  @tracked modalElement = null;
+  @tracked progressModalElement = null;
 
   fileInput = null;
 
@@ -42,8 +42,8 @@ export default class SubmissionFormComponent extends Component {
                       : ['wgs', 'complete_genome', 'mag', 'sag', 'wgs_version_up', 'tls', 'htg', 'tsa', 'htc', 'est', 'dna', 'rna', 'other'];
   }
 
-  get modal() {
-    return Modal.getOrCreateInstance(this.modalElement);
+  get progressModal() {
+    return Modal.getOrCreateInstance(this.progressModalElement);
   }
 
   toJSON() {
@@ -96,7 +96,7 @@ export default class SubmissionFormComponent extends Component {
 
   @action async submit() {
     if (this.fileIsPrepared) {
-      this.modal.show();
+      this.progressModal.show();
     }
 
     const files = await this.uploadFiles();
@@ -125,7 +125,7 @@ export default class SubmissionFormComponent extends Component {
 
     console.log(await res.json());
 
-    this.modal.hide();
+    this.progressModal.hide();
   }
 
   async uploadFiles() {
