@@ -21,7 +21,7 @@
 
 <h1 class="display-6 my-4">新規登録</h1>
 
-<input type="file" multiple accept=".ann, .fasta" class="d-none" {{did-insert (set this 'fileInput')}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInput.value' ''))}}>
+<input type="file" multiple accept=".ann, .fasta" class="d-none" {{did-insert (set this 'fileInputElement')}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInputElement.value' ''))}}>
 
 <form class="vstack gap-3" {{on 'submit' (prevent-default this.submit)}}>
   <div class="card">
@@ -53,7 +53,7 @@
           <RadioGroup as |group|>
             <div class="form-check">
               <group.radio as |radio|>
-                <radio.input checked={{eq this.determinedByOwnStudy true}} class="form-check-input" required {{on 'change' (pipe (set this 'determinedByOwnStudy' true))}} />
+                <radio.input checked={{eq this.determinedByOwnStudy true}} class="form-check-input" required {{on 'change' (fn this.setDeterminedByOwnStudy true)}} />
 
                 <radio.label class="form-check-label">
                   はい、自身の研究で配列決定した塩基配列です
@@ -63,7 +63,7 @@
 
             <div class="form-check">
               <group.radio as |radio|>
-                <radio.input checked={{eq this.determinedByOwnStudy false}} class="form-check-input" required {{on 'change' (pipe (set this 'determinedByOwnStudy' false))}} />
+                <radio.input checked={{eq this.determinedByOwnStudy false}} class="form-check-input" required {{on 'change' (fn this.setDeterminedByOwnStudy false)}} />
 
                 <radio.label class="form-check-label">
                   いいえ、公開されているデータからアセンブルした塩基配列です
@@ -80,7 +80,7 @@
             <RadioGroup as |group|>
               <div class="form-check">
                 <group.radio as |radio|>
-                  <radio.input checked={{eq this.tpa true}} class="form-check-input" required {{on 'change' (set this 'tpa' true)}} />
+                  <radio.input checked={{eq @model.tpa true}} class="form-check-input" required {{on 'change' (set @model 'tpa' true)}} />
 
                   <radio.label class="form-check-label">
                     はい
@@ -90,7 +90,7 @@
 
               <div class="form-check">
                 <group.radio as |radio|>
-                  <radio.input checked={{eq this.tpa false}} class="form-check-input" required {{on 'change' (set this 'tpa' false)}} />
+                  <radio.input checked={{eq @model.tpa false}} class="form-check-input" required {{on 'change' (set @model 'tpa' false)}} />
 
                   <radio.label class="form-check-label">
                     いいえ
@@ -100,7 +100,7 @@
             </RadioGroup>
           </div>
 
-          {{#if (eq this.tpa false)}}
+          {{#if (eq @model.tpa false)}}
             <p>TPAの場合、論文を準備しないのであれば申し込みできません。Formを閉じてください。</p>
           {{/if}}
         {{/if}}
@@ -108,7 +108,7 @@
     </div>
   </div>
 
-  {{#if (or this.determinedByOwnStudy this.tpa)}}
+  {{#if (or this.determinedByOwnStudy @model.tpa)}}
     <div class="card">
       <div class="card-header">
         Sequencer
@@ -120,7 +120,7 @@
         <RadioGroup as |group|>
           <div class="form-check">
             <group.radio as |radio|>
-              <radio.input checked={{eq this.sequencer 'sanger'}} class="form-check-input" required {{on 'change' (set this 'sequencer' 'sanger')}} />
+              <radio.input checked={{eq @model.sequencer 'sanger'}} class="form-check-input" required {{on 'change' (set @model 'sequencer' 'sanger')}} />
 
               <radio.label class="form-check-label">
                 Sanger dideoxy sequencing
@@ -130,7 +130,7 @@
 
           <div class="form-check">
             <group.radio as |radio|>
-              <radio.input checked={{eq this.sequencer 'ngs'}} class="form-check-input" required {{on 'change' (set this 'sequencer' 'ngs')}} />
+              <radio.input checked={{eq @model.sequencer 'ngs'}} class="form-check-input" required {{on 'change' (set @model 'sequencer' 'ngs')}} />
 
               <radio.label class="form-check-label">
                 NGS
@@ -179,7 +179,7 @@
           <RadioGroup as |group|>
             <div class="form-check">
               <group.radio as |radio|>
-                <radio.input checked={{eq this.dfast true}} class="form-check-input" required {{on 'change' (set this 'dfast' true)}} />
+                <radio.input checked={{eq @model.dfast true}} class="form-check-input" required {{on 'change' (fn this.setDfast true)}} />
 
                 <radio.label class="form-check-label">
                   はい
@@ -189,7 +189,7 @@
 
             <div class="form-check">
               <group.radio as |radio|>
-                <radio.input checked={{eq this.dfast false}} class="form-check-input" required {{on 'change' (set this 'dfast' false)}} />
+                <radio.input checked={{eq @model.dfast false}} class="form-check-input" required {{on 'change' (fn this.setDfast false)}} />
 
                 <radio.label class="form-check-label">
                   いいえ
@@ -201,7 +201,7 @@
       </div>
     </div>
 
-    {{#if (not-eq this.dfast null)}}
+    {{#unless (is-none @model.dfast)}}
       <div class="card">
         <div class="card-header">
           Data type
@@ -214,22 +214,22 @@
 
               <div class="row">
                 <div class="col-auto">
-                  <select class="form-select" id={{id}} required {{on 'change' (pick 'target.value' (set this 'dataType'))}}>
-                    <option selected={{eq this.dataType null}}></option>
+                  <select class="form-select" id={{id}} required {{on 'change' (pick 'target.value' this.setDataType)}}>
+                    <option selected={{is-none @model.dataType}}></option>
 
                     {{#each this.dataTypes as |key|}}
-                      <option value={{key}} selected={{eq this.dataType key}}>
-                        {{t (concat (if this.dfast 'data_types_dfast' 'data_types') '.' key)}}
+                      <option value={{key}} selected={{eq @model.dataType key}}>
+                        {{t (concat (if @model.dfast 'data_types_dfast' 'data_types') '.' key)}}
                       </option>
                     {{/each}}
                   </select>
                 </div>
 
-                {{#if (and (not this.dfast) (eq this.dataType 'other'))}}
+                {{#if (eq @model.dataType 'other')}}
                   <div class="col-auto">
                     {{#let (unique-id) as |id|}}
                       <label for={{id}} class="visually-hidden">Data type</label>
-                      <input type="text" value={{this.dataTypeOther}} class="form-control" id={{id}} required {{on 'change' (pick 'target.value' (set this 'dataTypeOther'))}}>
+                      <input type="text" value={{@model.dataTypeOther}} class="form-control" id={{id}} required {{on 'change' (pick 'target.value' (set @model 'dataTypeOtherText'))}}>
                     {{/let}}
                   </div>
                 {{/if}}
@@ -237,17 +237,17 @@
             {{/let}}
           </div>
 
-          {{#if (eq this.dataType 'wgs_version_up')}}
+          {{#if (eq @model.dataType 'wgs_version_up')}}
             <div>
               {{#let (unique-id) as |id|}}
                 <label for={{id}} class="form-label">Accession # to update</label>
-                <input type="text" value={{this.accessionNumber}} class="form-control" id={{id}} required {{on 'change' (pick 'target.value' (set this 'accessionNumber'))}}>
+                <input type="text" value={{@model.accessionNumber}} class="form-control" id={{id}} required {{on 'change' (pick 'target.value' (set @model 'accessionNumber'))}}>
               {{/let}}
             </div>
           {{/if}}
         </div>
       </div>
-    {{/if}}
+    {{/unless}}
 
     {{#if this.fileIsPrepared}}
       <div class="card">
@@ -303,7 +303,7 @@
 </form>
 
 {{#let (unique-id) as |id|}}
-  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby={{id}} aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" {{did-insert (set this 'progressModalElement')}}>
+  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby={{id}} aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" {{did-insert this.setProgressModal}}>
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -322,7 +322,7 @@
           </div>
 
           <div class="progress">
-            <div class="progress-bar" role="progressbar" {{style (hash width=(concat this.uploadPercentage '%'))}} aria-valuenow={{this.uploadPercentage}} aria-valuemin="0" aria-valuemax="100">{{this.uploadPercentage}}%</div>
+            <div class="progress-bar" role="progressbar" {{style (hash width=(concat this.uploadPercentage '%'))}} aria-valuenow={{this.uploadPercentage}} aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </div>
 
