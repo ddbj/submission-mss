@@ -301,3 +301,19 @@
     <input type="submit" value="Apply for MSS" class="btn btn-primary btn-lg">
   </div>
 </form>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" {{did-insert (set this 'modalElement')}}>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Uploading</h5>
+      </div>
+      <div class="modal-body">
+        Running! Please wait.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

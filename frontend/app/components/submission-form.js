@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
+import Modal from 'bootstrap/js/src/modal';
 import { DirectUpload } from '@rails/activestorage';
 
 const url = '/rails/active_storage/direct_uploads';
@@ -32,12 +33,17 @@ export default class SubmissionFormComponent extends Component {
   @tracked confirmed            = false;
 
   @tracked dragOver = false;
+  @tracked modalElement = null;
 
   fileInput = null;
 
   get dataTypes() {
     return this.dfast ? ['wgs', 'complete_genome', 'mag', 'wgs_version_up']
                       : ['wgs', 'complete_genome', 'mag', 'sag', 'wgs_version_up', 'tls', 'htg', 'tsa', 'htc', 'est', 'dna', 'rna', 'other'];
+  }
+
+  get modal() {
+    return Modal.getOrCreateInstance(this.modalElement);
   }
 
   toJSON() {
@@ -89,6 +95,10 @@ export default class SubmissionFormComponent extends Component {
   }
 
   @action async submit() {
+    if (this.fileIsPrepared) {
+      this.modal.show();
+    }
+
     const files = await this.uploadFiles();
 
     await this.session.authenticate('authenticator:appauth');
@@ -114,6 +124,8 @@ export default class SubmissionFormComponent extends Component {
     }
 
     console.log(await res.json());
+
+    this.modal.hide();
   }
 
   async uploadFiles() {
