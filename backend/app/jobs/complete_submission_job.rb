@@ -1,4 +1,4 @@
-class CopySubmissionFilesJob < ApplicationJob
+class CompleteSubmissionJob < ApplicationJob
   queue_as :default
 
   def perform(submission)

@@ -4,7 +4,7 @@ class SubmissionsController < ApplicationController
   def create
     submission = current_user.submissions.create!(submission_params)
 
-    CopySubmissionFilesJob.perform_later submission
+    CompleteSubmissionJob.perform_later submission
 
     render json: {
       submission: {
