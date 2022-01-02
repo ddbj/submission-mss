@@ -5,7 +5,6 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import { DirectUpload } from '@rails/activestorage';
-import { ref } from 'ember-ref-bucket';
 
 const url = '/rails/active_storage/direct_uploads';
 
@@ -34,7 +33,7 @@ export default class SubmissionFormComponent extends Component {
 
   @tracked dragOver = false;
 
-  @ref('fileInput') fileInput;
+  fileInput = null;
 
   get dataTypes() {
     return this.dfast ? ['wgs', 'complete_genome', 'mag', 'wgs_version_up']
@@ -125,9 +124,7 @@ export default class SubmissionFormComponent extends Component {
     const signedIds = [];
 
     for (const file of this.files.toArray()) {
-      const { signed_id } = await uploadFile(file, (progress) =>
-        console.log(file, progress)
-      );
+      const {signed_id} = await uploadFile(file, (progress) => console.log(file, progress));
 
       signedIds.push(signed_id);
     }

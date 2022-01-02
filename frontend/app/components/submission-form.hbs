@@ -21,7 +21,7 @@
 
 <h1 class="display-6 my-4">新規登録</h1>
 
-<input type="file" multiple accept=".ann, .fasta" class="d-none" {{create-ref 'fileInput'}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInput.value' ''))}}>
+<input type="file" multiple accept=".ann, .fasta" class="d-none" {{did-insert (set this 'fileInput')}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInput.value' ''))}}>
 
 <form class="vstack gap-3" {{on 'submit' (prevent-default this.submit)}}>
   <div class="card">
