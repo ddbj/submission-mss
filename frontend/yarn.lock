@@ -5638,6 +5638,14 @@ ember-source@~4.1.0:
     semver "^7.3.4"
     silent-error "^1.1.1"
 
+ember-style-modifier@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/ember-style-modifier/-/ember-style-modifier-0.7.0.tgz#85b3dfd7e4bc2bd546df595f2dab4fb141cf7d87"
+  integrity sha512-iDzffiwJcb9j6gu3g8CxzZOTvRZ0BmLMEFl+uyqjiaj72VVND9+HbLyQRw1/ewPAtinhSktxxTTdwU/JO+stLw==
+  dependencies:
+    ember-cli-babel "^7.26.6"
+    ember-modifier "^3.0.0"
+
 ember-template-lint@^3.15.0:
   version "3.15.0"
   resolved "https://registry.yarnpkg.com/ember-template-lint/-/ember-template-lint-3.15.0.tgz#ba2f9454e8a134d276451dd2c3819130177d69a3"

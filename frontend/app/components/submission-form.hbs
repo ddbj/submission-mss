@@ -309,9 +309,23 @@
         <div class="modal-header">
           <h5 class="modal-title" id={{id}}>ファイルのアップロード中</h5>
         </div>
-        <div class="modal-body">
-          ...
+
+        <div class="modal-body vstack gap-3">
+          <div class="d-flex gap-2 align-items-center">
+            <div>{{this.currentFile.name}}</div>
+
+            {{#if this.isPreparing}}
+              <div class="spinner-border spinner-border-sm text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            {{/if}}
+          </div>
+
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" {{style (hash width=(concat this.uploadPercentage '%'))}} aria-valuenow={{this.uploadPercentage}} aria-valuemin="0" aria-valuemax="100">{{this.uploadPercentage}}%</div>
+          </div>
         </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" {{on 'click' this.cancelSubmit}}>キャンセル</button>
         </div>

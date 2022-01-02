@@ -2,19 +2,20 @@
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
-module.exports = function (defaults) {
+module.exports = function(defaults) {
   let app = new EmberApp(defaults, {
     'ember-simple-auth': {
-      useSessionSetupMethod: true,
+      useSessionSetupMethod: true
     },
   });
 
-  const { Webpack } = require('@embroider/webpack');
+  const {Webpack} = require('@embroider/webpack');
+
   return require('@embroider/compat').compatBuild(app, Webpack, {
     skipBabel: [
       {
-        package: 'qunit',
-      },
+        package: 'qunit'
+      }
     ],
 
     packagerOptions: {
@@ -33,15 +34,15 @@ module.exports = function (defaults) {
 
                   options: {
                     sassOptions: {
-                      includePaths: ['./node_modules'],
-                    },
-                  },
-                },
-              ],
-            },
-          ],
-        },
-      },
-    },
+                      includePaths: ['./node_modules']
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
   });
 };

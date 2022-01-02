@@ -33,8 +33,8 @@ export default class SubmissionFormComponent extends Component {
   @tracked confirmed            = false;
 
   @tracked dragOver = false;
-  @tracked progressModalElement = null;
 
+  progressModalElement = null;
   fileInput = null;
 
   get dataTypes() {
@@ -98,12 +98,46 @@ export default class SubmissionFormComponent extends Component {
     this.progressModal.hide();
   }
 
-  @action async submit() {
-    if (this.fileIsPrepared) {
-      this.progressModal.show();
-    }
+  get totalSize() {
+    return this.files.reduce((acc, {size}) => acc + size, 0);
+  }
 
-    const files = await this.uploadFiles();
+  @tracked currentFile;
+  @tracked isPreparing;
+  @tracked totalUploadedFilesSize;
+  @tracked currentUploadedFileSize;
+
+  get uploadPercentage() {
+    return Math.floor((this.totalUploadedFilesSize + this.currentUploadedFileSize) / this.totalSize * 100);
+  }
+
+  @action async submit() {
+    this.currentFile             = null;
+    this.isPreparing             = false;
+    this.totalUploadedFilesSize  = 0;
+    this.currentUploadedFileSize = 0;
+
+    this.progressModal.show();
+
+    const files = await uploadFiles(this.fileIsPrepared ? this.files.toArray() : [], {
+      init: (file) => {
+        this.currentFile = file;
+        this.isPreparing = true;
+      },
+
+      onLoadStart: () => {
+        this.isPreparing = false;
+      },
+
+      onProgress: ({loaded}) => {
+        this.currentUploadedFileSize = loaded;
+      },
+
+      onLoad: ({total}) => {
+        this.totalUploadedFilesSize += total;
+        this.currentUploadedFileSize = 0;
+      }
+    });
 
     await this.session.authenticate('authenticator:appauth');
 
@@ -128,24 +162,6 @@ export default class SubmissionFormComponent extends Component {
     }
 
     console.log(await res.json());
-
-    this.progressModal.hide();
-  }
-
-  async uploadFiles() {
-    if (!this.fileIsPrepared) {
-      return [];
-    }
-
-    const signedIds = [];
-
-    for (const file of this.files.toArray()) {
-      const {signed_id} = await uploadFile(file, (progress) => console.log(file, progress));
-
-      signedIds.push(signed_id);
-    }
-
-    return signedIds;
   }
 }
 
@@ -155,7 +171,7 @@ class Person {
   @tracked affiliation;
 
   toJSON() {
-    const { fullName, email, affiliation } = this;
+    const {fullName, email, affiliation} = this;
 
     return {
       full_name: fullName,
@@ -165,16 +181,32 @@ class Person {
   }
 }
 
-function uploadFile(file, onProgress) {
+async function uploadFiles(files, {init, onLoadStart, onProgress, onLoad}) {
+  const signedIds = [];
+
+  for (const file of files) {
+    const {signed_id} = await uploadFile(file, {init, onLoadStart, onProgress, onLoad});
+
+    signedIds.push(signed_id);
+  }
+
+  return signedIds;
+}
+
+function uploadFile(file, {init, onLoadStart, onProgress, onLoad}) {
   // Since service switching is disabled on the server side, there is no need to send these parameters.
   // See config/initializers/active_storage_direct_uploads_controller_monkey.rb.
-  const serviceName = null;
+  const serviceName    = null;
   const attachmentName = null;
+
+  init(file);
 
   const upload = new DirectUpload(file, url, serviceName, attachmentName, {
     directUploadWillStoreFileWithXHR(xhr) {
-      xhr.upload.addEventListener('progress', onProgress);
-    },
+      xhr.upload.addEventListener('loadstart', onLoadStart);
+      xhr.upload.addEventListener('progress',  onProgress);
+      xhr.upload.addEventListener('load',      onLoad);
+    }
   });
 
   return new Promise((resolve, reject) => {
