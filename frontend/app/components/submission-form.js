@@ -94,6 +94,10 @@ export default class SubmissionFormComponent extends Component {
     this.files.removeObject(file);
   }
 
+  @action cancelSubmit() {
+    this.progressModal.hide();
+  }
+
   @action async submit() {
     if (this.fileIsPrepared) {
       this.progressModal.show();
