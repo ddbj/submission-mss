@@ -21,7 +21,7 @@
             </div>
 
             <div class="progress">
-              {{#let this.directUpload.progressPercentage as |percentage|}}
+              {{#let (percentage this.directUpload.uploadedSize this.directUpload.totalSize) as |percentage|}}
                 <div class="progress-bar" role="progressbar" {{style (hash width=(concat percentage '%'))}} aria-valuenow={{percentage}} aria-valuemin="0" aria-valuemax="100"></div>
               {{/let}}
             </div>

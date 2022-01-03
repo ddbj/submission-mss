@@ -1,13 +1,16 @@
-import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import { DirectUpload } from '@rails/activestorage';
 
 const url = '/rails/active_storage/direct_uploads';
 
-export default class DirectUploadService extends Service {
-  @tracked uploads       = [];
+export default class _DirectUpload {
+  @tracked uploads;
   @tracked currentUpload = null;
+
+  constructor(files) {
+    this.uploads = files.map(file => new Upload(file));
+  }
 
   get totalSize() {
     return this.uploads.reduce((acc, {file}) => acc + file.size, 0);
@@ -17,18 +20,7 @@ export default class DirectUploadService extends Service {
     return this.uploads.reduce((acc, {uploadedSize}) => acc + uploadedSize, 0);
   }
 
-  get progressPercentage() {
-    const {totalSize, uploadedSize} = this;
-
-    if (!totalSize) { return null; }
-
-    return Math.floor(uploadedSize / totalSize * 100);
-  }
-
-  async perform(files) {
-    this.uploads       = files.map(file => new Upload(file));
-    this.currentUpload = null;
-
+  async perform() {
     const blobs = [];
 
     for (const upload of this.uploads) {

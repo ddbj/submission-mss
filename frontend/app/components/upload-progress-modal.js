@@ -1,17 +1,19 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 import Modal from 'bootstrap/js/src/modal';
 
 export default class UploadProgressModalComponent extends Component {
-  @service directUpload;
+  @tracked directUpload;
 
   @action setModal(element) {
     this.modal = new Modal(element);
   }
 
-  @action show() {
+  @action show(directUpload) {
+    this.directUpload = directUpload;
+
     this.modal.show();
   }
 
