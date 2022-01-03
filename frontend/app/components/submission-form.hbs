@@ -23,313 +23,287 @@
 
 <input type="file" multiple accept=".ann, .fasta" class="d-none" {{did-insert (set this 'fileInputElement')}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInputElement.value' ''))}}>
 
-<form class="vstack gap-3" {{on 'submit' (prevent-default this.submit)}}>
-  <div class="card">
-    <div class="card-header">
-      Requirement
+<UploadProgressModal as |modal|>
+  <form class="vstack gap-3 mb-3" {{on 'submit' (prevent-default (fn this.submit modal))}}>
+    <div class="card">
+      <div class="card-header">
+        Requirement
+      </div>
+
+      <div class="card-body">
+        <p>以下のすべてに該当する場合のみ申し込みできます。いずれか該当しない場合は、submissionを分け、submsssionごとにMSS申し込みを行ってください。</p>
+
+        <ul class="mb-0">
+          <li>Contact personが同一</li>
+          <li>登録データ種別が1種類</li>
+          <li>公開予定日が同一</li>
+        </ul>
+      </div>
     </div>
 
-    <div class="card-body">
-      <p>以下のすべてに該当する場合のみ申し込みできます。いずれか該当しない場合は、submissionを分け、submsssionごとにMSS申し込みを行ってください。</p>
+    <div class="card">
+      <div class="card-header">
+        Determination of the nucleotide sequence
+      </div>
 
-      <ul class="mb-0">
-        <li>Contact personが同一</li>
-        <li>登録データ種別が1種類</li>
-        <li>公開予定日が同一</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      Determination of the nucleotide sequence
-    </div>
-
-    <div class="card-body">
-      <div class="vstack gap-3">
-        <div>
-          <p>自身で配列決定した塩基配列ですか</p>
-
-          <RadioGroup as |group|>
-            <div class="form-check">
-              <group.radio as |radio|>
-                <radio.input checked={{eq this.determinedByOwnStudy true}} class="form-check-input" required {{on 'change' (fn this.setDeterminedByOwnStudy true)}} />
-
-                <radio.label class="form-check-label">
-                  はい、自身の研究で配列決定した塩基配列です
-                </radio.label>
-              </group.radio>
-            </div>
-
-            <div class="form-check">
-              <group.radio as |radio|>
-                <radio.input checked={{eq this.determinedByOwnStudy false}} class="form-check-input" required {{on 'change' (fn this.setDeterminedByOwnStudy false)}} />
-
-                <radio.label class="form-check-label">
-                  いいえ、公開されているデータからアセンブルした塩基配列です
-                </radio.label>
-              </group.radio>
-            </div>
-          </RadioGroup>
-        </div>
-
-        {{#if (eq this.determinedByOwnStudy false)}}
+      <div class="card-body">
+        <div class="vstack gap-3">
           <div>
-            <p>TPA (Third party data) として登録できる可能性があります。peer-reviewつき雑誌の学術論文に投稿し、配列作成に関する内容を公開する予定でしょうか</p>
+            <p>自身で配列決定した塩基配列ですか</p>
 
             <RadioGroup as |group|>
               <div class="form-check">
                 <group.radio as |radio|>
-                  <radio.input checked={{eq @model.tpa true}} class="form-check-input" required {{on 'change' (set @model 'tpa' true)}} />
+                  <radio.input checked={{eq this.determinedByOwnStudy true}} class="form-check-input" required {{on 'change' (fn this.setDeterminedByOwnStudy true)}} />
 
                   <radio.label class="form-check-label">
-                    はい
+                    はい、自身の研究で配列決定した塩基配列です
                   </radio.label>
                 </group.radio>
               </div>
 
               <div class="form-check">
                 <group.radio as |radio|>
-                  <radio.input checked={{eq @model.tpa false}} class="form-check-input" required {{on 'change' (set @model 'tpa' false)}} />
+                  <radio.input checked={{eq this.determinedByOwnStudy false}} class="form-check-input" required {{on 'change' (fn this.setDeterminedByOwnStudy false)}} />
 
                   <radio.label class="form-check-label">
-                    いいえ
+                    いいえ、公開されているデータからアセンブルした塩基配列です
                   </radio.label>
                 </group.radio>
               </div>
             </RadioGroup>
           </div>
 
-          {{#if (eq @model.tpa false)}}
-            <p>TPAの場合、論文を準備しないのであれば申し込みできません。Formを閉じてください。</p>
-          {{/if}}
-        {{/if}}
-      </div>
-    </div>
-  </div>
+          {{#if (eq this.determinedByOwnStudy false)}}
+            <div>
+              <p>TPA (Third party data) として登録できる可能性があります。peer-reviewつき雑誌の学術論文に投稿し、配列作成に関する内容を公開する予定でしょうか</p>
 
-  {{#if (or this.determinedByOwnStudy @model.tpa)}}
-    <div class="card">
-      <div class="card-header">
-        Sequencer
-      </div>
+              <RadioGroup as |group|>
+                <div class="form-check">
+                  <group.radio as |radio|>
+                    <radio.input checked={{eq @model.tpa true}} class="form-check-input" required {{on 'change' (set @model 'tpa' true)}} />
 
-      <div class="card-body">
-        <p>塩基配列決定にどのタイプのシークエンサーを使用しましたか</p>
-
-        <RadioGroup as |group|>
-          <div class="form-check">
-            <group.radio as |radio|>
-              <radio.input checked={{eq @model.sequencer 'sanger'}} class="form-check-input" required {{on 'change' (set @model 'sequencer' 'sanger')}} />
-
-              <radio.label class="form-check-label">
-                Sanger dideoxy sequencing
-              </radio.label>
-            </group.radio>
-          </div>
-
-          <div class="form-check">
-            <group.radio as |radio|>
-              <radio.input checked={{eq @model.sequencer 'ngs'}} class="form-check-input" required {{on 'change' (set @model 'sequencer' 'ngs')}} />
-
-              <radio.label class="form-check-label">
-                NGS
-              </radio.label>
-            </group.radio>
-          </div>
-        </RadioGroup>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
-        Submission file
-      </div>
-
-      <div class="card-body vstack gap-3">
-        <div>
-          <p>Submission fileを作成済みですか</p>
-
-          <RadioGroup as |group|>
-            <div class="form-check">
-              <group.radio as |radio|>
-                <radio.input checked={{eq this.fileIsPrepared true}} class="form-check-input" required {{on 'change' (set this 'fileIsPrepared' true)}} />
-
-                <radio.label class="form-check-label">
-                  submission fileを作成済みなのですぐにsubmit する
-                </radio.label>
-              </group.radio>
-            </div>
-
-            <div class="form-check">
-              <group.radio as |radio|>
-                <radio.input checked={{eq this.fileIsPrepared false}} class="form-check-input" required {{on 'change' (set this 'fileIsPrepared' false)}} />
-
-                <radio.label class="form-check-label">
-                  申し込み後にsubmission fileを作成する
-                </radio.label>
-              </group.radio>
-            </div>
-          </RadioGroup>
-        </div>
-
-        <div>
-          <p>submission fileはDFASTで作成したcomplete genome または WGSですか</p>
-
-          <RadioGroup as |group|>
-            <div class="form-check">
-              <group.radio as |radio|>
-                <radio.input checked={{eq @model.dfast true}} class="form-check-input" required {{on 'change' (fn this.setDfast true)}} />
-
-                <radio.label class="form-check-label">
-                  はい
-                </radio.label>
-              </group.radio>
-            </div>
-
-            <div class="form-check">
-              <group.radio as |radio|>
-                <radio.input checked={{eq @model.dfast false}} class="form-check-input" required {{on 'change' (fn this.setDfast false)}} />
-
-                <radio.label class="form-check-label">
-                  いいえ
-                </radio.label>
-              </group.radio>
-            </div>
-          </RadioGroup>
-        </div>
-      </div>
-    </div>
-
-    {{#unless (is-none @model.dfast)}}
-      <div class="card">
-        <div class="card-header">
-          Data type
-        </div>
-
-        <div class="card-body vstack gap-3">
-          <div>
-            {{#let (unique-id) as |id|}}
-              <label for={{id}} class="form-label">データ種別を選択してください</label>
-
-              <div class="row">
-                <div class="col-auto">
-                  <select class="form-select" id={{id}} required {{on 'change' (pick 'target.value' this.setDataType)}}>
-                    <option selected={{is-none @model.dataType}}></option>
-
-                    {{#each this.dataTypes as |key|}}
-                      <option value={{key}} selected={{eq @model.dataType key}}>
-                        {{t (concat (if @model.dfast 'data_types_dfast' 'data_types') '.' key)}}
-                      </option>
-                    {{/each}}
-                  </select>
+                    <radio.label class="form-check-label">
+                      はい
+                    </radio.label>
+                  </group.radio>
                 </div>
 
-                {{#if (eq @model.dataType 'other')}}
-                  <div class="col-auto">
-                    {{#let (unique-id) as |id|}}
-                      <label for={{id}} class="visually-hidden">Data type</label>
-                      <input type="text" value={{@model.dataTypeOther}} class="form-control" id={{id}} required {{on 'change' (pick 'target.value' (set @model 'dataTypeOtherText'))}}>
-                    {{/let}}
-                  </div>
-                {{/if}}
-              </div>
-            {{/let}}
-          </div>
+                <div class="form-check">
+                  <group.radio as |radio|>
+                    <radio.input checked={{eq @model.tpa false}} class="form-check-input" required {{on 'change' (set @model 'tpa' false)}} />
 
-          {{#if (eq @model.dataType 'wgs_version_up')}}
-            <div>
-              {{#let (unique-id) as |id|}}
-                <label for={{id}} class="form-label">Accession # to update</label>
-                <input type="text" value={{@model.accessionNumber}} class="form-control" id={{id}} required {{on 'change' (pick 'target.value' (set @model 'accessionNumber'))}}>
-              {{/let}}
+                    <radio.label class="form-check-label">
+                      いいえ
+                    </radio.label>
+                  </group.radio>
+                </div>
+              </RadioGroup>
             </div>
+
+            {{#if (eq @model.tpa false)}}
+              <p>TPAの場合、論文を準備しないのであれば申し込みできません。Formを閉じてください。</p>
+            {{/if}}
           {{/if}}
         </div>
       </div>
-    {{/unless}}
+    </div>
 
-    {{#if this.fileIsPrepared}}
+    {{#if (or this.determinedByOwnStudy @model.tpa)}}
       <div class="card">
         <div class="card-header">
-          Submission file upload
+          Sequencer
         </div>
 
         <div class="card-body">
-          {{#if this.files}}
-            <div class="card {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
-              <ul class="list-group list-group-flush">
-                {{#each this.files as |file|}}
-                  <li class="list-group-item d-flex align-items-center">
-                    <div class="ms-2 me-auto">
-                      {{file.name}}
-                      <small class="text-muted">{{filesize file.size}}</small>
-                    </div>
+          <p>塩基配列決定にどのタイプのシークエンサーを使用しましたか</p>
 
-                    <div>
-                      <button type="button" class="btn btn-outline-danger" {{on 'click' (prevent-default (fn this.removeFile file))}}>削除</button>
-                    </div>
-                  </li>
-                {{/each}}
-              </ul>
+          <RadioGroup as |group|>
+            <div class="form-check">
+              <group.radio as |radio|>
+                <radio.input checked={{eq @model.sequencer 'sanger'}} class="form-check-input" required {{on 'change' (set @model 'sequencer' 'sanger')}} />
 
-              <div class="card-footer d-flex justify-content-between align-items-center">
-                <div>
-                  <button type="button" class="btn btn-outline-primary" {{on 'click' (prevent-default this.selectFiles)}}>
-                    ファイルの追加
-                  </button>
-                </div>
-
-                <div>
-                  {{this.files.length}}ファイル、{{filesize (sum (map-by 'size' this.files))}}
-                </div>
-              </div>
+                <radio.label class="form-check-label">
+                  Sanger dideoxy sequencing
+                </radio.label>
+              </group.radio>
             </div>
-          {{else}}
-            <div class="card border-2 border-dashed {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
-              <div class="card-body py-5 text-center">
-                <a href="#" class="stretched-link" {{on 'click' (prevent-default this.selectFiles)}}>ファイルを選択</a>するか、ここにファイルをドロップしてください。
-              </div>
+
+            <div class="form-check">
+              <group.radio as |radio|>
+                <radio.input checked={{eq @model.sequencer 'ngs'}} class="form-check-input" required {{on 'change' (set @model 'sequencer' 'ngs')}} />
+
+                <radio.label class="form-check-label">
+                  NGS
+                </radio.label>
+              </group.radio>
             </div>
-          {{/if}}
+          </RadioGroup>
         </div>
       </div>
-    {{/if}}
-  {{/if}}
 
-  <div class="my-3">
-    <input type="submit" value="Apply for MSS" class="btn btn-primary btn-lg">
-  </div>
-</form>
+      {{#if @model.sequencer}}
+        <div class="card">
+          <div class="card-header">
+            Submission file
+          </div>
 
-{{#let (unique-id) as |id|}}
-  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby={{id}} aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" {{did-insert this.setProgressModal}}>
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id={{id}}>ファイルのアップロード中</h5>
-        </div>
+          <div class="card-body vstack gap-3">
+            <div>
+              <p>Submission fileを作成済みですか</p>
 
-        <div class="modal-body vstack gap-3">
-          <div class="d-flex gap-2 align-items-center">
-            <div>{{this.currentFile.name}}</div>
+              <RadioGroup as |group|>
+                <div class="form-check">
+                  <group.radio as |radio|>
+                    <radio.input checked={{eq this.fileIsPrepared true}} class="form-check-input" required {{on 'change' (fn this.setFileIsPrepared true)}} />
 
-            {{#if this.isPreparing}}
-              <div class="spinner-border spinner-border-sm text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
+                    <radio.label class="form-check-label">
+                      submission fileを作成済みなのですぐにsubmit する
+                    </radio.label>
+                  </group.radio>
+                </div>
+
+                <div class="form-check">
+                  <group.radio as |radio|>
+                    <radio.input checked={{eq this.fileIsPrepared false}} class="form-check-input" required {{on 'change' (fn this.setFileIsPrepared false)}} />
+
+                    <radio.label class="form-check-label">
+                      申し込み後にsubmission fileを作成する
+                    </radio.label>
+                  </group.radio>
+                </div>
+              </RadioGroup>
+            </div>
+
+            {{#if this.fileIsPrepared}}
+              <div>
+                <p>submission fileはDFASTで作成したcomplete genome または WGSですか</p>
+
+                <RadioGroup as |group|>
+                  <div class="form-check">
+                    <group.radio as |radio|>
+                      <radio.input checked={{eq @model.dfast true}} class="form-check-input" required {{on 'change' (fn this.setDfast true)}} />
+
+                      <radio.label class="form-check-label">
+                        はい
+                      </radio.label>
+                    </group.radio>
+                  </div>
+
+                  <div class="form-check">
+                    <group.radio as |radio|>
+                      <radio.input checked={{eq @model.dfast false}} class="form-check-input" required {{on 'change' (fn this.setDfast false)}} />
+
+                      <radio.label class="form-check-label">
+                        いいえ
+                      </radio.label>
+                    </group.radio>
+                  </div>
+                </RadioGroup>
               </div>
             {{/if}}
           </div>
+        </div>
+      {{/if}}
 
-          <div class="progress">
-            <div class="progress-bar" role="progressbar" {{style (hash width=(concat this.uploadPercentage '%'))}} aria-valuenow={{this.uploadPercentage}} aria-valuemin="0" aria-valuemax="100"></div>
+      {{#if (or (eq this.fileIsPrepared false) (not (is-none @model.dfast)))}}
+        <div class="card">
+          <div class="card-header">
+            Data type
+          </div>
+
+          <div class="card-body vstack gap-3">
+            <div>
+              {{#let (unique-id) as |id|}}
+                <label for={{id}} class="form-label">データ種別を選択してください</label>
+
+                <div class="row">
+                  <div class="col-auto">
+                    <select class="form-select" id={{id}} required {{on 'change' (pick 'target.value' this.setDataType)}}>
+                      <option selected={{is-none @model.dataType}}></option>
+
+                      {{#each @model.dataTypes as |key|}}
+                        <option value={{key}} selected={{eq @model.dataType key}}>
+                          {{t (concat (if @model.dfast 'data_types_dfast' 'data_types') '.' key)}}
+                        </option>
+                      {{/each}}
+                    </select>
+                  </div>
+                </div>
+              {{/let}}
+            </div>
+
+            {{#if (eq @model.dataType 'wgs_version_up')}}
+              <div>
+                {{#let (unique-id) as |id|}}
+                  <label for={{id}} class="form-label">Accession # to update</label>
+                  <input type="text" value={{@model.accessionNumber}} class="form-control" id={{id}} required {{on 'change' (pick 'target.value' (set @model 'accessionNumber'))}}>
+                {{/let}}
+              </div>
+            {{/if}}
+
+            {{#if (eq @model.dataType 'other')}}
+              <div>
+                {{#let (unique-id) as |id|}}
+                  <label for={{id}} class="form-label">データ種別（その他）の名称を入力してください</label>
+                  <input type="text" value={{@model.dataTypeOther}} class="form-control" id={{id}} required {{on 'change' (pick 'target.value' (set @model 'dataTypeOtherText'))}}>
+                {{/let}}
+              </div>
+            {{/if}}
           </div>
         </div>
+      {{/if}}
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" {{on 'click' this.cancelSubmit}}>キャンセル</button>
+      {{#if (and this.fileIsPrepared @model.dataTypeIsFulfilled)}}
+        <div class="card">
+          <div class="card-header">
+            Submission file upload
+          </div>
+
+          <div class="card-body">
+            {{#if this.files}}
+              <div class="card {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
+                <ul class="list-group list-group-flush">
+                  {{#each this.files as |file|}}
+                    <li class="list-group-item d-flex align-items-center">
+                      <div class="ms-2 me-auto">
+                        {{file.name}}
+                        <small class="text-muted">{{filesize file.size}}</small>
+                      </div>
+
+                      <div>
+                        <button type="button" class="btn btn-outline-danger" {{on 'click' (prevent-default (fn this.removeFile file))}}>削除</button>
+                      </div>
+                    </li>
+                  {{/each}}
+                </ul>
+
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                  <div>
+                    <button type="button" class="btn btn-outline-primary" {{on 'click' (prevent-default this.selectFiles)}}>
+                      ファイルの追加
+                    </button>
+                  </div>
+
+                  <div>
+                    {{this.files.length}}ファイル、{{filesize (sum (map-by 'size' this.files))}}
+                  </div>
+                </div>
+              </div>
+            {{else}}
+              <div class="card border-2 border-dashed {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
+                <div class="card-body py-5 text-center">
+                  <a href="#" class="stretched-link" {{on 'click' (prevent-default this.selectFiles)}}>ファイルを選択</a>するか、ここにファイルをドロップしてください。
+                </div>
+              </div>
+            {{/if}}
+          </div>
         </div>
+      {{/if}}
+
+      <div>
+        <input type="submit" value="Apply for MSS" class="btn btn-primary btn-lg">
       </div>
-    </div>
-  </div>
-{{/let}}
+    {{/if}}
+  </form>
+</UploadProgressModal>

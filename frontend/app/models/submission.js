@@ -1,3 +1,4 @@
+import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { underscore } from '@ember/string';
 
@@ -8,7 +9,6 @@ export default class Submission {
   @tracked dataType;
   @tracked dataTypeOtherText;
   @tracked accessionNumber;
-  @tracked files = [];
   @tracked entriesCount;
   @tracked holdDate;
   @tracked contactPerson = new Person();
@@ -16,6 +16,22 @@ export default class Submission {
   @tracked shortTitle;
   @tracked description;
   @tracked emailLanguage;
+
+  get dataTypes() {
+    return this.dfast ? ['wgs', 'complete_genome', 'mag', 'wgs_version_up']
+                      : ['wgs', 'complete_genome', 'mag', 'sag', 'wgs_version_up', 'tls', 'htg', 'tsa', 'htc', 'est', 'dna', 'rna', 'other'];
+  }
+
+  get dataTypeIsFulfilled() {
+    switch (this.dataType) {
+      case 'other':
+        return isPresent(this.dataTypeOtherText);
+      case 'wgs_version_up':
+        return isPresent(this.accessionNumber);
+      default:
+        return this.dataTypes.includes(this.dataType);
+    }
+  }
 
   toPayload() {
     return toPayload(this, [
@@ -25,7 +41,6 @@ export default class Submission {
       'dataType',
       'dataTypeOtherText',
       'accessionNumber',
-      'files',
       'entriesCount',
       'holdDate',
       'contactPerson',

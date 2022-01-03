@@ -1,0 +1,37 @@
+{{yield this}}
+
+{{#let (unique-id) as |id|}}
+  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby={{id}} aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" {{did-insert this.setModal}}>
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id={{id}}>登録ファイルのアップロード</h5>
+        </div>
+
+        <div class="modal-body vstack gap-3">
+          {{#with this.directUpload.currentUpload as |upload|}}
+            <div class="d-flex gap-2 align-items-center">
+              <div>{{upload.file.name}}</div>
+
+              {{#unless upload.isStarted}}
+                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              {{/unless}}
+            </div>
+
+            <div class="progress">
+              {{#let this.directUpload.progressPercentage as |percentage|}}
+                <div class="progress-bar" role="progressbar" {{style (hash width=(concat percentage '%'))}} aria-valuenow={{percentage}} aria-valuemin="0" aria-valuemax="100"></div>
+              {{/let}}
+            </div>
+          {{/with}}
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" {{on 'click' this.hide}}>キャンセル</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{{/let}}
