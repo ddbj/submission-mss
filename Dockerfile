@@ -31,7 +31,7 @@ ENV TZ=Japan
 
 EXPOSE 3000
 
-RUN gem install bundler:2.3.3
+RUN gem install bundler:2.3.4
 
 WORKDIR /app
 
