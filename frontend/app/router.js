@@ -15,5 +15,9 @@ Router.map(function () {
     this.route('submissions', {resetNamespace: true}, function() {
       this.route('new');
     });
+
+    this.route('submission', {resetNamespace: true, path: ':id'}, function() {
+      this.route('submitted');
+    });
   });
 });

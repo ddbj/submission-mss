@@ -232,29 +232,11 @@
                 </div>
               {{/let}}
             </div>
-
-            {{#if (eq @model.dataType 'wgs_version_up')}}
-              <div>
-                {{#let (unique-id) as |id|}}
-                  <label for={{id}} class="form-label">Accession # to update</label>
-                  <input type="text" value={{@model.accessionNumber}} class="form-control" id={{id}} required {{on 'change' (pick 'target.value' (set @model 'accessionNumber'))}}>
-                {{/let}}
-              </div>
-            {{/if}}
-
-            {{#if (eq @model.dataType 'other')}}
-              <div>
-                {{#let (unique-id) as |id|}}
-                  <label for={{id}} class="form-label">データ種別（その他）の名称を入力してください</label>
-                  <input type="text" value={{@model.dataTypeOther}} class="form-control" id={{id}} required {{on 'change' (pick 'target.value' (set @model 'dataTypeOtherText'))}}>
-                {{/let}}
-              </div>
-            {{/if}}
           </div>
         </div>
       {{/if}}
 
-      {{#if (and this.fileIsPrepared @model.dataTypeIsFulfilled)}}
+      {{#if (and this.fileIsPrepared (not-eq @model.dataType null))}}
         <div class="card">
           <div class="card-header">
             Submission file upload

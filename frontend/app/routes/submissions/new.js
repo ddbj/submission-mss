@@ -1,9 +1,13 @@
 import Route from '@ember/routing/route';
-
-import Submission from 'mssform-web/models/submission';
+import { service } from '@ember/service';
 
 export default class SubmissionsNewRoute extends Route {
+  @service store;
+
   model() {
-    return new Submission();
+    return this.store.createRecord('submission', {
+      contactPerson: this.store.createRecord('person'),
+      anotherPerson: this.store.createRecord('person')
+    });
   }
 }

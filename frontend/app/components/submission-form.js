@@ -7,7 +7,7 @@ import { tracked } from '@glimmer/tracking';
 import UploadFiles from 'mssform-web/models/upload-files';
 
 export default class SubmissionFormComponent extends Component {
-  @service appauth;
+  @service router;
   @service session;
 
   @tracked determinedByOwnStudy = null;
@@ -60,28 +60,13 @@ export default class SubmissionFormComponent extends Component {
 
     await this.session.authenticate('authenticator:appauth');
 
-    const res = await fetch('/api/submissions', {
-      method: 'POST',
+    const {model} = this.args;
+    const files   = blobs.map(({signed_id}) => signed_id);
 
-      headers: {
-        Authorization: `Bearer ${this.session.data.authenticated.id_token}`,
-        'Content-Type': 'application/json',
-      },
+    model.files = files;
+    await model.save();
 
-      body: JSON.stringify({
-        submission: {
-          ...this.args.model.toPayload(),
-
-          files: blobs.map(({signed_id}) => signed_id)
-        }
-      })
-    });
-
-    if (!res.ok) {
-      throw new Error(res.statusText);
-    }
-
-    console.log(await res.json());
+    this.router.transitionTo('submission.submitted', model);
   }
 
   async uploadFiles(progressModal) {
