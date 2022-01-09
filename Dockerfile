@@ -15,7 +15,7 @@ RUN yarn build
 
 ###
 
-FROM ruby:3.0
+FROM ruby:3.1
 
 ENV BUNDLE_CLEAN=true
 ENV BUNDLE_DEPLOYMENT=true
