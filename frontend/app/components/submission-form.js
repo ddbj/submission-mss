@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import DirectUpload from 'mssform-web/models/direct-upload';
+import UploadFiles from 'mssform-web/models/upload-files';
 
 export default class SubmissionFormComponent extends Component {
   @service appauth;
@@ -87,7 +87,7 @@ export default class SubmissionFormComponent extends Component {
   async uploadFiles(progressModal) {
     if (this.files.length === 0) { return []; }
 
-    const upload  = new DirectUpload(this.files);
+    const upload  = new UploadFiles(this.files);
     const perform = upload.perform();
 
     progressModal.show(upload);

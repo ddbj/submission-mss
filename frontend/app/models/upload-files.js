@@ -4,12 +4,12 @@ import { DirectUpload } from '@rails/activestorage';
 
 const url = '/rails/active_storage/direct_uploads';
 
-export default class _DirectUpload {
+export default class UploadFiles {
   @tracked uploads;
   @tracked currentUpload = null;
 
   constructor(files) {
-    this.uploads = files.map(file => new Upload(file));
+    this.uploads = files.map(file => new UploadFile(file));
   }
 
   get totalSize() {
@@ -33,7 +33,7 @@ export default class _DirectUpload {
   }
 }
 
-class Upload {
+class UploadFile {
   @tracked file;
   @tracked isStarted    = false;
   @tracked uploadedSize = 0;
