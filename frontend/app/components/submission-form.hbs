@@ -19,12 +19,12 @@
   }
 </style>
 
-<h1 class="display-6 my-4">新規登録</h1>
+<h1 class="display-6 my-4">新規申し込み</h1>
 
 <input type="file" multiple accept=".ann, .fasta" class="d-none" {{did-insert (set this 'fileInputElement')}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInputElement.value' ''))}} />
 
 <UploadProgressModal as |modal|>
-  <form class="vstack gap-3 mb-3" {{on 'submit' (prevent-default (fn this.submit modal))}}>
+  <form class="vstack gap-3 mb-5" {{on 'submit' (prevent-default (fn this.submit modal))}}>
     <div class="card">
       <div class="card-header">
         Requirement
@@ -58,7 +58,7 @@
           <RadioGroup as |group|>
             <div class="form-check">
               <group.radio as |radio|>
-                <radio.input checked={{eq this.determinedByOwnStudy true}} class="form-check-input" required {{on 'change' (fn this.setDeterminedByOwnStudy true)}} />
+                <radio.input checked={{eq this.determinedByOwnStudy true}} required class="form-check-input" {{on 'change' (fn this.setDeterminedByOwnStudy true)}} />
 
                 <radio.label class="form-check-label">
                   はい、自身の研究で配列決定した塩基配列です
@@ -68,7 +68,7 @@
 
             <div class="form-check">
               <group.radio as |radio|>
-                <radio.input checked={{eq this.determinedByOwnStudy false}} class="form-check-input" required {{on 'change' (fn this.setDeterminedByOwnStudy false)}} />
+                <radio.input checked={{eq this.determinedByOwnStudy false}} required class="form-check-input" {{on 'change' (fn this.setDeterminedByOwnStudy false)}} />
 
                 <radio.label class="form-check-label">
                   いいえ、公開されているデータからアセンブルした塩基配列です
@@ -88,7 +88,7 @@
             <RadioGroup as |group|>
               <div class="form-check">
                 <group.radio as |radio|>
-                  <radio.input checked={{eq @model.tpa true}} class="form-check-input" required {{on 'change' (set @model 'tpa' true)}} />
+                  <radio.input checked={{eq @model.tpa true}} required class="form-check-input" {{on 'change' (set @model 'tpa' true)}} />
 
                   <radio.label class="form-check-label">
                     はい
@@ -98,7 +98,7 @@
 
               <div class="form-check">
                 <group.radio as |radio|>
-                  <radio.input checked={{eq @model.tpa false}} class="form-check-input" required {{on 'change' (set @model 'tpa' false)}} />
+                  <radio.input checked={{eq @model.tpa false}} required class="form-check-input" {{on 'change' (set @model 'tpa' false)}} />
 
                   <radio.label class="form-check-label">
                     いいえ
@@ -128,7 +128,7 @@
             <RadioGroup as |group|>
               <div class="form-check">
                 <group.radio as |radio|>
-                  <radio.input checked={{eq this.setSubmissionFileType 'dfast'}} class="form-check-input" required {{on 'change' (fn this.setSubmissionFileType 'dfast')}} />
+                  <radio.input checked={{eq this.submissionFileType 'dfast'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'dfast')}} />
 
                   <radio.label class="form-check-label">
                     DFASTで作成したBacterial complete genome または WGSのsubmission fileをuploadする
@@ -138,7 +138,7 @@
 
               <div class="form-check">
                 <group.radio as |radio|>
-                  <radio.input checked={{eq this.setSubmissionFileType 'without-dfast'}} class="form-check-input" required {{on 'change' (fn this.setSubmissionFileType 'without-dfast')}} />
+                  <radio.input checked={{eq this.submissionFileType 'without-dfast'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'without-dfast')}} />
 
                   <radio.label class="form-check-label">
                     DFASTを使わずsubmission fileを作成済みでありuploadする
@@ -148,7 +148,7 @@
 
               <div class="form-check">
                 <group.radio as |radio|>
-                  <radio.input checked={{eq this.setSubmissionFileType 'none'}} class="form-check-input" required {{on 'change' (fn this.setSubmissionFileType 'none')}} />
+                  <radio.input checked={{eq this.submissionFileType 'none'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'none')}} />
 
                   <radio.label class="form-check-label">
                     申し込み後にsubmission fileを作成する
@@ -217,17 +217,17 @@
           <div class="card-body row row-cols-2">
             <div class="col">
               <label for="entriesCount" class="form-label">登録件数</label>
-              <input type="number" value={{@model.entriesCount}} id="entriesCount" min="1" class="form-control" required {{on 'change' (pick 'target.value' (set @model 'entriesCount'))}} />
+              <input type="number" value={{@model.entriesCount}} required min="1" class="form-control" id="entriesCount" {{on 'change' (pick 'target.value' (set @model 'entriesCount'))}} />
             </div>
 
             <div class="col vstack gap-1">
               <div>
                 <label for="holdDate" class="form-label">公開予定日 (Hold date)</label>
-                <input type="date" value={{@model.holdDate}} disabled={{this.releaseImmediately}} required id="holdDate" class="form-control" {{on 'change' (pick 'target.value' (set @model 'holdDate'))}} />
+                <input type="date" value={{@model.holdDate}} disabled={{this.releaseImmediately}} required class="form-control" id="holdDate" {{on 'change' (pick 'target.value' (set @model 'holdDate'))}} />
               </div>
 
               <div class="form-check">
-                <input type="checkbox" checked={{this.releaseImmediately}} id="releaseImmediately" class="form-check-input" {{on 'change' (pick 'target.checked' this.setReleaseImmediately)}} />
+                <input type="checkbox" checked={{this.releaseImmediately}} class="form-check-input" id="releaseImmediately" {{on 'change' (pick 'target.checked' this.setReleaseImmediately)}} />
                 <label for="releaseImmediately" class="form-check-label">Release immediately</label>
               </div>
             </div>
@@ -243,17 +243,17 @@
             {{#let @model.contactPerson as |person|}}
               <div class="col">
                 <label for="contactPerson.email" class="form-label">Submission fileのcontact 行に記載する、1名の登録責任者のEmail</label>
-                <input type="email" value={{person.email}} id="contactPerson.email" class="form-control" required {{on 'change' (pick 'target.value' (set person 'email'))}} />
+                <input type="email" value={{person.email}} required class="form-control" id="contactPerson.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
               </div>
 
               <div class="col">
                 <label for="contactPerson.fullName" class="form-label">英語名 (フルネーム) を入力してください</label>
-                <input type="text" value={{person.fullName}} id="contactPerson.fullName" class="form-control" required {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
+                <input type="text" value={{person.fullName}} required maxlength="255" class="form-control" id="contactPerson.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
               </div>
 
               <div class="col">
                 <label for="contactPerson.affiliation" class="form-label">所属名 (英語名)</label>
-                <input type="text" value={{person.affiliation}} id="contactPerson.affiliation" class="form-control" required {{on 'change' (pick 'target.value' (set person 'affiliation'))}} />
+                <input type="text" value={{person.affiliation}} required maxlength="255" class="form-control" id="contactPerson.affiliation" {{on 'change' (pick 'target.value' (set person 'affiliation'))}} />
               </div>
             {{/let}}
           </div>
@@ -271,17 +271,17 @@
               {{#let @model.anotherPerson as |person|}}
                 <div class="col">
                   <label for="anotherPerson.email" class="form-label">Email address</label>
-                  <input type="email" value={{person.email}} id="anotherPerson.email" class="form-control" required={{this.anotherPersonIsPresent}} {{on 'change' (pick 'target.value' (set person 'email'))}} />
+                  <input type="email" value={{person.email}} required={{this.anotherPersonIsPresent}} class="form-control" id="anotherPerson.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
                 </div>
 
                 <div class="col">
                   <label for="anotherPerson.fullName" class="form-label">英語名 (フルネーム) を入力してください</label>
-                  <input type="text" value={{person.fullName}} id="anotherPerson.fullName" class="form-control" required={{this.anotherPersonIsPresent}} {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
+                  <input type="text" value={{person.fullName}} required={{this.anotherPersonIsPresent}} maxlength="255" class="form-control" id="anotherPerson.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
                 </div>
 
                 <div class="col">
                   <label for="anotherPerson.affiliation" class="form-label">所属名 (英語名)</label>
-                  <input type="text" value={{person.affiliation}} id="anotherPerson.affiliation" class="form-control" required={{this.anotherPersonIsPresent}} {{on 'change' (pick 'target.value' (set person 'affiliation'))}} />
+                  <input type="text" value={{person.affiliation}} required={{this.anotherPersonIsPresent}} maxlength="255" class="form-control" id="anotherPerson.affiliation" {{on 'change' (pick 'target.value' (set person 'affiliation'))}} />
                 </div>
               {{/let}}
             </div>
@@ -323,7 +323,7 @@
             <div>
               <label for="dataType" class="form-label">データ種別を選択してください</label>
 
-              <select class="form-select" id="dataType" required {{on 'change' (pick 'target.value' (set @model 'dataType'))}}>
+              <select required class="form-select" id="dataType" {{on 'change' (pick 'target.value' (set @model 'dataType'))}}>
                 <option selected={{is-none @model.dataType}}></option>
 
                 {{#each this.dataTypes as |key|}}
@@ -344,11 +344,11 @@
           <div class="card-body vstack gap-3">
             <div>
               <label for="shortTitle" class="form-label">ショートタイトル</label>
-              <input type="text" value={{@model.shortTitle}} required maxlength="79" placeholder="e.g. Draft genome sequences of Pseudomonas five strains" id="shortTitle" class="form-control" {{on 'input' (pick 'target.value' (set @model 'shortTitle'))}} />
+              <input type="text" value={{@model.shortTitle}} required maxlength="80" placeholder="e.g. Draft genome sequences of Pseudomonas five strains" class="form-control" id="shortTitle" {{on 'input' (pick 'target.value' (set @model 'shortTitle'))}} />
 
               <div class="row">
                 <div class="form-text col-auto order-1">
-                  {{or @model.shortTitle.length 0}} / 79
+                  {{or @model.shortTitle.length 0}} / 80
                 </div>
 
                 <div class="form-text col">
@@ -359,7 +359,7 @@
 
             <div>
               <label for="description" class="form-label">補足説明</label>
-              <textarea required minlength="100" maxlength="1000" rows="8" placeholder="e.g.活性汚泥から単離した Dibenzothiophene分解能を有するPseudomonas属ストレイン5種のドラフトゲノム配列にアノテーションをつけたもの" id="description" class="form-control" {{on 'keypress' this.preventEnter}} {{on 'input' this.onDescriptionInput}}>{{@model.description}}</textarea>
+              <textarea required minlength="100" maxlength="1000" rows="8" placeholder="e.g.活性汚泥から単離した Dibenzothiophene分解能を有するPseudomonas属ストレイン5種のドラフトゲノム配列にアノテーションをつけたもの" class="form-control" id="description" {{on 'keypress' this.preventEnter}} {{on 'input' this.onDescriptionInput}}>{{@model.description}}</textarea>
 
               <div class="row">
                 <div class="form-text col-auto order-1">
@@ -386,7 +386,7 @@
             <RadioGroup as |group|>
               <div class="form-check">
                 <group.radio as |radio|>
-                  <radio.input checked={{eq @model.emailLanguage 'ja'}} class="form-check-input" required {{on 'change' (set @model 'emailLanguage' 'ja')}} />
+                  <radio.input checked={{eq @model.emailLanguage 'ja'}} required class="form-check-input" {{on 'change' (set @model 'emailLanguage' 'ja')}} />
 
                   <radio.label class="form-check-label">
                     日本語
@@ -396,7 +396,7 @@
 
               <div class="form-check">
                 <group.radio as |radio|>
-                  <radio.input checked={{eq @model.emailLanguage 'en'}} class="form-check-input" required {{on 'change' (set @model 'emailLanguage' 'en')}} />
+                  <radio.input checked={{eq @model.emailLanguage 'en'}} required class="form-check-input" {{on 'change' (set @model 'emailLanguage' 'en')}} />
 
                   <radio.label class="form-check-label">
                     English
@@ -414,7 +414,7 @@
 
           <div class="card-body vstack gap-3">
             <div class="form-check">
-              <input type="checkbox" value={{this.confirmed}} requied id="confirmed" class="form-check-input" {{on 'change' (pick 'target.checked' (set this 'confirmed'))}} />
+              <input type="checkbox" value={{this.confirmed}} requied class="form-check-input" id="confirmed" {{on 'change' (pick 'target.checked' (set this 'confirmed'))}} />
 
               <label for="confirmed" class="form-check-label">
                 上記入力内容で間違いありません
