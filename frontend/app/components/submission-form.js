@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { A } from '@ember/array';
 import { action } from '@ember/object';
+import { isPresent } from '@ember/utils';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
@@ -11,34 +12,34 @@ export default class SubmissionFormComponent extends Component {
   @service session;
 
   @tracked determinedByOwnStudy = null;
-  @tracked fileIsPrepared       = null;
+  @tracked submissionFileType   = null;
   @tracked files                = A([]);
+  @tracked releaseImmediately   = true;
   @tracked confirmed            = false;
   @tracked dragOver             = false;
 
   fileInputElement = null;
+  dataTypes        = ['wgs', 'complete_genome', 'mag', 'sag', 'tls', 'htg', 'tsa', 'htc', 'est', 'dna', 'rna', 'ask'];
+
+  get anotherPersonIsPresent() {
+    const {email, fullName, affiliation} = this.args.model.anotherPerson;
+
+    return [email, fullName, affiliation].some(isPresent);
+  }
 
   @action setDeterminedByOwnStudy(val) {
     this.determinedByOwnStudy = val;
-    this.args.model.tpa       = null;
+
+    this.args.model.tpa = val ? false : null;
   }
 
-  @action setFileIsPrepared(val) {
-    this.fileIsPrepared = val;
+  @action setSubmissionFileType(val) {
+    this.submissionFileType = val;
+    this.args.model.dfast   = val === 'dfast';
 
-    this.setDfast(null);
-  }
-
-  @action setDfast(val) {
-    this.args.model.dfast = val;
-
-    this.setDataType(null);
-  }
-
-  @action setDataType(val) {
-    this.args.model.dataType          = val;
-    this.args.model.dataTypeOtherText = null;
-    this.args.model.accessionNumber   = null;
+    if (val === 'none') {
+      this.files.clear();
+    }
   }
 
   @action selectFiles() {
@@ -53,6 +54,29 @@ export default class SubmissionFormComponent extends Component {
 
   @action removeFile(file) {
     this.files.removeObject(file);
+  }
+
+  @action setReleaseImmediately(val) {
+    this.releaseImmediately = val;
+
+    if (val) {
+      this.args.model.holdDate = null;
+    }
+  }
+
+  @action preventEnter(e) {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+    }
+  }
+
+  @action onDescriptionInput(e) {
+    e.preventDefault();
+
+    const val = stripLineBreaks(e.target.value);
+
+    e.target.value              = val;
+    this.args.model.description = val;
   }
 
   @action async submit(uploadProgressModal) {
@@ -83,4 +107,8 @@ export default class SubmissionFormComponent extends Component {
 
     return blobs;
   }
+}
+
+function stripLineBreaks(str) {
+  return str.replace(/\r\n|\n|\r/g, '');
 }
