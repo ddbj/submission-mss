@@ -39,4 +39,4 @@
 
 <p>登録を始めるには DDBJ アカウントでログインしてください。</p>
 
-<a {{on 'click' this.authenticate}} href class="btn btn-primary btn-lg">DDBJ アカウントでログイン</a>
+<a {{on 'click' (prevent-default this.authenticate)}} href class="btn btn-primary btn-lg">DDBJ アカウントでログイン</a>
