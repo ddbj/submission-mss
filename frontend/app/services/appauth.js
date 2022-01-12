@@ -33,9 +33,9 @@ export default class AppAuthService extends Service {
     const handler = new RedirectRequestHandler();
 
     const req = new AuthorizationRequest({
-      client_id: this.config.clientId,
-      redirect_uri: this.redirectUri,
-      scope: 'openid offline_access',
+      client_id:     this.config.clientId,
+      redirect_uri:  this.redirectUri,
+      scope:         'openid offline_access',
       response_type: AuthorizationRequest.RESPONSE_TYPE_CODE,
 
       extras: {
