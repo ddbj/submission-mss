@@ -1,0 +1,72 @@
+data_types:
+  wgs:
+    label: draft genome (WGS)
+    ddbj_page_url:
+      en: https://www.ddbj.nig.ac.jp/ddbj/wgs-e.html
+      ja: https://www.ddbj.nig.ac.jp/ddbj/wgs.html
+
+  complete_genome:
+    label: complete or nearly complete genome
+    ddbj_page_url:
+      en: https://www.ddbj.nig.ac.jp/ddbj/genome-e.html
+      ja: https://www.ddbj.nig.ac.jp/ddbj/genome.html
+
+  mag:
+    label: Metagenome-Assembled Genome (MAG)
+    ddbj_page_url:
+      en: https://www.ddbj.nig.ac.jp/ddbj/metagenome-assembly-e.html
+      ja: https://www.ddbj.nig.ac.jp/ddbj/metagenome-assembly.html
+
+  sag:
+    label: Single amplified genome (SAG)
+    ddbj_page_url:
+      en: https://www.ddbj.nig.ac.jp/ddbj/single-amplified-genome-e.html
+      ja: https://www.ddbj.nig.ac.jp/ddbj/single-amplified-genome.html
+
+  tls:
+    label: TLS
+    ddbj_page_url:
+      en: https://www.ddbj.nig.ac.jp/ddbj/tls-e.html
+      ja: https://www.ddbj.nig.ac.jp/ddbj/tls.html
+
+  htg:
+    label: HTG
+    ddbj_page_url:
+      en: https://www.ddbj.nig.ac.jp/ddbj/htg-e.html
+      ja: https://www.ddbj.nig.ac.jp/ddbj/htg.html
+
+  tsa:
+    label: TSA
+    ddbj_page_url:
+      en: https://www.ddbj.nig.ac.jp/ddbj/tsa-e.html
+      ja: https://www.ddbj.nig.ac.jp/ddbj/tsa.html
+
+  htc:
+    label: full length cDNA (HTC)
+    ddbj_page_url:
+      en: https://www.ddbj.nig.ac.jp/ddbj/htc-e.html
+      ja: https://www.ddbj.nig.ac.jp/ddbj/htc.html
+
+  est:
+    label: EST
+    ddbj_page_url:
+      en: https://www.ddbj.nig.ac.jp/ddbj/est-e.html
+      ja: https://www.ddbj.nig.ac.jp/ddbj/est.html
+
+  dna:
+    label: Gene sequences (DNA)
+    ddbj_page_url:
+      en: https://www.ddbj.nig.ac.jp/submission-e.html
+      ja: https://www.ddbj.nig.ac.jp/submission.html
+
+  rna:
+    label: Gene sequences (RNA)
+    ddbj_page_url:
+      en: https://www.ddbj.nig.ac.jp/submission-e.html
+      ja: https://www.ddbj.nig.ac.jp/submission.html
+
+  ask:
+    label: Ask DDBJ curator to judge a correct datatype
+    ddbj_page_url:
+      en: https://www.ddbj.nig.ac.jp/submission-e.html
+      ja: https://www.ddbj.nig.ac.jp/submission.html
