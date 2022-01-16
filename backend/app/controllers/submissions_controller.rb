@@ -13,6 +13,7 @@ class SubmissionsController < ApplicationController
 
   def submission_params
     params.require(:submission).permit(
+      :data_type,
       files: [],
 
       contact_person: [

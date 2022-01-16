@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 2021_12_29_031155) do
 
   create_table "submissions", force: :cascade do |t|
     t.bigint "user_id"
+    t.string "data_type", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_submissions_on_user_id"
