@@ -11,3 +11,40 @@ https://www.ddbj.nig.ac.jp/ddbj/file-format-e.html#sample
 
 Regarding the explanation of the datatype that you have chosen, visit the site below.
 <%= t @submission.data_type, scope: 'mssform.data_type_ddbj_page_urls' %>
+
+Upload the submission file(s) from the URL below, after you completely create them.
+https://######
+
+If the file size exceeds ## Gbytes, you should transfer the files to ~/mass/ direcotry by using the sftp file transfer.
+https://www.ddbj.nig.ac.jp/dra/submission-e.html#upload-sequence-data
+
+## Check tool for the submission files
+
+Before uploading the submission files, check syntax and protein translation by using GUI tool, UME, which includes both 'Parser' and 'transChecker'. If you cannot stat up UME on your computer, you shoudl use command line tool, 'Parser' and 'transCheker' to check the file.
+
+How to use UME, parser and transChecker.
+- UME, https://www.ddbj.nig.ac.jp/ddbj/ume-e.html
+- Parser, https://www.ddbj.nig.ac.jp/ddbj/parser-e.html
+- transChecker, https://www.ddbj.nig.ac.jp/ddbj/transchecker-e.html
+
+## Other information
+
+Pre-registration of BioProject and BioSample is required for submitting genome and transcriptome assemblies (Transcriptome Shotgun Assembly: TSA), and bulk sequences of a target gene or region (Target Locus Study: TLS).
+
+Make sure that annotation is optional for complete and draft (WGS) genome submissions. If genome sequences have biological features such as CDS, tRNA and rRNA, you need to pre-register locus tag prefix in the course of BioSample submission.
+
+If you want to annotate bacterial genomes, we strongly recommend to using the annotation pipeline "DFAST". DFAST produces an annotation file submittable to MSS and greatly shortens the submission processing time.
+https://dfast.ddbj.nig.ac.jp/
+
+CAUTION: when it is passed 1 month after the application without your sending submission file, we will cancell the application.
+
+We are looking forward to having your submission.
+
+Sincerely,
+DDBJ Mass Submission System (MSS)
+mass@ddbj.nig.ac.jp
+
+DISCLAIMER
+https://www.ddbj.nig.ac.jp/policies-e.html#disclaimer　
+How to use MSS
+https://www.ddbj.nig.ac.jp/ddbj/mss-e.html
