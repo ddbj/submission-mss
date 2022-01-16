@@ -16,6 +16,7 @@ services:
     environment:
       - MINIO_ENDPOINT=https://mss-staging.ddbj.nig.ac.jp
       - MINIO_SECRET_ACCESS_KEY=
+      - STAGE=staging
 
     volumes:
       - /home/w3const/submissions:/app/submissions

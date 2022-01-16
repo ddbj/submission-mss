@@ -326,7 +326,7 @@
               <select required class="form-select" id="dataType" {{on 'change' (pick 'target.value' (set @model 'dataType'))}}>
                 <option selected={{is-none @model.dataType}}></option>
 
-                {{#each this.dataTypes as |key|}}
+                {{#each (map-by 'key' (enum 'data_types')) as |key|}}
                   <option value={{key}} selected={{eq @model.dataType key}}>
                     {{t (concat 'data_types.' key)}}
                   </option>

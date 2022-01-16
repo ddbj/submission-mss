@@ -32,6 +32,7 @@ services:
       - MINIO_ENDPOINT=
       - MINIO_SECRET_ACCESS_KEY=
       - REDIS_URL=redis://redis
+      - SUBMISSION_MAIL_CC='DDBJ Mass Submission System (MSS) <mass@ddbj.nig.ac.jp>'
 
     depends_on:
       - postgres

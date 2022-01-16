@@ -43,8 +43,20 @@ ActiveRecord::Schema.define(version: 2021_12_29_031155) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "contact_people", force: :cascade do |t|
+    t.bigint "submission_id", null: false
+    t.string "email", null: false
+    t.string "full_name", null: false
+    t.string "affiliation", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["submission_id"], name: "index_contact_people_on_submission_id"
+  end
+
   create_table "submissions", force: :cascade do |t|
     t.bigint "user_id"
+    t.string "data_type", null: false
+    t.string "email_language", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_submissions_on_user_id"
@@ -59,4 +71,5 @@ ActiveRecord::Schema.define(version: 2021_12_29_031155) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "contact_people", "submissions"
 end

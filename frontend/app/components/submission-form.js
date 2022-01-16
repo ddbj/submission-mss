@@ -19,7 +19,6 @@ export default class SubmissionFormComponent extends Component {
   @tracked dragOver             = false;
 
   fileInputElement = null;
-  dataTypes        = ['wgs', 'complete_genome', 'mag', 'sag', 'tls', 'htg', 'tsa', 'htc', 'est', 'dna', 'rna', 'ask'];
 
   get anotherPersonIsPresent() {
     const {email, fullName, affiliation} = this.args.model.anotherPerson;
