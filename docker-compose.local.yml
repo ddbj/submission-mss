@@ -18,6 +18,8 @@ services:
     environment:
       - MINIO_ENDPOINT=http://mssform.localhost:3000
       - MINIO_SECRET_ACCESS_KEY=changeme
+      - STAGE=local
+      - SUBMISSION_MAIL_CC='MSS CC <local@example.com>'
 
     extra_hosts:
       - keycloak.localhost:host-gateway

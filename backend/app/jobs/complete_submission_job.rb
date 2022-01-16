@@ -19,6 +19,8 @@ class CompleteSubmissionJob < ApplicationJob
 
     FileUtils.move work, dest.tap(&:mkpath)
 
+    CompleteSubmissionMailer.with(submission: submission).for_submitter.deliver_now
+
     submission.files.purge
   end
 end
