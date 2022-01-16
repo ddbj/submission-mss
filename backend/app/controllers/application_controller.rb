@@ -38,7 +38,7 @@ class ApplicationController < ActionController::API
         config               = Rails.root.join('../config/openid-configuration.json').open(&JSON.method(:load))
         algorithms, jwks_uri = config.fetch_values('id_token_signing_alg_values_supported', 'jwks_uri')
 
-        payload, _header = JWT.decode(token, nil, true, algorithms: algorithms, jwks: ->(opts) {
+        jwks = ->(opts) {
           Rails.cache.fetch(:openid_jwks, force: opts[:invalidate]) {
             HTTP.get(jwks_uri).then {|res|
               raise res.status unless res.status.success?
@@ -46,8 +46,9 @@ class ApplicationController < ActionController::API
               res.parse
             }
           }
-        })
+        }
 
+        payload, _header = JWT.decode(token, nil, true, algorithms:, jwks:, verify_aud: true, aud: ENV.fetch('OPENID_CLIENT_ID'))
         payload
       end
     )
