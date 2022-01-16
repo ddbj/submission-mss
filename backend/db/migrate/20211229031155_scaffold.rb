@@ -9,7 +9,8 @@ class Scaffold < ActiveRecord::Migration[7.0]
     create_table :submissions do |t|
       t.references :user
 
-      t.string :data_type, null: false
+      t.string :data_type,      null: false
+      t.string :email_language, null: false
 
       t.timestamps
     end

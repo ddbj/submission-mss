@@ -1,0 +1,13 @@
+<%= @submission.contact_person.affiliation %>
+Dear Dr. <%= @submission.contact_person.full_name %>,
+
+Thank you for using DDBJ Mass Submission System (MSS) for large-scale sequence data submission.
+
+Annotation and sequence files are needed for the registration.
+https://www.ddbj.nig.ac.jp/ddbj/file-format-e.html
+
+Refer to the sample annotation for making the annotation file.
+https://www.ddbj.nig.ac.jp/ddbj/file-format-e.html#sample
+
+Regarding the explanation of the datatype that you have chosen, visit the site below.
+<%= t @submission.data_type, scope: 'mssform.data_type_ddbj_page_urls' %>
