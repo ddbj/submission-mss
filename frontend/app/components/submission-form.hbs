@@ -22,7 +22,7 @@
 <h1 class="display-6 my-4">新規申し込み</h1>
 
 <p>
-  登録可能なデータは次の通りです。<br>
+  登録可能なデータは次の通りです。<br />
   <a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept" target="_blank" rel="noopener">https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept</a>
 </p>
 
@@ -54,7 +54,7 @@
                 <radio.input checked={{eq this.determinedByOwnStudy true}} required class="form-check-input" {{on 'change' (fn this.setDeterminedByOwnStudy true)}} />
 
                 <radio.label class="form-check-label">
-                  自身の研究で配列決定した塩基配列です
+                  自身の研究で配列決定した塩基配列である
                 </radio.label>
               </group.radio>
             </div>
@@ -64,7 +64,7 @@
                 <radio.input checked={{eq this.determinedByOwnStudy false}} required class="form-check-input" {{on 'change' (fn this.setDeterminedByOwnStudy false)}} />
 
                 <radio.label class="form-check-label">
-                  公開されているデータからアセンブルした塩基配列 (TPA) です
+                  公開されているデータからアセンブルした塩基配列 (TPA) である
                 </radio.label>
               </group.radio>
             </div>
@@ -101,7 +101,10 @@
           </div>
 
           {{#if (eq @model.tpa false)}}
-            <p>TPAの場合、論文を準備しないのであれば申し込みできません。</p>
+            <p>
+              TPAの場合、論文を準備しないのであれば申し込みできません。<br />
+              <LinkTo @route="home">ホームに戻る</LinkTo>
+            </p>
           {{/if}}
         {{/if}}
       </div>
@@ -161,7 +164,7 @@
 
               {{#if this.files}}
                 <div class="card {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
-                  <ul class="list-group list-group-flush">
+                  <ul class="list-group list-group-flush overflow-auto" style="max-height: 550px">
                     {{#each this.files as |file|}}
                       <li class="list-group-item d-flex align-items-center">
                         <div class="ms-2 me-auto">
@@ -351,7 +354,7 @@
                 </div>
 
                 <div class="form-text col">
-                  Submissionデータの補足説明をここに記入してください(日本語可)。生物の説明(common nameや性質など)、単離生物由来でない場合は塩基配列をどうやって得たのか、そのほか、Curatorに知らせたいこと等を入力できます。<br>
+                  Submissionデータの補足説明をここに記入してください(日本語可)。生物の説明(common nameや性質など)、単離生物由来でない場合は塩基配列をどうやって得たのか、そのほか、Curatorに知らせたいこと等を入力できます。<br />
                   DDBJに登録した配列を更新する場合は対象のAccessionを記入してください。
                 </div>
               </div>
