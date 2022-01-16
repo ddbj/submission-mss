@@ -6,6 +6,7 @@ gem 'rails', '~> 7.0.0'
 
 gem 'aws-sdk-s3'
 gem 'dalli'
+gem 'enumerize'
 gem 'http'
 gem 'jb'
 gem 'jwt'

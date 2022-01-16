@@ -8,7 +8,7 @@ class CompleteSubmissionMailer < ApplicationMailer
 
     mail(
       to:            email_address_with_name(email, full_name),
-      subject:       "[DDBJ:#{@submission.mass_id}] Short title",
+      subject:       "[DDBJ:#{@submission.mass_id}] #{@submission.data_type_text}: Short title",
       template_name: 'for_submitter/not_uploaded'
     )
   end
