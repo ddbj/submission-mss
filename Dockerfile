@@ -3,13 +3,13 @@ FROM node:16 AS frontend
 ARG OPENID_CLIENT_ID
 ARG OPENID_CONFIGURATION_ENDPOINT
 
-ENV OPENID_CLIENT_ID=$OPENID_CLIENT_ID
+ENV OPENID_CLIENT_ID=${OPENID_CLIENT_ID:?}
 
 WORKDIR /app/frontend
 
 COPY ./config /app/config
 COPY ./frontend /app/frontend
-RUN curl $OPENID_CONFIGURATION_ENDPOINT > /app/config/openid-configuration.json
+RUN curl ${OPENID_CONFIGURATION_ENDPOINT:?} > /app/config/openid-configuration.json
 RUN --mount=type=cache,target=/tmp/node_modules yarn install --frozen-lockfile --modules-folder /tmp/node_modules && cp --recursive --no-target-directory /tmp/node_modules ./node_modules
 RUN yarn build
 
