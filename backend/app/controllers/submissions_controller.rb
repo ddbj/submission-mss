@@ -3,7 +3,7 @@ class SubmissionsController < ApplicationController
 
   def create
     @submission = current_user.submissions.create!(submission_params.except(:contact_person)) {|submission|
-      submission.build_contact_person(submission_params[:contact_person])
+      submission.build_contact_person submission_params[:contact_person]
     }
 
     CompleteSubmissionJob.perform_later @submission
@@ -13,8 +13,16 @@ class SubmissionsController < ApplicationController
 
   def submission_params
     params.require(:submission).permit(
+      :tpa,
+      :dfast,
+      :entries_count,
+      :hold_date,
+      :sequencer,
       :data_type,
+      :short_title,
+      :description,
       :email_language,
+
       files: [],
 
       contact_person: [

@@ -290,25 +290,17 @@
               <p>塩基配列決定にどのタイプのシークエンサーを使用しましたか</p>
 
               <RadioGroup as |group|>
-                <div class="form-check">
-                  <group.radio as |radio|>
-                    <radio.input checked={{eq @model.sequencer 'ngs'}} class="form-check-input" required {{on 'change' (set @model 'sequencer' 'ngs')}} />
+                {{#each (enum 'sequencers') as |sequencer|}}
+                  <div class="form-check">
+                    <group.radio as |radio|>
+                      <radio.input checked={{eq @model.sequencer sequencer.key}} class="form-check-input" required {{on 'change' (set @model 'sequencer' sequencer.key)}} />
 
-                    <radio.label class="form-check-label">
-                      NGS
-                    </radio.label>
-                  </group.radio>
-                </div>
-
-                <div class="form-check">
-                  <group.radio as |radio|>
-                    <radio.input checked={{eq @model.sequencer 'sanger'}} class="form-check-input" required {{on 'change' (set @model 'sequencer' 'sanger')}} />
-
-                    <radio.label class="form-check-label">
-                      Sanger dideoxy sequencing
-                    </radio.label>
-                  </group.radio>
-                </div>
+                      <radio.label class="form-check-label">
+                        {{sequencer.label}}
+                      </radio.label>
+                    </group.radio>
+                  </div>
+                {{/each}}
               </RadioGroup>
             </div>
 
@@ -318,9 +310,9 @@
               <select required class="form-select" id="dataType" {{on 'change' (pick 'target.value' (set @model 'dataType'))}}>
                 <option selected={{is-none @model.dataType}}></option>
 
-                {{#each (map-by 'key' (enum 'data_types')) as |key|}}
-                  <option value={{key}} selected={{eq @model.dataType key}}>
-                    {{t (concat 'data_types.' key)}}
+                {{#each (enum 'data_types') as |type|}}
+                  <option value={{type.key}} selected={{eq @model.dataType type.key}}>
+                    {{type.label}}
                   </option>
                 {{/each}}
               </select>
@@ -336,7 +328,7 @@
           <div class="card-body vstack gap-3">
             <div>
               <label for="shortTitle" class="form-label">ショートタイトル</label>
-              <input type="text" value={{@model.shortTitle}} required maxlength="80" placeholder="e.g. Draft genome sequences of Pseudomonas five strains" class="form-control" id="shortTitle" {{on 'input' (pick 'target.value' (set @model 'shortTitle'))}} />
+              <input type="text" value={{@model.shortTitle}} maxlength="80" placeholder="e.g. Draft genome sequences of Pseudomonas five strains" class="form-control" id="shortTitle" {{on 'input' (pick 'target.value' (set @model 'shortTitle'))}} />
 
               <div class="row">
                 <div class="form-text col-auto order-1">
@@ -351,7 +343,7 @@
 
             <div>
               <label for="description" class="form-label">補足説明</label>
-              <textarea required minlength="100" maxlength="1000" rows="8" placeholder="e.g.活性汚泥から単離した Dibenzothiophene分解能を有するPseudomonas属ストレイン5種のドラフトゲノム配列にアノテーションをつけたもの" class="form-control" id="description" {{on 'keypress' this.preventEnter}} {{on 'input' this.onDescriptionInput}}>{{@model.description}}</textarea>
+              <textarea required minlength="100" maxlength="1000" rows="8" placeholder="e.g.活性汚泥から単離した Dibenzothiophene分解能を有するPseudomonas属ストレイン5種のドラフトゲノム配列にアノテーションをつけたもの" class="form-control" id="description" {{on 'input' (pick 'target.value' (set @model 'description'))}}>{{@model.description}}</textarea>
 
               <div class="row">
                 <div class="form-text col-auto order-1">

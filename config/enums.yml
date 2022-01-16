@@ -70,3 +70,10 @@ data_types:
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/submission-e.html
       ja: https://www.ddbj.nig.ac.jp/submission.html
+
+sequencers:
+  - key: ngs
+    label: NGS
+
+  - key: sanger
+    label: Sanger dideoxy sequencing

@@ -3,7 +3,9 @@ class ApplicationController < ActionController::API
 
   def current_user(token = openid_token_payload)
     if sub = token&.fetch('sub')
-      User.find_or_create_by!(openid_sub: sub)
+      User.find_or_initialize_by(openid_sub: sub).tap {|user|
+        user.update! openid_preferred_username: token.fetch('preferred_username')
+      }
     else
       nil
     end

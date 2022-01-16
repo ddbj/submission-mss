@@ -66,21 +66,6 @@ export default class SubmissionFormComponent extends Component {
     }
   }
 
-  @action preventEnter(e) {
-    if (e.keyCode === 13) {
-      e.preventDefault();
-    }
-  }
-
-  @action onDescriptionInput(e) {
-    e.preventDefault();
-
-    const val = stripLineBreaks(e.target.value);
-
-    e.target.value              = val;
-    this.args.model.description = val;
-  }
-
   @action async submit(uploadProgressModal) {
     const blobs = await this.uploadFiles(uploadProgressModal);
 
@@ -109,8 +94,4 @@ export default class SubmissionFormComponent extends Component {
 
     return blobs;
   }
-}
-
-function stripLineBreaks(str) {
-  return str.replace(/\r\n|\n|\r/g, '');
 }

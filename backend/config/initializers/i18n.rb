@@ -16,4 +16,16 @@ Rails.application.config.after_initialize do
       }
     end
   end
+
+  enums.fetch(:sequencers).each do |sequencer|
+    key, label = sequencer.fetch_values(:key, :label)
+
+    %i(en ja).each do |locale|
+      I18n.backend.store_translations locale, mssform: {
+        sequencers: {
+          key => label
+        }
+      }
+    end
+  end
 end
