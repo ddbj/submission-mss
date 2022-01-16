@@ -1,14 +1,17 @@
 Rails.application.config.after_initialize do
-  enums = YAML.load_file(Rails.root.join('config/enums.yml')).deep_symbolize_keys
+  enums = YAML.load_file(Rails.root.join('../config/enums.yml')).deep_symbolize_keys
 
-  enums[:data_types].each do |type, data|
+  enums.fetch(:data_types).each do |type|
+    key, label, ddbj_page_url = type.fetch_values(:key, :label, :ddbj_page_url)
+
     %i(en ja).each do |locale|
       I18n.backend.store_translations locale, mssform: {
         data_types: {
-          type => data[:label]
+          key => label
         },
+
         data_type_ddbj_page_urls: {
-          type => data[:ddbj_page_url][locale]
+          key => ddbj_page_url.fetch(locale)
         }
       }
     end

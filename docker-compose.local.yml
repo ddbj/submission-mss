@@ -9,7 +9,7 @@ services:
   rails: &rails-local
     build:
       args:
-        - OPENID_CLIENT_ID=mssform
+        - OPENID_CLIENT_ID=mss_staging
         - OPENID_CONFIGURATION_ENDPOINT=http://keycloak.localhost:8080/auth/realms/master/.well-known/openid-configuration
 
       extra_hosts:

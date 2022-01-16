@@ -3,6 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const yaml = require('js-yaml');
+
 module.exports = function (environment) {
   const {
     authorization_endpoint,
@@ -10,7 +12,7 @@ module.exports = function (environment) {
     revocation_endpoint,
     userinfo_endpoint,
     end_session_endpoint,
-  } = JSON.parse(fs.readFileSync(process.env.OPENID_CONFIGURATION_PATH));
+  } = JSON.parse(fs.readFileSync(path.join(__dirname, '../../config/openid-configuration.json')));
 
   let ENV = {
     modulePrefix: 'mssform-web',
@@ -29,6 +31,7 @@ module.exports = function (environment) {
     },
 
     APP: {
+      enums: yaml.load(fs.readFileSync(path.join(__dirname, '../../config/enums.yml')))
     },
 
     appauth: {
