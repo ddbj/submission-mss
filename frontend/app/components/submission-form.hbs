@@ -300,20 +300,20 @@
               <RadioGroup as |group|>
                 <div class="form-check">
                   <group.radio as |radio|>
-                    <radio.input checked={{eq @model.sequencer 'sanger'}} class="form-check-input" required {{on 'change' (set @model 'sequencer' 'sanger')}} />
+                    <radio.input checked={{eq @model.sequencer 'ngs'}} class="form-check-input" required {{on 'change' (set @model 'sequencer' 'ngs')}} />
 
                     <radio.label class="form-check-label">
-                      Sanger dideoxy sequencing
+                      NGS
                     </radio.label>
                   </group.radio>
                 </div>
 
                 <div class="form-check">
                   <group.radio as |radio|>
-                    <radio.input checked={{eq @model.sequencer 'ngs'}} class="form-check-input" required {{on 'change' (set @model 'sequencer' 'ngs')}} />
+                    <radio.input checked={{eq @model.sequencer 'sanger'}} class="form-check-input" required {{on 'change' (set @model 'sequencer' 'sanger')}} />
 
                     <radio.label class="form-check-label">
-                      NGS
+                      Sanger dideoxy sequencing
                     </radio.label>
                   </group.radio>
                 </div>
