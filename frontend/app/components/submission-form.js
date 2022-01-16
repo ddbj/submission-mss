@@ -20,6 +20,9 @@ export default class SubmissionFormComponent extends Component {
 
   fileInputElement = null;
 
+  annotationFileExtensions = ['.ann', '.annt.tsv', '.ann.txt', '.ano.tsv'];
+  sequenceFileExtensions   = ['.fasta', '.seq.fa', '.fa', '.fna', '.seq', '.sequence.ddbj'];
+
   get anotherPersonIsPresent() {
     const {email, fullName, affiliation} = this.args.model.anotherPerson;
 
