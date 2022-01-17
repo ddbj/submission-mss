@@ -3,7 +3,7 @@ class CompleteSubmissionJob < ApplicationJob
 
   def perform(submission)
     write_submission_files submission
-    add_row_to_review_sheet submission
+    add_row_to_working_list submission
 
     CompleteSubmissionMailer.with(submission: submission).for_submitter.deliver_now
 
@@ -33,9 +33,9 @@ class CompleteSubmissionJob < ApplicationJob
     FileUtils.move work, dest.tap(&:mkpath)
   end
 
-  def add_row_to_review_sheet(submission)
-    sheet_id   = ENV.fetch('REVIEW_SHEET_ID')
-    sheet_name = ENV.fetch('REVIEW_SHEET_NAME')
+  def add_row_to_working_list(submission)
+    sheet_id   = ENV.fetch('MSS_WORKING_LIST_SHEET_ID')
+    sheet_name = ENV.fetch('MSS_WORKING_LIST_SHEET_NAME')
 
     authorizer = Google::Auth::ServiceAccountCredentials.from_env(scope: 'https://www.googleapis.com/auth/spreadsheets')
     service    = Google::Apis::SheetsV4::SheetsService.new
@@ -52,37 +52,37 @@ class CompleteSubmissionJob < ApplicationJob
 
   def to_hash(submission)
     {
-      mass_id:                     submission.mass_id,
-      curator:                     nil,
-      created_date:                submission.created_at.to_date,
-      status:                      nil,
-      short_title:                 submission.short_title,
-      description:                 submission.description,
-      contact_person_email:        submission.contact_person.email,
-      contact_person_full_name:    submission.contact_person.full_name,
-      contact_person_affiliation:  submission.contact_person.affiliation,
-      subcontact_email:            nil, # TODO
-      subcontact_name_affiliation: nil, # TODO
-      dway_account:                submission.user.openid_preferred_username,
-      date_arrival_date:           submission.files.empty? ? nil : submission.created_at.to_date,
-      check_start_date:            nil,
-      finish_date:                 nil,
-      sequencer:                   submission.sequencer_text,
-      annotation_pipeline:         submission.dfast? ? 'DFAST' : nil,
-      hup:                         submission.hold_date,
-      tpa:                         submission.tpa?,
-      data_type:                   submission.data_type_text,
-      total_entry:                 submission.entries_count,
-      accession:                   nil,
-      prefix_count:                nil,
-      div:                         nil,
-      bioproject:                  nil,
-      biosample:                   nil,
-      drr:                         nil,
-      language:                    submission.email_language,
-      mail_j:                      nil,
-      mail_e:                      nil,
-      memo:                        nil
+      mass_id:                    submission.mass_id,
+      curator:                    nil,
+      created_date:               submission.created_at.to_date,
+      status:                     nil,
+      short_title:                submission.short_title,
+      description:                submission.description,
+      contact_person_email:       submission.contact_person.email,
+      contact_person_full_name:   submission.contact_person.full_name,
+      contact_person_affiliation: submission.contact_person.affiliation,
+      other_person_email:         nil, # TODO
+      other_person_full_name:     nil, # TODO
+      dway_account:               submission.user.openid_preferred_username,
+      date_arrival_date:          submission.files.empty? ? nil : submission.created_at.to_date,
+      check_start_date:           nil,
+      finish_date:                nil,
+      sequencer:                  submission.sequencer_text,
+      annotation_pipeline:        submission.dfast? ? 'DFAST' : nil,
+      hup:                        submission.hold_date || 'non-HUP',
+      tpa:                        submission.tpa?,
+      data_type:                  submission.data_type_text,
+      total_entry:                submission.entries_count,
+      accession:                  nil,
+      prefix_count:               nil,
+      div:                        nil,
+      bioproject:                 nil,
+      biosample:                  nil,
+      drr:                        nil,
+      language:                   submission.email_language,
+      mail_j:                     nil,
+      mail_e:                     nil,
+      memo:                       nil
     }
   end
 end
