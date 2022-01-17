@@ -23,12 +23,6 @@ export default class SubmissionFormComponent extends Component {
   annotationFileExtensions = ['.ann', '.annt.tsv', '.ann.txt', '.ano.tsv'];
   sequenceFileExtensions   = ['.fasta', '.seq.fa', '.fa', '.fna', '.seq', '.sequence.ddbj'];
 
-  get anotherPersonIsPresent() {
-    const {email, fullName, affiliation} = this.args.model.anotherPerson;
-
-    return [email, fullName, affiliation].some(isPresent);
-  }
-
   @action setDeterminedByOwnStudy(val) {
     this.determinedByOwnStudy = val;
 
@@ -64,6 +58,14 @@ export default class SubmissionFormComponent extends Component {
     if (val) {
       this.args.model.holdDate = null;
     }
+  }
+
+  @action addOtherPerson() {
+    this.args.model.otherPeople.createRecord();
+  }
+
+  @action removeOtherPerson(person) {
+    person.destroyRecord();
   }
 
   @action async submit(uploadProgressModal) {

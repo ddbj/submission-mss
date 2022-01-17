@@ -1,6 +1,5 @@
 {
   submission: {
-    id: @submission.mass_id,
-    contact_person: @submission.contact_person.as_json(only: %i(id email full_name affiliation))
+    id: @submission.mass_id
   }
 }

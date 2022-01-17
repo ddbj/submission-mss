@@ -58,9 +58,9 @@ class CompleteSubmissionJob < ApplicationJob
       status:                     nil,
       short_title:                submission.short_title,
       description:                submission.description,
-      contact_person_email:       submission.contact_person.email,
-      contact_person_full_name:   submission.contact_person.full_name,
-      contact_person_affiliation: submission.contact_person.affiliation,
+      contact_person_email:       submission.contact_person.fetch('email'),
+      contact_person_full_name:   submission.contact_person.fetch('full_name'),
+      contact_person_affiliation: submission.contact_person.fetch('affiliation'),
       other_person_email:         nil, # TODO
       other_person_full_name:     nil, # TODO
       dway_account:               submission.user.openid_preferred_username,

@@ -1,8 +1,8 @@
-import Model, { attr, belongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 export default class Submission extends Model {
   @belongsTo('contact-person', {async: false}) contactPerson;
-  @belongsTo('another-person', {async: false}) anotherPerson;
+  @hasMany('other-person', {async: false}) otherPeople;
 
   @attr('boolean') tpa;
   @attr('boolean') dfast;

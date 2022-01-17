@@ -3,8 +3,6 @@ class Submission < ApplicationRecord
 
   belongs_to :user
 
-  has_one :contact_person
-
   has_many_attached :files
 
   YAML.load_file(Rails.root.join('../config/enums.yml')).deep_symbolize_keys.then do |enums|

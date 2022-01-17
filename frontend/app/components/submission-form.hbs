@@ -193,7 +193,7 @@
                 </div>
               {{else}}
                 <div class="card border-2 border-dashed {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
-                  <div class="card-body py-5 text-center">
+                  <div class="card-body py-5 text-center text-muted">
                     <a href="#" class="stretched-link" {{on 'click' (prevent-default this.selectFiles)}}>ファイルを選択</a>するか、ここにファイルをドロップしてください。
                   </div>
                 </div>
@@ -234,51 +234,70 @@
             Contact person
           </div>
 
-          <div class="card-body row row-cols-2 gy-3">
-            {{#let @model.contactPerson as |person|}}
-              <div class="col">
-                <label for="contactPerson.email" class="form-label">Submission fileのcontact 行に記載する、1名の登録責任者のEmail</label>
-                <input type="email" value={{person.email}} required class="form-control" id="contactPerson.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
-              </div>
+          <div class="card-body">
+            <p>Submission fileのcontact 行に記載する、1名の登録責任者について記載してください。</p>
 
-              <div class="col">
-                <label for="contactPerson.fullName" class="form-label">英語名 (フルネーム) を入力してください</label>
-                <input type="text" value={{person.fullName}} required maxlength="255" class="form-control" id="contactPerson.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
-              </div>
+            <div class="row row-cols-2 gy-3">
+              {{#let @model.contactPerson as |person|}}
+                <div class="col">
+                  <label for="contactPerson.email" class="form-label">Email アドレス</label>
+                  <input type="email" value={{person.email}} required class="form-control" id="contactPerson.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
+                </div>
 
-              <div class="col">
-                <label for="contactPerson.affiliation" class="form-label">所属名 (英語名)</label>
-                <input type="text" value={{person.affiliation}} required maxlength="255" class="form-control" id="contactPerson.affiliation" {{on 'change' (pick 'target.value' (set person 'affiliation'))}} />
-              </div>
-            {{/let}}
+                <div class="col">
+                  <label for="contactPerson.fullName" class="form-label">フルネーム (英語表記)</label>
+                  <input type="text" value={{person.fullName}} required maxlength="255" class="form-control" id="contactPerson.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
+                </div>
+
+                <div class="col">
+                  <label for="contactPerson.affiliation" class="form-label">所属名 (英語表記)</label>
+                  <input type="text" value={{person.affiliation}} required maxlength="255" class="form-control" id="contactPerson.affiliation" {{on 'change' (pick 'target.value' (set person 'affiliation'))}} />
+                </div>
+              {{/let}}
+            </div>
           </div>
         </div>
 
         <div class="card">
           <div class="card-header">
-            Another person who would like to contact DDBJ
+            Other person who would like to contact DDBJ
           </div>
 
           <div class="card-body">
-            <p>コンタクトパーソン以外に登録担当がおり、Accession、公開お知らせ通知を受けたい場合は、このセクションに記入してください</p>
+            <p>コンタクトパーソン以外に登録担当がおり、Accessionや公開のお知らせを受けたい場合は通知先を追加してください。</p>
 
-            <div class="row row-cols-2 gy-3">
-              {{#let @model.anotherPerson as |person|}}
-                <div class="col">
-                  <label for="anotherPerson.email" class="form-label">Email address</label>
-                  <input type="email" value={{person.email}} required={{this.anotherPersonIsPresent}} class="form-control" id="anotherPerson.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
-                </div>
+            <div class="card">
+              <ul class="list-group list-group-flush">
+                {{#each @model.otherPeople as |person i|}}
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col">
+                        <label for="otherPerson.{{i}}.email" class="form-label">Email アドレス</label>
+                        <input type="email" value={{person.email}} required=true class="form-control" id="otherPerson.{{i}}.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
+                      </div>
 
-                <div class="col">
-                  <label for="anotherPerson.fullName" class="form-label">英語名 (フルネーム) を入力してください</label>
-                  <input type="text" value={{person.fullName}} required={{this.anotherPersonIsPresent}} maxlength="255" class="form-control" id="anotherPerson.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
-                </div>
+                      <div class="col">
+                        <label for="otherPerson.{{i}}.fullName" class="form-label">フルネーム (英語表記)</label>
+                          <input type="text" value={{person.fullName}} required=true maxlength="255" class="form-control" id="otherPerson.{{i}}.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
+                      </div>
 
-                <div class="col">
-                  <label for="anotherPerson.affiliation" class="form-label">所属名 (英語名)</label>
-                  <input type="text" value={{person.affiliation}} required={{this.anotherPersonIsPresent}} maxlength="255" class="form-control" id="anotherPerson.affiliation" {{on 'change' (pick 'target.value' (set person 'affiliation'))}} />
-                </div>
-              {{/let}}
+                      <div class="col-auto align-self-center">
+                        <button type="button" class="btn btn-outline-danger" {{on 'click' (prevent-default (fn this.removeOtherPerson person))}}>削除</button>
+                      </div>
+                    </div>
+                  </li>
+                {{else}}
+                  <li class="list-group-item py-3 text-muted text-center">
+                    登録されていません。
+                  </li>
+                {{/each}}
+              </ul>
+
+              <div class="card-footer bg-white">
+                <button type="button" class="btn btn-outline-primary" {{on 'click' (prevent-default this.addOtherPerson)}}>
+                  通知先の追加
+                </button>
+              </div>
             </div>
           </div>
         </div>

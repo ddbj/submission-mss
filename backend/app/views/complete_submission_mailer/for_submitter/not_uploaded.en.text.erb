@@ -1,5 +1,4 @@
-<%= @submission.contact_person.affiliation %>
-Dear Dr. <%= @submission.contact_person.full_name %>,
+<%= render 'complete_submission_mailer/for_submitter/recipients', submission: @submission %>
 
 Thank you for using DDBJ Mass Submission System (MSS) for large-scale sequence data submission.
 

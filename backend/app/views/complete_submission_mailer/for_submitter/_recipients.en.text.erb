@@ -1,0 +1,5 @@
+<%= @submission.contact_person.affiliation %>
+Dear Dr. <%= @submission.contact_person.full_name %>,
+<% @submission.other_people.each do |person| %>
+Cc: Dear Dr. <%= person.fetch('full_name') %>,
+<% end %>

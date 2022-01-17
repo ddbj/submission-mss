@@ -1,7 +1,6 @@
 import Model, { attr } from '@ember-data/model';
 
-export default class AnotherPerson extends Model {
+export default class OtherPerson extends Model {
   @attr email;
   @attr fullName;
-  @attr affiliation;
 }
