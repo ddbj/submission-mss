@@ -17,7 +17,6 @@ class SubmissionsController < ApplicationController
       :hold_date,
       :sequencer,
       :data_type,
-      :short_title,
       :description,
       :email_language,
 

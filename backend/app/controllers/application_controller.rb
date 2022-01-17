@@ -1,22 +1,27 @@
 class ApplicationController < ActionController::API
   private
 
-  def current_user(token = openid_token_payload)
-    if sub = token&.fetch('sub')
-      User.find_or_initialize_by(openid_sub: sub).tap {|user|
-        user.update! openid_preferred_username: token.fetch('preferred_username')
+  def current_user
+    return nil           if @current_user == :not_found
+    return @current_user if @current_user
+
+    if token = openid_token_payload
+      @current_user = User.find_or_initialize_by(openid_sub: token.fetch('sub')).tap {|user|
+        user.update! id_token: token
       }
     else
+      @current_user = :not_found
       nil
     end
   rescue JWT::DecodeError => e
     Rails.logger.error e
 
+    @current_user = :not_found
     nil
   end
 
   def require_authentication
-    return if token = openid_token_payload and current_user(token)
+    return if current_user
 
     render json: {
       error: 'missing token'
@@ -30,27 +35,23 @@ class ApplicationController < ActionController::API
   end
 
   def openid_token_payload
-    @openid_token_payload ||= (
-      begin
-        return nil unless header = request.headers['Authorization']
-        return nil unless token  = /\ABearer (?<token>\S+)\z/.match(header)&.named_captures.fetch('token')
+    return nil unless header = request.headers['Authorization']
+    return nil unless token  = /\ABearer (?<token>\S+)\z/.match(header)&.named_captures.fetch('token')
 
-        config               = Rails.root.join('../config/openid-configuration.json').open(&JSON.method(:load))
-        algorithms, jwks_uri = config.fetch_values('id_token_signing_alg_values_supported', 'jwks_uri')
+    config               = Rails.root.join('../config/openid-configuration.json').open(&JSON.method(:load))
+    algorithms, jwks_uri = config.fetch_values('id_token_signing_alg_values_supported', 'jwks_uri')
 
-        jwks = ->(opts) {
-          Rails.cache.fetch(:openid_jwks, force: opts[:invalidate]) {
-            HTTP.get(jwks_uri).then {|res|
-              raise res.status unless res.status.success?
+    jwks = ->(opts) {
+      Rails.cache.fetch(:openid_jwks, force: opts[:invalidate]) {
+        HTTP.get(jwks_uri).then {|res|
+          raise res.status unless res.status.success?
 
-              res.parse
-            }
-          }
+          res.parse
         }
+      }
+    }
 
-        payload, _header = JWT.decode(token, nil, true, algorithms:, jwks:, verify_aud: true, aud: ENV.fetch('OPENID_CLIENT_ID'))
-        payload
-      end
-    )
+    payload, _header = JWT.decode(token, nil, true, algorithms:, jwks:, verify_aud: true, aud: ENV.fetch('OPENID_CLIENT_ID'))
+    payload
   end
 end

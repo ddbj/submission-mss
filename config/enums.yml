@@ -5,7 +5,7 @@ data_types:
       en: https://www.ddbj.nig.ac.jp/ddbj/wgs-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/wgs.html
 
-  - key: complete_genome
+  - key: gnm
     label: complete or nearly complete genome
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/genome-e.html

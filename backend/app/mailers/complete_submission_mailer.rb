@@ -6,7 +6,7 @@ class CompleteSubmissionMailer < ApplicationMailer
       mail(
         to:            format_address(@submission.contact_person),
         cc:            @submission.other_people.map { format_address(_1) } + ENV['SUBMISSION_MAIL_CC'].to_s.split(','),
-        subject:       "[DDBJ:#{@submission.mass_id}] #{@submission.data_type_text}#{@submission.short_title.presence&.prepend(': ')}",
+        subject:       "[DDBJ:#{@submission.mass_id}] #{@submission.data_type_text}",
         template_name: 'for_submitter/not_uploaded'
       )
     end

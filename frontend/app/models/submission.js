@@ -11,7 +11,6 @@ export default class Submission extends Model {
   @attr('string')  holdDate;
   @attr('string')  sequencer;
   @attr('string')  dataType;
-  @attr('string')  shortTitle;
   @attr('string')  description;
   @attr('string')  emailLanguage;
 }

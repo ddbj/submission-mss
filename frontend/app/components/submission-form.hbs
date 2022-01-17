@@ -344,38 +344,21 @@
 
         <div class="card">
           <div class="card-header">
-            Title of the submission
+            Description
           </div>
 
-          <div class="card-body vstack gap-3">
-            <div>
-              <label for="shortTitle" class="form-label">ショートタイトル</label>
-              <input type="text" value={{@model.shortTitle}} maxlength="80" placeholder="e.g. Draft genome sequences of Pseudomonas five strains" class="form-control" id="shortTitle" {{on 'input' (pick 'target.value' (set @model 'shortTitle'))}} />
-
-              <div class="row">
-                <div class="form-text col-auto order-1">
-                  {{or @model.shortTitle.length 0}} / 80
-                </div>
-
-                <div class="form-text col">
-                  このsubmissionにショートタイトルをつけてください。Emailの件名に表示されます。
-                </div>
-              </div>
-            </div>
+          <div class="card-body">
+            <p>
+              Submissionデータの補足説明をここに記入してください(日本語可)。生物の説明(common nameや性質など)、単離生物由来でない場合は塩基配列をどうやって得たのか、そのほか、Curatorに知らせたいこと等を入力できます。<br />
+              DDBJに登録した配列を更新する場合は対象のAccessionを記入してください。
+            </p>
 
             <div>
-              <label for="description" class="form-label">補足説明</label>
-              <textarea required minlength="100" maxlength="1000" rows="8" placeholder="e.g.活性汚泥から単離した Dibenzothiophene分解能を有するPseudomonas属ストレイン5種のドラフトゲノム配列にアノテーションをつけたもの" class="form-control" id="description" {{on 'input' (pick 'target.value' (set @model 'description'))}}>{{@model.description}}</textarea>
+              <label for="description" class="form-label visually-hidden">補足説明</label>
+              <textarea required minlength="30" maxlength="1000" rows="8" placeholder="e.g.活性汚泥から単離した Dibenzothiophene分解能を有するPseudomonas属ストレイン5種のドラフトゲノム配列にアノテーションをつけたもの" class="form-control" id="description" {{on 'input' (pick 'target.value' (set @model 'description'))}}>{{@model.description}}</textarea>
 
-              <div class="row">
-                <div class="form-text col-auto order-1">
-                  {{or @model.description.length 0}} / 1000
-                </div>
-
-                <div class="form-text col">
-                  Submissionデータの補足説明をここに記入してください(日本語可)。生物の説明(common nameや性質など)、単離生物由来でない場合は塩基配列をどうやって得たのか、そのほか、Curatorに知らせたいこと等を入力できます。<br />
-                  DDBJに登録した配列を更新する場合は対象のAccessionを記入してください。
-                </div>
+              <div class="form-text text-end">
+                {{or @model.description.length 0}} / 1000
               </div>
             </div>
           </div>

@@ -56,14 +56,12 @@ class CompleteSubmissionJob < ApplicationJob
       curator:                    nil,
       created_date:               submission.created_at.to_date,
       status:                     nil,
-      short_title:                submission.short_title,
       description:                submission.description,
       contact_person_email:       submission.contact_person.fetch('email'),
       contact_person_full_name:   submission.contact_person.fetch('full_name'),
       contact_person_affiliation: submission.contact_person.fetch('affiliation'),
-      other_person_email:         nil, # TODO
-      other_person_full_name:     nil, # TODO
-      dway_account:               submission.user.openid_preferred_username,
+      other_person:               submission.other_people.map { format_address(_1) }.join('; '),
+      dway_account:               submission.user.id_token.fetch('preferred_username'),
       date_arrival_date:          submission.files.empty? ? nil : submission.created_at.to_date,
       check_start_date:           nil,
       finish_date:                nil,
@@ -71,7 +69,7 @@ class CompleteSubmissionJob < ApplicationJob
       annotation_pipeline:        submission.dfast? ? 'DFAST' : nil,
       hup:                        submission.hold_date || 'non-HUP',
       tpa:                        submission.tpa?,
-      data_type:                  submission.data_type_text,
+      data_type:                  submission.data_type.upcase,
       total_entry:                submission.entries_count,
       accession:                  nil,
       prefix_count:               nil,
@@ -84,5 +82,14 @@ class CompleteSubmissionJob < ApplicationJob
       mail_e:                     nil,
       memo:                       nil
     }
+  end
+
+  def format_address(person)
+    email, full_name = person.fetch_values('email', 'full_name')
+
+    Mail::Address.new.tap {|builder|
+      builder.address      = email
+      builder.display_name = full_name
+    }.to_s
   end
 end
