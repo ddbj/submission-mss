@@ -2,7 +2,7 @@ class ApplicationController < ActionController::API
   private
 
   def current_user
-    return nil           if @current_user == :not_found
+    return nil           if @current_user == :not_available
     return @current_user if @current_user
 
     if token = openid_token_payload
@@ -10,13 +10,13 @@ class ApplicationController < ActionController::API
         user.update! id_token: token
       }
     else
-      @current_user = :not_found
+      @current_user = :not_available
       nil
     end
   rescue JWT::DecodeError => e
     Rails.logger.error e
 
-    @current_user = :not_found
+    @current_user = :not_available
     nil
   end
 
