@@ -2,6 +2,8 @@
 
 class CompleteSubmissionPreview < ActionMailer::Preview
   def for_submitter
-    CompleteSubmissionMailer.with(submission: Submission.last).for_submitter
+    submission = Submission.order(id: :desc).offset(params[:last] || 0).first
+
+    CompleteSubmissionMailer.with(submission: submission).for_submitter
   end
 end
