@@ -14,12 +14,38 @@ class Scaffold < ActiveRecord::Migration[7.0]
       t.boolean :dfast,          null: false
       t.integer :entries_count,  null: false
       t.date    :hold_date
-      t.jsonb   :contact_person, null: false
-      t.jsonb   :other_people,   null: false, array: true
       t.string  :sequencer,      null: false
       t.string  :data_type,      null: false
       t.string  :description,    null: false
       t.string  :email_language, null: false
+
+      t.timestamps
+    end
+
+    create_table :uploads do |t|
+      t.references :submission, null: false
+
+      t.boolean :copied, null: false, default: false
+
+      t.timestamps
+    end
+
+    create_table :contact_people do |t|
+      t.references :submission, null: false
+
+      t.string :email,       null: false
+      t.string :full_name,   null: false
+      t.string :affiliation, null: false
+
+      t.timestamps
+    end
+
+    create_table :other_people do |t|
+      t.references :submission, null: false
+
+      t.string  :email,     null: false
+      t.string  :full_name, null: false
+      t.integer :position,  null: false, index: true
 
       t.timestamps
     end

@@ -1,5 +1,5 @@
-<%= submission.contact_person.fetch('affiliation') %>
-<%= submission.contact_person.fetch('full_name') %> 様
+<%= submission.contact_person.affiliation %>
+<%= submission.contact_person.full_name %> 様
 <% submission.other_people.each do |person| %>
-Cc: <%= person.fetch('full_name') %> 様
+Cc: <%= person.full_name %> 様
 <% end %>

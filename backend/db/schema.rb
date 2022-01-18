@@ -43,14 +43,33 @@ ActiveRecord::Schema.define(version: 2021_12_29_031155) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "contact_people", force: :cascade do |t|
+    t.bigint "submission_id", null: false
+    t.string "email", null: false
+    t.string "full_name", null: false
+    t.string "affiliation", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["submission_id"], name: "index_contact_people_on_submission_id"
+  end
+
+  create_table "other_people", force: :cascade do |t|
+    t.bigint "submission_id", null: false
+    t.string "email", null: false
+    t.string "full_name", null: false
+    t.integer "position", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["position"], name: "index_other_people_on_position"
+    t.index ["submission_id"], name: "index_other_people_on_submission_id"
+  end
+
   create_table "submissions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.boolean "tpa", null: false
     t.boolean "dfast", null: false
     t.integer "entries_count", null: false
     t.date "hold_date"
-    t.jsonb "contact_person", null: false
-    t.jsonb "other_people", null: false, array: true
     t.string "sequencer", null: false
     t.string "data_type", null: false
     t.string "description", null: false
@@ -58,6 +77,14 @@ ActiveRecord::Schema.define(version: 2021_12_29_031155) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_submissions_on_user_id"
+  end
+
+  create_table "uploads", force: :cascade do |t|
+    t.bigint "submission_id", null: false
+    t.boolean "copied", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["submission_id"], name: "index_uploads_on_submission_id"
   end
 
   create_table "users", force: :cascade do |t|

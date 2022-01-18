@@ -2,36 +2,14 @@ class CompleteSubmissionJob < ApplicationJob
   queue_as :default
 
   def perform(submission)
-    write_submission_files submission
+    submission.uploads.first&.copy_flles_to_submissions_dir
+
     add_row_to_working_list submission
 
-    CompleteSubmissionMailer.with(submission: submission).for_submitter.deliver_now
-
-    submission.files.purge
+    CompleteSubmissionMailer.with(submission:).for_submitter.deliver_now
   end
 
   private
-
-  def write_submission_files(submission)
-    return if submission.files.empty?
-
-    output_dir = Pathname.new(ENV.fetch('SUBMISSIONS_DIR'))
-    timestamp  = submission.created_at.strftime('%Y%m%d')
-    work       = output_dir.join('.work', submission.mass_id, timestamp)
-    dest       = output_dir.join(submission.mass_id)
-
-    work.mkpath
-
-    submission.files.each do |attachment|
-      work.join(attachment.filename.to_s).open 'wb' do |f|
-        attachment.download do |chunk|
-          f.write chunk
-        end
-      end
-    end
-
-    FileUtils.move work, dest.tap(&:mkpath)
-  end
 
   def add_row_to_working_list(submission)
     sheet_id   = ENV.fetch('MSS_WORKING_LIST_SHEET_ID')
@@ -57,12 +35,12 @@ class CompleteSubmissionJob < ApplicationJob
       created_date:               submission.created_at.to_date,
       status:                     nil,
       description:                submission.description,
-      contact_person_email:       submission.contact_person.fetch('email'),
-      contact_person_full_name:   submission.contact_person.fetch('full_name'),
-      contact_person_affiliation: submission.contact_person.fetch('affiliation'),
-      other_person:               submission.other_people.map { format_address(_1) }.join('; '),
+      contact_person_email:       submission.contact_person.email,
+      contact_person_full_name:   submission.contact_person.full_name,
+      contact_person_affiliation: submission.contact_person.affiliation,
+      other_person:               submission.other_people.order(:position).map(&:email_address_with_name).join('; '),
       dway_account:               submission.user.id_token.fetch('preferred_username'),
-      date_arrival_date:          submission.files.empty? ? nil : submission.created_at.to_date,
+      date_arrival_date:          submission.uploads.map(&:dirname).join('; '),
       check_start_date:           nil,
       finish_date:                nil,
       sequencer:                  submission.sequencer_text,
@@ -82,11 +60,5 @@ class CompleteSubmissionJob < ApplicationJob
       mail_e:                     nil,
       memo:                       nil
     }
-  end
-
-  def format_address(person)
-    email, full_name = person.fetch_values('email', 'full_name')
-
-    ApplicationMailer.email_address_with_name(email, full_name)
   end
 end
