@@ -87,9 +87,6 @@ class CompleteSubmissionJob < ApplicationJob
   def format_address(person)
     email, full_name = person.fetch_values('email', 'full_name')
 
-    Mail::Address.new.tap {|builder|
-      builder.address      = email
-      builder.display_name = full_name
-    }.to_s
+    ApplicationMailer.email_address_with_name(email, full_name)
   end
 end

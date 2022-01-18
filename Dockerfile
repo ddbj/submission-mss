@@ -17,6 +17,9 @@ RUN yarn build
 
 FROM ruby:3.1
 
+ARG APP_GID
+ARG APP_UID
+
 ENV BUNDLE_CLEAN=true
 ENV BUNDLE_DEPLOYMENT=true
 ENV BUNDLE_JOBS=4
@@ -25,7 +28,6 @@ ENV BUNDLE_WITHOUT=development:test
 ENV RAILS_ENV=production
 ENV RAILS_LOG_TO_STDOUT=true
 ENV RAILS_SERVE_STATIC_FILES=true
-ENV SUBMISSIONS_DIR=/app/submissions
 ENV TZ=Japan
 
 EXPOSE 3000
@@ -38,5 +40,7 @@ COPY ./config /app/config
 COPY ./backend /app/backend
 RUN --mount=type=cache,target=/tmp/bundle BUNDLE_PATH=/tmp/bundle bundle install && cp --recursive --no-target-directory /tmp/bundle ./vendor/bundle
 COPY --from=frontend /app/frontend/dist/ ./public/
+
+USER ${APP_UID:?}:${APP_GID:?}
 
 CMD ["bin/rails", "server", "--binding", "0.0.0.0"]
