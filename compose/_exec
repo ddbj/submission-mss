@@ -6,13 +6,11 @@ export STAGE=${0##*/}
 
 dir=${0%/*}
 
-export COMPOSE_DOCKER_CLI_BUILD=1
 export COMPOSE_FILE=$dir/base.yml:$dir/$STAGE.yml
 export COMPOSE_PROJECT_NAME=mssform-$STAGE
-export DOCKER_BUILDKIT=1
 
 set -o allexport
 source $dir/$STAGE.env
 set +o allexport
 
-exec docker-compose $@
+exec docker compose $@
