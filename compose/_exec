@@ -8,6 +8,7 @@ dir=${0%/*}
 
 export COMPOSE_FILE=$dir/base.yml:$dir/$STAGE.yml
 export COMPOSE_PROJECT_NAME=mssform-$STAGE
+export DOCKER_BUILDKIT=1
 
 set -o allexport
 source $dir/$STAGE.env

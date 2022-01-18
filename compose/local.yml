@@ -13,7 +13,9 @@ services:
       - mssform.localhost:host-gateway
 
     volumes:
-      - ../submissions:/app/submissions
+      - type: bind
+        source: ../submissions
+        target: /app/submissions
 
     depends_on:
       - mailhog

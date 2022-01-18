@@ -1,0 +1,14 @@
+- hosts: all
+  tasks:
+    - file:
+        path: ~/.docker/cli-plugins
+        state: directory
+
+    - get_url:
+        url: https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-linux-x86_64
+        dest: ~/.docker/cli-plugins/docker-compose
+        mode: +x
+
+    - file:
+        path: ~/submissions/staging
+        state: directory

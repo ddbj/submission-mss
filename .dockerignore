@@ -1,5 +1,5 @@
+/backend/log/
+/backend/storage/
+/backend/tmp/
 /frontend/dist/
 /frontend/node_modules/
-/log/
-/storage/
-/tmp/
