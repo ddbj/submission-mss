@@ -9,6 +9,9 @@ services:
   varnish:
     build: ../docker/varnish
 
+    ports:
+      - ${VARNISH_PORT:?}:80
+
     tmpfs:
       - /var/lib/varnish:exec
 
