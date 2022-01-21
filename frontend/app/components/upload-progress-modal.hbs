@@ -1,7 +1,7 @@
 {{yield this}}
 
 {{#let (unique-id) as |id|}}
-  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby={{id}} aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" {{did-insert this.setModal}}>
+  <div class="modal" tabindex="-1" role="dialog" aria-labelledby={{id}} aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" {{did-insert this.setModal}}>
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content">
         <div class="modal-header">
