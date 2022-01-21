@@ -1,16 +1,25 @@
+FROM curlimages/curl:latest AS openid-configuration
+
+ARG OPENID_CONFIGURATION_ENDPOINT
+
+WORKDIR /app/config/
+RUN curl ${OPENID_CONFIGURATION_ENDPOINT:?} > ./openid-configuration.json
+
+###
+
 FROM node:16 AS frontend
 
 ARG OPENID_CLIENT_ID
-ARG OPENID_CONFIGURATION_ENDPOINT
 
 ENV OPENID_CLIENT_ID=${OPENID_CLIENT_ID:?}
 
-WORKDIR /app/frontend
+WORKDIR /app/config/
+COPY ./config/ ./
+COPY --from=openid-configuration /app/config/openid-configuration.json ./
 
-COPY ./config /app/config
-COPY ./frontend /app/frontend
-RUN curl ${OPENID_CONFIGURATION_ENDPOINT:?} > /app/config/openid-configuration.json
-RUN --mount=type=cache,target=/tmp/node_modules yarn install --frozen-lockfile --modules-folder /tmp/node_modules && cp --recursive --no-target-directory /tmp/node_modules ./node_modules
+WORKDIR /app/frontend/
+COPY ./frontend/ ./
+RUN --mount=type=cache,target=/tmp/node_modules yarn install --frozen-lockfile --modules-folder /tmp/node_modules/ && cp --recursive --no-target-directory /tmp/node_modules/ ./node_modules/
 RUN yarn build
 
 ###
@@ -23,7 +32,7 @@ ARG APP_UID
 ENV BUNDLE_CLEAN=true
 ENV BUNDLE_DEPLOYMENT=true
 ENV BUNDLE_JOBS=4
-ENV BUNDLE_PATH=/app/backend/vendor/bundle
+ENV BUNDLE_PATH=/app/backend/vendor/bundle/
 ENV BUNDLE_WITHOUT=development:test
 ENV RAILS_ENV=production
 ENV RAILS_LOG_TO_STDOUT=true
@@ -32,15 +41,17 @@ ENV TZ=Japan
 
 EXPOSE 3000
 
-RUN gem install bundler:2.3.4
+RUN gem install bundler:2.3.5
 
-WORKDIR /app/backend
+WORKDIR /app/config/
+COPY ./config/ ./
+COPY --from=openid-configuration /app/config/openid-configuration.json ./
 
-COPY ./config /app/config
-COPY ./backend /app/backend
-RUN --mount=type=cache,target=/tmp/bundle BUNDLE_PATH=/tmp/bundle bundle install && cp --recursive --no-target-directory /tmp/bundle ./vendor/bundle
+WORKDIR /app/backend/
+COPY ./backend/ ./
+RUN --mount=type=cache,target=/tmp/bundle/ BUNDLE_PATH=/tmp/bundle/ bundle install && cp --recursive --no-target-directory /tmp/bundle/ ./vendor/bundle/
 COPY --from=frontend /app/frontend/dist/ ./public/
+RUN install --directory --owner=${APP_UID:?} --group=${APP_GID:?} ./tmp/
 
 USER ${APP_UID:?}:${APP_GID:?}
-
 CMD ["bin/rails", "server", "--binding", "0.0.0.0"]
