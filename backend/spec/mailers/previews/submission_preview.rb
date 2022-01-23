@@ -2,7 +2,9 @@
 
 class SubmissionPreview < ActionMailer::Preview
   def confirmation
-    submission = Submission.order(id: :desc).offset(params[:last] || 0).first
+    submission = Submission.order(id: :desc).offset(params[:last] || 0).take!
+
+    submission.email_language = I18n.locale
 
     SubmissionMailer.with(submission: submission).confirmation
   end

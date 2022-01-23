@@ -1,0 +1,9 @@
+<%= render 'header', submission: @submission -%>
+
+<% if @submission.uploads.exists? %>
+<%= render 'uploaded', submission: @submission -%>
+<% else %>
+<%= render 'not_uploaded', submission: @submission -%>
+<% end %>
+
+<%= render 'footer' -%>

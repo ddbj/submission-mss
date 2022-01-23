@@ -9,10 +9,9 @@ class SubmissionMailer < ApplicationMailer
 
     I18n.with_locale @submission.email_language do
       mail(
-        to:            @submission.contact_person.email_address_with_name,
-        cc:,
-        subject:       "[DDBJ:#{@submission.mass_id}] #{@submission.data_type_text}",
-        template_name: 'confirmation/not_uploaded'
+        to:      @submission.contact_person.email_address_with_name,
+        cc:      ,
+        subject: "[DDBJ:#{@submission.mass_id}] #{@submission.data_type_text}"
       )
     end
   end
