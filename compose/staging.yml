@@ -18,7 +18,7 @@ services:
 
     volumes:
       - type: bind
-        source: ~/data/$STAGE/postgres
+        source: ~/mssform/data/$STAGE/postgres
         target: /var/lib/postgresql/data
 
   redis:
@@ -26,7 +26,7 @@ services:
 
     volumes:
       - type: bind
-        source: ~/data/$STAGE/redis
+        source: ~/mssform/data/$STAGE/redis
         target: /data
 
   memcached:
@@ -37,5 +37,5 @@ services:
 
     volumes:
       - type: bind
-        source: ~/data/$STAGE/minio
+        source: ~/mssform/data/$STAGE/minio
         target: /data
