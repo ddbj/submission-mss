@@ -54,4 +54,4 @@ COPY --from=frontend /app/frontend/dist/ ./public/
 RUN install --directory --owner=${APP_UID:?} --group=${APP_GID:?} ./tmp/
 
 USER ${APP_UID:?}:${APP_GID:?}
-CMD ["bin/rails", "server", "--binding", "0.0.0.0"]
+CMD rm -rf ./tmp/pids/server.pid && bin/rails server --binding 0.0.0.0

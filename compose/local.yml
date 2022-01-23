@@ -1,8 +1,4 @@
 services:
-  varnish:
-    ports:
-      - 4200:80
-
   rails: &rails-local
     build:
       extra_hosts:

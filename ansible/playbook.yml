@@ -10,5 +10,10 @@
         mode: +x
 
     - file:
-        path: ~/submissions/staging
+        path: '{{item}}'
         state: directory
+      loop:
+        - ~/submissions/staging
+        - ~/data/staging/postgres
+        - ~/data/staging/redis
+        - ~/data/staging/minio
