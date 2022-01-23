@@ -14,7 +14,7 @@ class SubmissionsController < ApplicationController
       end
     }
 
-    CompleteSubmissionJob.perform_later @submission
+    ProcessSubmissionJob.perform_later @submission
   end
 
   private

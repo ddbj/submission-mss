@@ -1,4 +1,4 @@
-class CompleteSubmissionJob < ApplicationJob
+class ProcessSubmissionJob < ApplicationJob
   queue_as :default
 
   def perform(submission)
@@ -6,7 +6,7 @@ class CompleteSubmissionJob < ApplicationJob
 
     add_row_to_working_list submission
 
-    CompleteSubmissionMailer.with(submission:).for_submitter.deliver_now
+    SubmissionMailer.with(submission:).confirmation.deliver_later
   end
 
   private

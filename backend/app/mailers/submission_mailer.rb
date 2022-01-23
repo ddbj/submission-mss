@@ -1,5 +1,5 @@
-class CompleteSubmissionMailer < ApplicationMailer
-  def for_submitter
+class SubmissionMailer < ApplicationMailer
+  def confirmation
     @submission = params[:submission]
 
     cc = [
@@ -12,7 +12,7 @@ class CompleteSubmissionMailer < ApplicationMailer
         to:            @submission.contact_person.email_address_with_name,
         cc:,
         subject:       "[DDBJ:#{@submission.mass_id}] #{@submission.data_type_text}",
-        template_name: 'for_submitter/not_uploaded'
+        template_name: 'confirmation/not_uploaded'
       )
     end
   end
