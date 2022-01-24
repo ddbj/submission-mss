@@ -1,0 +1,49 @@
+## mass-id
+<%= @row.fetch(:mass_id) %>
+
+## mass-id_created date
+<%= @row.fetch(:created_date) %>
+
+## description
+<%= @row.fetch(:description) %>
+
+## contact_email
+<%= @row.fetch(:contact_person_email) %>
+
+## contact_person_name
+<%= @row.fetch(:contact_person_full_name) %>
+
+## contact_institution
+<%= @row.fetch(:contact_person_affiliation) %>
+
+## other_person
+<%= @row.fetch(:other_person) %>
+
+## D-way_account
+<%= @row.fetch(:dway_account) %>
+
+## data_arrival_date
+<% @submission.uploads.each do |upload| -%>
+<%= upload.timestamp %>: <%= upload.directory_path %>
+<% end -%>
+
+## sequencer
+<%= @row.fetch(:sequencer) %>
+
+## annotation_pipeline
+<%= @row.fetch(:annotation_pipeline) %>
+
+## HUP
+<%= @row.fetch(:hup) %>
+
+## TPA
+<%= @row.fetch(:tpa) %>
+
+## datatype
+<%= @row.fetch(:data_type) %>
+
+## total_entry
+<%= @row.fetch(:total_entry) %>
+
+## Language
+<%= @row.fetch(:language) %>

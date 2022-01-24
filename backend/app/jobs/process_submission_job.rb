@@ -6,7 +6,8 @@ class ProcessSubmissionJob < ApplicationJob
 
     add_row_to_working_list submission
 
-    SubmissionMailer.with(submission:).confirmation.deliver_later
+    SubmissionMailer.with(submission:).submitter_confirmation.deliver_later
+    SubmissionMailer.with(submission:).curator_notification.deliver_later
   end
 
   private
@@ -20,45 +21,11 @@ class ProcessSubmissionJob < ApplicationJob
 
     service.authorization = authorizer
 
-    row = Google::Apis::SheetsV4::ValueRange.new(values: [to_hash(submission).values])
+    row = Google::Apis::SheetsV4::ValueRange.new(values: [submission.to_working_sheet_row.values])
 
     service.append_spreadsheet_value sheet_id, "#{sheet_name}!A1", row, **{
       insert_data_option: 'INSERT_ROWS',
       value_input_option: 'RAW'
-    }
-  end
-
-  def to_hash(submission)
-    {
-      mass_id:                    submission.mass_id,
-      curator:                    nil,
-      created_date:               submission.created_at.to_date,
-      status:                     nil,
-      description:                submission.description,
-      contact_person_email:       submission.contact_person.email,
-      contact_person_full_name:   submission.contact_person.full_name,
-      contact_person_affiliation: submission.contact_person.affiliation,
-      other_person:               submission.other_people.order(:position).map(&:email_address_with_name).join('; '),
-      dway_account:               submission.user.id_token.fetch('preferred_username'),
-      date_arrival_date:          submission.uploads.map(&:dirname).join('; '),
-      check_start_date:           nil,
-      finish_date:                nil,
-      sequencer:                  submission.sequencer_text,
-      annotation_pipeline:        submission.dfast? ? 'DFAST' : nil,
-      hup:                        submission.hold_date || 'non-HUP',
-      tpa:                        submission.tpa?,
-      data_type:                  submission.data_type.upcase,
-      total_entry:                submission.entries_count,
-      accession:                  nil,
-      prefix_count:               nil,
-      div:                        nil,
-      bioproject:                 nil,
-      biosample:                  nil,
-      drr:                        nil,
-      language:                   submission.email_language,
-      mail_j:                     nil,
-      mail_e:                     nil,
-      memo:                       nil
     }
   end
 end

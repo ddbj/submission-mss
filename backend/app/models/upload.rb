@@ -6,10 +6,7 @@ class Upload < ApplicationRecord
   def copy_flles_to_submissions_dir
     return if copied?
 
-    base = Pathname.new(ENV.fetch('SUBMISSIONS_DIR'))
-    work = base.join('.work', submission.mass_id, dirname)
-    dest = base.join(submission.mass_id)
-
+    work = submissions_dir.join('.work', "#{submission.mass_id}-#{timestamp}")
     work.mkpath
 
     files.each do |attachment|
@@ -20,12 +17,23 @@ class Upload < ApplicationRecord
       end
     end
 
-    FileUtils.move work, dest.tap(&:mkpath)
+    directory_path.dirname.mkpath
+    FileUtils.move work, directory_path
 
     update! copied: true
   end
 
-  def dirname
+  def directory_path
+    submissions_dir.join(submission.mass_id, timestamp)
+  end
+
+  def timestamp
     created_at.strftime('%Y%m%d-%H%M%S')
+  end
+
+  private
+
+  def submissions_dir
+    Pathname.new(ENV.fetch('SUBMISSIONS_DIR'))
   end
 end
