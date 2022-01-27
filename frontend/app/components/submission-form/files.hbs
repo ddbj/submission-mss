@@ -1,0 +1,97 @@
+<input type="file" multiple accept={{join ', ' (append this.annotationFileExtensions this.sequenceFileExtensions)}} class="d-none" {{did-insert (set this 'fileInputElement')}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInputElement.value' ''))}} />
+
+<div class="card">
+  <div class="card-header">
+    Submission file
+  </div>
+
+  <div class="card-body vstack gap-3">
+    <div>
+      <p><a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener">UME</a> (Parser, transChecker) でチェック済みのSubmission fileを作成済みであればuploadしてください</p>
+
+      <RadioGroup as |group|>
+      <div class="form-check">
+        <group.radio as |radio|>
+          <radio.input checked={{eq @state.submissionFileType 'dfast'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'dfast')}} />
+
+          <radio.label class="form-check-label">
+            DFASTで作成したBacterial complete genome または WGSのsubmission fileをuploadする
+          </radio.label>
+        </group.radio>
+      </div>
+
+      <div class="form-check">
+        <group.radio as |radio|>
+          <radio.input checked={{eq @state.submissionFileType 'without-dfast'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'without-dfast')}} />
+
+          <radio.label class="form-check-label">
+            DFASTを使わずsubmission fileを作成済みでありuploadする
+          </radio.label>
+        </group.radio>
+      </div>
+
+      <div class="form-check">
+        <group.radio as |radio|>
+        <radio.input checked={{eq @state.submissionFileType 'none'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'none')}} />
+
+        <radio.label class="form-check-label">
+        申し込み後にsubmission fileを作成する
+        </radio.label>
+        </group.radio>
+      </div>
+      </RadioGroup>
+    </div>
+
+    {{#if (or (eq @state.submissionFileType 'dfast') (eq @state.submissionFileType 'without-dfast'))}}
+      <div>
+        <ul>
+          <li>Submission fileを圧縮せずにuploadしてください。</li>
+          <li>Requirementに従っていれば、複数セットのsubmission fileをuploadできます。</li>
+          <li>各Submissionのfile拡張子は必ず、.ann (アノテーションファイル)、.fasta (塩基配列)とし、拡張子を除く名称を同一にしてください。</li>
+          <li>Linuxのlsコマンドでの名前ソート順にAccession番号が発行されます。</li>
+        </ul>
+
+        {{#if @state.files}}
+          <div class="card {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
+            <ul class="list-group list-group-flush overflow-auto" style="max-height: 550px">
+              {{#each @state.files as |file|}}
+                <li class="list-group-item d-flex align-items-center">
+                  <div class="ms-2 me-auto">
+                    {{file.name}}
+                    <small class="text-muted">{{filesize file.size}}</small>
+                  </div>
+
+                  <div>
+                    <button type="button" class="btn btn-outline-danger" {{on 'click' (prevent-default (fn this.removeFile file))}}>削除</button>
+                  </div>
+                </li>
+              {{/each}}
+            </ul>
+
+            <div class="card-footer d-flex justify-content-between align-items-center bg-white">
+              <div>
+                <button type="button" class="btn btn-outline-primary" {{on 'click' (prevent-default this.selectFiles)}}>
+                  ファイルの追加
+                </button>
+              </div>
+
+              <div>
+                {{@state.files.length}}ファイル、{{filesize (sum (map-by 'size' @state.files))}}
+              </div>
+            </div>
+          </div>
+        {{else}}
+          <div class="card border-2 border-dashed {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
+            <div class="card-body py-5 text-center text-muted">
+              <a href="#" class="stretched-link" {{on 'click' (prevent-default this.selectFiles)}}>ファイルを選択</a>するか、ここにファイルをドロップしてください。
+            </div>
+          </div>
+        {{/if}}
+      </div>
+    {{/if}}
+  </div>
+</div>
+
+<div>
+  <button class="btn btn-primary" disabled={{not this.isFulfilled}} {{on 'click' (prevent-default @goNextStep)}}>次へ</button>
+</div>

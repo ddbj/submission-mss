@@ -1,0 +1,85 @@
+<p>
+  登録可能なデータは次の通りです。<br />
+  <a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept" target="_blank" rel="noopener">https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept</a>
+</p>
+
+<p>以下のすべてに該当する場合のみ申し込みできます。いずれか該当しない場合は、submissionを分け、submsssionごとにMSS申し込みを行ってください。</p>
+
+<ul>
+  <li>Contact personが同一</li>
+  <li>登録データ種別が1種類</li>
+  <li>公開予定日が同一</li>
+</ul>
+
+<form>
+  <div class="card">
+    <div class="card-body vstack gap-3">
+      <div>
+        <p>今回登録する配列について当てはまるものを選択してください。</p>
+
+        <RadioGroup as |group|>
+          <div class="form-check">
+            <group.radio as |radio|>
+              <radio.input checked={{eq @state.determinedByOwnStudy true}} required class="form-check-input" {{on 'change' (fn this.setDeterminedByOwnStudy true)}} />
+
+              <radio.label class="form-check-label">
+                自身の研究で配列決定した塩基配列である
+              </radio.label>
+            </group.radio>
+          </div>
+
+          <div class="form-check">
+            <group.radio as |radio|>
+              <radio.input checked={{eq @state.determinedByOwnStudy false}} required class="form-check-input" {{on 'change' (fn this.setDeterminedByOwnStudy false)}} />
+
+              <radio.label class="form-check-label">
+                公開されているデータからアセンブルした塩基配列 (TPA) である
+              </radio.label>
+            </group.radio>
+          </div>
+        </RadioGroup>
+      </div>
+
+      {{#if (eq @state.determinedByOwnStudy false)}}
+        <div>
+          <p>
+            MSS で TPA の登録を申請する場合、申請対象の配列作成に関する情報が査読付き論文として公開される必要があります。当てはまるものを選択してください。
+          </p>
+
+          <RadioGroup as |group|>
+            <div class="form-check">
+              <group.radio as |radio|>
+                <radio.input checked={{eq @model.tpa true}} required class="form-check-input" {{on 'change' (set @model 'tpa' true)}} />
+
+                <radio.label class="form-check-label">
+                  査読付き学術雑誌に論文を投稿する予定がある、あるいは投稿済みである
+                </radio.label>
+              </group.radio>
+            </div>
+
+            <div class="form-check">
+              <group.radio as |radio|>
+                <radio.input checked={{eq @model.tpa false}} required class="form-check-input" {{on 'change' (set @model 'tpa' false)}} />
+
+                <radio.label class="form-check-label">
+                  投稿の予定はない
+                </radio.label>
+              </group.radio>
+            </div>
+          </RadioGroup>
+        </div>
+
+        {{#if (eq @model.tpa false)}}
+          <p>
+            TPAの場合、論文を準備しないのであれば申し込みできません。<br />
+            <LinkTo @route="home">ホームに戻る</LinkTo>
+          </p>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="my-3">
+    <button class="btn btn-primary" disabled={{not this.isFulfilled}} {{on 'click' (prevent-default @goNextStep)}}>次へ</button>
+  </div>
+</form>
