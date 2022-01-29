@@ -11,7 +11,7 @@
   <li>公開予定日が同一</li>
 </ul>
 
-<form>
+<form {{on 'submit' (prevent-default @goNextStep)}}>
   <div class="card">
     <div class="card-body vstack gap-3">
       <div>
@@ -80,6 +80,6 @@
   </div>
 
   <div class="my-3">
-    <button class="btn btn-primary" disabled={{not this.isFulfilled}} {{on 'click' (prevent-default @goNextStep)}}>次へ</button>
+    <button class="btn btn-primary" disabled={{not this.isFulfilled}}>次へ</button>
   </div>
 </form>

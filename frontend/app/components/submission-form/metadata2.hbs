@@ -1,195 +1,197 @@
-<div class="card">
-  <div class="card-header">
-    Number of entries, hold date
-  </div>
-
-  <div class="card-body row row-cols-2">
-    <div class="col">
-      <label for="entriesCount" class="form-label">登録件数</label>
-      <input type="number" value={{@model.entriesCount}} required min="1" class="form-control" id="entriesCount" {{on 'change' (pick 'target.value' (set @model 'entriesCount'))}} />
+<form class="vstack gap-3" {{on 'submit' (prevent-default @goNextStep)}}>
+  <div class="card">
+    <div class="card-header">
+      Number of entries, hold date
     </div>
 
-    <div class="col vstack gap-1">
+    <div class="card-body row row-cols-2">
+      <div class="col">
+        <label for="entriesCount" class="form-label">登録件数</label>
+        <input type="number" value={{@model.entriesCount}} required min="1" class="form-control" id="entriesCount" {{on 'change' (pick 'target.value' (set @model 'entriesCount'))}} />
+      </div>
+
+      <div class="col vstack gap-1">
+        <div>
+          <label for="holdDate" class="form-label">公開予定日 (Hold date)</label>
+          <input type="date" value={{@model.holdDate}} disabled={{@state.releaseImmediately}} required class="form-control" id="holdDate" {{on 'change' (pick 'target.value' (set @model 'holdDate'))}} />
+        </div>
+
+        <div class="form-check">
+          <input type="checkbox" checked={{@state.releaseImmediately}} class="form-check-input" id="releaseImmediately" {{on 'change' (pick 'target.checked' this.setReleaseImmediately)}} />
+          <label for="releaseImmediately" class="form-check-label">Release immediately</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      Contact person
+    </div>
+
+    <div class="card-body">
+      <p>Submission fileのcontact 行に記載する、1名の登録責任者について記載してください。</p>
+
+      <div class="row row-cols-2 gy-3">
+        {{#let @model.contactPerson as |person|}}
+          <div class="col">
+            <label for="contactPerson.email" class="form-label">Email アドレス</label>
+            <input type="email" value={{person.email}} required class="form-control" id="contactPerson.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
+          </div>
+
+          <div class="col">
+            <label for="contactPerson.fullName" class="form-label">フルネーム (英語表記)</label>
+            <input type="text" value={{person.fullName}} required maxlength="255" class="form-control" id="contactPerson.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
+          </div>
+
+          <div class="col">
+            <label for="contactPerson.affiliation" class="form-label">所属名 (英語表記)</label>
+            <input type="text" value={{person.affiliation}} required maxlength="255" class="form-control" id="contactPerson.affiliation" {{on 'change' (pick 'target.value' (set person 'affiliation'))}} />
+          </div>
+        {{/let}}
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      Other person who would like to contact DDBJ
+    </div>
+
+    <div class="card-body">
+      <p>コンタクトパーソン以外に登録担当がおり、Accessionや公開のお知らせを受けたい場合は通知先を追加してください。</p>
+
+      <div class="card">
+        <ul class="list-group list-group-flush">
+          {{#each @model.otherPeople as |person i|}}
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col">
+                  <label for="otherPerson.{{i}}.email" class="form-label">Email アドレス</label>
+                  <input type="email" value={{person.email}} required=true class="form-control" id="otherPerson.{{i}}.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
+                </div>
+
+                <div class="col">
+                  <label for="otherPerson.{{i}}.fullName" class="form-label">フルネーム (英語表記)</label>
+                    <input type="text" value={{person.fullName}} required=true maxlength="255" class="form-control" id="otherPerson.{{i}}.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
+                </div>
+
+                <div class="col-auto align-self-center">
+                  <button type="button" class="btn btn-outline-danger" {{on 'click' (prevent-default (fn this.removeOtherPerson person))}}>削除</button>
+                </div>
+              </div>
+            </li>
+          {{else}}
+            <li class="list-group-item py-3 text-muted text-center">
+              登録されていません。
+            </li>
+          {{/each}}
+        </ul>
+
+        <div class="card-footer bg-white">
+          <button type="button" class="btn btn-outline-primary" {{on 'click' (prevent-default this.addOtherPerson)}}>
+            通知先の追加
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      Sequencer, datatype
+    </div>
+
+    <div class="card-body vstack gap-3">
       <div>
-        <label for="holdDate" class="form-label">公開予定日 (Hold date)</label>
-        <input type="date" value={{@model.holdDate}} disabled={{@state.releaseImmediately}} required class="form-control" id="holdDate" {{on 'change' (pick 'target.value' (set @model 'holdDate'))}} />
-      </div>
+        <p>塩基配列決定にどのタイプのシークエンサーを使用しましたか</p>
 
-      <div class="form-check">
-        <input type="checkbox" checked={{@state.releaseImmediately}} class="form-check-input" id="releaseImmediately" {{on 'change' (pick 'target.checked' this.setReleaseImmediately)}} />
-        <label for="releaseImmediately" class="form-check-label">Release immediately</label>
-      </div>
-    </div>
-  </div>
-</div>
+        <RadioGroup as |group|>
+          {{#each (enum 'sequencers') as |sequencer|}}
+            <div class="form-check">
+              <group.radio as |radio|>
+                <radio.input checked={{eq @model.sequencer sequencer.key}} class="form-check-input" required {{on 'change' (set @model 'sequencer' sequencer.key)}} />
 
-<div class="card">
-  <div class="card-header">
-    Contact person
-  </div>
-
-  <div class="card-body">
-    <p>Submission fileのcontact 行に記載する、1名の登録責任者について記載してください。</p>
-
-    <div class="row row-cols-2 gy-3">
-      {{#let @model.contactPerson as |person|}}
-        <div class="col">
-          <label for="contactPerson.email" class="form-label">Email アドレス</label>
-          <input type="email" value={{person.email}} required class="form-control" id="contactPerson.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
-        </div>
-
-        <div class="col">
-          <label for="contactPerson.fullName" class="form-label">フルネーム (英語表記)</label>
-          <input type="text" value={{person.fullName}} required maxlength="255" class="form-control" id="contactPerson.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
-        </div>
-
-        <div class="col">
-          <label for="contactPerson.affiliation" class="form-label">所属名 (英語表記)</label>
-          <input type="text" value={{person.affiliation}} required maxlength="255" class="form-control" id="contactPerson.affiliation" {{on 'change' (pick 'target.value' (set person 'affiliation'))}} />
-        </div>
-      {{/let}}
-    </div>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-header">
-    Other person who would like to contact DDBJ
-  </div>
-
-  <div class="card-body">
-    <p>コンタクトパーソン以外に登録担当がおり、Accessionや公開のお知らせを受けたい場合は通知先を追加してください。</p>
-
-    <div class="card">
-      <ul class="list-group list-group-flush">
-        {{#each @model.otherPeople as |person i|}}
-          <li class="list-group-item">
-            <div class="row">
-              <div class="col">
-                <label for="otherPerson.{{i}}.email" class="form-label">Email アドレス</label>
-                <input type="email" value={{person.email}} required=true class="form-control" id="otherPerson.{{i}}.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
-              </div>
-
-              <div class="col">
-                <label for="otherPerson.{{i}}.fullName" class="form-label">フルネーム (英語表記)</label>
-                  <input type="text" value={{person.fullName}} required=true maxlength="255" class="form-control" id="otherPerson.{{i}}.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
-              </div>
-
-              <div class="col-auto align-self-center">
-                <button type="button" class="btn btn-outline-danger" {{on 'click' (prevent-default (fn this.removeOtherPerson person))}}>削除</button>
-              </div>
+                <radio.label class="form-check-label">
+                  {{sequencer.label}}
+                </radio.label>
+              </group.radio>
             </div>
-          </li>
-        {{else}}
-          <li class="list-group-item py-3 text-muted text-center">
-            登録されていません。
-          </li>
-        {{/each}}
-      </ul>
+          {{/each}}
+        </RadioGroup>
+      </div>
 
-      <div class="card-footer bg-white">
-        <button type="button" class="btn btn-outline-primary" {{on 'click' (prevent-default this.addOtherPerson)}}>
-          通知先の追加
-        </button>
+      <div>
+        <label for="dataType" class="form-label">データ種別を選択してください</label>
+
+        <select required class="form-select" id="dataType" {{on 'change' (pick 'target.value' (set @model 'dataType'))}}>
+          <option selected={{is-none @model.dataType}}></option>
+
+          {{#each (enum 'data_types') as |type|}}
+            <option value={{type.key}} selected={{eq @model.dataType type.key}}>
+              {{type.label}}
+            </option>
+          {{/each}}
+        </select>
       </div>
     </div>
   </div>
-</div>
 
-<div class="card">
-  <div class="card-header">
-    Sequencer, datatype
+  <div class="card">
+    <div class="card-header">
+      Description
+    </div>
+
+    <div class="card-body">
+      <p>
+        Submissionデータの補足説明をここに記入してください(日本語可)。生物の説明(common nameや性質など)、単離生物由来でない場合は塩基配列をどうやって得たのか、そのほか、Curatorに知らせたいこと等を入力できます。<br />
+        DDBJに登録した配列を更新する場合は対象のAccessionを記入してください。
+      </p>
+
+      <div>
+        <label for="description" class="form-label visually-hidden">補足説明</label>
+        <textarea required minlength="30" maxlength="1000" rows="8" placeholder="e.g.活性汚泥から単離した Dibenzothiophene分解能を有するPseudomonas属ストレイン5種のドラフトゲノム配列にアノテーションをつけたもの" class="form-control" id="description" {{on 'input' (pick 'target.value' (set @model 'description'))}}>{{@model.description}}</textarea>
+
+        <div class="form-text text-end">
+          {{or @model.description.length 0}} / 1000
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="card-body vstack gap-3">
-    <div>
-      <p>塩基配列決定にどのタイプのシークエンサーを使用しましたか</p>
+  <div class="card">
+    <div class="card-header">
+      Language for the email
+    </div>
+
+    <div class="card-body">
+      <p>通知するEメールの言語を選択</p>
 
       <RadioGroup as |group|>
-        {{#each (enum 'sequencers') as |sequencer|}}
-          <div class="form-check">
-            <group.radio as |radio|>
-              <radio.input checked={{eq @model.sequencer sequencer.key}} class="form-check-input" required {{on 'change' (set @model 'sequencer' sequencer.key)}} />
+        <div class="form-check">
+          <group.radio as |radio|>
+            <radio.input checked={{eq @model.emailLanguage 'ja'}} required class="form-check-input" {{on 'change' (set @model 'emailLanguage' 'ja')}} />
 
-              <radio.label class="form-check-label">
-                {{sequencer.label}}
-              </radio.label>
-            </group.radio>
-          </div>
-        {{/each}}
+            <radio.label class="form-check-label">
+              日本語
+            </radio.label>
+          </group.radio>
+        </div>
+
+        <div class="form-check">
+          <group.radio as |radio|>
+            <radio.input checked={{eq @model.emailLanguage 'en'}} required class="form-check-input" {{on 'change' (set @model 'emailLanguage' 'en')}} />
+
+            <radio.label class="form-check-label">
+              English
+            </radio.label>
+          </group.radio>
+        </div>
       </RadioGroup>
     </div>
-
-    <div>
-      <label for="dataType" class="form-label">データ種別を選択してください</label>
-
-      <select required class="form-select" id="dataType" {{on 'change' (pick 'target.value' (set @model 'dataType'))}}>
-        <option selected={{is-none @model.dataType}}></option>
-
-        {{#each (enum 'data_types') as |type|}}
-          <option value={{type.key}} selected={{eq @model.dataType type.key}}>
-            {{type.label}}
-          </option>
-        {{/each}}
-      </select>
-    </div>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-header">
-    Description
   </div>
 
-  <div class="card-body">
-    <p>
-      Submissionデータの補足説明をここに記入してください(日本語可)。生物の説明(common nameや性質など)、単離生物由来でない場合は塩基配列をどうやって得たのか、そのほか、Curatorに知らせたいこと等を入力できます。<br />
-      DDBJに登録した配列を更新する場合は対象のAccessionを記入してください。
-    </p>
-
-    <div>
-      <label for="description" class="form-label visually-hidden">補足説明</label>
-      <textarea required minlength="30" maxlength="1000" rows="8" placeholder="e.g.活性汚泥から単離した Dibenzothiophene分解能を有するPseudomonas属ストレイン5種のドラフトゲノム配列にアノテーションをつけたもの" class="form-control" id="description" {{on 'input' (pick 'target.value' (set @model 'description'))}}>{{@model.description}}</textarea>
-
-      <div class="form-text text-end">
-        {{or @model.description.length 0}} / 1000
-      </div>
-    </div>
+  <div>
+    <button class="btn btn-primary">次へ</button>
   </div>
-</div>
-
-<div class="card">
-  <div class="card-header">
-    Language for the email
-  </div>
-
-  <div class="card-body">
-    <p>通知するEメールの言語を選択</p>
-
-    <RadioGroup as |group|>
-      <div class="form-check">
-        <group.radio as |radio|>
-          <radio.input checked={{eq @model.emailLanguage 'ja'}} required class="form-check-input" {{on 'change' (set @model 'emailLanguage' 'ja')}} />
-
-          <radio.label class="form-check-label">
-            日本語
-          </radio.label>
-        </group.radio>
-      </div>
-
-      <div class="form-check">
-        <group.radio as |radio|>
-          <radio.input checked={{eq @model.emailLanguage 'en'}} required class="form-check-input" {{on 'change' (set @model 'emailLanguage' 'en')}} />
-
-          <radio.label class="form-check-label">
-            English
-          </radio.label>
-        </group.radio>
-      </div>
-    </RadioGroup>
-  </div>
-</div>
-
-<div>
-  <button class="btn btn-primary" {{on 'click' (prevent-default @goNextStep)}}>次へ</button>
-</div>
+</form>
