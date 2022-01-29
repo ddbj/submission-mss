@@ -3,16 +3,16 @@ require 'rails_helper'
 RSpec.describe ProcessSubmissionJob do
   include ActiveJob::TestHelper
 
-  def uploaded_file(dir, filename, content: '')
-    file = Pathname.new(dir).join(filename).open('wb').tap {|f|
-      f.write content
-      f.rewind
+  def uploaded_file(filename, content: '')
+    Dir.mktmpdir {|dir|
+      file = Pathname.new(dir).join(filename).open('wb').tap {|f|
+        f.write content
+        f.rewind
+      }
+
+      Rack::Test::UploadedFile.new(file)
     }
-
-    Rack::Test::UploadedFile.new(file)
   end
-
-  fixtures :users
 
   around do |example|
     Dir.mktmpdir do |dir|
@@ -27,42 +27,36 @@ RSpec.describe ProcessSubmissionJob do
   end
 
   before do
-    submission = Submission.create!(
+    submission = create(:submission, **{
       id:             42,
-      user:           users(:alice),
+      user:           build(:user, :alice),
       tpa:            true,
       dfast:          true,
       entries_count:  101,
-      hold_date:      '2022-02-01',
+      hold_date:      '2022-01-03',
+      contact_person: build(:contact_person, :alice),
       sequencer:      'sanger',
       data_type:      'wgs',
       description:    'some description',
       email_language: 'ja',
-      created_at:     '2022-01-01'
-    ) {|submission|
-      Dir.mktmpdir do |dir|
-        submission.uploads.build(
+      created_at:     '2022-01-01',
+
+      other_people: [
+        build(:other_person, :bob),
+        build(:other_person, :carol)
+      ],
+
+      uploads: [
+        build(:upload, **{
           created_at: '2022-01-02 12:34:56',
 
           files: [
-            uploaded_file(dir, 'example.ann'),
-            uploaded_file(dir, 'example.fasta')
+            uploaded_file('example.ann'),
+            uploaded_file('example.fasta')
           ]
-        )
-      end
-
-      submission.build_contact_person(
-        email:       'alice@example.com',
-        full_name:   'Alice Liddell',
-        affiliation: 'Example Inc.'
-      )
-
-      submission.other_people.build(
-        email:     'bob@example.com',
-        full_name: 'Bob',
-        position:  0
-      )
-    }
+        })
+      ]
+    })
 
     stub_request(:post, 'https://www.googleapis.com/oauth2/v4/token').to_return(
       headers: {
@@ -99,15 +93,15 @@ RSpec.describe ProcessSubmissionJob do
             'some description',
             'alice@example.com',
             'Alice Liddell',
-            'Example Inc.',
-            'Bob <bob@example.com>',
+            'Wonderland Inc.',
+            'Bob <bob@example.com>; Carol <carol@example.com>',
             'alice-liddell',
             '20220102-123456',
             nil,
             nil,
             'Sanger dideoxy sequencing',
             'DFAST',
-            '2022-02-01',
+            '2022-01-03',
             true,
             'WGS',
             101,

@@ -23,6 +23,7 @@ end
 
 group :test do
   gem 'climate_control'
-  gem 'rspec-rails', group: :development
+  gem 'factory_bot_rails', group: :development
+  gem 'rspec-rails',       group: :development
   gem 'webmock'
 end
