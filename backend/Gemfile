@@ -22,5 +22,7 @@ group :development do
 end
 
 group :test do
+  gem 'climate_control'
   gem 'rspec-rails', group: :development
+  gem 'webmock'
 end

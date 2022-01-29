@@ -1,0 +1,5 @@
+alice:
+  openid_sub: SUB_CLAIM_VAL
+
+  id_token:
+    preferred_username: alice-liddell
