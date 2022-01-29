@@ -94,6 +94,7 @@
   </div>
 
   <div>
+    <a href class="btn btn-link" {{on 'click' (prevent-default @nav.goPrev)}}>戻る</a>
     <button class="btn btn-primary" disabled={{not this.isFulfilled}}>次へ</button>
   </div>
 </form>
