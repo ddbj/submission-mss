@@ -11,7 +11,7 @@
   <li>公開予定日が同一</li>
 </ul>
 
-<form {{on 'submit' (prevent-default @goNextStep)}}>
+<form {{on 'submit' (prevent-default @steps.goNext)}}>
   <div class="card">
     <div class="card-body vstack gap-3">
       <div>

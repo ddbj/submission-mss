@@ -11,13 +11,8 @@ class State {
   @tracked releaseImmediately   = true;
 }
 
-export default class SubmissionFormComponent extends Component {
-  @service router;
-  @service session;
-
-  state = new State();
-
-  steps = [
+class Steps {
+  names = [
     'prerequisite',
     'files',
     'metadata',
@@ -25,17 +20,25 @@ export default class SubmissionFormComponent extends Component {
     'submit'
   ];
 
-  @tracked currentStepIndex = 0;
+  @tracked currentIndex = 0;
 
-  get currentStep() {
-    return this.steps[this.currentStepIndex];
+  get currentName() {
+    return this.names[this.currentIndex];
   }
 
-  @action goNextStep() {
-    this.currentStepIndex = Math.min(this.currentStepIndex + 1, this.steps.length);
+  @action goNext() {
+    this.currentIndex = Math.min(this.currentIndex + 1, this.names.length);
   }
 
-  @action goPrevStep() {
-    this.currentStepIndex = Math.max(0, this.currentStepIndex - 1);
+  @action goPrev() {
+    this.currentIndex = Math.max(0, this.currentIndex - 1);
   }
+}
+
+export default class SubmissionFormComponent extends Component {
+  @service router;
+  @service session;
+
+  state = new State();
+  steps = new Steps();
 }

@@ -1,7 +1,7 @@
-<form {{on 'submit' (prevent-default @goNextStep)}}>
+<form {{on 'submit' (prevent-default @steps.goNext)}}>
   <p>（確認画面）</p>
 
   <div>
-    <button class="btn btn-primary" {{on 'click' (prevent-default @goNextStep)}}>次へ</button>
+    <button class="btn btn-primary">次へ</button>
   </div>
 </form>
