@@ -1,4 +1,4 @@
-<form {{on 'submit' (prevent-default @steps.goNext)}}>
+<form {{on 'submit' (prevent-default @nav.goNext)}}>
   <input type="file" multiple accept={{join ', ' (append this.annotationFileExtensions this.sequenceFileExtensions)}} class="d-none" {{did-insert (set this 'fileInputElement')}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInputElement.value' ''))}} />
 
   <div class="card">

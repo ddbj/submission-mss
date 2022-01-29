@@ -22,29 +22,11 @@
 <h1 class="display-6 my-4">新規申し込み</h1>
 
 <nav class="nav nav-pills nav-justified my-4">
-  {{#each this.steps as |step i|}}
-    <a href class="nav-link {{if (eq i this.steps.currentIndex) 'active'}} {{if (gt i this.steps.currentIndex) 'disabled'}}">
+  {{#each this.nav.steps as |step|}}
+    <a href class="nav-link {{if (this.nav.isCurrent step) 'active'}} {{if (this.nav.isFollowing step) 'disabled'}}">
       {{t (concat 'submission-form.steps.' step)}}
     </a>
   {{/each}}
 </nav>
 
-{{#if (eq this.steps.currentName 'prerequisite')}}
-  <SubmissionForm::Prerequisite @model={{@model}} @state={{this.state}} @steps={{this.steps}} />
-{{/if}}
-
-{{#if (eq this.steps.currentName 'files')}}
-  <SubmissionForm::Files @model={{@model}} @state={{this.state}} @steps={{this.steps}} />
-{{/if}}
-
-{{#if (eq this.steps.currentName 'metadata')}}
-  <SubmissionForm::Metadata2 @model={{@model}} @state={{this.state}} @steps={{this.steps}} />
-{{/if}}
-
-{{#if (eq this.steps.currentName 'confirm')}}
-  <SubmissionForm::Confirm @model={{@model}} @state={{this.state}} @steps={{this.steps}} />
-{{/if}}
-
-{{#if (eq this.steps.currentName 'submit')}}
-  <SubmissionForm::Submit @model={{@model}} @state={{this.state}} @steps={{this.steps}} />
-{{/if}}
+{{component (concat 'submission-form/' this.nav.currentStep) model=@model state=this.state nav=this.nav}}

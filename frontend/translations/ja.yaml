@@ -2,6 +2,6 @@ submission-form:
   steps:
     prerequisite: 登録種別の確認
     files:        登録ファイルの選択
-    metadata:     情報の入力
+    metadata2:    情報の入力
     confirm:      申し込み内容の確認
     submit:       送信

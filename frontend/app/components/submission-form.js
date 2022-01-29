@@ -11,27 +11,35 @@ class State {
   @tracked releaseImmediately   = true;
 }
 
-class Steps {
-  names = [
+class Navigation {
+  steps = [
     'prerequisite',
     'files',
-    'metadata',
+    'metadata2',
     'confirm',
     'submit'
   ];
 
-  @tracked currentIndex = 0;
+  @tracked stepIndex = 0;
 
-  get currentName() {
-    return this.names[this.currentIndex];
+  get currentStep() {
+    return this.steps[this.stepIndex];
+  }
+
+  @action isCurrent(step) {
+    return this.currentStep === step;
+  }
+
+  @action isFollowing(step) {
+    return this.stepIndex < this.steps.indexOf(step);
   }
 
   @action goNext() {
-    this.currentIndex = Math.min(this.currentIndex + 1, this.names.length);
+    this.stepIndex = Math.min(this.stepIndex + 1, this.steps.length);
   }
 
   @action goPrev() {
-    this.currentIndex = Math.max(0, this.currentIndex - 1);
+    this.stepIndex = Math.max(0, this.stepIndex - 1);
   }
 }
 
@@ -40,5 +48,5 @@ export default class SubmissionFormComponent extends Component {
   @service session;
 
   state = new State();
-  steps = new Steps();
+  nav   = new Navigation();
 }
