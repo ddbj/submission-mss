@@ -5625,6 +5625,14 @@ ember-fetch@^8.1.1:
     node-fetch "^2.6.1"
     whatwg-fetch "^3.6.2"
 
+ember-functions-as-helper-polyfill@^1.0.15:
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/ember-functions-as-helper-polyfill/-/ember-functions-as-helper-polyfill-1.0.15.tgz#abe4a6bac7a7269633069fbf3c0d9baaeea3508a"
+  integrity sha512-fIthmFhkkj03yut7F7iDFv3T3nw5h+R8jsTq5LljUfTskSU8UbSsacFbs9BPTlRAk6t2jN37WwEO/4nZQ1HzbQ==
+  dependencies:
+    ember-cli-babel "^7.26.11"
+    ember-cli-typescript "^4.2.1"
+
 "ember-getowner-polyfill@^1.1.0 || ^2.0.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/ember-getowner-polyfill/-/ember-getowner-polyfill-2.2.0.tgz#38e7dccbcac69d5ec694000329ec0b2be651d2b2"
