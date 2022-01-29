@@ -1,14 +1,10 @@
-<form {{on 'submit' (prevent-default @nav.goNext)}}>
-  <input type="file" multiple accept={{join ', ' (append this.annotationFileExtensions this.sequenceFileExtensions)}} class="d-none" {{did-insert (set this 'fileInputElement')}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInputElement.value' ''))}} />
+<input type="file" multiple accept={{join ', ' (append this.annotationFileExtensions this.sequenceFileExtensions)}} class="d-none" {{did-insert (set this 'fileInputElement')}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInputElement.value' ''))}} />
 
+<form class="vstack gap-3" {{on 'submit' (prevent-default @nav.goNext)}}>
   <div class="card">
-    <div class="card-header">
-      Submission file
-    </div>
-
     <div class="card-body vstack gap-3">
       <div>
-        <p><a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener">UME</a> (Parser, transChecker) でチェック済みのSubmission fileを作成済みであればuploadしてください</p>
+        <p><a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener">UME</a> (Parser, transChecker) でチェック済みのSubmission fileを作成済みであればuploadしてください。</p>
 
         <RadioGroup as |group|>
         <div class="form-check">

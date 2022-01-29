@@ -1,36 +1,32 @@
 <form class="vstack gap-3" {{on 'submit' (prevent-default @nav.goNext)}}>
   <div class="card">
-    <div class="card-header">
-      Number of entries, hold date
-    </div>
+    <div class="card-body bg-lighth">
+      <p>すべての配列ファイルの合計エントリ数と、公開予定日 (Hold date) の希望があれば入力してください。</p>
 
-    <div class="card-body row row-cols-2">
-      <div class="col">
-        <label for="entriesCount" class="form-label">登録件数</label>
-        <input type="number" value={{@model.entriesCount}} required min="1" class="form-control" id="entriesCount" {{on 'change' (pick 'target.value' (set @model 'entriesCount'))}} />
-      </div>
-
-      <div class="col vstack gap-1">
-        <div>
-          <label for="holdDate" class="form-label">公開予定日 (Hold date)</label>
-          <input type="date" value={{@model.holdDate}} disabled={{@state.releaseImmediately}} required class="form-control" id="holdDate" {{on 'change' (pick 'target.value' (set @model 'holdDate'))}} />
+      <div class="row row-cols-2">
+        <div class="col">
+          <label for="entriesCount" class="form-label">エントリ数</label>
+          <input type="number" value={{@model.entriesCount}} required min="1" class="form-control" id="entriesCount" {{on 'change' (pick 'target.value' (set @model 'entriesCount'))}} />
         </div>
 
-        <div class="form-check">
-          <input type="checkbox" checked={{@state.releaseImmediately}} class="form-check-input" id="releaseImmediately" {{on 'change' (pick 'target.checked' this.setReleaseImmediately)}} />
-          <label for="releaseImmediately" class="form-check-label">Release immediately</label>
+        <div class="col vstack gap-1">
+          <div>
+            <label for="holdDate" class="form-label">公開予定日</label>
+            <input type="date" value={{@model.holdDate}} disabled={{@state.releaseImmediately}} required class="form-control" id="holdDate" {{on 'change' (pick 'target.value' (set @model 'holdDate'))}} />
+          </div>
+
+          <div class="form-check">
+            <input type="checkbox" checked={{@state.releaseImmediately}} class="form-check-input" id="releaseImmediately" {{on 'change' (pick 'target.checked' this.setReleaseImmediately)}} />
+            <label for="releaseImmediately" class="form-check-label">Release immediately</label>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-header">
-      Contact person
-    </div>
-
     <div class="card-body">
-      <p>Submission fileのcontact 行に記載する、1名の登録責任者について記載してください。</p>
+      <p>Submission fileのcontact 行に記載する、1名の登録責任者（コンタクトパーソン）について記載してください。</p>
 
       <div class="row row-cols-2 gy-3">
         {{#let @model.contactPerson as |person|}}
@@ -54,10 +50,6 @@
   </div>
 
   <div class="card">
-    <div class="card-header">
-      Other person who would like to contact DDBJ
-    </div>
-
     <div class="card-body">
       <p>コンタクトパーソン以外に登録担当がおり、Accessionや公開のお知らせを受けたい場合は通知先を追加してください。</p>
 
@@ -98,13 +90,9 @@
   </div>
 
   <div class="card">
-    <div class="card-header">
-      Sequencer, datatype
-    </div>
-
     <div class="card-body vstack gap-3">
       <div>
-        <p>塩基配列決定にどのタイプのシークエンサーを使用しましたか</p>
+        <p>塩基配列決定にどのタイプのシークエンサーを使用しましたか。</p>
 
         <RadioGroup as |group|>
           {{#each (enum 'sequencers') as |sequencer|}}
@@ -122,7 +110,7 @@
       </div>
 
       <div>
-        <label for="dataType" class="form-label">データ種別を選択してください</label>
+        <label for="dataType" class="form-label">データ種別を選択してください。</label>
 
         <select required class="form-select" id="dataType" {{on 'change' (pick 'target.value' (set @model 'dataType'))}}>
           <option selected={{is-none @model.dataType}}></option>
@@ -138,15 +126,9 @@
   </div>
 
   <div class="card">
-    <div class="card-header">
-      Description
-    </div>
-
     <div class="card-body">
-      <p>
-        Submissionデータの補足説明をここに記入してください(日本語可)。生物の説明(common nameや性質など)、単離生物由来でない場合は塩基配列をどうやって得たのか、そのほか、Curatorに知らせたいこと等を入力できます。<br />
-        DDBJに登録した配列を更新する場合は対象のAccessionを記入してください。
-      </p>
+      <p>Submissionデータの補足説明をここに記入してください (日本語可、30文字以上1,000文字以内)。</p>
+      <p>生物の説明(common nameや性質など)、単離生物由来でない場合は塩基配列をどうやって得たのか、そのほか、Curatorに知らせたいこと等を入力できます。DDBJに登録した配列を更新する場合は対象のAccessionを記入してください。</p>
 
       <div>
         <label for="description" class="form-label visually-hidden">補足説明</label>
@@ -160,12 +142,8 @@
   </div>
 
   <div class="card">
-    <div class="card-header">
-      Language for the email
-    </div>
-
     <div class="card-body">
-      <p>通知するEメールの言語を選択</p>
+      <p>通知するEメールの言語を選択してください。</p>
 
       <RadioGroup as |group|>
         <div class="form-check">
