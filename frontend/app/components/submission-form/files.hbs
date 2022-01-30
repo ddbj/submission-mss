@@ -1,51 +1,66 @@
 <input type="file" multiple accept={{join ', ' (append this.annotationFileExtensions this.sequenceFileExtensions)}} class="d-none" {{did-insert (set this 'fileInputElement')}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInputElement.value' ''))}} />
 
-<form class="vstack gap-3" {{on 'submit' (prevent-default @nav.goNext)}}>
-  <div class="card">
-    <div class="card-body vstack gap-3">
-      <div>
-        <p><a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener">UME</a> (Parser, transChecker) でチェック済みのSubmission fileを作成済みであればuploadしてください。</p>
+<form {{on 'submit' (prevent-default @nav.goNext)}}>
+  <div class="vstack gap-3">
+    <div class="card">
+      <div class="card-body">
+        <p>
+          登録ファイルを作成済みですか。<br />
+          （作成したファイルは <a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener">UME</a> (Parser, transChecker) でチェックしてください）
+        </p>
 
         <RadioGroup as |group|>
-        <div class="form-check">
-          <group.radio as |radio|>
-            <radio.input checked={{eq @state.submissionFileType 'dfast'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'dfast')}} />
+          <div class="form-check">
+            <group.radio as |radio|>
+              <radio.input checked={{eq @state.submissionFileType 'dfast'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'dfast')}} />
 
-            <radio.label class="form-check-label">
-              DFASTで作成したBacterial complete genome または WGSのsubmission fileをuploadする
-            </radio.label>
-          </group.radio>
-        </div>
+              <radio.label class="form-check-label">
+                DFAST で作成した Bacterial complete genome または WGS の登録ファイルをアップロードする
+              </radio.label>
+            </group.radio>
+          </div>
 
-        <div class="form-check">
-          <group.radio as |radio|>
-            <radio.input checked={{eq @state.submissionFileType 'without-dfast'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'without-dfast')}} />
+          <div class="form-check">
+            <group.radio as |radio|>
+              <radio.input checked={{eq @state.submissionFileType 'without-dfast'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'without-dfast')}} />
 
-            <radio.label class="form-check-label">
-              DFASTを使わずsubmission fileを作成済みでありuploadする
-            </radio.label>
-          </group.radio>
-        </div>
+              <radio.label class="form-check-label">
+                DFAST を使わず作成した登録ファイルをアップロードする
+              </radio.label>
+            </group.radio>
+          </div>
 
-        <div class="form-check">
-          <group.radio as |radio|>
-          <radio.input checked={{eq @state.submissionFileType 'none'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'none')}} />
+          <div class="form-check">
+            <group.radio as |radio|>
+              <radio.input checked={{eq @state.submissionFileType 'none'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'none')}} />
 
-          <radio.label class="form-check-label">
-          申し込み後にsubmission fileを作成する
-          </radio.label>
-          </group.radio>
-        </div>
+              <radio.label class="form-check-label">
+                申し込み後に登録ファイルを作成する（今はアップロードしない）
+              </radio.label>
+            </group.radio>
+          </div>
         </RadioGroup>
       </div>
+    </div>
 
-      {{#if (or (eq @state.submissionFileType 'dfast') (eq @state.submissionFileType 'without-dfast'))}}
-        <div>
+    {{#if (or (eq @state.submissionFileType 'dfast') (eq @state.submissionFileType 'without-dfast'))}}
+      <div class="card">
+        <div class="card-body">
           <ul>
-            <li>Submission fileを圧縮せずにuploadしてください。</li>
-            <li>Requirementに従っていれば、複数セットのsubmission fileをuploadできます。</li>
-            <li>各Submissionのfile拡張子は必ず、.ann (アノテーションファイル)、.fasta (塩基配列)とし、拡張子を除く名称を同一にしてください。</li>
-            <li>Linuxのlsコマンドでの名前ソート順にAccession番号が発行されます。</li>
+            <li>受け付けるファイル拡張子は <code>.ann</code> (アノテーションファイル)、<code>.fasta</code> (塩基配列) です。ファイルは圧縮しないでください。</li>
+
+            <li>
+              アノテーションファイルと塩基配列のペアを複数指定できます。各ペアはファイル名の拡張子以外の部分を同一にしてください。<br />
+              ただし、以下の条件が1つでも該当しない場合は別の申し込みにしてください。
+
+              <ul>
+                <li>コンタクトパーソンが同一である</li>
+                <li>登録データ種別が1種類である</li>
+                <li>公開予定日が同一である</li>
+              </ul>
+            </li>
+
+            <li>Linux の <code>ls</code> コマンドでの名前ソート順に Accession 番号が発行されます。</li>
           </ul>
 
           {{#if @state.files}}
@@ -85,12 +100,14 @@
             </div>
           {{/if}}
         </div>
-      {{/if}}
-    </div>
+      </div>
+    {{/if}}
   </div>
 
-  <div>
-    <a href class="btn btn-link" {{on 'click' (prevent-default @nav.goPrev)}}>戻る</a>
-    <button class="btn btn-primary" disabled={{not this.isFulfilled}}>次へ</button>
+  <hr />
+
+  <div class="hstack gap-3 justify-content-end">
+    <a href class="btn btn-outline-primary px-4" {{on 'click' (prevent-default @nav.goPrev)}}>戻る</a>
+    <button class="btn btn-primary px-4" disabled={{not this.isFulfilled}}>次へ</button>
   </div>
 </form>

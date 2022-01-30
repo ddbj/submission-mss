@@ -4,7 +4,8 @@ import { service } from '@ember/service';
 
 import UploadFiles from 'mssform-web/models/upload-files';
 
-export default class SubmissionFormSubmitComponent extends Component {
+export default class SubmissionFormConfirmComponent extends Component {
+  @service router;
   @service session;
 
   @action async submit(uploadProgressModal) {
@@ -12,11 +13,13 @@ export default class SubmissionFormSubmitComponent extends Component {
 
     await this.session.authenticate('authenticator:appauth');
 
-    const {model} = this.args;
+    const {model, nav} = this.args;
 
     model.files = blobs.map(({signed_id}) => signed_id);
 
     await model.save();
+
+    nav.goNext();
   }
 
   async uploadFiles(progressModal) {

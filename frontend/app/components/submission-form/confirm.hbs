@@ -1,8 +1,125 @@
-<form {{on 'submit' (prevent-default @nav.goNext)}}>
-  <p>（確認画面）</p>
+<UploadProgressModal as |modal|>
+  <form {{on 'submit' (prevent-default (fn this.submit modal))}}>
+    <div class="vstack gap-3">
+      <div class="card">
+        <div class="card-header">登録種別</div>
 
-  <div>
-    <a href class="btn btn-link" {{on 'click' (prevent-default @nav.goPrev)}}>戻る</a>
-    <button class="btn btn-primary">次へ</button>
-  </div>
-</form>
+        <div class="card-body">
+
+          {{#if @model.tpa}}
+            TPA
+          {{else}}
+            非 TPA
+          {{/if}}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">登録ファイル</div>
+
+        {{#if @state.files}}
+          <div class="card-body">
+            {{#if @model.dfast}}
+              DFAST を使って作成
+            {{else}}
+              DFAST を使わずに作成
+            {{/if}}
+          </div>
+
+          <ul class="list-group list-group-flush">
+            {{#each @state.files as |file|}}
+              <li class="list-group-item">{{file.name}}</li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <div class="card-body">
+            申し込み後に作成する
+          </div>
+        {{/if}}
+      </div>
+
+      <div class="card">
+        <div class="card-header">エントリ数</div>
+
+        <div class="card-body">
+          {{@model.entriesCount}}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">公開予定日</div>
+
+        <div class="card-body">
+          {{or @model.holdDate '即時公開'}}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">コンタクトパーソン</div>
+
+        <div class="card-body">
+          {{#let @model.contactPerson as |person|}}
+            {{person.fullName}} &lt;{{person.email}}&gt; ({{person.affiliation}})
+          {{/let}}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">追加連絡先</div>
+
+        {{#if @model.otherPeople}}
+          <ul class="list-group list-group-flush">
+            {{#each @model.otherPeople as |person|}}
+              <li class="list-group-item">{{person.fullName}} &lt;{{person.email}}&gt;</li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <div class="card-body">
+            なし
+          </div>
+        {{/if}}
+      </div>
+
+      <div class="card">
+        <div class="card-header">シークエンサー</div>
+
+        <div class="card-body">
+          {{t (concat 'sequencers.' @model.sequencer)}}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">データ種別</div>
+
+        <div class="card-body">
+          {{t (concat 'data_types.' @model.dataType)}}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">補足説明</div>
+
+        <div class="card-body">
+          <div style="white-space: pre-wrap;">{{@model.description}}</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">通知メールの言語</div>
+
+        <div class="card-body">
+          {{t (concat 'locales.' @model.emailLanguage)}}
+        </div>
+      </div>
+
+      <p>入力内容をご確認のうえ、よろしければ登録申請ボタンを押してください。クリック後は修正できません。</p>
+    </div>
+
+    <hr />
+
+    <div class="hstack gap-3 justify-content-end">
+      <a href class="btn btn-outline-primary px-4" {{on 'click' (prevent-default @nav.goPrev)}}>戻る</a>
+      <button class="btn btn-primary px-5">登録申請</button>
+    </div>
+  </form>
+</UploadProgressModal>

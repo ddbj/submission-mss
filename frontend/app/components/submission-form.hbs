@@ -1,13 +1,13 @@
-{{page-title '新規登録'}}
+{{page-title '新規登録申請'}}
 
 <style>
   body {
-    counter-reset: section 0;
+    counter-reset: step 0;
   }
 
-  form > .card > .card-header:before {
-    counter-increment: section 1;
-    content: counter(section) '. ';
+  nav > .nav-link:before {
+    counter-increment: step 1;
+    content: counter(step) '. ';
   }
 
   .border-dashed {
@@ -19,14 +19,20 @@
   }
 </style>
 
-<h1 class="display-6 my-4">新規申し込み</h1>
+<h1 class="display-6 my-4">新規登録申請</h1>
 
-<nav class="nav nav-pills nav-justified my-4">
-  {{#each this.nav.steps as |step|}}
-    <a href class="nav-link {{if (this.nav.isCurrent step) 'active'}} {{if (this.nav.isFollowing step) 'disabled'}}">
-      {{t (concat 'submission-form.steps.' step)}}
-    </a>
-  {{/each}}
-</nav>
+<div class="hstack gap-4 align-items-start my-3">
+  <nav class="nav nav-pills flex-column flex-shrink-0">
+    {{#each this.nav.steps as |step|}}
+      <a href class="nav-link {{(this.nav.linkClass step)}}" {{on 'click' (prevent-default (fn this.nav.gotoStep step))}}>
+        {{t (concat 'submission-form.steps.' step)}}
+      </a>
+    {{/each}}
+  </nav>
 
-{{component (concat 'submission-form/' this.nav.currentStep) model=@model state=this.state nav=this.nav}}
+  <div class="vr"></div>
+
+  <main class="flex-fill">
+    {{component (concat 'submission-form/' this.nav.currentStep) model=@model state=this.state nav=this.nav}}
+  </main>
+</div>

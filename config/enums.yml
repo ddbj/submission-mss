@@ -1,3 +1,14 @@
+locales:
+  - key: ja
+    label:
+      en: Japanese
+      ja: 日本語
+
+  - key: en
+    label:
+      en: English
+      ja: 英語
+
 data_types:
   - key: wgs
     label: draft genome (WGS)

@@ -8,11 +8,10 @@ class Submission < ApplicationRecord
   has_many :other_people,   dependent: :destroy
 
   YAML.load_file(Rails.root.join('../config/enums.yml')).deep_symbolize_keys.then do |enums|
-    enumerize :data_type, in: enums.fetch(:data_types).map {|type| type.fetch(:key) }, i18n_scope: 'mssform.data_types'
-    enumerize :sequencer, in: enums.fetch(:sequencers).map {|type| type.fetch(:key) }, i18n_scope: 'mssform.sequencers'
+    enumerize :data_type,      in: enums.fetch(:data_types).map {|item| item.fetch(:key) }, i18n_scope: 'mssform.data_types'
+    enumerize :sequencer,      in: enums.fetch(:sequencers).map {|item| item.fetch(:key) }, i18n_scope: 'mssform.sequencers'
+    enumerize :email_language, in: enums.fetch(:locales).map    {|item| item.fetch(:key) }, i18n_scope: 'mssform.locales'
   end
-
-  enumerize :email_language, in: %i(ja en)
 
   def mass_id
     "NSUB#{id.to_s.rjust(6, '0')}"
