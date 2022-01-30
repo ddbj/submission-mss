@@ -1,18 +1,22 @@
 require 'rails_helper'
 
+using Module.new {
+  refine Rack::Test::UploadedFile.singleton_class do
+    def tmp(filename, content: '')
+      Dir.mktmpdir {|dir|
+        file = Pathname.new(dir).join(filename).open('wb').tap {|f|
+          f.write content
+          f.rewind
+        }
+
+        new(file)
+      }
+    end
+  end
+}
+
 RSpec.describe ProcessSubmissionJob do
   include ActiveJob::TestHelper
-
-  def uploaded_file(filename, content: '')
-    Dir.mktmpdir {|dir|
-      file = Pathname.new(dir).join(filename).open('wb').tap {|f|
-        f.write content
-        f.rewind
-      }
-
-      Rack::Test::UploadedFile.new(file)
-    }
-  end
 
   around do |example|
     Dir.mktmpdir do |dir|
@@ -51,8 +55,8 @@ RSpec.describe ProcessSubmissionJob do
           created_at: '2022-01-02 12:34:56',
 
           files: [
-            uploaded_file('example.ann'),
-            uploaded_file('example.fasta')
+            Rack::Test::UploadedFile.tmp('example.ann'),
+            Rack::Test::UploadedFile.tmp('example.fasta')
           ]
         })
       ]

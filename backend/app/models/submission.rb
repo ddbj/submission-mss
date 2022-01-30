@@ -12,6 +12,8 @@ class Submission < ApplicationRecord
     enumerize :sequencer, in: enums.fetch(:sequencers).map {|type| type.fetch(:key) }, i18n_scope: 'mssform.sequencers'
   end
 
+  enumerize :email_language, in: %i(ja en)
+
   def mass_id
     "NSUB#{id.to_s.rjust(6, '0')}"
   end
