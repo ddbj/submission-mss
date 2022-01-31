@@ -17,7 +17,7 @@
       <div class="card">
         <div class="card-header">登録ファイル</div>
 
-        {{#if @state.files}}
+        {{#if @state.fileSet.files}}
           <div class="card-body">
             {{#if @model.dfast}}
               DFAST を使って作成
@@ -27,7 +27,7 @@
           </div>
 
           <ul class="list-group list-group-flush">
-            {{#each @state.files as |file|}}
+            {{#each @state.fileSet.files as |file|}}
               <li class="list-group-item">{{file.name}}</li>
             {{/each}}
           </ul>

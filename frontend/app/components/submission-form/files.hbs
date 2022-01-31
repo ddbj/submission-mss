@@ -1,4 +1,4 @@
-<input type="file" multiple accept={{join ', ' (append this.annotationFileExtensions this.sequenceFileExtensions)}} class="d-none" {{did-insert (set this 'fileInputElement')}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInputElement.value' ''))}} />
+<input type="file" multiple accept={{join ', ' @state.fileSet.allowedExtensions}} class="d-none" {{did-insert (set this 'fileInputElement')}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInputElement.value' ''))}} />
 
 <form {{on 'submit' (prevent-default @nav.goNext)}}>
   <div class="vstack gap-3">
@@ -52,14 +52,18 @@
             <li>Linux の <code>ls</code> コマンドでの名前ソート順に Accession 番号が発行されます。</li>
           </ul>
 
-          {{#if @state.files}}
+          {{#if @state.fileSet.files}}
             <div class="card {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
               <ul class="list-group list-group-flush overflow-auto" style="max-height: 550px">
-                {{#each @state.files as |file|}}
+                {{#each (sort-by 'name' @state.fileSet.files) as |file|}}
                   <li class="list-group-item d-flex align-items-center">
                     <div class="ms-2 me-auto">
                       {{file.name}}
                       <small class="text-muted">{{filesize file.size}}</small>
+
+                      {{#with file.entriesCount as |count|}}
+                        <small class="text-muted">/ {{format-number count}} エントリ</small>
+                      {{/with}}
                     </div>
 
                     <div>
@@ -77,7 +81,7 @@
                 </div>
 
                 <div>
-                  {{@state.files.length}}ファイル、{{filesize (sum (map-by 'size' @state.files))}}
+                  {{@state.fileSet.files.length}}ファイル、{{filesize (sum (map-by 'size' @state.fileSet.files))}}
                 </div>
               </div>
             </div>

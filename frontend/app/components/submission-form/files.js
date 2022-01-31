@@ -3,16 +3,14 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class SubmissionFormFilesComponent extends Component {
-  fileInputElement         = null;
-  annotationFileExtensions = ['.ann', '.annt.tsv', '.ann.txt'];
-  sequenceFileExtensions   = ['.fasta', '.seq.fa', '.fa', '.fna', '.seq'];
+  fileInputElement = null;
 
   @tracked dragOver = false;
 
   get isNextButtonDisabled() {
-    const {submissionFileType, files} = this.args.state;
+    const {submissionFileType, fileSet} = this.args.state;
 
-    return submissionFileType && submissionFileType !== 'none' && files.length === 0;
+    return submissionFileType && submissionFileType !== 'none' && fileSet.files.length === 0;
   }
 
   @action setSubmissionFileType(val) {
@@ -22,7 +20,7 @@ export default class SubmissionFormFilesComponent extends Component {
     model.dfast              = val === 'dfast';
 
     if (val === 'none') {
-      state.files.clear();
+      state.fileSet.files.clear();
     }
   }
 
@@ -31,12 +29,16 @@ export default class SubmissionFormFilesComponent extends Component {
   }
 
   @action addFiles(files) {
-    this.args.state.files.pushObjects(Array.from(files));
+    const {fileSet} = this.args.state;
+
+    for (const file of files) {
+      fileSet.add(file);
+    }
 
     this.dragOver = false;
   }
 
   @action removeFile(file) {
-    this.args.state.files.removeObject(file);
+    this.args.state.fileSet.remove(file);
   }
 }
