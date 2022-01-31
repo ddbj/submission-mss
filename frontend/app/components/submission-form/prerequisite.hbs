@@ -71,19 +71,18 @@
           </RadioGroup>
         </div>
       </div>
-
-      {{#if (eq @model.tpa false)}}
-        <p>
-          TPAの場合、論文を準備しないのであれば申し込みできません。<br />
-          <LinkTo @route="home">ホームに戻る</LinkTo>
-        </p>
-      {{/if}}
     {{/if}}
   </div>
 
   <hr />
 
-  <div class="hstack gap-3 justify-content-end">
-    <button class="btn btn-primary px-4" disabled={{not this.isFulfilled}}>次へ</button>
-  </div>
+  {{#if (and (eq @state.determinedByOwnStudy false) (eq @model.tpa false))}}
+    <p>TPAの場合、論文を準備しないのであれば申し込みできません。</p>
+
+    <LinkTo @route="home">ホームに戻る</LinkTo>
+  {{else}}
+    <div class="hstack gap-3 justify-content-end">
+      <button class="btn btn-primary px-5">次へ</button>
+    </div>
+  {{/if}}
 </form>

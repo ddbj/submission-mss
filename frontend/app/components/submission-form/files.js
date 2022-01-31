@@ -9,10 +9,10 @@ export default class SubmissionFormFilesComponent extends Component {
 
   @tracked dragOver = false;
 
-  get isFulfilled() {
-    const {state} = this.args;
+  get isNextButtonDisabled() {
+    const {submissionFileType, files} = this.args.state;
 
-    return state.submissionFileType === 'none' || state.files;
+    return submissionFileType && submissionFileType !== 'none' && files.length === 0;
   }
 
   @action setSubmissionFileType(val) {

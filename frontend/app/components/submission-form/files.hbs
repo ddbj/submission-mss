@@ -47,19 +47,21 @@
       <div class="card">
         <div class="card-body">
           <ul>
-            <li>受け付けるファイル拡張子は <code>.ann</code> (アノテーションファイル)、<code>.fasta</code> (塩基配列) です。ファイルは圧縮しないでください。</li>
+            <li>登録ファイルはアノテーションファイル <code>.ann</code> と 配列ファイル <code>.fasta</code> を対にしたものです。各ペアはファイル名の拡張子以外の部分を同一にしてください。</li>
 
             <li>
-              アノテーションファイルと塩基配列のペアを複数指定できます。各ペアはファイル名の拡張子以外の部分を同一にしてください。<br />
-              ただし、以下の条件が1つでも該当しない場合は別の申し込みにしてください。
+              以下の条件をすべて満たす場合は一回の申請で複数の登録ファイルのペアをアップロードできます。
 
               <ul>
                 <li>コンタクトパーソンが同一である</li>
                 <li>登録データ種別が1種類である</li>
                 <li>公開予定日が同一である</li>
               </ul>
+
+              いずれかの条件に該当しない場合は申請を別にしてください。
             </li>
 
+            <li>ファイルは圧縮しないでください。</li>
             <li>Linux の <code>ls</code> コマンドでの名前ソート順に Accession 番号が発行されます。</li>
           </ul>
 
@@ -108,6 +110,6 @@
 
   <div class="hstack gap-3 justify-content-end">
     <a href class="btn btn-outline-primary px-4" {{on 'click' (prevent-default @nav.goPrev)}}>戻る</a>
-    <button class="btn btn-primary px-4" disabled={{not this.isFulfilled}}>次へ</button>
+    <button class="btn btn-primary px-5" disabled={{this.isNextButtonDisabled}}>次へ</button>
   </div>
 </form>

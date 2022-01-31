@@ -16,7 +16,6 @@ export default class SubmissionFormConfirmComponent extends Component {
     const {model, nav} = this.args;
 
     model.files = blobs.map(({signed_id}) => signed_id);
-
     await model.save();
 
     nav.goNext();
