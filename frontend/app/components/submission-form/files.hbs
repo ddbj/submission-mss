@@ -5,8 +5,7 @@
     <div class="card">
       <div class="card-body">
         <p>
-          登録ファイルを作成済みですか。<br />
-          （作成したファイルは <a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener">UME</a> (Parser, transChecker) でチェックしてください）
+          <a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener">UME</a> (Parser, transChecker) でチェック済みの登録ファイルを作成済みであればアップロードしてください。
         </p>
 
         <RadioGroup as |group|>
@@ -35,7 +34,7 @@
               <radio.input checked={{eq @state.submissionFileType 'none'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'none')}} />
 
               <radio.label class="form-check-label">
-                申し込み後に登録ファイルを作成する（今はアップロードしない）
+                申し込み後に登録ファイルを作成する
               </radio.label>
             </group.radio>
           </div>
@@ -47,21 +46,9 @@
       <div class="card">
         <div class="card-body">
           <ul>
-            <li>登録ファイルはアノテーションファイル <code>.ann</code> と 配列ファイル <code>.fasta</code> を対にしたものです。各ペアはファイル名の拡張子以外の部分を同一にしてください。</li>
-
-            <li>
-              以下の条件をすべて満たす場合は一回の申請で複数の登録ファイルのペアをアップロードできます。
-
-              <ul>
-                <li>コンタクトパーソンが同一である</li>
-                <li>登録データ種別が1種類である</li>
-                <li>公開予定日が同一である</li>
-              </ul>
-
-              いずれかの条件に該当しない場合は申請を別にしてください。
-            </li>
-
-            <li>ファイルは圧縮しないでください。</li>
+            <li>登録ファイルを圧縮せずにアップロードしてください。</li>
+            <li>前提条件に従っていれば、複数セットの登録ファイルをアップロードできます。</li>
+            <li>各 Submission のファイル拡張子は必ず <code>.ann</code> (アノテーションファイル)、<code>.fasta</code> (塩基配列) とし、拡張子を除く名称を同一にしてください。</li>
             <li>Linux の <code>ls</code> コマンドでの名前ソート順に Accession 番号が発行されます。</li>
           </ul>
 
