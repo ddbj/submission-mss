@@ -74,11 +74,10 @@ class SequenceFile extends SubmissionFile {
     const reader = this.rawFile.stream().pipeThrough(new TextDecoderStream()).pipeThrough(new LineStream()).getReader();
 
     let entriesCount = 0;
+    let done, value;
 
-    for (let result = await reader.read(); !result.done; result = await reader.read()) {
-      const line = result.value;
-
-      if (line.startsWith('>')) {
+    while (({done, value} = await reader.read()), !done) {
+      if (value.startsWith('>')) {
         entriesCount++;
       }
     }
