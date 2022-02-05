@@ -17,12 +17,8 @@ export default class FileSet {
     return this.files.length === 0;
   }
 
-  get annotationFiles() {
-    return this.files.filter(({type}) => type === 'annotation');
-  }
-
-  get sequenceFiles() {
-    return this.files.filter(({type}) => type === 'sequence');
+  filterByType(type) {
+    return this.files.filter(file => file.type === type);
   }
 
   async add(rawFile) {

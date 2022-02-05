@@ -43,30 +43,37 @@ export default class SubmissionFormFilesComponent extends Component {
   }
 
   @action goNext() {
-    const {model, state, nav} = this.args;
+    this.setParsedData();
 
-    if (state.submissionFileType === 'none') {
-      nav.goNext();
-      return;
-    }
+    this.args.nav.goNext();
+  }
+
+  setParsedData() {
+    const {state, model} = this.args;
+
+    if (state.fileSet.isEmpty) { return; }
 
     // files.length >= 2
     // paired
     // entries count > 0
     // contact person is exists
 
-    const {annotationFiles, sequenceFiles}         = state.fileSet;
-    const {holdDate, fullName, email, affiliation} = annotationFiles[0].parsedData;
-
-    model.holdDate           = holdDate;
-    state.releaseImmediately = !holdDate;
+    const {
+      fullName,
+      email,
+      affiliation,
+      holdDate
+    } = state.fileSet.filterByType('annotation')[0].parsedData;
 
     model.contactPerson.fullName    = fullName;
     model.contactPerson.email       = email;
     model.contactPerson.affiliation = affiliation;
 
-    model.entriesCount = sequenceFiles.reduce((acc, file) => acc + file.parsedData.entriesCount, 0);
+    model.holdDate           = holdDate;
+    state.releaseImmediately = !holdDate;
 
-    nav.goNext();
+    model.entriesCount = state.fileSet.filterByType('sequence').reduce((acc, file) => {
+      return acc + file.parsedData.entriesCount;
+    }, 0);
   }
 }
