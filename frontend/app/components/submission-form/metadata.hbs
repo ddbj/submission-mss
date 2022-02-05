@@ -60,12 +60,12 @@
               <div class="row">
                 <div class="col">
                   <label for="otherPerson.{{i}}.email" class="form-label">E-mail アドレス</label>
-                  <input type="email" value={{person.email}} required=true class="form-control" id="otherPerson.{{i}}.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
+                    <input type="email" value={{person.email}} required={{true}} class="form-control" id="otherPerson.{{i}}.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
                 </div>
 
                 <div class="col">
                   <label for="otherPerson.{{i}}.fullName" class="form-label">フルネーム (英語表記)</label>
-                    <input type="text" value={{person.fullName}} required=true maxlength="255" class="form-control" id="otherPerson.{{i}}.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
+                    <input type="text" value={{person.fullName}} required={{true}} maxlength="255" class="form-control" id="otherPerson.{{i}}.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
                 </div>
 
                 <div class="col-auto align-self-center">
@@ -163,6 +163,6 @@
 
   <div class="hstack gap-3 justify-content-end">
     <a href class="btn btn-outline-primary px-4" {{on 'click' (prevent-default @nav.goPrev)}}>戻る</a>
-    <button class="btn btn-primary px-5">次へ</button>
+    <button type="submit" class="btn btn-primary px-5">次へ</button>
   </div>
 </form>

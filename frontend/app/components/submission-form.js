@@ -79,11 +79,4 @@ class Navigation {
   @action isFollowing(step) {
     return this.stepIndex < this.steps.indexOf(step);
   }
-
-  @action linkClass(step) {
-    return step === this.currentStep       ? 'active'   :
-           this.currentStep === 'complete' ? 'disabled' :
-           this.isFollowing(step)          ? 'disabled' :
-                                             null;
-  }
 }
