@@ -1,9 +1,17 @@
+import { setOwner } from '@ember/application';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 export default class FileSet {
   allowedExtensions = [...AnnotationFile.extensions, ...SequenceFile.extensions];
 
   @tracked files = [];
+
+  owner;
+
+  constructor({owner}) {
+    this.owner = owner;
+  }
 
   async add(rawFile) {
     const klass = [AnnotationFile, SequenceFile].find(klass => klass.matchExtension(rawFile.name));
@@ -12,10 +20,9 @@ export default class FileSet {
       throw new Error(`${rawFile.name}: アップロード可能なファイル拡張子は .ann, .fasta のいずれかです。`);
     }
 
-    const file = new klass(rawFile);
-    await file.parse();
-
+    const file = new klass(rawFile, {owner: this.owner});
     this.files = [...this.files, file];
+    await file.parse();
   }
 
   remove(file) {
@@ -28,7 +35,9 @@ class SubmissionFile {
     return this.extensions.some(ext => filename.endsWith(ext));
   }
 
-  constructor(rawFile) {
+  constructor(rawFile, {owner}) {
+    setOwner(this, owner);
+
     this.rawFile = rawFile;
   }
 
@@ -66,50 +75,15 @@ class AnnotationFile extends SubmissionFile {
 class SequenceFile extends SubmissionFile {
   static extensions = ['.fasta', '.seq.fa', '.fa', '.fna', '.seq'];
 
+  @service sequenceFileParser;
+
   kind = 'sequence';
 
   @tracked entriesCount;
 
   async parse() {
-    const reader = this.rawFile.stream().pipeThrough(new TextDecoderStream()).pipeThrough(new LineStream()).getReader();
-
-    let entriesCount = 0;
-    let done, value;
-
-    while (({done, value} = await reader.read()), !done) {
-      if (value.startsWith('>')) {
-        entriesCount++;
-      }
-    }
+    const {entriesCount} = await this.sequenceFileParser.parse(this.rawFile);
 
     this.entriesCount = entriesCount;
-  }
-}
-
-class LineStream extends TransformStream {
-  constructor() {
-    super({
-      start() {
-        this.pending = '';
-      },
-
-      transform(chunk, controller) {
-        if (!chunk) { return; }
-
-        const buffer = this.pending + chunk;
-
-        this.pending = buffer.replaceAll(/[^\n\r]*(?:\r\n|\n|\r)/g, (line) => {
-          controller.enqueue(line);
-
-          return '';
-        });
-      },
-
-      flush(controller) {
-        if (this.pending === '') { return; }
-
-        controller.enqueue(this.pending);
-      }
-    });
   }
 }

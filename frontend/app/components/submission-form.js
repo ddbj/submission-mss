@@ -9,15 +9,26 @@ export default class SubmissionFormComponent extends Component {
   @service router;
   @service session;
 
-  state = new State();
-  nav   = new Navigation();
+  nav = new Navigation();
+
+  constructor(owner) {
+    super(...arguments);
+
+    this.state = new State({owner});
+  }
 }
 
 class State {
   @tracked determinedByOwnStudy = null;
   @tracked submissionFileType   = 'dfast'; // FIXME null
-  @tracked fileSet              = new FileSet();
+  @tracked fileSet              = new FileSet({owner: this.owner});
   @tracked releaseImmediately   = true;
+
+  owner;
+
+  constructor({owner}) {
+    this.owner = owner;
+  }
 }
 
 class Navigation {
