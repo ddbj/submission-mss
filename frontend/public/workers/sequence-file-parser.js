@@ -1,9 +1,9 @@
 addEventListener('message', async (e) => {
-  const {guid, file} = e.data;
-  const reader = file.stream().pipeThrough(new TextDecoderStream()).pipeThrough(new LineStream()).getReader();
+  const [id, file] = e.data;
+  const reader     = file.stream().pipeThrough(new TextDecoderStream()).pipeThrough(new LineStream()).getReader();
 
-  let entriesCount = 0;
   let done, value;
+  let entriesCount = 0;
 
   while (({done, value} = await reader.read()), !done) {
     if (value.startsWith('>')) {
@@ -11,7 +11,7 @@ addEventListener('message', async (e) => {
     }
   }
 
-  e.source.postMessage([null, {guid, entriesCount}]);
+  postMessage([null, [id, {entriesCount}]]);
 });
 
 class LineStream extends TransformStream {

@@ -35,6 +35,10 @@ class SubmissionFile {
     return this.extensions.some(ext => filename.endsWith(ext));
   }
 
+  @service fileParser;
+
+  @tracked parsedData;
+
   constructor(rawFile, {owner}) {
     setOwner(this, owner);
 
@@ -66,24 +70,23 @@ class SubmissionFile {
 class AnnotationFile extends SubmissionFile {
   static extensions = ['.ann', '.annt.tsv', '.ann.txt'];
 
-  kind = 'annotation';
+  type = 'annotation';
 
   async parse() {
+    const {fullName, email, affiliation} = await this.fileParser.parse(this.type, this.rawFile);
+
+    this.parsedData = {fullName, email, affiliation};
   }
 }
 
 class SequenceFile extends SubmissionFile {
   static extensions = ['.fasta', '.seq.fa', '.fa', '.fna', '.seq'];
 
-  @service sequenceFileParser;
-
-  kind = 'sequence';
-
-  @tracked entriesCount;
+  type = 'sequence';
 
   async parse() {
-    const {entriesCount} = await this.sequenceFileParser.parse(this.rawFile);
+    const {entriesCount} = await this.fileParser.parse(this.type, this.rawFile);
 
-    this.entriesCount = entriesCount;
+    this.parsedData = {entriesCount};
   }
 }
