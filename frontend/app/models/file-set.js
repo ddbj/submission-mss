@@ -13,6 +13,18 @@ export default class FileSet {
     this.owner = owner;
   }
 
+  get isEmpty() {
+    return this.files.length === 0;
+  }
+
+  get annotationFiles() {
+    return this.files.filter(({type}) => type === 'annotation');
+  }
+
+  get sequenceFiles() {
+    return this.files.filter(({type}) => type === 'sequence');
+  }
+
   async add(rawFile) {
     const klass = [AnnotationFile, SequenceFile].find(klass => klass.matchExtension(rawFile.name));
 
@@ -21,7 +33,9 @@ export default class FileSet {
     }
 
     const file = new klass(rawFile, {owner: this.owner});
+
     this.files = [...this.files, file];
+
     await file.parse();
   }
 
@@ -65,28 +79,20 @@ class SubmissionFile {
 
     return this.constructor.extensions.find(ext => name.endsWith(ext));
   }
+
+  async parse() {
+    this.parsedData = await this.fileParser.parse(this.type, this.rawFile);
+  }
 }
 
 class AnnotationFile extends SubmissionFile {
   static extensions = ['.ann', '.annt.tsv', '.ann.txt'];
 
   type = 'annotation';
-
-  async parse() {
-    const {fullName, email, affiliation} = await this.fileParser.parse(this.type, this.rawFile);
-
-    this.parsedData = {fullName, email, affiliation};
-  }
 }
 
 class SequenceFile extends SubmissionFile {
   static extensions = ['.fasta', '.seq.fa', '.fa', '.fna', '.seq'];
 
   type = 'sequence';
-
-  async parse() {
-    const {entriesCount} = await this.fileParser.parse(this.type, this.rawFile);
-
-    this.parsedData = {entriesCount};
-  }
 }

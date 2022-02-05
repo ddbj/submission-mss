@@ -1,25 +1,51 @@
 addEventListener('message', async (e) => {
   const [id, file] = e.data;
-  const reader       = file.stream().pipeThrough(new TextDecoderStream()).pipeThrough(new LineStream()).getReader();
+  const reader     = file.stream().pipeThrough(new TextDecoderStream()).pipeThrough(new LineStream()).getReader();
 
-  let done, line;
-  let fullName, email, affiliation;
+  const payload = {
+    holdDate:    null,
+    fullName:    null,
+    email:       null,
+    affiliation: null
+  };
 
-  while (({done, value: line} = await reader.read()), !done && !(fullName && email && affiliation)) {
-    if (!fullName) {
-      fullName = line.match(/\tcontact\t([^\t\n\r]+)(?:\r\n|\n|\r)?$/)?.[1];
+  let done, line, inCommon;
+
+  while (({done, value: line} = await reader.read()), !done && !Object.values(payload).every(Boolean)) {
+    const [entry, _feature, _location, qualifier, value] = line.replace(/\r\n|\n|\r$/, '').split('\t');
+
+    if (entry && inCommon) { break; }
+
+    if (entry) {
+      inCommon = entry === 'COMMON';
     }
 
-    if (!email) {
-      email = line.match(/\temail\t([^\t\n\r]+)(?:\r\n|\n|\r)?$/)?.[1];
-    }
+    if (!inCommon) { continue; }
 
-    if (!affiliation) {
-      affiliation = line.match(/\tinstitute\t([^\t\n\r]+)(?:\r\n|\n|\r)?$/)?.[1];
+    switch (qualifier) {
+      case 'hold_date': {
+        const m = value.match(/^(\d{4})(\d{2})(\d{2})$/);
+
+        if (!m) { throw new Error(`invalid hold_date: ${value}`); }
+
+        payload.holdDate = m.slice(1).join('-');
+        break;
+      }
+      case 'contact':
+        payload.fullName = value;
+        break;
+      case 'email':
+        payload.email = value;
+        break;
+      case 'institute':
+        payload.affiliation = value;
+        break;
+      default:
+        // do nothing
     }
   }
 
-  postMessage([null, [id, {fullName, email, affiliation}]]);
+  postMessage([null, [id, payload]]);
 });
 
 class LineStream extends TransformStream {

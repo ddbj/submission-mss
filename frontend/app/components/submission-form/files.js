@@ -41,4 +41,32 @@ export default class SubmissionFormFilesComponent extends Component {
   @action removeFile(file) {
     this.args.state.fileSet.remove(file);
   }
+
+  @action goNext() {
+    const {model, state, nav} = this.args;
+
+    if (state.submissionFileType === 'none') {
+      nav.goNext();
+      return;
+    }
+
+    // files.length >= 2
+    // paired
+    // entries count > 0
+    // contact person is exists
+
+    const {annotationFiles, sequenceFiles}         = state.fileSet;
+    const {holdDate, fullName, email, affiliation} = annotationFiles[0].parsedData;
+
+    model.holdDate           = holdDate;
+    state.releaseImmediately = !holdDate;
+
+    model.contactPerson.fullName    = fullName;
+    model.contactPerson.email       = email;
+    model.contactPerson.affiliation = affiliation;
+
+    model.entriesCount = sequenceFiles.reduce((acc, file) => acc + file.parsedData.entriesCount, 0);
+
+    nav.goNext();
+  }
 }

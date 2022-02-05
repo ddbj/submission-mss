@@ -1,6 +1,6 @@
 <input type="file" multiple accept={{join ', ' @state.fileSet.allowedExtensions}} class="d-none" {{did-insert (set this 'fileInputElement')}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInputElement.value' ''))}} />
 
-<form {{on 'submit' (prevent-default @nav.goNext)}}>
+<form {{on 'submit' (prevent-default this.goNext)}}>
   <div class="vstack gap-3">
     <div class="card">
       <div class="card-body">
@@ -59,17 +59,20 @@
                   <li class="list-group-item d-flex align-items-center">
                     <div class="ms-2 me-auto">
                       {{file.name}}
-                      <small class="text-muted">{{filesize file.size}}</small>
 
-                      {{#with file.parsedData as |data|}}
-                        {{#if (eq file.type 'annotation')}}
-                          <small class="text-muted">/ {{data.fullName}} ({{data.affiliation}})</small>
-                        {{/if}}
+                      <small class="text-muted">
+                        {{filesize file.size}}
 
-                        {{#if (eq file.type 'sequence')}}
-                          <small class="text-muted">/ {{format-number data.entriesCount}} エントリ</small>
-                        {{/if}}
-                      {{/with}}
+                        {{#with file.parsedData as |data|}}
+                          {{#if (eq file.type 'annotation')}}
+                            / {{data.fullName}}
+                          {{/if}}
+
+                          {{#if (eq file.type 'sequence')}}
+                            / {{format-number data.entriesCount}} エントリ
+                          {{/if}}
+                        {{/with}}
+                      </small>
                     </div>
 
                     <div>
