@@ -6,9 +6,9 @@ export default class FileParserService extends Service {
   running = {};
 
   workerFor(type) {
-    const cached = this.workers[type];
+    const instance = this.workers[type];
 
-    if (cached) { return cached; }
+    if (instance) { return instance; }
 
     const worker = this.workers[type] = new Worker(`/workers/${type}-file-parser.js`);
 

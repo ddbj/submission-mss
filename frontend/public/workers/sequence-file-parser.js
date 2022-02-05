@@ -11,10 +11,8 @@ addEventListener('message', async (e) => {
       if (isBOL && byte === gt) {
         entriesCount++;
         isBOL = false;
-      } else if (byte === lf || byte === cr) {
-        isBOL = true;
       } else {
-        isBOL = false;
+        isBOL = byte === lf || byte === cr;
       }
     }
   }
