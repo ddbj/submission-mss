@@ -1,6 +1,6 @@
 addEventListener('message', async (e) => {
   const [id, file] = e.data;
-  const reader     = file.stream().pipeThrough(new TextDecoderStream()).pipeThrough(new LineStream()).getReader();
+  const reader     = file.stream().getReader();
 
   const payload = {
     holdDate:    null,
@@ -9,12 +9,14 @@ addEventListener('message', async (e) => {
     affiliation: null
   };
 
-  let done, line, inCommon;
+  let inCommon;
 
-  while (({done, value: line} = await reader.read()), !done && !Object.values(payload).every(Boolean)) {
+  for await (const line of makeLineIterator(reader)) {
+    if (Object.values(payload).every(Boolean)) { break; }
+
     const [entry, _feature, _location, qualifier, value] = line.replace(/\r\n|\n|\r$/, '').split('\t');
 
-    if (entry && inCommon) { break; }
+    if (inCommon && entry) { break; }
 
     if (entry) {
       inCommon = entry === 'COMMON';
@@ -48,30 +50,35 @@ addEventListener('message', async (e) => {
   postMessage([null, [id, payload]]);
 });
 
-class LineStream extends TransformStream {
-  constructor() {
-    super({
-      start() {
-        this.pending = '';
-      },
+async function* makeLineIterator(reader) {
+  const decoder = new TextDecoder();
 
-      transform(chunk, controller) {
-        if (!chunk) { return; }
+  let done, chunk;
+  let pending = '';
 
-        const buffer = this.pending + chunk;
+  while (({done, value: chunk} = await reader.read()), !done) {
+    let buffer = pending + decoder.decode(chunk, {stream: true});
 
-        this.pending = buffer.replaceAll(/[^\n\r]*(?:\r\n|\n|\r)/g, (line) => {
-          controller.enqueue(line);
+    for (;;) {
+      let line = null;
 
-          return '';
-        });
-      },
+      buffer = buffer.replace(/[^\n\r]*(?:\r\n|\n|\r)/, (matched) => {
+        line = matched;
 
-      flush(controller) {
-        if (this.pending === '') { return; }
+        return '';
+      });
 
-        controller.enqueue(this.pending);
+      if (line) {
+        yield line;
+      } else {
+        break;
       }
-    });
+    }
+
+    pending = buffer;
+  }
+
+  if (pending !== '') {
+    yield pending;
   }
 }
