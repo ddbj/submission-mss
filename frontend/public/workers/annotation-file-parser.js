@@ -1,6 +1,5 @@
-addEventListener('message', async (e) => {
-  const [id, file] = e.data;
-  const reader     = file.stream().getReader();
+addEventListener('message', async ({data: {file}}) => {
+  const reader = file.stream().getReader();
 
   const payload = {
     holdDate:    null,
@@ -47,7 +46,7 @@ addEventListener('message', async (e) => {
     }
   }
 
-  postMessage([null, [id, payload]]);
+  postMessage(payload);
 });
 
 async function* makeLineIterator(reader) {

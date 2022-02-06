@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
-import ENV from 'mssform-web/config/environment';
+import ENV from 'mssform/config/environment';
 
 export default class ApplicationRoute extends Route {
   @service intl;

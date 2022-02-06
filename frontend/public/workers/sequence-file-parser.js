@@ -1,13 +1,12 @@
-addEventListener('message', async (e) => {
-  const [id, file] = e.data;
-  const reader     = file.stream().getReader();
+addEventListener('message', async ({data: {file}}) => {
+  const reader = file.stream().getReader();
 
-  let done, bytes;
+  let done, chunk;
   let entriesCount = 0;
   let isBOL        = true;
 
-  while (({done, value: bytes} = await reader.read()), !done) {
-    for (const byte of bytes) {
+  while (({done, value: chunk} = await reader.read()), !done) {
+    for (const byte of chunk) {
       if (isBOL && byte === gt) {
         entriesCount++;
         isBOL = false;
@@ -17,7 +16,7 @@ addEventListener('message', async (e) => {
     }
   }
 
-  postMessage([null, [id, {entriesCount}]]);
+  postMessage({entriesCount});
 });
 
 const lf = '\n'.codePointAt(0);

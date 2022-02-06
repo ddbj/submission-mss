@@ -1,5 +1,5 @@
-import Application from 'mssform-web/app';
-import config from 'mssform-web/config/environment';
+import Application from 'mssform/app';
+import config from 'mssform/config/environment';
 import * as QUnit from 'qunit';
 import { setApplication } from '@ember/test-helpers';
 import { setup } from 'qunit-dom';

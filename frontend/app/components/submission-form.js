@@ -3,32 +3,21 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import FileSet from 'mssform-web/models/file-set';
+import FileSet from 'mssform/models/file-set';
 
 export default class SubmissionFormComponent extends Component {
   @service router;
   @service session;
 
-  nav = new Navigation();
-
-  constructor(owner) {
-    super(...arguments);
-
-    this.state = new State({owner});
-  }
+  state = new State();
+  nav   = new Navigation();
 }
 
 class State {
   @tracked determinedByOwnStudy = null;
   @tracked submissionFileType   = 'dfast'; // FIXME null
-  @tracked fileSet              = new FileSet({owner: this.owner});
+  @tracked fileSet              = new FileSet();
   @tracked releaseImmediately   = true;
-
-  owner;
-
-  constructor({owner}) {
-    this.owner = owner;
-  }
 }
 
 class Navigation {
