@@ -57,26 +57,34 @@
               <ul class="list-group list-group-flush overflow-auto" style="max-height: 550px">
                 {{#each (sort-by 'name' @state.fileSet.files) as |file|}}
                   <li class="list-group-item d-flex align-items-center">
-                    <div class="ms-2 me-auto">
+                    <div class="ms-2 me-auto {{unless file.isParsed 'opacity-50'}}">
                       {{file.name}}
 
-                      <small class="text-muted">
-                        {{filesize file.size}}
+                      <small class="text-muted hstack gap-2">
+                        <div>{{filesize file.size}}</div>
+
+                        {{#unless file.isParsed}}
+                          <div class="spinner-border spinner-border-seconcary spinner-border-sm" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                        {{/unless}}
 
                         {{#with file.parsedData as |data|}}
-                          {{#if (eq file.type 'annotation')}}
-                            / {{data.fullName}}
+                          {{#if file.isAnnotation}}
+                            <div>{{data.fullName}}</div>
                           {{/if}}
 
-                          {{#if (eq file.type 'sequence')}}
-                            / {{format-number data.entriesCount}} エントリ
+                          {{#if file.isSequence}}
+                            <div>{{format-number data.entriesCount}} エントリ</div>
                           {{/if}}
                         {{/with}}
                       </small>
                     </div>
 
                     <div>
-                      <button type="button" class="btn btn-outline-danger" {{on 'click' (prevent-default (fn this.removeFile file))}}>削除</button>
+                      <button type="button" class="btn btn-link p-2" {{on 'click' (prevent-default (fn this.removeFile file))}}>
+                        {{svg-jar 'no-entry-24' class='octicon fill-danger' role='img' desc='削除'}}
+                      </button>
                     </div>
                   </li>
                 {{/each}}

@@ -9,7 +9,7 @@ module('Unit | Model | sequence file', function(hooks) {
   setupTest(hooks);
 
   for (const newline of ['\n', '\r\n', '\r']) {
-    test(`sequence file (newline: ${JSON.stringify(newline)})`, async function(assert) {
+    test(`parse (newline: ${JSON.stringify(newline)})`, async function(assert) {
       const file = new File([outdent({newline})`
 >CLN01
 ggacaggctgccgcaggagccaggccgggagcaggaagaggcttcgggggagccggagaa

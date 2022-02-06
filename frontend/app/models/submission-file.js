@@ -6,9 +6,22 @@ class SubmissionFile {
   }
 
   @tracked parsedData;
+  @tracked error;
 
   constructor(rawFile) {
     this.rawFile = rawFile;
+  }
+
+  get isValid() {
+    return Boolean(this.parsedData);
+  }
+
+  get isError() {
+    return Boolean(this.error);
+  }
+
+  get isParsed() {
+    return this.isValid || this.isError;
   }
 
   get name() {
@@ -34,7 +47,7 @@ class SubmissionFile {
 
   parse() {
     return new Promise((resolve, reject) => {
-      const worker = new Worker(`/workers/${this.type}-file-parser.js`);
+      const worker = new Worker(this.constructor.workerURL);
 
       worker.addEventListener('message', ({data}) => {
         this.parsedData = data;
@@ -43,6 +56,8 @@ class SubmissionFile {
       });
 
       worker.addEventListener('error', (e) => {
+        this.error = e;
+
         reject(e);
       });
 
@@ -53,12 +68,14 @@ class SubmissionFile {
 
 export class AnnotationFile extends SubmissionFile {
   static extensions = ['.ann', '.annt.tsv', '.ann.txt'];
+  static workerURL  = '/workers/annotation-file-parser.js';
 
-  type = 'annotation';
+  isAnnotation = true;
 }
 
 export class SequenceFile extends SubmissionFile {
   static extensions = ['.fasta', '.seq.fa', '.fa', '.fna', '.seq'];
+  static workerURL  = '/workers/sequence-file-parser.js';
 
-  type = 'sequence';
+  isSequence = true;
 }

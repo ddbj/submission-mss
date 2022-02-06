@@ -9,7 +9,7 @@ module('Unit | Model | annotation file', function(hooks) {
   setupTest(hooks);
 
   for (const newline of ['\n', '\r\n', '\r']) {
-    test(`annotation file (newline: ${JSON.stringify(newline)})`, async function(assert) {
+    test(`parse (newline: ${JSON.stringify(newline)})`, async function(assert) {
       const file = new File([outdent({newline})`
 COMMON	SUBMITTER		contact	Alice Liddell
 			email	alice@example.com

@@ -11,8 +11,8 @@ export default class FileSet {
     return this.files.length === 0;
   }
 
-  filterByType(type) {
-    return this.files.filter(file => file.type === type);
+  get everyValid() {
+    return this.files.every(({isValid}) => isValid);
   }
 
   async add(rawFile) {

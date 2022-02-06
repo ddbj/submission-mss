@@ -10,7 +10,10 @@ export default class SubmissionFormFilesComponent extends Component {
   get isNextButtonDisabled() {
     const {submissionFileType, fileSet} = this.args.state;
 
-    return submissionFileType && submissionFileType !== 'none' && fileSet.files.length === 0;
+    return !submissionFileType           ? true  :
+           submissionFileType === 'none' ? false :
+           fileSet.isEmpty               ? true  :
+           !fileSet.everyValid;
   }
 
   @action setSubmissionFileType(val) {
@@ -50,8 +53,9 @@ export default class SubmissionFormFilesComponent extends Component {
 
   setParsedData() {
     const {state, model} = this.args;
+    const {fileSet}      = state;
 
-    if (state.fileSet.isEmpty) { return; }
+    if (fileSet.isEmpty) { return; }
 
     // files.length >= 2
     // paired
@@ -63,7 +67,7 @@ export default class SubmissionFormFilesComponent extends Component {
       email,
       affiliation,
       holdDate
-    } = state.fileSet.filterByType('annotation')[0].parsedData;
+    } = fileSet.files.find(({isAnnotation}) => isAnnotation).parsedData;
 
     model.contactPerson.fullName    = fullName;
     model.contactPerson.email       = email;
@@ -72,7 +76,7 @@ export default class SubmissionFormFilesComponent extends Component {
     model.holdDate           = holdDate;
     state.releaseImmediately = !holdDate;
 
-    model.entriesCount = state.fileSet.filterByType('sequence').reduce((acc, file) => {
+    model.entriesCount = state.fileSet.files.filter(({isSequence}) => isSequence).reduce((acc, file) => {
       return acc + file.parsedData.entriesCount;
     }, 0);
   }
