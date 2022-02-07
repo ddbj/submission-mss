@@ -1,7 +1,7 @@
-@import '@primer/octicons/build/build.css';
-@import 'bootstrap/scss/bootstrap.scss';
+@use '@primer/octicons/build/build.css';
+@use 'bootstrap/scss/bootstrap.scss' as bs;
 
-@each $theme, $color in $theme-colors {
+@each $theme, $color in bs.$theme-colors {
   .fill-#{$theme} {
     fill: $color;
   }
