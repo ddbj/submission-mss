@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 
-import UploadFiles from 'mssform-web/models/upload-files';
+import UploadFiles from 'mssform/models/upload-files';
 
 export default class SubmissionFormConfirmComponent extends Component {
   @service router;
