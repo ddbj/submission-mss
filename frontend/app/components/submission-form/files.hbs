@@ -58,46 +58,64 @@
                 {{#each (sort-by 'name' @state.fileSet.files) as |file|}}
                   <li class="list-group-item hstack gap-2 align-items-center">
                     <div class="align-self-start">
-                      {{#if file.isParsed}}
-                        {{#if file.isValid}}
-                          {{svg-jar 'check-circle-fill-16' class='octicon fill-success' style='margin-top: 2.5px;'}}
-                        {{else}}
-                          {{svg-jar 'x-circle-fill-16' class='octicon fill-danger' style='margin-top: 2.5px;'}}
-                        {{/if}}
-                      {{else}}
+                      {{#if file.isParsing}}
                         <div class="spinner-border spinner-border-seconcary spinner-border-sm opacity-50" role="status">
                           <span class="visually-hidden">Loading...</span>
                         </div>
+                      {{else}}
+                        {{#if (or file.errors (and file.isAnnotation @state.fileSet.annotationFileErrors))}}
+                          {{svg-jar 'x-circle-fill-16' class='octicon fill-danger' style='margin-top: 2.5px;'}}
+                        {{else}}
+                          {{svg-jar 'check-circle-fill-16' class='octicon fill-success' style='margin-top: 2.5px;'}}
+                        {{/if}}
                       {{/if}}
                     </div>
 
-                    <div class={{unless file.isParsed 'opacity-50'}}>
-                      <div class={{if file.isError 'text-danger'}}>
-                        {{file.name}}
+                    <div class={{if file.isParsing 'opacity-50'}}>
+                      {{file.name}}
 
-                        <small class={{if file.isError 'text-danger' 'text-muted'}}>{{filesize file.size}}</small>
-                      </div>
+                      <small class="text-muted">{{filesize file.size}}</small>
 
-                      <small class={{if file.isError 'text-danger' 'text-muted'}}>
-                        {{#if file.isParsed}}
-                          {{#if file.isValid}}
-                            {{#let file.parsedData as |data|}}
+                      <small class={{if file.errors 'text-danger' 'text-muted'}}>
+                        {{#if file.isParsing}}
+                          Parsing...
+                        {{else}}
+                          <div class="hstack gap-3 text-muted">
+                            {{#with file.parsedData as |data|}}
                               {{#if file.isAnnotation}}
-                                {{#if data.contactPerson}}
-                                  {{data.contactPerson.fullName}}
-                                {{/if}}
-                                {{data.holdDate}}
+                                <div>
+                                  <b>Contact person</b>
+                                  {{#with data.contactPerson as |person|}}
+                                    {{person.fullName}}
+                                    &lt;{{person.email}}&gt;
+                                    ({{person.affiliation}})
+                                  {{else}}
+                                    -
+                                  {{/with}}
+                                </div>
+
+                                <div>
+                                  <b>Hold date</b>
+                                  {{or data.holdDate '-'}}
+                                </div>
                               {{/if}}
 
                               {{#if file.isSequence}}
-                                {{format-number data.entriesCount}} エントリ
+                                <div>
+                                  <b>エントリ数</b>
+                                  {{format-number data.entriesCount}}
+                                </div>
                               {{/if}}
-                            {{/let}}
-                          {{else}}
-                            {{file.error}}
+                            {{/with}}
+                          </div>
+
+                          {{#if file.errors}}
+                            <ul class="list-unstyled text-danger">
+                              {{#each file.errors as |error|}}
+                                <li>{{error}}</li>
+                              {{/each}}
+                            </ul>
                           {{/if}}
-                        {{else}}
-                          Parsing...
                         {{/if}}
                       </small>
                     </div>
@@ -110,6 +128,16 @@
                   </li>
                 {{/each}}
               </ul>
+
+              {{#with @state.fileSet.annotationFileErrors as |errors|}}
+                <div class="card-body">
+                  <ul class="text-danger mb-0">
+                    {{#each errors as |error|}}
+                      <li>{{error}}</li>
+                    {{/each}}
+                  </ul>
+                </div>
+              {{/with}}
 
               <div class="card-footer d-flex justify-content-between align-items-center bg-white">
                 <div>

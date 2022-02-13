@@ -18,23 +18,20 @@ export class SubmissionFile {
     return this.extensions.some(ext => filename.endsWith(ext)) && this;
   }
 
+  @tracked isParsing = false;
   @tracked parsedData;
-  @tracked error;
+  @tracked fileError;
 
   constructor(rawFile) {
     this.rawFile = rawFile;
   }
 
-  get isValid() {
+  get errors() {
+    return [this.fileError].filter(Boolean);
+  }
+
+  get isParseSucceeded() {
     return Boolean(this.parsedData);
-  }
-
-  get isError() {
-    return Boolean(this.error);
-  }
-
-  get isParsed() {
-    return this.isValid || this.isError;
   }
 
   get name() {
@@ -59,12 +56,14 @@ export class SubmissionFile {
   }
 
   parse() {
+    this.isParsing = true;
+
     return new Promise((resolve, reject) => {
       const worker = new Worker(this.constructor.workerURL);
 
       worker.addEventListener('message', ({data: [err, payload]}) => {
         if (err) {
-          this.error = err;
+          this.fileError = err;
 
           reject(err);
         } else {
@@ -75,6 +74,8 @@ export class SubmissionFile {
       });
 
       worker.postMessage({file: this.rawFile});
+    }).finally(() => {
+      this.isParsing = false;
     });
   }
 }
@@ -94,7 +95,7 @@ export class SequenceFile extends SubmissionFile {
 }
 
 export class UnsupportedFile extends SubmissionFile {
-  error = '登録ファイルの拡張子は .ann, .fasta のいずれかです。';
+  fileError = '登録ファイルの拡張子は .ann, .fasta のいずれかです。';
 
   parse() {
     // do nothing

@@ -2,6 +2,8 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
+import { SubmissionFile } from 'mssform/models/submission-file';
+
 export default class SubmissionFormFilesComponent extends Component {
   fileInputElement = null;
 
@@ -13,7 +15,7 @@ export default class SubmissionFormFilesComponent extends Component {
     return !submissionFileType           ? true  :
            submissionFileType === 'none' ? false :
            fileSet.isEmpty               ? true  :
-                                           fileSet.files.every(({isValid}) => isValid);
+                                           fileSet.files.every(({errors}) => !errors.length);
   }
 
   @action setSubmissionFileType(val) {
@@ -32,19 +34,20 @@ export default class SubmissionFormFilesComponent extends Component {
   }
 
   @action async addFiles(files) {
+    this.dragOver = false;
+
     const {fileSet} = this.args.state;
 
-    for (const rawFile of Array.from(files)) {
-      const file = fileSet.add(rawFile);
+    const promises = Array.from(files).map((rawFile) => {
+      const file    = SubmissionFile.createFromRawFile(rawFile);
+      const promise = file.parse();
 
-      try {
-        await file.parse();
-      } catch (e) {
-        console.error(e);
-      }
-    }
+      fileSet.add(file);
 
-    this.dragOver = false;
+      return promise;
+    });
+
+    await Promise.all(promises);
   }
 
   @action removeFile(file) {
@@ -62,16 +65,6 @@ export default class SubmissionFormFilesComponent extends Component {
     const {fileSet}      = state;
 
     if (fileSet.isEmpty) { return; }
-
-    // files.length >= 2
-    // paired
-    // entries count > 0
-    // assert contact person in annotation files
-
-    const {
-      contactPerson,
-      holdDate
-    } = fileSet.files.find(({isAnnotation}) => isAnnotation).parsedData;
 
     Object.assign(model.contactPerson, contactPerson || {});
     state.isContactPersonReadonly = !!contactPerson;
