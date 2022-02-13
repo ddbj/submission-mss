@@ -66,7 +66,6 @@ export default class SubmissionFormFilesComponent extends Component {
     // files.length >= 2
     // paired
     // entries count > 0
-    // contact person is exists
     // assert contact person in annotation files
 
     const {
