@@ -63,10 +63,10 @@
                           <span class="visually-hidden">Loading...</span>
                         </div>
                       {{else}}
-                        {{#if (or file.errors (and file.isAnnotation @state.fileSet.annotationFileErrors))}}
-                          {{svg-jar 'x-circle-fill-16' class='octicon fill-danger' style='margin-top: 2.5px;'}}
-                        {{else}}
+                        {{#if file.isValid}}
                           {{svg-jar 'check-circle-fill-16' class='octicon fill-success' style='margin-top: 2.5px;'}}
+                        {{else}}
+                          {{svg-jar 'x-circle-fill-16' class='octicon fill-danger' style='margin-top: 2.5px;'}}
                         {{/if}}
                       {{/if}}
                     </div>
@@ -125,7 +125,7 @@
                 {{/each}}
               </ul>
 
-              {{#with @state.fileSet.annotationFileErrors as |errors|}}
+              {{#with @state.fileSet.globalErrors as |errors|}}
                 <div class="card-body">
                   <ul class="text-danger mb-0">
                     {{#each errors as |error|}}

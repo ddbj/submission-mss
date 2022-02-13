@@ -14,8 +14,8 @@ export default class SubmissionFormFilesComponent extends Component {
 
     return !submissionFileType           ? true  :
            submissionFileType === 'none' ? false :
-           fileSet.isEmpty               ? true  :
-           fileSet.errors.length         ? true  :
+           !fileSet.files.length         ? true  :
+           fileSet.globalErrors.length   ? true  :
                                            fileSet.files.some(({isParsing, errors}) => isParsing || errors.length);
   }
 
@@ -40,12 +40,11 @@ export default class SubmissionFormFilesComponent extends Component {
     const {fileSet} = this.args.state;
 
     const promises = Array.from(files).map((rawFile) => {
-      const file    = SubmissionFile.createFromRawFile(rawFile);
-      const promise = file.parse();
+      const file = SubmissionFile.createFromRawFile(rawFile);
 
       fileSet.add(file);
 
-      return promise;
+      return file.parse();
     });
 
     await Promise.all(promises);

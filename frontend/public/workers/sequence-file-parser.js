@@ -28,6 +28,8 @@ async function parse(file) {
     }
   }
 
+  if (!entriesCount) { throw new Error('エントリが1つも含まれていません。'); }
+
   return {entriesCount};
 }
 

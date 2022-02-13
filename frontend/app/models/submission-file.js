@@ -21,13 +21,23 @@ export class SubmissionFile {
   @tracked isParsing = false;
   @tracked parsedData;
   @tracked fileError;
+  @tracked fileSet;
 
   constructor(rawFile) {
     this.rawFile = rawFile;
   }
 
   get errors() {
-    return [this.fileError].filter(Boolean);
+    return [
+      ...(this.fileError || []),
+      ...this.fileSet.perFileErrors.get(this)
+    ];
+  }
+
+  get isValid() {
+    return this.errors.length                                            ? false :
+           this.isAnnotation && this.fileSet.annotationFileErrors.length ? false :
+                                                                           true;
   }
 
   get isParseSucceeded() {
@@ -95,9 +105,11 @@ export class SequenceFile extends SubmissionFile {
 }
 
 export class UnsupportedFile extends SubmissionFile {
+  static extensions = [];
+
   fileError = '登録ファイルの拡張子は .ann, .fasta のいずれかです。';
 
   parse() {
-    // do nothing
+    this.isParsing = false;
   }
 }
