@@ -15,7 +15,7 @@ export default class SubmissionFormComponent extends Component {
 
 class State {
   @tracked determinedByOwnStudy    = null;
-  @tracked submissionFileType      = 'dfast'; // FIXME null
+  @tracked submissionFileType      = null;
   @tracked fileSet                 = new FileSet();
   @tracked isContactPersonReadonly = false;
   @tracked releaseImmediately      = true;
@@ -30,7 +30,7 @@ class Navigation {
     'complete'
   ];
 
-  @tracked stepIndex = 1; // FIXME 0
+  @tracked stepIndex = 0;
 
   get currentStep() {
     return this.steps[this.stepIndex];
