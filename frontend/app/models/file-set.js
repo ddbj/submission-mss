@@ -19,6 +19,10 @@ export default class FileSet {
     this.files = this.files.filter(f => f !== file);
   }
 
+  get errors() {
+    return this.annotationFileErrors;
+  }
+
   get annotationFileErrors() {
     // files.length >= 2
     // paired
@@ -26,7 +30,7 @@ export default class FileSet {
 
     const files = this.files.filter(({isAnnotation, isParseSucceeded}) => isAnnotation && isParseSucceeded);
 
-    if (!files.length) { return; }
+    if (!files.length) { return []; }
 
     const contactPersonSet = new Set();
     const holdDateSet      = new Set();
