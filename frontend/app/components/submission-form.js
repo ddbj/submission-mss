@@ -14,10 +14,11 @@ export default class SubmissionFormComponent extends Component {
 }
 
 class State {
-  @tracked determinedByOwnStudy = null;
-  @tracked submissionFileType   = 'dfast'; // FIXME null
-  @tracked fileSet              = new FileSet();
-  @tracked releaseImmediately   = true;
+  @tracked determinedByOwnStudy    = null;
+  @tracked submissionFileType      = 'dfast'; // FIXME null
+  @tracked fileSet                 = new FileSet();
+  @tracked isContactPersonReadonly = false;
+  @tracked releaseImmediately      = true;
 }
 
 class Navigation {

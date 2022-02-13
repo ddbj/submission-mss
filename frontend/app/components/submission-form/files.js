@@ -67,15 +67,15 @@ export default class SubmissionFormFilesComponent extends Component {
     // paired
     // entries count > 0
     // contact person is exists
+    // assert contact person in annotation files
 
     const {
       contactPerson,
       holdDate
     } = fileSet.files.find(({isAnnotation}) => isAnnotation).parsedData;
 
-    if (contactPerson) {
-      Object.assign(model.contactPerson, contactPerson);
-    }
+    Object.assign(model.contactPerson, contactPerson || {});
+    state.isContactPersonReadonly = !!contactPerson;
 
     model.holdDate           = holdDate;
     state.releaseImmediately = !holdDate;

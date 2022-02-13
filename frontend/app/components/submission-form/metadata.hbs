@@ -32,17 +32,17 @@
         {{#let @model.contactPerson as |person|}}
           <div class="col">
             <label for="contactPerson.email" class="form-label">E-mail アドレス</label>
-            <input type="email" value={{person.email}} readonly={{not @state.fileSet.isEmpty}} required class="form-control" id="contactPerson.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
+            <input type="email" value={{person.email}} readonly={{@state.isContactPersonReadonly}} required class="form-control" id="contactPerson.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
           </div>
 
           <div class="col">
             <label for="contactPerson.fullName" class="form-label">フルネーム (英語表記)</label>
-            <input type="text" value={{person.fullName}} readonly={{not @state.fileSet.isEmpty}} required maxlength="255" class="form-control" id="contactPerson.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
+            <input type="text" value={{person.fullName}} readonly={{@state.isContactPersonReadonly}} required maxlength="255" class="form-control" id="contactPerson.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
           </div>
 
           <div class="col">
             <label for="contactPerson.affiliation" class="form-label">所属名 (英語表記)</label>
-            <input type="text" value={{person.affiliation}} readonly={{not @state.fileSet.isEmpty}} required maxlength="255" class="form-control" id="contactPerson.affiliation" {{on 'change' (pick 'target.value' (set person 'affiliation'))}} />
+            <input type="text" value={{person.affiliation}} readonly={{@state.isContactPersonReadonly}} required maxlength="255" class="form-control" id="contactPerson.affiliation" {{on 'change' (pick 'target.value' (set person 'affiliation'))}} />
           </div>
         {{/let}}
       </div>
