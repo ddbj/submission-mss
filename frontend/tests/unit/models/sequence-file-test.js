@@ -21,7 +21,7 @@ ctcacacagatgcgcgcacaccagtggttgtaacagaagcctgaggtgcgctcgtggtca
 gaagagggcatgcgcttcagtcgtgggcgaagcctgaggaaaaaatagtcattcatataa
 atttgaacacacctgctgtggctgtaactctgagatgtgctaaataaaccctctt
 //
-      `], 'foo.ann');
+      `], 'foo.fasta');
 
       const {entriesCount} = await new SequenceFile(file).parse();
 
