@@ -62,10 +62,12 @@ export default class SubmissionFormFilesComponent extends Component {
   }
 
   setParsedData() {
-    const {state, model} = this.args;
-    const {fileSet}      = state;
+    const {state, model}                = this.args;
+    const {submissionFileType, fileSet} = state;
 
-    if (fileSet.isEmpty) { return; }
+    if (submissionFileType === 'none') { return; }
+
+    const {contactPerson, holdDate} = fileSet.files.find(({isAnnotation}) => isAnnotation).parsedData;
 
     Object.assign(model.contactPerson, contactPerson || {});
     state.isContactPersonReadonly = !!contactPerson;
@@ -73,7 +75,7 @@ export default class SubmissionFormFilesComponent extends Component {
     model.holdDate           = holdDate;
     state.releaseImmediately = !holdDate;
 
-    model.entriesCount = state.fileSet.files.filter(({isSequence}) => isSequence).reduce((acc, file) => {
+    model.entriesCount = fileSet.files.filter(({isSequence}) => isSequence).reduce((acc, file) => {
       return acc + file.parsedData.entriesCount;
     }, 0);
   }
