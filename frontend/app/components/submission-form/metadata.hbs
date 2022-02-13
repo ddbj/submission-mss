@@ -69,7 +69,9 @@
                 </div>
 
                 <div class="col-auto align-self-center">
-                  <button type="button" class="btn btn-outline-danger" {{on 'click' (prevent-default (fn this.removeOtherPerson person))}}>削除</button>
+                  <button type="button" class="btn btn-link p-2" {{on 'click' (prevent-default (fn this.removeOtherPerson person))}}>
+                    {{svg-jar 'no-entry-24' class='octicon fill-danger' role='img' desc='削除'}}
+                  </button>
                 </div>
               </div>
             </li>
