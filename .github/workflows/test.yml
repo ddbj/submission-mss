@@ -3,7 +3,7 @@ name: test
 on: push
 
 jobs:
-  server:
+  rails:
     runs-on: ubuntu-latest
 
     services:
@@ -42,10 +42,10 @@ jobs:
           bundler-cache: true
           working-directory: backend
 
-      - run: bin/rails db:prepare
+      - run: bin/rails db:test:load
       - run: bundle exec rspec
 
-  client:
+  ember:
     runs-on: ubuntu-latest
 
     defaults:

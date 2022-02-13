@@ -2,8 +2,6 @@ import { tracked } from '@glimmer/tracking';
 
 import { DirectUpload } from '@rails/activestorage';
 
-const url = '/rails/active_storage/direct_uploads';
-
 export default class UploadFiles {
   @tracked uploads;
   @tracked currentUpload = null;
@@ -43,9 +41,7 @@ class UploadFile {
   }
 
   perform() {
-    // Since service switching is disabled on the server side, there is no need to send third and forth parameters.
-    // See backend/config/initializers/active_storage_direct_uploads_controller_monkey.rb.
-    const upload = new DirectUpload(this.file, url, null, null, {
+    const upload = new DirectUpload(this.file, '/api/direct_uploads', {
       directUploadWillStoreFileWithXHR: (xhr) => {
         xhr.upload.addEventListener('loadstart', () => {
           this.isStarted = true;
