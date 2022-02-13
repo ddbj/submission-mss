@@ -43,7 +43,7 @@ export default class FileSet {
     }
 
     if (holdDateSet.size > 1) {
-      errors.push('公開日はすべてのアノテーションファイルで同一でなければなりません。');
+      errors.push('公開予定日はすべてのアノテーションファイルで同一でなければなりません。');
     }
 
     return errors;
