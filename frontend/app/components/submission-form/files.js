@@ -31,11 +31,17 @@ export default class SubmissionFormFilesComponent extends Component {
     this.fileInputElement.click();
   }
 
-  @action addFiles(files) {
+  @action async addFiles(files) {
     const {fileSet} = this.args.state;
 
-    for (const file of files) {
-      fileSet.add(file);
+    for (const rawFile of Array.from(files)) {
+      const file = fileSet.add(rawFile);
+
+      try {
+        await file.parse();
+      } catch (e) {
+        console.error(e);
+      }
     }
 
     this.dragOver = false;

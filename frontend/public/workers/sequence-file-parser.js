@@ -1,4 +1,16 @@
 addEventListener('message', async ({data: {file}}) => {
+  try {
+    const payload = await parse(file);
+
+    postMessage([null, payload]);
+  } catch (err) {
+    console.error(err);
+
+    postMessage([err, null]);
+  }
+});
+
+async function parse(file) {
   const reader = file.stream().getReader();
 
   let done, chunk;
@@ -16,8 +28,8 @@ addEventListener('message', async ({data: {file}}) => {
     }
   }
 
-  postMessage({entriesCount});
-});
+  return {entriesCount};
+}
 
 const lf = '\n'.codePointAt(0);
 const cr = '\r'.codePointAt(0);

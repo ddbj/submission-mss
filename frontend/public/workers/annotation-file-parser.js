@@ -1,11 +1,23 @@
 addEventListener('message', async ({data: {file}}) => {
+  try {
+    const payload = await parse(file);
+
+    postMessage([null, payload]);
+  } catch (err) {
+    console.error(err);
+
+    postMessage([err.message, null]);
+  }
+});
+
+async function parse(file) {
   const reader = file.stream().getReader();
 
   const payload = {
-    holdDate:    null,
     fullName:    null,
     email:       null,
-    affiliation: null
+    affiliation: null,
+    holdDate:    null
   };
 
   let inCommon;
@@ -24,14 +36,6 @@ addEventListener('message', async ({data: {file}}) => {
     if (!inCommon) { continue; }
 
     switch (qualifier) {
-      case 'hold_date': {
-        const m = value.match(/^(\d{4})(\d{2})(\d{2})$/);
-
-        if (!m) { throw new Error(`invalid hold_date: ${value}`); }
-
-        payload.holdDate = m.slice(1).join('-');
-        break;
-      }
       case 'contact':
         payload.fullName = value;
         break;
@@ -41,13 +45,27 @@ addEventListener('message', async ({data: {file}}) => {
       case 'institute':
         payload.affiliation = value;
         break;
+      case 'hold_date': {
+        const m = value.match(/^(\d{4})(\d{2})(\d{2})$/);
+
+        if (!m) { throw new Error(`hold_date must be an 8-digit number (YYYYMMDD), but: ${value}`); }
+
+        payload.holdDate = m.slice(1).join('-');
+        break;
+      }
       default:
         // do nothing
     }
   }
 
-  postMessage(payload);
-});
+  const {fullName, email, affiliation} = payload;
+
+  if ((fullName && email && affiliation) || (!fullName && !email && !affiliation)) {
+    return payload;
+  } else {
+    throw new Error('Contact person information (contact, email, institute) must be included or not included at all.');
+  }
+}
 
 async function* makeLineIterator(reader) {
   const decoder = new TextDecoder();

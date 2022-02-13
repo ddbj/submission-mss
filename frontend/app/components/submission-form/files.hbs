@@ -56,32 +56,50 @@
             <div class="card {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
               <ul class="list-group list-group-flush overflow-auto" style="max-height: 550px">
                 {{#each (sort-by 'name' @state.fileSet.files) as |file|}}
-                  <li class="list-group-item d-flex align-items-center">
-                    <div class="ms-2 me-auto {{unless file.isParsed 'opacity-50'}}">
-                      {{file.name}}
+                  <li class="list-group-item hstack gap-2 align-items-center">
+                    <div class="align-self-start">
+                      {{#if file.isParsed}}
+                        {{#if file.isValid}}
+                          {{svg-jar 'check-circle-fill-16' class='octicon fill-success' style='margin-top: 2.5px;'}}
+                        {{else}}
+                          {{svg-jar 'x-circle-fill-16' class='octicon fill-danger' style='margin-top: 2.5px;'}}
+                        {{/if}}
+                      {{else}}
+                        <div class="spinner-border spinner-border-seconcary spinner-border-sm opacity-50" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      {{/if}}
+                    </div>
 
-                      <small class="text-muted hstack gap-2">
-                        <div>{{filesize file.size}}</div>
+                    <div class={{unless file.isParsed 'opacity-50'}}>
+                      <div class={{if file.isError 'text-danger'}}>
+                        {{file.name}}
 
-                        {{#unless file.isParsed}}
-                          <div class="spinner-border spinner-border-seconcary spinner-border-sm" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                          </div>
-                        {{/unless}}
+                        <small class={{if file.isError 'text-danger' 'text-muted'}}>{{filesize file.size}}</small>
+                      </div>
 
-                        {{#with file.parsedData as |data|}}
-                          {{#if file.isAnnotation}}
-                            <div>{{data.fullName}}</div>
+                      <small class={{if file.isError 'text-danger' 'text-muted'}}>
+                        {{#if file.isParsed}}
+                          {{#if file.isValid}}
+                            {{#let file.parsedData as |data|}}
+                              {{#if file.isAnnotation}}
+                                {{data.fullName}}
+                              {{/if}}
+
+                              {{#if file.isSequence}}
+                                {{format-number data.entriesCount}} エントリ
+                              {{/if}}
+                            {{/let}}
+                          {{else}}
+                            {{file.error}}
                           {{/if}}
-
-                          {{#if file.isSequence}}
-                            <div>{{format-number data.entriesCount}} エントリ</div>
-                          {{/if}}
-                        {{/with}}
+                        {{else}}
+                          Parsing...
+                        {{/if}}
                       </small>
                     </div>
 
-                    <div>
+                    <div class="ms-auto">
                       <button type="button" class="btn btn-link p-2" {{on 'click' (prevent-default (fn this.removeFile file))}}>
                         {{svg-jar 'no-entry-24' class='octicon fill-danger' role='img' desc='削除'}}
                       </button>
