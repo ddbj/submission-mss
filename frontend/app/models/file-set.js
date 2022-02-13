@@ -7,10 +7,6 @@ export default class FileSet {
 
   @tracked files = [];
 
-  get isEmpty() {
-    return this.files.length === 0;
-  }
-
   add(file) {
     this.files = [...this.files, file];
   }

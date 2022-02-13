@@ -6,17 +6,17 @@
       <div class="row row-cols-2">
         <div class="col">
           <label for="entriesCount" class="form-label">エントリ数</label>
-          <input type="number" value={{@model.entriesCount}} readonly={{not @state.fileSet.isEmpty}} required min="1" class="form-control" id="entriesCount" {{on 'change' (pick 'target.value' (set @model 'entriesCount'))}} />
+          <input type="number" value={{@model.entriesCount}} readonly={{@state.fileSet.files.length}} required min="1" class="form-control" id="entriesCount" {{on 'change' (pick 'target.value' (set @model 'entriesCount'))}} />
         </div>
 
         <div class="col vstack gap-1">
           <div>
             <label for="holdDate" class="form-label">公開予定日</label>
-            <input type="date" value={{@model.holdDate}} readonly={{not @state.fileSet.isEmpty}} disabled={{@state.releaseImmediately}} required class="form-control" id="holdDate" {{on 'change' (pick 'target.value' (set @model 'holdDate'))}} />
+            <input type="date" value={{@model.holdDate}} readonly={{@state.fileSet.files.length}} disabled={{@state.releaseImmediately}} required class="form-control" id="holdDate" {{on 'change' (pick 'target.value' (set @model 'holdDate'))}} />
           </div>
 
           <div class="form-check">
-            <input type="checkbox" checked={{@state.releaseImmediately}} disabled={{not @state.fileSet.isEmpty}} class="form-check-input" id="releaseImmediately" {{on 'change' (pick 'target.checked' this.setReleaseImmediately)}} />
+            <input type="checkbox" checked={{@state.releaseImmediately}} disabled={{@state.fileSet.files.length}} class="form-check-input" id="releaseImmediately" {{on 'change' (pick 'target.checked' this.setReleaseImmediately)}} />
             <label for="releaseImmediately" class="form-check-label">即時公開</label>
           </div>
         </div>
