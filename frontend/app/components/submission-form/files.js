@@ -69,15 +69,13 @@ export default class SubmissionFormFilesComponent extends Component {
     // contact person is exists
 
     const {
-      fullName,
-      email,
-      affiliation,
+      contactPerson,
       holdDate
     } = fileSet.files.find(({isAnnotation}) => isAnnotation).parsedData;
 
-    model.contactPerson.fullName    = fullName;
-    model.contactPerson.email       = email;
-    model.contactPerson.affiliation = affiliation;
+    if (contactPerson) {
+      Object.assign(model.contactPerson, contactPerson);
+    }
 
     model.holdDate           = holdDate;
     state.releaseImmediately = !holdDate;

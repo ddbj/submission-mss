@@ -20,9 +20,11 @@ COMMON	SUBMITTER		contact	Alice Liddell
       `], 'foo.ann');
 
       const {
-        fullName,
-        email,
-        affiliation,
+        contactPerson: {
+          fullName,
+          email,
+          affiliation,
+        },
         holdDate
       } = await new AnnotationFile(file).parse();
 
@@ -34,23 +36,18 @@ COMMON	SUBMITTER		contact	Alice Liddell
   }
 
   test('empty' , async function(assert) {
-    assert.expect(4);
+    assert.expect(2);
 
     const file = new File([outdent`
     `], 'foo.ann');
 
     const {
-      fullName,
-      email,
-      affiliation,
+      contactPerson,
       holdDate
     } = await new AnnotationFile(file).parse();
 
-    assert.strictEqual(fullName,    null);
-    assert.strictEqual(email,       null);
-    assert.strictEqual(affiliation, null);
-    assert.strictEqual(holdDate,    null)
-    ;
+    assert.strictEqual(contactPerson, null);
+    assert.strictEqual(holdDate,      null);
   });
 
   test('invalid contact person', async function(assert) {

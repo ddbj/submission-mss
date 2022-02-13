@@ -83,7 +83,10 @@
                           {{#if file.isValid}}
                             {{#let file.parsedData as |data|}}
                               {{#if file.isAnnotation}}
-                                {{data.fullName}}
+                                {{#if data.contactPerson}}
+                                  {{data.contactPerson.fullName}}
+                                {{/if}}
+                                {{data.holdDate}}
                               {{/if}}
 
                               {{#if file.isSequence}}
