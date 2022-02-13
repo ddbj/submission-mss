@@ -22,7 +22,9 @@ export default class SubmissionFormConfirmComponent extends Component {
   }
 
   async uploadFiles(progressModal) {
-    const {files} = this.args.state;
+    const {fileSet} = this.args.state;
+
+    const files = fileSet.files.mapBy('rawFile');
 
     if (files.length === 0) { return []; }
 

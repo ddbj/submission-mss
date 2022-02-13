@@ -14,12 +14,15 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:ember/recommended',
-    'plugin:prettier/recommended',
   ],
   env: {
     browser: true,
   },
-  rules: {},
+  rules: {
+    'no-unused-vars': ['error', {
+      varsIgnorePattern: '^_',
+    }]
+  },
   overrides: [
     // node files
     {

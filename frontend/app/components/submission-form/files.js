@@ -3,16 +3,17 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class SubmissionFormFilesComponent extends Component {
-  fileInputElement         = null;
-  annotationFileExtensions = ['.ann', '.annt.tsv', '.ann.txt'];
-  sequenceFileExtensions   = ['.fasta', '.seq.fa', '.fa', '.fna', '.seq'];
+  fileInputElement = null;
 
   @tracked dragOver = false;
 
   get isNextButtonDisabled() {
-    const {submissionFileType, files} = this.args.state;
+    const {submissionFileType, fileSet} = this.args.state;
 
-    return submissionFileType && submissionFileType !== 'none' && files.length === 0;
+    return !submissionFileType           ? true  :
+           submissionFileType === 'none' ? false :
+           fileSet.isEmpty               ? true  :
+           !fileSet.everyValid;
   }
 
   @action setSubmissionFileType(val) {
@@ -22,7 +23,7 @@ export default class SubmissionFormFilesComponent extends Component {
     model.dfast              = val === 'dfast';
 
     if (val === 'none') {
-      state.files.clear();
+      state.fileSet.files.clear();
     }
   }
 
@@ -30,13 +31,59 @@ export default class SubmissionFormFilesComponent extends Component {
     this.fileInputElement.click();
   }
 
-  @action addFiles(files) {
-    this.args.state.files.pushObjects(Array.from(files));
+  @action async addFiles(files) {
+    const {fileSet} = this.args.state;
+
+    for (const rawFile of Array.from(files)) {
+      const file = fileSet.add(rawFile);
+
+      try {
+        await file.parse();
+      } catch (e) {
+        console.error(e);
+      }
+    }
 
     this.dragOver = false;
   }
 
   @action removeFile(file) {
-    this.args.state.files.removeObject(file);
+    this.args.state.fileSet.remove(file);
+  }
+
+  @action goNext() {
+    this.setParsedData();
+
+    this.args.nav.goNext();
+  }
+
+  setParsedData() {
+    const {state, model} = this.args;
+    const {fileSet}      = state;
+
+    if (fileSet.isEmpty) { return; }
+
+    // files.length >= 2
+    // paired
+    // entries count > 0
+    // contact person is exists
+
+    const {
+      fullName,
+      email,
+      affiliation,
+      holdDate
+    } = fileSet.files.find(({isAnnotation}) => isAnnotation).parsedData;
+
+    model.contactPerson.fullName    = fullName;
+    model.contactPerson.email       = email;
+    model.contactPerson.affiliation = affiliation;
+
+    model.holdDate           = holdDate;
+    state.releaseImmediately = !holdDate;
+
+    model.entriesCount = state.fileSet.files.filter(({isSequence}) => isSequence).reduce((acc, file) => {
+      return acc + file.parsedData.entriesCount;
+    }, 0);
   }
 }

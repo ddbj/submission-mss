@@ -1,0 +1,67 @@
+name: test
+
+on: push
+
+jobs:
+  server:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+
+        ports:
+          - 5432:5432
+
+        env:
+          POSTGRES_DB: mssform_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    defaults:
+      run:
+        working-directory: backend
+
+    env:
+      PGHOST: localhost
+      PGUSER: postgres
+      RAILS_ENV: test
+      TZ: Japan
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+          bundler-cache: true
+          working-directory: backend
+
+      - run: bin/rails db:prepare
+      - run: bundle exec rspec
+
+  client:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: yarn
+          cache-dependency-path: frontend/yarn.lock
+
+      - run: yarn install --frozen-lockfile
+
+      - run: echo '{}' > ../config/openid-configuration.json
+      - run: yarn test

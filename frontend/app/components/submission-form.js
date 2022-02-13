@@ -1,8 +1,9 @@
 import Component from '@glimmer/component';
-import { A } from '@ember/array';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+
+import FileSet from 'mssform/models/file-set';
 
 export default class SubmissionFormComponent extends Component {
   @service router;
@@ -14,8 +15,8 @@ export default class SubmissionFormComponent extends Component {
 
 class State {
   @tracked determinedByOwnStudy = null;
-  @tracked submissionFileType   = null;
-  @tracked files                = A([]);
+  @tracked submissionFileType   = 'dfast'; // FIXME null
+  @tracked fileSet              = new FileSet();
   @tracked releaseImmediately   = true;
 }
 
@@ -28,7 +29,7 @@ class Navigation {
     'complete'
   ];
 
-  @tracked stepIndex = 0;
+  @tracked stepIndex = 1; // FIXME 0
 
   get currentStep() {
     return this.steps[this.stepIndex];
@@ -66,12 +67,5 @@ class Navigation {
 
   @action isFollowing(step) {
     return this.stepIndex < this.steps.indexOf(step);
-  }
-
-  @action linkClass(step) {
-    return step === this.currentStep       ? 'active'   :
-           this.currentStep === 'complete' ? 'disabled' :
-           this.isFollowing(step)          ? 'disabled' :
-                                             null;
   }
 }

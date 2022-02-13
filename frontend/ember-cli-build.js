@@ -11,6 +11,12 @@ module.exports = function(defaults) {
     'ember-simple-auth': {
       useSessionSetupMethod: true
     },
+
+    svgJar: {
+      sourceDirs: [
+        'node_modules/@primer/octicons/build/svg'
+      ]
+    }
   });
 
   return app.toTree();

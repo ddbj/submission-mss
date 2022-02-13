@@ -1,6 +1,6 @@
 {{page-title '新規登録申請'}}
 
-<style>
+<style {{!-- template-lint-disable no-forbidden-elements --}}>
   body {
     counter-reset: step 0;
   }
@@ -24,7 +24,7 @@
 <div class="hstack gap-3 align-items-start my-3">
   <nav class="nav nav-pills flex-column flex-shrink-0">
     {{#each this.nav.steps as |step|}}
-      <a href class="nav-link {{(this.nav.linkClass step)}}" {{on 'click' (prevent-default (fn this.nav.gotoStep step))}}>
+      <a href class="nav-link {{step-nav-link-class this.nav step}}" {{on 'click' (prevent-default (fn this.nav.gotoStep step))}}>
         {{t (concat 'submission-form.steps.' step)}}
       </a>
     {{/each}}
