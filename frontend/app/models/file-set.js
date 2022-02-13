@@ -11,10 +11,6 @@ export default class FileSet {
     return this.files.length === 0;
   }
 
-  get everyValid() {
-    return this.files.every(({isValid}) => isValid);
-  }
-
   add(rawFile) {
     const file = SubmissionFile.createFromRawFile(rawFile);
 

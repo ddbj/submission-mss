@@ -13,7 +13,7 @@ export default class SubmissionFormFilesComponent extends Component {
     return !submissionFileType           ? true  :
            submissionFileType === 'none' ? false :
            fileSet.isEmpty               ? true  :
-           !fileSet.everyValid;
+                                           fileSet.files.every(({isValid}) => isValid);
   }
 
   @action setSubmissionFileType(val) {
