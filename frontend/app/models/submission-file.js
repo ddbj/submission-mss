@@ -29,15 +29,9 @@ export class SubmissionFile {
 
   get errors() {
     return [
-      ...(this.fileError || []),
+      ...(this.fileError ? [this.fileError] : []),
       ...this.fileSet.perFileErrors.get(this)
     ];
-  }
-
-  get isValid() {
-    return this.errors.length                                            ? false :
-           this.isAnnotation && this.fileSet.annotationFileErrors.length ? false :
-                                                                           true;
   }
 
   get isParseSucceeded() {

@@ -17,84 +17,85 @@ export default class FileSet {
     this.files = this.files.filter(f => f !== file);
   }
 
-  get globalErrors() {
-    return this.annotationFileErrors;
-  }
-
-  get annotationFileErrors() {
-    const files = this.files.filter(({isAnnotation, isParseSucceeded}) => isAnnotation && isParseSucceeded);
-
-    if (!files.length) { return []; }
-
-    const contactPersonSet = new Set();
-    const holdDateSet      = new Set();
-
-    for (const file of files) {
-      const {contactPerson, holdDate} = file.parsedData;
-
-      contactPersonSet.add(JSON.stringify(contactPerson));
-      holdDateSet.add(holdDate);
-    }
-
-    const errors = [];
-
-    if (contactPersonSet.size > 1) {
-      errors.push('コンタクトパーソンはすべてのアノテーションファイルで同一でなければなりません。');
-    }
-
-    if (holdDateSet.size > 1) {
-      errors.push('公開予定日はすべてのアノテーションファイルで同一でなければなりません。');
-    }
-
-    return errors;
-  }
-
   get perFileErrors() {
-    const errors = new Map();
+    const errorsMap = new Map();
 
     for (const file of this.files) {
-      errors.set(file, []);
+      errorsMap.set(file, []);
     }
 
-    const grouped = this.files.reduce((map, file) => {
-      const val = map.has(file.basename) ? [...map.get(file.basename), file] : [file];
+    validatePair(errorsMap, this.files);
+    validateSameness(errorsMap, this.files);
 
-      return map.set(file.basename, val);
-    }, new Map());
+    return errorsMap;
+  }
+}
 
-    for (const files of grouped.values()) {
-      const [annotations, sequences] = files.reduce(([ann, seq], file) => {
-        return [
-          file.isAnnotation ? [...ann, file] : ann,
-          file.isSequence   ? [...seq, file] : seq
-        ];
-      }, [[], []]);
+function validatePair(errorsMap, files) {
+  const grouped = files.reduce((map, file) => {
+    const val = map.has(file.basename) ? [...map.get(file.basename), file] : [file];
 
-      if (!annotations.length) {
-        for (const file of sequences) {
-          errors.set(file, [...errors.get(file), '対応するアノテーションファイルがありません。']);
-        }
-      }
+    return map.set(file.basename, val);
+  }, new Map());
 
-      if (annotations.length > 1) {
-        for (const file of annotations) {
-          errors.set(file, [...errors.get(file), '同名のアノテーションファイルが複数あります。']);
-        }
-      }
+  for (const files of grouped.values()) {
+    const [annotations, sequences] = files.reduce(([ann, seq], file) => {
+      return [
+        file.isAnnotation ? [...ann, file] : ann,
+        file.isSequence   ? [...seq, file] : seq
+      ];
+    }, [[], []]);
 
-      if (!sequences.length) {
-        for (const file of annotations) {
-          errors.set(file, [...errors.get(file), '対応する配列ファイルがありません。']);
-        }
-      }
-
-      if (sequences.length > 1) {
-        for (const file of sequences) {
-          errors.set(file, [...errors.get(file), '同名の配列ファイルが複数あります。']);
-        }
+    if (!annotations.length) {
+      for (const file of sequences) {
+        errorsMap.get(file).push('対応するアノテーションファイルがありません。');
       }
     }
 
-    return errors;
+    if (annotations.length > 1) {
+      for (const file of annotations) {
+        errorsMap.get(file).push('同名のアノテーションファイルが複数あります。');
+      }
+    }
+
+    if (!sequences.length) {
+      for (const file of annotations) {
+        errorsMap.get(file).push('対応する配列ファイルがありません。');
+      }
+    }
+
+    if (sequences.length > 1) {
+      for (const file of sequences) {
+        errorsMap.get(file).push('同名の配列ファイルが複数あります。');
+      }
+    }
+  }
+}
+
+function validateSameness(errorsMap, files) {
+  files = files.filter(({isAnnotation, isParseSucceeded}) => isAnnotation && isParseSucceeded);
+
+  if (!files.length) { return []; }
+
+  const contactPersonSet = new Set();
+  const holdDateSet      = new Set();
+
+  for (const file of files) {
+    const {contactPerson, holdDate} = file.parsedData;
+
+    contactPersonSet.add(JSON.stringify(contactPerson));
+    holdDateSet.add(holdDate);
+  }
+
+  if (contactPersonSet.size > 1) {
+    for (const file of files) {
+      errorsMap.get(file).push('コンタクトパーソンはすべてのアノテーションファイルで同一でなければなりません。');
+    }
+  }
+
+  if (holdDateSet.size > 1) {
+    for (const file of files) {
+      errorsMap.get(file).push('公開予定日はすべてのアノテーションファイルで同一でなければなりません。');
+    }
   }
 }

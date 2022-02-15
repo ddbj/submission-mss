@@ -63,10 +63,10 @@
                           <span class="visually-hidden">Loading...</span>
                         </div>
                       {{else}}
-                        {{#if file.isValid}}
-                          {{svg-jar 'check-circle-fill-16' class='octicon fill-success' style='margin-top: 2.5px;'}}
-                        {{else}}
+                        {{#if file.errors.length}}
                           {{svg-jar 'x-circle-fill-16' class='octicon fill-danger' style='margin-top: 2.5px;'}}
+                        {{else}}
+                          {{svg-jar 'check-circle-fill-16' class='octicon fill-success' style='margin-top: 2.5px;'}}
                         {{/if}}
                       {{/if}}
                     </div>
@@ -124,16 +124,6 @@
                   </li>
                 {{/each}}
               </ul>
-
-              {{#with @state.fileSet.globalErrors as |errors|}}
-                <div class="card-body">
-                  <ul class="text-danger mb-0">
-                    {{#each errors as |error|}}
-                      <li>{{error}}</li>
-                    {{/each}}
-                  </ul>
-                </div>
-              {{/with}}
 
               <div class="card-footer d-flex justify-content-between align-items-center bg-white">
                 <div>

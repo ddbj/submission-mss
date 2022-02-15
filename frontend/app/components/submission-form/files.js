@@ -15,7 +15,6 @@ export default class SubmissionFormFilesComponent extends Component {
     return !submissionFileType           ? true  :
            submissionFileType === 'none' ? false :
            !fileSet.files.length         ? true  :
-           fileSet.globalErrors.length   ? true  :
                                            fileSet.files.some(({isParsing, errors}) => isParsing || errors.length);
   }
 
