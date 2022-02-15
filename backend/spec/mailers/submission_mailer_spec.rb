@@ -78,6 +78,11 @@ RSpec.describe SubmissionMailer do
         Submission対象のデータタイプに関する説明です。
         https://www.ddbj.nig.ac.jp/ddbj/wgs.html
       BODY
+
+      expect(mail.newline_normalized_body).to include(<<~BODY)
+        Submission file(s)完成後、以下の URL から upload してください。
+        http://mssform.example.com/home/submission/NSUB000042/upload
+      BODY
     end
 
     example 'email_language=en, uploaded=false' do
@@ -94,6 +99,11 @@ RSpec.describe SubmissionMailer do
       expect(mail.newline_normalized_body).to include(<<~BODY)
         Regarding the explanation of the datatype that you have chosen, visit the site below.
         https://www.ddbj.nig.ac.jp/ddbj/wgs-e.html
+      BODY
+
+      expect(mail.newline_normalized_body).to include(<<~BODY)
+        Upload the submission file(s) from the URL below, after you completely create them.
+        http://mssform.example.com/home/submission/NSUB000042/upload
       BODY
     end
   end
