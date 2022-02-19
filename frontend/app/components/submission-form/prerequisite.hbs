@@ -23,7 +23,7 @@
               <radio.input checked={{eq @state.determinedByOwnStudy true}} required class="form-check-input" {{on 'change' (fn this.setDeterminedByOwnStudy true)}} />
 
               <radio.label class="form-check-label">
-                自身の研究で配列決定した塩基配列である
+                {{t 'submission-form.prerequisite.a1-1'}}
               </radio.label>
             </group.radio>
           </div>
@@ -34,7 +34,7 @@
                 <radio.input checked={{eq @state.determinedByOwnStudy false}} required class="form-check-input" {{on 'change' (fn this.setDeterminedByOwnStudy false)}} />
 
                 <radio.label class="form-check-label">
-                  公開されているデータからアセンブルした塩基配列 (TPA) である
+                  {{t 'submission-form.prerequisite.a1-2'}}
                 </radio.label>
               </group.radio>
             </div>
@@ -62,7 +62,7 @@
                 <radio.input checked={{eq @model.tpa true}} required class="form-check-input" {{on 'change' (set @model 'tpa' true)}} />
 
                 <radio.label class="form-check-label">
-                  査読付き学術雑誌に論文を投稿する予定がある、あるいは投稿済みである
+                  {{t 'submission-form.prerequisite.a2-1'}}
                 </radio.label>
               </group.radio>
             </div>
@@ -72,7 +72,7 @@
                 <radio.input checked={{eq @model.tpa false}} required class="form-check-input" {{on 'change' (set @model 'tpa' false)}} />
 
                 <radio.label class="form-check-label">
-                  投稿の予定はない
+                  {{t 'submission-form.prerequisite.a2-2'}}
                 </radio.label>
               </group.radio>
             </div>

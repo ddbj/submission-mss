@@ -2,41 +2,44 @@
   <form {{on 'submit' (prevent-default (fn this.submit modal))}}>
     <div class="vstack gap-3">
       <div class="card">
-        <div class="card-header">登録種別</div>
+        <div class="card-header">事前質問</div>
 
         <div class="card-body">
+          <ul class="mb-0">
+            {{#if @state.determinedByOwnStudy}}
+              <li>{{t 'submission-form.prerequisite.a1-1'}}</li>
+            {{else}}
+              <li>{{t 'submission-form.prerequisite.a1-2'}}</li>
 
-          {{#if @model.tpa}}
-            TPA
-          {{else}}
-            非 TPA
-          {{/if}}
+              {{#if @model.tpa}}
+                <li>{{t 'submission-form.prerequisite.a2-1'}}</li>
+              {{else}}
+                <li>{{t 'submission-form.prerequisite.a2-2'}}</li>
+              {{/if}}
+            {{/if}}
+
+            {{#if (eq @state.submissionFileType 'none')}}
+              <li>{{t 'submission-form.files.a3'}}</li>
+            {{else if @model.dfast}}
+              <li>{{t 'submission-form.files.a1'}}</li>
+            {{else}}
+              <li>{{t 'submission-form.files.a2'}}</li>
+            {{/if}}
+          </ul>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-header">登録ファイル</div>
-
-        {{#if @state.fileSet.files}}
-          <div class="card-body">
-            {{#if @model.dfast}}
-              DFAST を使って作成
-            {{else}}
-              DFAST を使わずに作成
-            {{/if}}
-          </div>
+      {{#with @state.fileSet.files as |files|}}
+        <div class="card">
+          <div class="card-header">登録ファイル</div>
 
           <ul class="list-group list-group-flush">
-            {{#each @state.fileSet.files as |file|}}
+            {{#each files as |file|}}
               <li class="list-group-item">{{file.name}}</li>
             {{/each}}
           </ul>
-        {{else}}
-          <div class="card-body">
-            申し込み後に作成する
-          </div>
-        {{/if}}
-      </div>
+        </div>
+      {{/with}}
 
       <div class="card">
         <div class="card-header">エントリ数</div>

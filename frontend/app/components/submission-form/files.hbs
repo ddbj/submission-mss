@@ -14,7 +14,7 @@
               <radio.input checked={{eq @state.submissionFileType 'dfast'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'dfast')}} />
 
               <radio.label class="form-check-label">
-                DFAST で作成した Bacterial complete genome または WGS の登録ファイルをアップロードする
+                {{t 'submission-form.files.a1'}}
               </radio.label>
             </group.radio>
           </div>
@@ -24,7 +24,7 @@
               <radio.input checked={{eq @state.submissionFileType 'without-dfast'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'without-dfast')}} />
 
               <radio.label class="form-check-label">
-                DFAST を使わず作成した登録ファイルをアップロードする
+                {{t 'submission-form.files.a2'}}
               </radio.label>
             </group.radio>
           </div>
@@ -34,7 +34,7 @@
               <radio.input checked={{eq @state.submissionFileType 'none'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'none')}} />
 
               <radio.label class="form-check-label">
-                申し込み後に登録ファイルを作成する
+                {{t 'submission-form.files.a3'}}
               </radio.label>
             </group.radio>
           </div>
