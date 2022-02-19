@@ -8,7 +8,7 @@ export class SubmissionFile {
     ];
   }
 
-  static createFromRawFile(file) {
+  static fromRawFile(file) {
     const klass = AnnotationFile.matchExtension(file.name) || SequenceFile.matchExtension(file.name) || UnsupportedFile;
 
     return new klass(file);
@@ -20,18 +20,10 @@ export class SubmissionFile {
 
   @tracked isParsing = false;
   @tracked parsedData;
-  @tracked fileError;
-  @tracked fileSet;
+  @tracked errors = [];
 
   constructor(rawFile) {
     this.rawFile = rawFile;
-  }
-
-  get errors() {
-    return [
-      ...(this.fileError ? [this.fileError] : []),
-      ...this.fileSet.perFileErrors.get(this)
-    ];
   }
 
   get isParseSucceeded() {
@@ -67,7 +59,7 @@ export class SubmissionFile {
 
       worker.addEventListener('message', ({data: [err, payload]}) => {
         if (err) {
-          this.fileError = err;
+          this.errors = [err];
 
           reject(err);
         } else {
@@ -101,7 +93,7 @@ export class SequenceFile extends SubmissionFile {
 export class UnsupportedFile extends SubmissionFile {
   static extensions = [];
 
-  fileError = '登録ファイルの拡張子は .ann, .fasta のいずれかです。';
+  errors = ['登録ファイルの拡張子は .ann, .fasta のいずれかです。'];
 
   parse() {
     this.isParsing = false;

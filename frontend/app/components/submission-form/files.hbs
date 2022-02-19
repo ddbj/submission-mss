@@ -1,5 +1,3 @@
-<input type="file" multiple accept={{join ', ' @state.fileSet.allowedExtensions}} class="d-none" {{did-insert (set this 'fileInputElement')}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInputElement.value' ''))}} {{!-- template-lint-disable require-input-label --}} />
-
 <form {{on 'submit' (prevent-default this.goNext)}}>
   <div class="vstack gap-3">
     <div class="card">
@@ -52,98 +50,7 @@
             <li>Linux の <code>ls</code> コマンドでの名前ソート順に Accession 番号が発行されます。</li>
           </ul>
 
-          {{#if @state.fileSet.files}}
-            <div class="card {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
-              <ul class="list-group list-group-flush overflow-auto" style="max-height: 550px">
-                {{#each (sort-by 'name' @state.fileSet.files) as |file|}}
-                  <li class="list-group-item hstack gap-2 align-items-center">
-                    <div class="align-self-start">
-                      {{#if file.isParsing}}
-                        <div class="spinner-border spinner-border-seconcary spinner-border-sm opacity-50" role="status">
-                          <span class="visually-hidden">Loading...</span>
-                        </div>
-                      {{else}}
-                        {{#if file.errors.length}}
-                          {{svg-jar 'x-circle-fill-16' class='octicon fill-danger' style='margin-top: 2.5px;'}}
-                        {{else}}
-                          {{svg-jar 'check-circle-fill-16' class='octicon fill-success' style='margin-top: 2.5px;'}}
-                        {{/if}}
-                      {{/if}}
-                    </div>
-
-                    <div class={{if file.isParsing 'opacity-50'}}>
-                      {{file.name}} <small class="text-muted">{{filesize file.size}}</small>
-
-                      <small class="hstack gap-3 text-muted">
-                        {{#if file.isParsing}}
-                          Parsing...
-                        {{else}}
-                          {{#with file.parsedData as |data|}}
-                            {{#if file.isAnnotation}}
-                              <div>
-                                <b>Contact person</b>
-                                {{#with data.contactPerson as |person|}}
-                                  {{person.fullName}}
-                                  &lt;{{person.email}}&gt;
-                                  ({{person.affiliation}})
-                                {{else}}
-                                  -
-                                {{/with}}
-                              </div>
-
-                              <div>
-                                <b>Hold date</b>
-                                {{or data.holdDate '-'}}
-                              </div>
-                            {{/if}}
-
-                            {{#if file.isSequence}}
-                              <div>
-                                <b>エントリ数</b>
-                                {{format-number data.entriesCount}}
-                              </div>
-                            {{/if}}
-                          {{/with}}
-                        {{/if}}
-                      </small>
-
-                      {{#if file.errors}}
-                        <ul class="list-unstyled text-danger">
-                          {{#each file.errors as |error|}}
-                            <li>{{error}}</li>
-                          {{/each}}
-                        </ul>
-                      {{/if}}
-                    </div>
-
-                    <div class="ms-auto">
-                      <button type="button" class="btn btn-link p-2" {{on 'click' (prevent-default (fn this.removeFile file))}}>
-                        {{svg-jar 'no-entry-24' class='octicon fill-danger' role='img' desc='削除'}}
-                      </button>
-                    </div>
-                  </li>
-                {{/each}}
-              </ul>
-
-              <div class="card-footer d-flex justify-content-between align-items-center bg-white">
-                <div>
-                  <button type="button" class="btn btn-outline-primary" {{on 'click' (prevent-default this.selectFiles)}}>
-                    ファイルの追加
-                  </button>
-                </div>
-
-                <div>
-                  {{@state.fileSet.files.length}}ファイル、{{filesize (sum (map-by 'size' @state.fileSet.files))}}
-                </div>
-              </div>
-            </div>
-          {{else}}
-            <div class="card border-2 border-dashed {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
-              <div class="card-body py-5 text-center text-muted">
-                <a href="#" class="stretched-link" {{on 'click' (prevent-default this.selectFiles)}}>ファイルを選択</a>するか、ここにファイルをドロップしてください。
-              </div>
-            </div>
-          {{/if}}
+          <FileList @files={{@state.fileSet.files}} @crossoverErrors={{this.crossoverErrors}} @onAdd={{@state.fileSet.add}} @onRemove={{@state.fileSet.remove}} />
         </div>
       </div>
     {{/if}}
