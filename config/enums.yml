@@ -11,67 +11,67 @@ locales:
 
 data_types:
   - key: wgs
-    label: draft genome (WGS)
+    label: 'WGS: draft genome'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/wgs-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/wgs.html
 
   - key: gnm
-    label: complete or nearly complete genome
+    label: 'GNM: complete or nearly complete genome'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/genome-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/genome.html
 
   - key: mag
-    label: Metagenome-Assembled Genome (MAG)
+    label: 'MAG: Metagenome-Assembled Genome'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/metagenome-assembly-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/metagenome-assembly.html
 
   - key: sag
-    label: Single amplified genome (SAG)
+    label: 'SAG: Single amplified genome'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/single-amplified-genome-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/single-amplified-genome.html
 
   - key: tls
-    label: TLS
+    label: 'TLS: Targeted Locus Study'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/tls-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/tls.html
 
   - key: htg
-    label: HTG
+    label: 'HTG: High Throughput Genomic'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/htg-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/htg.html
 
   - key: tsa
-    label: TSA
+    label: 'TSA: Transcriptome Shotgun Assembly'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/tsa-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/tsa.html
 
   - key: htc
-    label: full length cDNA (HTC)
+    label: 'HTC: full length cDNA'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/htc-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/htc.html
 
   - key: est
-    label: EST
+    label: 'EST: Expressed Sequence tags'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/est-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/est.html
 
   - key: dna
-    label: Gene sequences (DNA)
+    label: 'DNA: Gene sequences'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/submission-e.html
       ja: https://www.ddbj.nig.ac.jp/submission.html
 
   - key: rna
-    label: Gene sequences (RNA)
+    label: 'RNA: Gene sequences'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/submission-e.html
       ja: https://www.ddbj.nig.ac.jp/submission.html
