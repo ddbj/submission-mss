@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   scope :api do
-    resources :submissions,    only: :create
+    resources :submissions, only: :create, param: :mass_id do
+      scope module: :submissions do
+        resources :uploads, only: :create
+      end
+    end
+
     resources :direct_uploads, only: :create
   end
 

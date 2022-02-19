@@ -1,6 +1,4 @@
 class SubmissionsController < ApplicationController
-  before_action :require_authentication
-
   def create
     @submission = current_user.submissions.create!(submission_params.except(:files, :contact_person, :other_people)) {|submission|
       files, contact_person, other_people = submission_params.values_at(:files, :contact_person, :other_people)

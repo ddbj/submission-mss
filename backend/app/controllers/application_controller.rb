@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::API
+  before_action :require_authentication
+
   private
 
   def current_user

@@ -1,0 +1,19 @@
+{{page-title '登録ファイルの再アップロード'}}
+
+<h1 class="display-6 my-4">登録ファイルの再アップロード</h1>
+
+<UploadProgressModal as |modal|>
+  <form {{on 'submit' (prevent-default (fn this.submit modal))}}>
+    <div class="card">
+      <div class="card-body">
+        <FileList @files={{this.fileSet.files}} @crossoverErrors={{this.crossoverErrors}} @onAdd={{this.fileSet.add}} @onRemove={{this.fileSet.remove}} />
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="text-end">
+      <button type="submit" class="btn btn-primary px-5">アップロード</button>
+    </div>
+  </form>
+</UploadProgressModal>

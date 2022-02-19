@@ -32,7 +32,7 @@ export default class SubmissionFormFilesComponent extends Component {
     model.dfast              = val === 'dfast';
 
     if (val === 'none') {
-      state.fileSet.files.clear();
+      state.fileSet.files = [];
     }
   }
 

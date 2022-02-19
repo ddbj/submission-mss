@@ -4,7 +4,7 @@
   <div class="card {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
     <ul class="list-group list-group-flush overflow-auto" style="max-height: 550px">
       {{#each (sort-by 'name' @files) as |file|}}
-        <FileList::Item @file={{file}} @errors={{append file.errors (map-get @crossoverErrors file)}} @onRemove={{@onRemove}} />
+        <FileList::Item @file={{file}} @errors={{append file.errors (or (map-get @crossoverErrors file) (array))}} @onRemove={{@onRemove}} />
       {{/each}}
     </ul>
 
