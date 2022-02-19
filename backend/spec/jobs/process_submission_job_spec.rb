@@ -95,7 +95,7 @@ RSpec.describe ProcessSubmissionJob do
             '2022-01-01',
             nil,
             'some description',
-            'alice@example.com',
+            'alice+contact@example.com',
             'Alice Liddell',
             'Wonderland Inc.',
             'Bob <bob@example.com>; Carol <carol@example.com>',

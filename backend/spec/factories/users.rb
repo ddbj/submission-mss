@@ -5,7 +5,8 @@ FactoryBot.define do
     trait :alice do
       id_token {
         {
-          preferred_username: 'alice-liddell'
+          preferred_username: 'alice-liddell',
+          email:              'alice+idp@example.com'
         }
       }
     end

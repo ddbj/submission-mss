@@ -33,7 +33,7 @@ RSpec.describe SubmissionMailer do
       mail = SubmissionMailer.with(submission:).submitter_confirmation
 
       expect(mail.from).to contain_exactly('mass@ddbj.nig.ac.jp')
-      expect(mail.to).to   contain_exactly('alice@example.com')
+      expect(mail.to).to   contain_exactly('alice+contact@example.com')
       expect(mail.cc).to   contain_exactly('bob@example.com', 'carol@example.com')
 
       expect(mail.subject).to eq('[DDBJ:NSUB000042] draft genome (WGS)')
@@ -147,7 +147,7 @@ RSpec.describe SubmissionMailer do
         some description
 
         ## contact_email
-        alice@example.com
+        alice+contact@example.com
 
         ## contact_person_name
         Alice Liddell
