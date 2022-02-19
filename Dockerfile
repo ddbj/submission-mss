@@ -24,7 +24,7 @@ RUN yarn build
 
 ###
 
-FROM ruby:3.1
+FROM ruby:3.1.1
 
 ARG APP_GID
 ARG APP_UID
@@ -41,7 +41,7 @@ ENV TZ=Japan
 
 EXPOSE 3000
 
-RUN gem install bundler:2.3.5
+RUN gem install bundler:2.3.7
 
 WORKDIR /app/config/
 COPY ./config/ ./
