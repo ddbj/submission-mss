@@ -100,7 +100,11 @@
         <div class="card-header">補足説明</div>
 
         <div class="card-body">
-          <div style="white-space: pre-wrap;">{{@model.description}}</div>
+          {{#if @model.description}}
+            <div style="white-space: pre-wrap;">{{@model.description}}</div>
+          {{else}}
+            なし
+          {{/if}}
         </div>
       </div>
 
