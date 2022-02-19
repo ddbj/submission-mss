@@ -1,19 +1,26 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
-import FileSet from 'mssform/models/file-set';
 import UploadFiles from 'mssform/models/upload-files';
 
 export default class UploadFormComponent extends Component {
   @service session;
 
-  fileSet         = new FileSet();
-  crossoverErrors = new Map();
+  @tracked files           = [];
+  @tracked crossoverErrors = new Map();
+
+  @action addFile(file) {
+    this.files = [...this.files, file];
+  }
+
+  @action removeFile(file) {
+    this.files = this.files.filter(f => f !== file);
+  }
 
   @action async submit(uploadProgressModal) {
-    const {files} = this.fileSet;
-    const blobs   = await uploadFiles(uploadProgressModal, files.map(f => f.rawFile));
+    const blobs = await uploadFiles(uploadProgressModal, this.files.map(f => f.rawFile));
 
     await this.session.authenticate('authenticator:appauth');
 

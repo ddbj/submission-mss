@@ -9,34 +9,29 @@ export default class SubmissionFormConfirmComponent extends Component {
   @service session;
 
   @action async submit(uploadProgressModal) {
-    const blobs = await this.uploadFiles(uploadProgressModal);
+    const {state, model, nav} = this.args;
+
+    const blobs = await uploadFiles(uploadProgressModal, state.files.map(f => f.rawFile));
 
     await this.session.authenticate('authenticator:appauth');
-
-    const {model, nav} = this.args;
 
     model.files = blobs.map(({signed_id}) => signed_id);
     await model.save();
 
     nav.goNext();
   }
+}
 
-  async uploadFiles(progressModal) {
-    const {fileSet} = this.args.state;
+async function uploadFiles(progressModal, files) {
+  if (files.length === 0) { return []; }
 
-    const files = fileSet.files.mapBy('rawFile');
+  const upload = new UploadFiles(files);
 
-    if (files.length === 0) { return []; }
+  progressModal.show(upload);
 
-    const upload  = new UploadFiles(files);
-    const perform = upload.perform();
+  const blobs = await upload.perform();
 
-    progressModal.show(upload);
+  progressModal.hide();
 
-    const blobs = await perform;
-
-    progressModal.hide();
-
-    return blobs;
-  }
+  return blobs;
 }

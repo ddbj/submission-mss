@@ -9,7 +9,7 @@
         <RadioGroup as |group|>
           <div class="form-check">
             <group.radio as |radio|>
-              <radio.input checked={{eq @state.submissionFileType 'dfast'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'dfast')}} />
+              <radio.input checked={{eq @state.uploadType 'dfast'}} required class="form-check-input" {{on 'change' (fn this.setUploadType 'dfast')}} />
 
               <radio.label class="form-check-label">
                 {{t 'submission-form.files.a1'}}
@@ -19,7 +19,7 @@
 
           <div class="form-check">
             <group.radio as |radio|>
-              <radio.input checked={{eq @state.submissionFileType 'without-dfast'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'without-dfast')}} />
+              <radio.input checked={{eq @state.uploadType 'without-dfast'}} required class="form-check-input" {{on 'change' (fn this.setUploadType 'without-dfast')}} />
 
               <radio.label class="form-check-label">
                 {{t 'submission-form.files.a2'}}
@@ -29,7 +29,7 @@
 
           <div class="form-check">
             <group.radio as |radio|>
-              <radio.input checked={{eq @state.submissionFileType 'none'}} required class="form-check-input" {{on 'change' (fn this.setSubmissionFileType 'none')}} />
+              <radio.input checked={{eq @state.uploadType 'none'}} required class="form-check-input" {{on 'change' (fn this.setUploadType 'none')}} />
 
               <radio.label class="form-check-label">
                 {{t 'submission-form.files.a3'}}
@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    {{#if (or (eq @state.submissionFileType 'dfast') (eq @state.submissionFileType 'without-dfast'))}}
+    {{#if (or (eq @state.uploadType 'dfast') (eq @state.uploadType 'without-dfast'))}}
       <div class="card">
         <div class="card-body">
           <ul>
@@ -50,7 +50,7 @@
             <li>Linux の <code>ls</code> コマンドでの名前ソート順に Accession 番号が発行されます。</li>
           </ul>
 
-          <FileList @files={{@state.fileSet.files}} @crossoverErrors={{this.crossoverErrors}} @onAdd={{@state.fileSet.add}} @onRemove={{@state.fileSet.remove}} />
+          <FileList @files={{@state.files}} @crossoverErrors={{this.crossoverErrors}} @onAdd={{this.addFile}} @onRemove={{this.removeFile}} />
         </div>
       </div>
     {{/if}}
@@ -60,6 +60,6 @@
 
   <div class="hstack gap-3 justify-content-end">
     <a href class="btn btn-outline-primary px-4" {{on 'click' (prevent-default @nav.goPrev)}}>戻る</a>
-    <button type="submit" class="btn btn-primary px-5" disabled={{this.isNextButtonDisabled}}>次へ</button>
+    <button type="submit" class="btn btn-primary px-5" disabled={{not this.isNextButtonEnabled}}>次へ</button>
   </div>
 </form>

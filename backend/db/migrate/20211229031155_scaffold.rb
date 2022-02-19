@@ -16,7 +16,7 @@ class Scaffold < ActiveRecord::Migration[7.0]
       t.date    :hold_date
       t.string  :sequencer,      null: false
       t.string  :data_type,      null: false
-      t.string  :description,    null: false
+      t.string  :description
       t.string  :email_language, null: false
 
       t.timestamps

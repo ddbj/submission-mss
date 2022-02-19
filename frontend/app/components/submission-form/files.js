@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 
 export default class SubmissionFormFilesComponent extends Component {
   get crossoverErrors() {
-    const {files} = this.args.state.fileSet;
+    const {files} = this.args.state;
     const errors  = new Map();
 
     for (const file of files) {
@@ -16,24 +16,45 @@ export default class SubmissionFormFilesComponent extends Component {
     return errors;
   }
 
-  get isNextButtonDisabled() {
-    const {submissionFileType, fileSet} = this.args.state;
+  get isNextButtonEnabled() {
+    const {uploadType, files} = this.args.state;
 
-    return !submissionFileType           ? true  :
-           submissionFileType === 'none' ? false :
-           !fileSet.files.length         ? true  :
-                                           fileSet.files.some(({isParsing, errors}) => isParsing || errors.length);
+    if (!uploadType)           { return false; }
+    if (uploadType === 'none') { return true;  }
+    if (!files.length)         { return false; }
+
+    for (const file of files) {
+      if (file.isParsing || file.errors.length) { return false; }
+    }
+
+    for (const errors of this.crossoverErrors.values()) {
+      if (errors.length) { return false; }
+    }
+
+    return true;
   }
 
-  @action setSubmissionFileType(val) {
+  @action setUploadType(val) {
     const {model, state} = this.args;
 
-    state.submissionFileType = val;
-    model.dfast              = val === 'dfast';
+    state.uploadType = val;
+    model.dfast      = val === 'dfast';
 
     if (val === 'none') {
-      state.fileSet.files = [];
+      state.files = [];
     }
+  }
+
+  @action addFile(file) {
+    const {state} = this.args;
+
+    state.files = [...state.files, file];
+  }
+
+  @action removeFile(file) {
+    const {state} = this.args;
+
+    state.files = state.files.filter(f => f !== file);
   }
 
   @action goNext() {
@@ -43,12 +64,12 @@ export default class SubmissionFormFilesComponent extends Component {
   }
 
   setParsedData() {
-    const {state, model}                = this.args;
-    const {submissionFileType, fileSet} = state;
+    const {state, model}  = this.args;
+    const {uploadType, files} = state;
 
-    if (submissionFileType === 'none') { return; }
+    if (uploadType === 'none') { return; }
 
-    const {contactPerson, holdDate} = fileSet.files.find(({isAnnotation}) => isAnnotation).parsedData;
+    const {contactPerson, holdDate} = files.find(({isAnnotation}) => isAnnotation).parsedData;
 
     Object.assign(model.contactPerson, contactPerson || {});
     state.isContactPersonReadonly = !!contactPerson;
@@ -56,7 +77,7 @@ export default class SubmissionFormFilesComponent extends Component {
     model.holdDate           = holdDate;
     state.releaseImmediately = !holdDate;
 
-    model.entriesCount = fileSet.files.filter(({isSequence}) => isSequence).reduce((acc, file) => {
+    model.entriesCount = files.filter(({isSequence}) => isSequence).reduce((acc, file) => {
       return acc + file.parsedData.entriesCount;
     }, 0);
   }

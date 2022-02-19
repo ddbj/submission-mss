@@ -3,8 +3,6 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import FileSet from 'mssform/models/file-set';
-
 export default class SubmissionFormComponent extends Component {
   @service router;
   @service session;
@@ -14,9 +12,9 @@ export default class SubmissionFormComponent extends Component {
 }
 
 class State {
-  @tracked determinedByOwnStudy    = null;
-  @tracked submissionFileType      = null;
-  @tracked fileSet                 = new FileSet();
+  @tracked maybeTpa                = null;
+  @tracked uploadType              = null;
+  @tracked files                   = [];
   @tracked isContactPersonReadonly = false;
   @tracked releaseImmediately      = true;
 }

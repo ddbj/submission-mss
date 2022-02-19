@@ -6,9 +6,7 @@
 
         <div class="card-body">
           <ul class="mb-0">
-            {{#if @state.determinedByOwnStudy}}
-              <li>{{t 'submission-form.prerequisite.a1-1'}}</li>
-            {{else}}
+            {{#if @state.maybeTpa}}
               <li>{{t 'submission-form.prerequisite.a1-2'}}</li>
 
               {{#if @model.tpa}}
@@ -16,20 +14,24 @@
               {{else}}
                 <li>{{t 'submission-form.prerequisite.a2-2'}}</li>
               {{/if}}
+            {{else}}
+              <li>{{t 'submission-form.prerequisite.a1-1'}}</li>
             {{/if}}
 
-            {{#if (eq @state.submissionFileType 'none')}}
-              <li>{{t 'submission-form.files.a3'}}</li>
-            {{else if @model.dfast}}
-              <li>{{t 'submission-form.files.a1'}}</li>
+            {{#if @state.files.length}}
+              {{#if @model.dfast}}
+                <li>{{t 'submission-form.files.a1'}}</li>
+              {{else}}
+                <li>{{t 'submission-form.files.a2'}}</li>
+              {{/if}}
             {{else}}
-              <li>{{t 'submission-form.files.a2'}}</li>
+              <li>{{t 'submission-form.files.a3'}}</li>
             {{/if}}
           </ul>
         </div>
       </div>
 
-      {{#with @state.fileSet.files as |files|}}
+      {{#with @state.files as |files|}}
         <div class="card">
           <div class="card-header">登録ファイル</div>
 

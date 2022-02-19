@@ -20,7 +20,7 @@
         <RadioGroup as |group|>
           <div class="form-check">
             <group.radio as |radio|>
-              <radio.input checked={{eq @state.determinedByOwnStudy true}} required class="form-check-input" {{on 'change' (fn this.setDeterminedByOwnStudy true)}} />
+              <radio.input checked={{eq @state.maybeTpa false}} required class="form-check-input" {{on 'change' (fn this.setMaybeTpa false)}} />
 
               <radio.label class="form-check-label">
                 {{t 'submission-form.prerequisite.a1-1'}}
@@ -31,7 +31,7 @@
           <div class="hstack gap-3">
             <div class="form-check">
               <group.radio as |radio|>
-                <radio.input checked={{eq @state.determinedByOwnStudy false}} required class="form-check-input" {{on 'change' (fn this.setDeterminedByOwnStudy false)}} />
+                <radio.input checked={{eq @state.maybeTpa true}} required class="form-check-input" {{on 'change' (fn this.setMaybeTpa true)}} />
 
                 <radio.label class="form-check-label">
                   {{t 'submission-form.prerequisite.a1-2'}}
@@ -49,7 +49,7 @@
       </div>
     </div>
 
-    {{#if (eq @state.determinedByOwnStudy false)}}
+    {{#if @state.maybeTpa}}
       <div class="card">
         <div class="card-body">
           <p>
@@ -84,7 +84,7 @@
 
   <hr />
 
-  {{#if (and (eq @state.determinedByOwnStudy false) (eq @model.tpa false))}}
+  {{#if (and @state.maybeTpa (eq @model.tpa false))}}
     <p>TPAの場合、論文を準備しないのであれば申し込みできません。</p>
 
     <LinkTo @route="home">ホームに戻る</LinkTo>

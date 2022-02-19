@@ -6,7 +6,7 @@
   <form {{on 'submit' (prevent-default (fn this.submit modal))}}>
     <div class="card">
       <div class="card-body">
-        <FileList @files={{this.fileSet.files}} @crossoverErrors={{this.crossoverErrors}} @onAdd={{this.fileSet.add}} @onRemove={{this.fileSet.remove}} />
+        <FileList @files={{this.files}} @crossoverErrors={{this.crossoverErrors}} @onAdd={{this.addFile}} @onRemove={{this.removeFile}} />
       </div>
     </div>
 
