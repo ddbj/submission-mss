@@ -28,14 +28,22 @@
             </group.radio>
           </div>
 
-          <div class="form-check">
-            <group.radio as |radio|>
-              <radio.input checked={{eq @state.determinedByOwnStudy false}} required class="form-check-input" {{on 'change' (fn this.setDeterminedByOwnStudy false)}} />
+          <div class="hstack gap-3">
+            <div class="form-check">
+              <group.radio as |radio|>
+                <radio.input checked={{eq @state.determinedByOwnStudy false}} required class="form-check-input" {{on 'change' (fn this.setDeterminedByOwnStudy false)}} />
 
-              <radio.label class="form-check-label">
-                公開されているデータからアセンブルした塩基配列 (TPA) である
-              </radio.label>
-            </group.radio>
+                <radio.label class="form-check-label">
+                  公開されているデータからアセンブルした塩基配列 (TPA) である
+                </radio.label>
+              </group.radio>
+            </div>
+
+            <div>
+              <a href={{t 'submission-form.prerequisite.about-tpa-url'}} target="_blank" rel="noopener noreferrer">
+                {{svg-jar 'question-16' class='octicon' width='14px' style='margin-top: 2px'}} {{t 'submission-form.prerequisite.about-tpa'}}
+              </a>
+            </div>
           </div>
         </RadioGroup>
       </div>

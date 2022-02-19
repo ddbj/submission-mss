@@ -1,0 +1,6 @@
+steps:
+  prerequisite: 前提条件の確認
+  files:        登録ファイルの選択
+  metadata:     情報の入力
+  confirm:      申請内容の確認
+  complete:     完了
