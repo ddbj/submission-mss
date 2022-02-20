@@ -4,7 +4,9 @@ class UploadJob < ApplicationJob
   def perform(upload)
     upload.copy_files_to_submissions_dir
 
-    WorkingList.instance.update_data_arrival_date upload.submission
+    submission = upload.submission
+
+    WorkingList.instance.update_data_arrival_date submission
 
     SubmissionMailer.with(submission:).submitter_confirmation.deliver_later
     SubmissionMailer.with(submission:).curator_notification.deliver_later
