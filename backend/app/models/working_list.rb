@@ -40,14 +40,14 @@ class WorkingList
   end
 
   def find_row_number_by_mass_id(target_mass_id, offset: 1, limit: 100)
-    res  = @service.batch_get_spreadsheet_values(@sheet_id, ranges: "#{@sheet_name}!A#{offset}:A#{offset + limit}")
-    vals = res.value_ranges.first.values
+    res    = @service.batch_get_spreadsheet_values(@sheet_id, ranges: "#{@sheet_name}!A#{offset}:A#{offset + limit - 1}")
+    values = res.value_ranges.first.values
 
-    res.value_ranges.first.values.each_with_index do |(mass_id), i|
+    values.each_with_index do |(mass_id), i|
       return offset + i if mass_id == target_mass_id
     end
 
-    return nil if vals.size < limit
+    return nil if values.size < limit
 
     find_row_number_by_mass_id(target_mass_id, offset: offset + limit, limit:)
   end

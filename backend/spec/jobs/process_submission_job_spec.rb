@@ -1,19 +1,6 @@
 require 'rails_helper'
 
-using Module.new {
-  refine Rack::Test::UploadedFile.singleton_class do
-    def tmp(filename, content: '')
-      Dir.mktmpdir {|dir|
-        file = Pathname.new(dir).join(filename).open('wb').tap {|f|
-          f.write content
-          f.rewind
-        }
-
-        new(file)
-      }
-    end
-  end
-}
+using TmpUploadedFile
 
 RSpec.describe ProcessSubmissionJob do
   include ActiveJob::TestHelper
