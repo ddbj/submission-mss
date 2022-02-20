@@ -41,6 +41,7 @@ services:
       MINIO_BUCKET:                uploads
       MINIO_ENDPOINT:
       MINIO_SECRET_ACCESS_KEY:
+      MSSFORM_URL:
       MSS_WORKING_LIST_SHEET_ID:
       MSS_WORKING_LIST_SHEET_NAME:
       OPENID_CLIENT_ID:
