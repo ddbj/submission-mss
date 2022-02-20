@@ -9,7 +9,7 @@
         </div>
 
         <div class="modal-body vstack gap-3">
-          {{#with this.directUpload.currentUpload as |upload|}}
+          {{#with this.uploadFiles.currentUpload as |upload|}}
             <div class="d-flex gap-2 align-items-center">
               <div>{{upload.file.name}}</div>
 
@@ -21,7 +21,7 @@
             </div>
 
             <div class="progress">
-              {{#let (percentage this.directUpload.uploadedSize this.directUpload.totalSize) as |percentage|}}
+              {{#let (percentage this.uploadFiles.uploadedSize this.uploadFiles.totalSize) as |percentage|}}
                 <div class="progress-bar" role="progressbar" {{style (hash width=(concat percentage '%'))}} aria-valuenow={{percentage}} aria-valuemin="0" aria-valuemax="100"></div>
               {{/let}}
             </div>
