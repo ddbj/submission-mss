@@ -57,10 +57,14 @@ services:
       SUBMISSIONS_DIR:             /app/submissions
 
     depends_on:
-      - postgres
-      - redis
-      - memcached
-      - minio
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      memcached:
+        condition: service_started
+      minio:
+        condition: service_started
 
   sidekiq:
     <<: *rails
@@ -76,12 +80,24 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
 
+    healthcheck:
+      test: [CMD, pg_isready, --username, postgres]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
   redis:
     image: redis:6
     command: [--appendonly, 'yes']
 
     volumes:
       - redis:/data
+
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 1s
+      timeout: 3s
+      retries: 30
 
   memcached:
     image: memcached:latest
