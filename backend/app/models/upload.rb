@@ -3,7 +3,7 @@ class Upload < ApplicationRecord
 
   has_many_attached :files
 
-  def copy_flles_to_submissions_dir
+  def copy_files_to_submissions_dir
     return if copied?
 
     work = submissions_dir.join('.work', "#{submission.mass_id}-#{timestamp}")

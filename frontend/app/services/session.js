@@ -3,12 +3,20 @@ import jwtDecode from 'jwt-decode';
 
 export default class SessionService extends SimpleAuthSessionService {
   get idToken() {
-    if (!this.isAuthenticated) {
-      return null;
-    }
+    if (!this.isAuthenticated) { return null; }
 
-    const {id_token} = this.data.authenticated;
+    return jwtDecode(this.data.authenticated.id_token);
+  }
 
-    return jwtDecode(id_token);
+  get authorizationHeader() {
+    if (!this.isAuthenticated) { return {}; }
+
+    return {
+      Authorization: `Bearer ${this.data.authenticated.id_token}`
+    };
+  }
+
+  async renewToken() {
+    await this.authenticate('authenticator:appauth');
   }
 }

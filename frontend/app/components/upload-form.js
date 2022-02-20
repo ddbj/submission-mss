@@ -8,6 +8,21 @@ export default class UploadFormComponent extends Component {
 
   @tracked files           = [];
   @tracked crossoverErrors = new Map();
+  @tracked isCompleted     = false;
+
+  get isSubmitButtonEnabled() {
+    if (!this.files.length) { return false; }
+
+    for (const file of this.files) {
+      if (file.isParsing || file.errors.length) { return false; }
+    }
+
+    for (const errors of this.crossoverErrors.values()) {
+      if (errors.length) { return false; }
+    }
+
+    return true;
+  }
 
   @action addFile(file) {
     this.files = [...this.files, file];
@@ -26,14 +41,14 @@ export default class UploadFormComponent extends Component {
       body.append('files[]', blob.signed_id);
     }
 
-    await this.session.authenticate('authenticator:appauth');
+    await this.session.renewToken();
 
     await fetch(`/api/submissions/${this.args.model.id}/uploads`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this.session.data.authenticated.id_token}`
-      },
+      method:  'POST',
+      headers: this.session.authorizationHeader,
       body
     });
+
+    this.isCompleted = true;
   }
 }

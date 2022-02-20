@@ -24,7 +24,7 @@ RSpec.describe SubmissionMailer do
         ],
 
         uploads: uploaded ? [build(:upload)] : []
-      })
+      }).reload
     end
 
     example 'email_language=ja, uploaded=true' do
@@ -46,6 +46,11 @@ RSpec.describe SubmissionMailer do
 
         私共ではお送りいただいた情報について、国際塩基配列データベース (DDBJ/ENA/GenBank) が定める規則に従い査定作業を行います。
       BODY
+
+      expect(mail.newline_normalized_body).to include(<<~BODY)
+        Submission file の再提出を求められた際は、次の URL から upload してください。
+        http://mssform.example.com/home/submission/NSUB000042/upload
+      BODY
     end
 
     example 'email_language=en, uploaded=true' do
@@ -60,6 +65,11 @@ RSpec.describe SubmissionMailer do
         Thank you for using DDBJ Mass Submission System (MSS) for large-scale sequence data submission.
 
         We will check and annotate them on the basis of the manual and rules common to the DDBJ, EMBL-Bank, and GenBank.
+      BODY
+
+      expect(mail.newline_normalized_body).to include(<<~BODY)
+        If you are asked for re-submitting the files, upload the submission file(s) from the URL below.
+        http://mssform.example.com/home/submission/NSUB000042/upload
       BODY
     end
 
@@ -137,7 +147,7 @@ RSpec.describe SubmissionMailer do
           build(:other_person, :bob),
           build(:other_person, :carol)
         ]
-      })
+      }).reload
 
       mail = SubmissionMailer.with(submission:).curator_notification
 

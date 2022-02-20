@@ -19,6 +19,8 @@ class Scaffold < ActiveRecord::Migration[7.0]
       t.string  :description
       t.string  :email_language, null: false
 
+      t.virtual :mass_id, type: :string, as: %('NSUB' || LPAD(CAST(id AS text), 6, '0')), stored: true, index: true
+
       t.timestamps
     end
 

@@ -9,10 +9,9 @@ export default class SubmissionFormConfirmComponent extends Component {
     const {state, model, nav} = this.args;
 
     const blobs = await uploadProgressModal.performUpload(state.files.map(f => f.rawFile));
-
-    await this.session.authenticate('authenticator:appauth');
-
     model.files = blobs.map(({signed_id}) => signed_id);
+
+    await this.session.renewToken();
     await model.save();
 
     nav.goNext();

@@ -4,7 +4,6 @@ import { service } from '@ember/service';
 
 export default class IndexController extends Controller {
   @service appauth;
-  @service session;
 
   @action
   authenticate() {

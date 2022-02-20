@@ -13,10 +13,6 @@ class Submission < ApplicationRecord
     enumerize :email_language, in: enums.fetch(:locales).map    {|item| item.fetch(:key) }, i18n_scope: 'mssform.locales'
   end
 
-  def mass_id
-    "NSUB#{id.to_s.rjust(6, '0')}"
-  end
-
   def to_working_sheet_row
     {
       mass_id:                    mass_id,

@@ -1,19 +1,34 @@
-{{page-title '登録ファイルの再アップロード'}}
+{{page-title 'アップロード'}}
 
-<h1 class="display-6 my-4">登録ファイルの再アップロード</h1>
+{{#if this.isCompleted}}
+  <h1 class="display-6 my-4">アップロード完了</h1>
 
-<UploadProgressModal as |modal|>
-  <form {{on 'submit' (prevent-default (fn this.submit modal))}}>
-    <div class="card">
-      <div class="card-body">
-        <FileList @files={{this.files}} @crossoverErrors={{this.crossoverErrors}} @onAdd={{this.addFile}} @onRemove={{this.removeFile}} />
+  <p>mass@ddbj.nig.ac.jp より、入力いただいたアドレス宛にメールが通知されます。メール添付での登録ファイル(再)送付はご遠慮ください。</p>
+
+  <LinkTo @route="home">ホームに戻る</LinkTo>
+{{else}}
+  <h1 class="display-6 my-4">アップロード</h1>
+
+  <p>この画面から MSS 申し込み ID <strong>{{@model.id}}</strong> の登録ファイルをアップロードできます。</p>
+
+  <UploadProgressModal as |modal|>
+    <form {{on 'submit' (prevent-default (fn this.submit modal))}}>
+      <div class="card">
+        <div class="card-body">
+          <ul>
+            <li>登録ファイルを圧縮せずにアップロードしてください。</li>
+            <li>ファイル拡張子は <code>.ann</code> (アノテーションファイル)、<code>.fasta</code> (塩基配列) にしてください。</li>
+          </ul>
+
+          <FileList @files={{this.files}} @crossoverErrors={{this.crossoverErrors}} @onAdd={{this.addFile}} @onRemove={{this.removeFile}} />
+        </div>
       </div>
-    </div>
 
-    <hr />
+      <hr />
 
-    <div class="text-end">
-      <button type="submit" class="btn btn-primary px-5">アップロード</button>
-    </div>
-  </form>
-</UploadProgressModal>
+      <div class="text-end">
+        <button type="submit" disabled={{not this.isSubmitButtonEnabled}} class="btn btn-primary px-5">アップロード</button>
+      </div>
+    </form>
+  </UploadProgressModal>
+{{/if}}

@@ -1,4 +1,12 @@
 class SubmissionsController < ApplicationController
+  def show
+    if current_user.submissions.where(mass_id: params.require(:mass_id)).exists?
+      head :no_content
+    else
+      head :not_found
+    end
+  end
+
   def create
     @submission = current_user.submissions.create!(submission_params.except(:files, :contact_person, :other_people)) {|submission|
       files, contact_person, other_people = submission_params.values_at(:files, :contact_person, :other_people)
@@ -10,7 +18,7 @@ class SubmissionsController < ApplicationController
       other_people.each_with_index do |person, i|
         submission.other_people.build **person, position: i
       end
-    }
+    }.reload
 
     ProcessSubmissionJob.perform_later @submission
   end

@@ -60,7 +60,7 @@ RSpec.describe ProcessSubmissionJob do
           ]
         })
       ]
-    })
+    }).reload
 
     stub_request(:post, 'https://www.googleapis.com/oauth2/v4/token').to_return(
       headers: {

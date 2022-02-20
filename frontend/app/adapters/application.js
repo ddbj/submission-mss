@@ -9,8 +9,6 @@ export default class ApplicationAdapter extends ActiveModelAdapter {
   get headers() {
     if (!this.session.isAuthenticated) { throw new Error('unauthenticated'); }
 
-    return {
-      Authorization: `Bearer ${this.session.data.authenticated.id_token}`
-    };
+    return this.session.authorizationHeader;
   }
 }

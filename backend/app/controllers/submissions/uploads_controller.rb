@@ -1,9 +1,9 @@
 class Submissions::UploadsController < ApplicationController
   def create
-    id         = params[:submission_mass_id].delete_prefix('NSUB')
-    submission = current_user.submissions.find(id)
+    submission = current_user.submissions.find_by!(mass_id: params.require(:submission_mass_id))
+    upload     = submission.uploads.create!(params.permit(files: []))
 
-    submission.uploads.create! params.permit(files: [])
+    UploadJob.perform_later upload
 
     head :ok
   end
