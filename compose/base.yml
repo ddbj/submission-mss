@@ -26,8 +26,10 @@ services:
       args:
         APP_GID:
         APP_UID:
+        NODE_VERSION:
         OPENID_CLIENT_ID:
         OPENID_CONFIGURATION_ENDPOINT:
+        RUBY_VERSION:
 
     environment:
       DATABASE_URL:                postgresql://postgres@postgres/mssform

@@ -1,3 +1,6 @@
+ARG NODE_VERSION
+ARG RUBY_VERSION
+
 FROM curlimages/curl:latest AS openid-configuration
 
 ARG OPENID_CONFIGURATION_ENDPOINT
@@ -7,7 +10,7 @@ RUN curl ${OPENID_CONFIGURATION_ENDPOINT:?} > ./openid-configuration.json
 
 ###
 
-FROM node:16 AS frontend
+FROM node:${NODE_VERSION:?} AS frontend
 
 ARG OPENID_CLIENT_ID
 
@@ -24,7 +27,7 @@ RUN yarn build
 
 ###
 
-FROM ruby:3.1.1
+FROM ruby:${RUBY_VERSION:?}
 
 ARG APP_GID
 ARG APP_UID
