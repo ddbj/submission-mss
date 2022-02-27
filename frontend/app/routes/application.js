@@ -10,11 +10,14 @@ export default class ApplicationRoute extends Route {
   async beforeModel() {
     await this.session.setup();
 
-    for (const locale of ['en', 'ja']) {
+    const availableLocales = ['en', 'ja'];
+    const currentLocale    = navigator.languages.find(l => availableLocales.includes(l)) || 'ja';
+
+    for (const locale of availableLocales) {
       this.intl.addTranslations(locale, enumTranslations(locale));
     }
 
-    this.intl.setLocale('ja');
+    this.intl.setLocale(currentLocale);
   }
 }
 
