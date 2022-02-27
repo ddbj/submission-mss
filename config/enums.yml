@@ -11,7 +11,7 @@ locales:
 
 data_types:
   - key: wgs
-    label: 'WGS: Whole Genome Shutgun'
+    label: 'WGS: Whole Genome Shotgun'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/wgs-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/wgs.html
