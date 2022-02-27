@@ -36,7 +36,7 @@ RSpec.describe SubmissionMailer do
       expect(mail.to).to   contain_exactly('alice+contact@example.com')
       expect(mail.cc).to   contain_exactly('bob@example.com', 'carol@example.com')
 
-      expect(mail.subject).to eq('[DDBJ:NSUB000042] WGS: draft genome')
+      expect(mail.subject).to eq('[DDBJ:NSUB000042] WGS: Whole Genome Shutgun')
 
       expect(mail.newline_normalized_body).to include(<<~BODY)
         Wonderland Inc.
@@ -154,7 +154,7 @@ RSpec.describe SubmissionMailer do
       expect(mail.from).to contain_exactly('mass@ddbj.nig.ac.jp')
       expect(mail.to).to   contain_exactly('mass@ddbj.nig.ac.jp')
 
-      expect(mail.subject).to eq('[DDBJ:NSUB000042] WGS: draft genome')
+      expect(mail.subject).to eq('[DDBJ:NSUB000042] WGS: Whole Genome Shutgun')
 
       expect(mail.newline_normalized_body).to include(<<~BODY)
         ## mass-id
