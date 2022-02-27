@@ -7,17 +7,22 @@ export default class ApplicationRoute extends Route {
   @service intl;
   @service session;
 
+  availableLocales = ['en', 'ja'];
+  queryParams      = {locale: null};
+
   async beforeModel() {
     await this.session.setup();
 
-    const availableLocales = ['en', 'ja'];
-    const currentLocale    = navigator.languages.find(l => availableLocales.includes(l)) || 'ja';
 
-    for (const locale of availableLocales) {
+    for (const locale of this.availableLocales) {
       this.intl.addTranslations(locale, enumTranslations(locale));
     }
+  }
 
-    this.intl.setLocale(currentLocale);
+  afterModel() {
+    const params = this.paramsFor('application');
+
+    this.intl.setLocale([params.locale, ...navigator.languages, 'ja']);
   }
 }
 
