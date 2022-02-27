@@ -49,7 +49,7 @@ RSpec.describe SubmissionMailer do
 
       expect(mail.newline_normalized_body).to include(<<~BODY)
         Submission file の再提出を求められた際は、次の URL から upload してください。
-        http://mssform.example.com/home/submission/NSUB000042/upload
+        http://mssform.example.com/home/submission/NSUB000042/upload?locale=ja
       BODY
     end
 
@@ -69,7 +69,7 @@ RSpec.describe SubmissionMailer do
 
       expect(mail.newline_normalized_body).to include(<<~BODY)
         If you are asked for re-submitting the files, upload the submission file(s) from the URL below.
-        http://mssform.example.com/home/submission/NSUB000042/upload
+        http://mssform.example.com/home/submission/NSUB000042/upload?locale=en
       BODY
     end
 
@@ -91,7 +91,7 @@ RSpec.describe SubmissionMailer do
 
       expect(mail.newline_normalized_body).to include(<<~BODY)
         Submission file(s)完成後、以下の URL から upload してください。
-        http://mssform.example.com/home/submission/NSUB000042/upload
+        http://mssform.example.com/home/submission/NSUB000042/upload?locale=ja
       BODY
     end
 
@@ -113,7 +113,7 @@ RSpec.describe SubmissionMailer do
 
       expect(mail.newline_normalized_body).to include(<<~BODY)
         Upload the submission file(s) from the URL below, after you completely create them.
-        http://mssform.example.com/home/submission/NSUB000042/upload
+        http://mssform.example.com/home/submission/NSUB000042/upload?locale=en
       BODY
     end
   end
