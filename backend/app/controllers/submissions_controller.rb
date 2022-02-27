@@ -24,7 +24,7 @@ class SubmissionsController < ApplicationController
   end
 
   def last_submitted
-    @submission = current_user.submissions.order(:id).last
+    @submission = current_user.submissions.order(:id).last!
   end
 
   private

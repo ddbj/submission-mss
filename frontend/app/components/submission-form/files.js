@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { NotFoundError } from '@ember-data/adapter/error';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 
@@ -68,7 +69,17 @@ export default class SubmissionFormFilesComponent extends Component {
   }
 
   async fillDataFromLastSubmission() {
-    const last = await this.store.queryRecord('submission', {lastSubmitted: true});
+    let last;
+
+    try {
+      last = await this.store.queryRecord('submission', {lastSubmitted: true});
+    } catch (e) {
+      if (e instanceof NotFoundError) {
+        // do nothing
+      } else {
+        throw e;
+      }
+    }
 
     if (!last) { return; }
 
