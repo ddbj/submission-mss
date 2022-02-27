@@ -1,7 +1,10 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 
 export default class SubmissionFormFilesComponent extends Component {
+  @service store;
+
   get crossoverErrors() {
     const {files} = this.args.state;
     const errors  = new Map();
@@ -57,13 +60,37 @@ export default class SubmissionFormFilesComponent extends Component {
     state.files = state.files.filter(f => f !== file);
   }
 
-  @action goNext() {
-    this.setParsedData();
+  @action async goNext() {
+    await this.fillDataFromLastSubmission();
+    this.fillDataFromSubmissionFiles();
 
     this.args.nav.goNext();
   }
 
-  setParsedData() {
+  async fillDataFromLastSubmission() {
+    const last = await this.store.queryRecord('submission', {lastSubmitted: true});
+
+    if (!last) { return; }
+
+    const {model} = this.args;
+
+    model.contactPerson.email       = last.contactPerson.email;
+    model.contactPerson.fullName    = last.contactPerson.fullName;
+    model.contactPerson.affiliation = last.contactPerson.affiliation;
+
+    for (const person of last.otherPeople.toArray()) {
+      model.otherPeople.createRecord({
+        email:       person.email,
+        fullName:    person.fullName,
+        affiliation: person.affiliation
+      });
+    }
+
+    model.sequencer     = last.sequencer;
+    model.emailLanguage = last.emailLanguage;
+  }
+
+  fillDataFromSubmissionFiles() {
     const {state, model}  = this.args;
     const {uploadType, files} = state;
 

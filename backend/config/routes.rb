@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   scope :api do
     resources :submissions, only: %i(show create), param: :mass_id do
+      collection do
+        get :last_submitted
+      end
+
       scope module: :submissions do
         resources :uploads, only: :create
       end

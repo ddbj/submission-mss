@@ -1,0 +1,13 @@
+{
+  submission: {
+    id: @submission.mass_id,
+
+    contact_person: @submission.contact_person.slice(:id, :email, :full_name, :affiliation),
+
+    other_people: @submission.other_people.map {|person|
+      person.slice(:id, :email, :full_name)
+    },
+
+    **@submission.slice(:sequencer, :email_language)
+  }
+}

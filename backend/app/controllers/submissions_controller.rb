@@ -23,6 +23,10 @@ class SubmissionsController < ApplicationController
     ProcessSubmissionJob.perform_later @submission
   end
 
+  def last_submitted
+    @submission = current_user.submissions.order(:id).last
+  end
+
   private
 
   def submission_params
