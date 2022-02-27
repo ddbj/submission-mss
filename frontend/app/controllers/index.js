@@ -4,9 +4,10 @@ import { service } from '@ember/service';
 
 export default class IndexController extends Controller {
   @service appauth;
+  @service router;
 
   @action
   authenticate() {
-    this.appauth.makeAuthorizationRequest();
+    this.appauth.makeAuthorizationRequest(this.router.currentURL);
   }
 }
