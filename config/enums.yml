@@ -11,13 +11,13 @@ locales:
 
 data_types:
   - key: wgs
-    label: 'WGS: draft genome'
+    label: 'WGS: Whole Genome Shutgun'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/wgs-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/wgs.html
 
   - key: gnm
-    label: 'GNM: complete or nearly complete genome'
+    label: 'GNM: Finished Level Genome sequence, non-WGS'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/genome-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/genome.html
@@ -29,7 +29,7 @@ data_types:
       ja: https://www.ddbj.nig.ac.jp/ddbj/metagenome-assembly.html
 
   - key: sag
-    label: 'SAG: Single amplified genome'
+    label: 'SAG: Single Amplified Genome'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/single-amplified-genome-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/single-amplified-genome.html
@@ -41,7 +41,7 @@ data_types:
       ja: https://www.ddbj.nig.ac.jp/ddbj/tls.html
 
   - key: htg
-    label: 'HTG: High Throughput Genomic'
+    label: 'HTG: High Throughput Genomic Sequences'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/htg-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/htg.html
@@ -53,25 +53,19 @@ data_types:
       ja: https://www.ddbj.nig.ac.jp/ddbj/tsa.html
 
   - key: htc
-    label: 'HTC: full length cDNA'
+    label: 'HTC: High Throughput cDNA Sequences'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/htc-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/htc.html
 
   - key: est
-    label: 'EST: Expressed Sequence tags'
+    label: 'EST: Expressed Sequence Tags'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/ddbj/est-e.html
       ja: https://www.ddbj.nig.ac.jp/ddbj/est.html
 
-  - key: dna
-    label: 'DNA: Gene sequences'
-    ddbj_page_url:
-      en: https://www.ddbj.nig.ac.jp/submission-e.html
-      ja: https://www.ddbj.nig.ac.jp/submission.html
-
-  - key: rna
-    label: 'RNA: Gene sequences'
+  - key: misc
+    label: 'MISC: Sequences that are not included in above types'
     ddbj_page_url:
       en: https://www.ddbj.nig.ac.jp/submission-e.html
       ja: https://www.ddbj.nig.ac.jp/submission.html
