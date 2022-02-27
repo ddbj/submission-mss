@@ -17,8 +17,8 @@
 
           <ul class="dropdown-menu" aria-labelledby="navbarLang">
             <li>
-              <a class="dropdown-item" href>日本語</a>
-              <a class="dropdown-item" href>English</a>
+              <a class="dropdown-item" href {{on 'click' (prevent-default (fn this.changeLocale 'ja'))}}>日本語</a>
+              <a class="dropdown-item" href {{on 'click' (prevent-default (fn this.changeLocale 'en'))}}>English</a>
             </li>
           </ul>
         </li>

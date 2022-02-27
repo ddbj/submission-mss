@@ -1,3 +1,5 @@
+home: ホーム
+
 steps:
   prerequisite: 前提条件の確認
   files:        登録ファイルの選択
