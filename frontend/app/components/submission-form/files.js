@@ -89,16 +89,23 @@ export default class SubmissionFormFilesComponent extends Component {
     model.contactPerson.fullName    = last.contactPerson.fullName;
     model.contactPerson.affiliation = last.contactPerson.affiliation;
 
-    for (const person of last.otherPeople.toArray()) {
-      model.otherPeople.createRecord({
-        email:       person.email,
-        fullName:    person.fullName,
-        affiliation: person.affiliation
-      });
+    if (model.otherPeople.length === 0) {
+      for (const person of last.otherPeople.toArray()) {
+        model.otherPeople.createRecord({
+          email:       person.email,
+          fullName:    person.fullName,
+          affiliation: person.affiliation
+        });
+      }
     }
 
-    model.sequencer     = last.sequencer;
-    model.emailLanguage = last.emailLanguage;
+    if (!model.sequencer) {
+      model.sequencer = last.sequencer;
+    }
+
+    if (!model.emailLanguage) {
+      model.emailLanguage = last.emailLanguage;
+    }
   }
 
   fillDataFromSubmissionFiles() {
