@@ -38,6 +38,7 @@ services:
       GOOGLE_CLIENT_EMAIL:
       GOOGLE_CLIENT_ID:
       GOOGLE_PRIVATE_KEY:
+      MAIL_ALLOWED_DOMAINS:
       MEMCACHE_SERVERS:            memcached
       MINIO_ACCESS_KEY_ID:
       MINIO_BUCKET:                uploads
