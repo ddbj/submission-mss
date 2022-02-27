@@ -1,12 +1,16 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 import 'bootstrap/js/src/dropdown';
 
 export default class ApplicationController extends Controller {
   @service session;
-  @service intl;
+
+  @tracked locale;
+
+  queryParams = ['locale'];
 
   @action
   async invalidateSession() {
@@ -15,6 +19,6 @@ export default class ApplicationController extends Controller {
 
   @action
   changeLocale(locale) {
-    this.intl.setLocale(locale);
+    this.locale = locale;
   }
 }

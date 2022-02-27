@@ -5,24 +5,35 @@ import ENV from 'mssform/config/environment';
 
 export default class ApplicationRoute extends Route {
   @service intl;
+  @service router;
   @service session;
 
-  availableLocales = ['en', 'ja'];
-  queryParams      = {locale: null};
+  queryParams = {
+    locale: {refreshModel: true, replace: true}
+  };
 
-  async beforeModel() {
+  availableLocales = ['en', 'ja'];
+
+  async beforeModel(transition) {
     await this.session.setup();
 
+    const {queryParams} = transition.to;
 
     for (const locale of this.availableLocales) {
       this.intl.addTranslations(locale, enumTranslations(locale));
     }
+
+    const locale = [queryParams.locale, ...navigator.languages, 'ja'].filter(l => this.availableLocales.includes(l)).uniq();
+
+    this.intl.setLocale(locale);
   }
 
-  afterModel() {
-    const params = this.paramsFor('application');
+  setupController(_controller, _model, transition) {
+    const {queryParams, name} = transition.to;
 
-    this.intl.setLocale([params.locale, ...navigator.languages, 'ja']);
+    if (this.intl.primaryLocale !== queryParams.locale) {
+      this.router.replaceWith(name, {queryParams: {locale: this.intl.primaryLocale}});
+    }
   }
 }
 
