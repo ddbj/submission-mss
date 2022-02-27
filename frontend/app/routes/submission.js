@@ -6,7 +6,7 @@ export default class SubmissionRoute extends Route {
   @service session;
 
   async model({id}) {
-    this.session.renewToken();
+    await this.session.renewToken();
 
     const res = await fetch(`/api/submissions/${id}`, {
       method:  'HEAD',
