@@ -12,18 +12,16 @@ export default class ApplicationRoute extends Route {
     locale: {refreshModel: true, replace: true}
   };
 
-  availableLocales = ['en', 'ja'];
-
   async beforeModel(transition) {
     await this.session.setup();
 
     const {queryParams} = transition.to;
 
-    for (const locale of this.availableLocales) {
+    for (const locale of this.intl.locales) {
       this.intl.addTranslations(locale, enumTranslations(locale));
     }
 
-    const locale = [queryParams.locale, ...navigator.languages, 'ja'].filter(l => this.availableLocales.includes(l)).uniq();
+    const locale = [queryParams.locale, ...navigator.languages, 'ja'].filter(l => this.intl.locales.includes(l)).uniq();
 
     this.intl.setLocale(locale);
   }
