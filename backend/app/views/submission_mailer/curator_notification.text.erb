@@ -22,6 +22,9 @@
 ## D-way_account
 <%= @row.fetch(:dway_account) %>
 
+## D-way_account_email
+<%= @row.fetch(:dway_account_email) %>
+
 ## data_arrival_date
 <% @submission.uploads.each do |upload| -%>
 <%= upload.timestamp %>: <%= upload.directory_path %>

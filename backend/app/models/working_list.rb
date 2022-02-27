@@ -16,7 +16,7 @@ class WorkingList
 
   def add_new_submission(submission)
     range = Google::Apis::SheetsV4::ValueRange.new(values: [
-      submission.to_working_sheet_row.values
+      to_row(submission).values
     ])
 
     @service.append_spreadsheet_value @sheet_id, "#{@sheet_name}!A1", range, **{
@@ -31,13 +31,50 @@ class WorkingList
     raise submission.mass_id unless row
 
     range = Google::Apis::SheetsV4::ValueRange.new(values: [
-      [submission.to_working_sheet_row.fetch(:data_arrival_date)]
+      [to_row(submission).fetch(:data_arrival_date)]
     ])
 
     @service.update_spreadsheet_value @sheet_id, "#{@sheet_name}!K#{row}", range, **{
       value_input_option: 'RAW'
     }
   end
+
+  def to_row(submission)
+    {
+      mass_id:                    submission.mass_id,
+      curator:                    nil,
+      created_date:               submission.created_at.to_date,
+      status:                     nil,
+      description:                submission.description,
+      contact_person_email:       submission.contact_person.email,
+      contact_person_full_name:   submission.contact_person.full_name,
+      contact_person_affiliation: submission.contact_person.affiliation,
+      other_person:               submission.other_people.order(:position).map(&:email_address_with_name).join('; '),
+      dway_account:               submission.user.id_token[:preferred_username],
+      dway_account_email:         submission.user.id_token[:email],
+      data_arrival_date:          submission.uploads.map(&:timestamp).join('; '),
+      check_start_date:           nil,
+      finish_date:                nil,
+      sequencer:                  submission.sequencer_text,
+      annotation_pipeline:        submission.dfast? ? 'DFAST' : nil,
+      hup:                        submission.hold_date || 'non-HUP',
+      tpa:                        submission.tpa?,
+      data_type:                  submission.data_type.upcase,
+      total_entry:                submission.entries_count,
+      accession:                  nil,
+      prefix_count:               nil,
+      div:                        nil,
+      bioproject:                 nil,
+      biosample:                  nil,
+      drr:                        nil,
+      language:                   submission.email_language,
+      mail_j:                     nil,
+      mail_e:                     nil,
+      memo:                       nil
+    }
+  end
+
+  private
 
   def find_row_number_by_mass_id(target_mass_id, offset: 1, limit: 100)
     res    = @service.batch_get_spreadsheet_values(@sheet_id, ranges: "#{@sheet_name}!A#{offset}:A#{offset + limit - 1}")

@@ -33,8 +33,8 @@ RSpec.describe SubmissionMailer do
       mail = SubmissionMailer.with(submission:).submitter_confirmation
 
       expect(mail.from).to contain_exactly('mass@ddbj.nig.ac.jp')
-      expect(mail.to).to   contain_exactly('alice+contact@example.com')
-      expect(mail.cc).to   contain_exactly('bob@example.com', 'carol@example.com')
+      expect(mail.to).to   contain_exactly('alice+idp@example.com')
+      expect(mail.cc).to   contain_exactly('alice+contact@foo.example.com', 'bob@bar.example.com', 'carol@baz.example.com')
 
       expect(mail.subject).to eq('[DDBJ:NSUB000042] WGS: Whole Genome Shutgun')
 
@@ -116,6 +116,18 @@ RSpec.describe SubmissionMailer do
         http://mssform.example.com/home/submission/NSUB000042/upload?locale=en
       BODY
     end
+
+    example 'allowed domains' do
+      ClimateControl.modify MAIL_ALLOWED_DOMAINS: 'foo.example.com,baz.example.com' do
+        submission = create_submission(email_language: 'ja', uploaded: true)
+
+        mail = SubmissionMailer.with(submission:).submitter_confirmation
+
+        expect(mail.from).to contain_exactly('mass@ddbj.nig.ac.jp')
+        expect(mail.to).to   contain_exactly('alice+idp@example.com')
+        expect(mail.cc).to   contain_exactly('alice+contact@foo.example.com', 'carol@baz.example.com')
+      end
+    end
   end
 
   describe 'curator_notification' do
@@ -167,7 +179,7 @@ RSpec.describe SubmissionMailer do
         some description
 
         ## contact_email
-        alice+contact@example.com
+        alice+contact@foo.example.com
 
         ## contact_person_name
         Alice Liddell
@@ -176,10 +188,13 @@ RSpec.describe SubmissionMailer do
         Wonderland Inc.
 
         ## other_person
-        Bob <bob@example.com>; Carol <carol@example.com>
+        Bob <bob@bar.example.com>; Carol <carol@baz.example.com>
 
         ## D-way_account
         alice-liddell
+
+        ## D-way_account_email
+        alice+idp@example.com
 
         ## data_arrival_date
         20200102-123456: /path/to/submissions/NSUB000042/20200102-123456
