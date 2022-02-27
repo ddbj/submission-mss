@@ -7,13 +7,7 @@ RSpec.describe ProcessSubmissionJob do
 
   around do |example|
     Dir.mktmpdir do |dir|
-      env = {
-        MSS_WORKING_LIST_SHEET_ID:   'SHEET_ID',
-        MSS_WORKING_LIST_SHEET_NAME: 'SHEET_NAME',
-        SUBMISSIONS_DIR:             dir
-      }
-
-      ClimateControl.modify(env, &example)
+      ClimateControl.modify SUBMISSIONS_DIR: dir, &example
     end
   end
 
