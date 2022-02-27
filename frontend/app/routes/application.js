@@ -21,9 +21,9 @@ export default class ApplicationRoute extends Route {
       this.intl.addTranslations(locale, enumTranslations(locale));
     }
 
-    const locale = [queryParams.locale, ...navigator.languages, 'ja'].filter(l => this.intl.locales.includes(l)).uniq();
+    const locale = [queryParams.locale, ...navigator.languages].find(l => this.intl.locales.includes(l));
 
-    this.intl.setLocale(locale);
+    this.intl.setLocale(locale || 'ja');
   }
 
   setupController(_controller, _model, transition) {
