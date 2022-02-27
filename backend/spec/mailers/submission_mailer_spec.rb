@@ -39,8 +39,7 @@ RSpec.describe SubmissionMailer do
       expect(mail.subject).to eq('[DDBJ:NSUB000042] WGS: Whole Genome Shotgun')
 
       expect(mail.newline_normalized_body).to include(<<~BODY)
-        Wonderland Inc.
-        Alice Liddell 様
+        ご登録者 様
 
         大規模塩基配列データ登録システム Mass Submission System (MSS) をご利用下さいまして、ありがとうございます。
 
@@ -59,8 +58,7 @@ RSpec.describe SubmissionMailer do
       mail = SubmissionMailer.with(submission:).submitter_confirmation
 
       expect(mail.newline_normalized_body).to include(<<~BODY)
-        Wonderland Inc.
-        Dear Dr. Alice Liddell,
+        Dear Submitter,
 
         Thank you for using DDBJ Mass Submission System (MSS) for large-scale sequence data submission.
 
