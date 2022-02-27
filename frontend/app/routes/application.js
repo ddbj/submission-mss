@@ -26,6 +26,7 @@ export default class ApplicationRoute extends Route {
     this.intl.setLocale(locale || 'ja');
   }
 
+  // XXX https://github.com/emberjs/ember.js/issues/18577
   setupController(_controller, _model, transition) {
     const {queryParams, name} = transition.to;
 
