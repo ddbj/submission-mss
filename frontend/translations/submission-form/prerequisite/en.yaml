@@ -1,0 +1,30 @@
+description-html: |
+  <p>
+    Acceptable nucleotide sequences<br />
+    <a href="https://www.ddbj.nig.ac.jp/documents/data-categories-e.html" target="_blank" rel="noopener noreferrer">https://www.ddbj.nig.ac.jp/documents/data-categories-e.html</a>
+  </p>
+
+  <p>You can apply for the submission or upload the submission files when the submission matches the following requirements.You must separate into some submissions and apply for MSS with each submission when the submission does not match any of the following requirements.</p>
+
+  <ul>
+    <li>same contact person</li>
+    <li>same submission data type</li>
+    <li>same publication date</li>
+    <li>same BioProject ID
+  </ul>
+
+q-1: Which of the following explanations applies to the nucleotide sequence you are applying for?
+
+a1-1: I have determined the nucleotide sequence by my study.
+a1-2: I have created the nucleotide sequences by assembling from the publicly available data (TPA).
+
+q-2: If you want to apply for TPA submission in MSS, information about the sequence creation for which you are applying must be published in a peer-reviewed paper. Please select the appropriate one.
+
+a2-1: I plan to (or have already) submitted a paper to a peer-reviewed academic journal.
+a2-2: Not planned.
+
+about-tpa-url: https://www.ddbj.nig.ac.jp/ddbj/tpa-e.html
+about-tpa:     About TPA
+
+unacceptable: You cannot proceed with the TPA application unless you prepare a paper.
+back-to-home: Back to home

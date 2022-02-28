@@ -1,1 +1,14 @@
 home: Home
+
+title: New Submission
+
+steps:
+  prerequisite: Prerequisites
+  files:        Files
+  metadata:     Metadata
+  confirm:      Confirmation
+  complete:     Complete
+
+nav:
+  next: Next
+  prev: Back

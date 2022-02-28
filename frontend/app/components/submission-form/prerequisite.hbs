@@ -1,21 +1,10 @@
-<p>
-  登録可能なデータは次の通りです。<br />
-  <a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept" target="_blank" rel="noopener noreferrer">https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept</a>
-</p>
-
-<p>以下のすべてに該当する場合のみ申し込みできます。いずれか該当しない場合は submission を分け、submsssion ごとに MSS 申し込みを行ってください。</p>
-
-<ul>
-  <li>コンタクトパーソンが同一である</li>
-  <li>登録データ種別が1種類である</li>
-  <li>公開予定日が同一である</li>
-</ul>
+{{t 'submission-form.prerequisite.description-html' htmlSafe=true}}
 
 <form {{on 'submit' (prevent-default @nav.goNext)}}>
   <div class="vstack gap-3">
     <div class="card">
       <div class="card-body">
-        <p>今回登録する配列について当てはまるものを選択してください。</p>
+        <p>{{t 'submission-form.prerequisite.q-1'}}</p>
 
         <RadioGroup as |group|>
           <div class="form-check">
@@ -52,9 +41,7 @@
     {{#if @state.maybeTpa}}
       <div class="card">
         <div class="card-body">
-          <p>
-            MSS で TPA の登録を申請する場合、申請対象の配列作成に関する情報が査読付き論文として公開される必要があります。当てはまるものを選択してください。
-          </p>
+          <p>{{t 'submission-form.prerequisite.q-2'}}</p>
 
           <RadioGroup as |group|>
             <div class="form-check">
@@ -85,12 +72,12 @@
   <hr />
 
   {{#if (and @state.maybeTpa (eq @model.tpa false))}}
-    <p>TPAの場合、論文を準備しないのであれば申し込みできません。</p>
+    <p>{{t 'submission-form.prerequisite.unacceptable'}}</p>
 
-    <LinkTo @route="home">ホームに戻る</LinkTo>
+    <LinkTo @route="home">{{t 'submission-form.prerequisite.back-to-home'}}</LinkTo>
   {{else}}
     <div class="hstack gap-3 justify-content-end">
-      <button type="submit" class="btn btn-primary px-5">次へ</button>
+      <button type="submit" class="btn btn-primary px-5">{{t 'submission-form.nav.next'}}</button>
     </div>
   {{/if}}
 </form>

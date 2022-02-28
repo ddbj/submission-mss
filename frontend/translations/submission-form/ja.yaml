@@ -1,8 +1,14 @@
 home: ホーム
 
+title: 新規登録申請
+
 steps:
   prerequisite: 前提条件の確認
   files:        登録ファイルの選択
   metadata:     情報の入力
   confirm:      申請内容の確認
   complete:     完了
+
+nav:
+  next: 次へ
+  back: 戻る
