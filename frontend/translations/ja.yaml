@@ -106,9 +106,7 @@ submission-form:
 
   files:
     q-html: |
-      <p>
-        <a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener noreferrer">UME (Parser, transChecker)</a> でチェック済みの登録ファイルを作成済みであればアップロードしてください。
-      </p>
+      <p><a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener noreferrer">UME (Parser, transChecker)</a> でチェック済みの登録ファイルを作成済みであればアップロードしてください。</p>
 
     a1: DFAST で作成した Bacterial complete genome または WGS の登録ファイルをアップロードする
     a2: DFAST を使わず作成した登録ファイルをアップロードする
@@ -126,8 +124,43 @@ submission-form:
       </dl>
 
   metadata:
-    datatype-text-html: |
+    required: 必須
+    optional: 任意
+
+    entries-html: |
+      <p>すべての配列ファイルの合計エントリ数と、<a href="https://www.ddbj.nig.ac.jp/documents/data-release-policy.html" target="_blank" rel="noopener noreferrer">公開予定日 (Hold date)</a> の希望があれば入力してください。</p>
+
+    entries-count: エントリ数
+    hold-date: 公開予定日
+    release-immediately: 即時公開
+
+    contact-person-html: |
+      <p>登録ファイルの contact 行に記載する1名の登録責任者（コンタクトパーソン）について入力してください。</p>
+
+    email: E-mail アドレス
+    full-name: フルネーム
+    affiliation: 所属名 (英語表記)
+
+    other-person-html: |
+      <p>コンタクトパーソン以外に登録担当がおり、Accession、公開お知らせ通知を受けたい場合は、このセクションに記入してください。</p>
+
+    remove: 削除
+    no-other-person: 登録されていません。
+    add: 追加
+
+    sequencer: 塩基配列決定に使用したシークエンサーのタイプ
+    data-type: データタイプ
+
+    data-type-text-html: |
       <a href="https://www.ddbj.nig.ac.jp/ddbj/data-categories.html#sub" target="_blank" rel="noopener noreferrer">データ種別</a>を選択してください。種別を判断できない場合、<a href="https://www.ddbj.nig.ac.jp/submission.html" target="_blank" rel="noopener noreferrer">登録ナビゲーションツール</a>をご利用ください。
+
+    description: 補足説明
+    description-placeholder: e.g. 活性汚泥から単離した Dibenzothiophene分解能を有するPseudomonas属ストレイン5種のドラフトゲノム配列にアノテーションをつけたもの
+
+    description-text-html: |
+      Submission データの補足説明をここに記入してください（日本語可）。生物の説明（common nameや性質など）、単離生物由来でない場合は塩基配列をどうやって得たのか、そのほか、DDBJ キュレータに知らせたいこと等を入力できます。DDBJ に登録した配列を更新する場合は対象の Accession を記入してください。
+
+    email-language: 通知メールの言語
 
 file-list:
   add-files: ファイルの追加

@@ -1,23 +1,31 @@
 <form class="vstack gap-3" {{on 'submit' (prevent-default @nav.goNext)}}>
   <div class="card">
     <div class="card-body bg-lighth">
-      <p>すべての配列ファイルの合計エントリ数と、公開予定日 (Hold date) の希望があれば入力してください。</p>
+      {{t 'submission-form.metadata.entries-html' htmlSafe=true}}
 
       <div class="row row-cols-2">
         <div class="col">
-          <label for="entriesCount" class="form-label">エントリ数 <small class="text-danger">必須</small></label>
+          <label for="entriesCount" class="form-label">
+            {{t 'submission-form.metadata.entries-count'}}
+            <small class="text-danger">{{t 'submission-form.metadata.required'}}</small>
+          </label>
+
           <input type="number" value={{@model.entriesCount}} readonly={{not (is-empty @state.files)}} required min="1" class="form-control" id="entriesCount" {{on 'change' (pick 'target.value' (set @model 'entriesCount'))}} />
         </div>
 
         <div class="col vstack gap-1">
           <div>
-            <label for="holdDate" class="form-label">公開予定日 <small class="text-muted">任意</small></label>
+            <label for="holdDate" class="form-label">
+              {{t 'submission-form.metadata.hold-date'}}
+              <small class="text-muted">{{t 'submission-form.metadata.optional'}}</small>
+            </label>
+
             <input type="date" value={{@model.holdDate}} readonly={{not (is-empty @state.files)}} disabled={{@state.releaseImmediately}} required class="form-control" id="holdDate" {{on 'change' (pick 'target.value' (set @model 'holdDate'))}} />
           </div>
 
           <div class="form-check">
             <input type="checkbox" checked={{@state.releaseImmediately}} disabled={{not (is-empty @state.files)}} class="form-check-input" id="releaseImmediately" {{on 'change' (pick 'target.checked' this.setReleaseImmediately)}} />
-            <label for="releaseImmediately" class="form-check-label">即時公開</label>
+            <label for="releaseImmediately" class="form-check-label">{{t 'submission-form.metadata.release-immediately'}}</label>
           </div>
         </div>
       </div>
@@ -26,22 +34,34 @@
 
   <div class="card">
     <div class="card-body">
-      <p>登録ファイルの contact 行に記載する1名の登録責任者（コンタクトパーソン）について記載してください。</p>
+      {{t 'submission-form.metadata.contact-person-html' htmlSafe=true}}
 
       <div class="row row-cols-2 gy-3">
         {{#let @model.contactPerson as |person|}}
           <div class="col">
-            <label for="contactPerson.email" class="form-label">E-mail アドレス <small class="text-danger">必須</small></label>
+            <label for="contactPerson.email" class="form-label">
+              {{t 'submission-form.metadata.email'}}
+              <small class="text-danger">{{t 'submission-form.metadata.required'}}</small>
+            </label>
+
             <input type="email" value={{person.email}} readonly={{@state.isContactPersonReadonly}} required class="form-control" id="contactPerson.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
           </div>
 
           <div class="col">
-            <label for="contactPerson.fullName" class="form-label">フルネーム (英語表記) <small class="text-danger">必須</small></label>
+            <label for="contactPerson.fullName" class="form-label">
+              {{t 'submission-form.metadata.full-name'}}
+              <small class="text-danger">{{t 'submission-form.metadata.required'}}</small>
+            </label>
+
             <input type="text" value={{person.fullName}} readonly={{@state.isContactPersonReadonly}} required maxlength="255" class="form-control" id="contactPerson.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
           </div>
 
           <div class="col">
-            <label for="contactPerson.affiliation" class="form-label">所属名 (英語表記) <small class="text-danger">必須</small></label>
+            <label for="contactPerson.affiliation" class="form-label">
+              {{t 'submission-form.metadata.affiliation'}}
+              <small class="text-danger">{{t 'submission-form.metadata.required'}}</small>
+            </label>
+
             <input type="text" value={{person.affiliation}} readonly={{@state.isContactPersonReadonly}} required maxlength="255" class="form-control" id="contactPerson.affiliation" {{on 'change' (pick 'target.value' (set person 'affiliation'))}} />
           </div>
         {{/let}}
@@ -51,7 +71,7 @@
 
   <div class="card">
     <div class="card-body">
-      <p>コンタクトパーソン以外に登録担当がおり、Accession、公開お知らせ通知を受けたい場合は、このセクションに記入してください（任意）。</p>
+      {{t 'submission-form.metadata.other-person-html' htmlSafe=true}}
 
       <div class="card">
         <ul class="list-group list-group-flush">
@@ -59,32 +79,40 @@
             <li class="list-group-item">
               <div class="row">
                 <div class="col">
-                  <label for="otherPerson.{{i}}.email" class="form-label">E-mail アドレス <small class="text-danger">必須</small></label>
-                    <input type="email" value={{person.email}} required={{true}} class="form-control" id="otherPerson.{{i}}.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
+                  <label for="otherPerson.{{i}}.email" class="form-label">
+                    {{t 'submission-form.metadata.email'}}
+                    <small class="text-danger">{{t 'submission-form.metadata.required'}}</small>
+                  </label>
+
+                  <input type="email" value={{person.email}} required={{true}} class="form-control" id="otherPerson.{{i}}.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
                 </div>
 
                 <div class="col">
-                  <label for="otherPerson.{{i}}.fullName" class="form-label">フルネーム (英語表記) <small class="text-danger">必須</small></label>
-                    <input type="text" value={{person.fullName}} required={{true}} maxlength="255" class="form-control" id="otherPerson.{{i}}.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
+                  <label for="otherPerson.{{i}}.fullName" class="form-label">
+                    {{t 'submission-form.metadata.full-name'}}
+                    <small class="text-danger">{{t 'submission-form.metadata.required'}}</small>
+                  </label>
+
+                  <input type="text" value={{person.fullName}} required={{true}} maxlength="255" class="form-control" id="otherPerson.{{i}}.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
                 </div>
 
                 <div class="col-auto align-self-center">
                   <button type="button" class="btn btn-link p-2" {{on 'click' (prevent-default (fn this.removeOtherPerson person))}}>
-                    {{svg-jar 'no-entry-24' class='octicon fill-danger' role='img' desc='削除'}}
+                    {{svg-jar 'no-entry-24' class='octicon fill-danger' role='img' desc=(t 'submission-form.metadata.remove')}}
                   </button>
                 </div>
               </div>
             </li>
           {{else}}
             <li class="list-group-item py-3 text-muted text-center">
-              登録されていません。
+              {{t 'submission-form.metadata.no-other-person'}}
             </li>
           {{/each}}
         </ul>
 
         <div class="card-footer bg-white">
           <button type="button" class="btn btn-outline-primary" {{on 'click' (prevent-default this.addOtherPerson)}}>
-            連絡先の追加
+            {{t 'submission-form.metadata.add'}}
           </button>
         </div>
       </div>
@@ -93,7 +121,10 @@
 
   <div class="card">
     <div class="card-body">
-      <p>塩基配列決定に使用したシークエンサーのタイプ <small class="text-danger">必須</small></p>
+      <p>
+        {{t 'submission-form.metadata.sequencer'}}
+        <small class="text-danger">{{t 'submission-form.metadata.required'}}</small>
+      </p>
 
       <RadioGroup as |group|>
         {{#each (enum 'sequencers') as |sequencer|}}
@@ -113,7 +144,10 @@
 
   <div class="card">
     <div class="card-body">
-      <label for="dataType" class="form-label">データ種別 <small class="text-danger">必須</small></label>
+      <label for="dataType" class="form-label">
+        {{t 'submission-form.metadata.data-type'}}
+        <small class="text-danger">{{t 'submission-form.metadata.required'}}</small>
+      </label>
 
       <select required class="form-select" id="dataType" {{on 'change' (pick 'target.value' (set @model 'dataType'))}}>
         <option selected={{is-none @model.dataType}}></option>
@@ -126,29 +160,37 @@
       </select>
 
       <div class="form-text">
-        {{t 'submission-form.metadata.datatype-text-html' htmlSafe=true}}
+        {{t 'submission-form.metadata.data-type-text-html' htmlSafe=true}}
       </div>
     </div>
   </div>
 
   <div class="card">
     <div class="card-body">
-      <label for="description" class="form-label">補足説明 <small class="text-muted">任意</small></label>
-      <textarea maxlength="1000" rows="8" placeholder="e.g.活性汚泥から単離した Dibenzothiophene分解能を有するPseudomonas属ストレイン5種のドラフトゲノム配列にアノテーションをつけたもの" class="form-control" id="description" {{on 'input' (pick 'target.value' (set @model 'description'))}}>{{@model.description}}</textarea>
+      <label for="description" class="form-label">
+        {{t 'submission-form.metadata.description'}}
+        <small class="text-muted">{{t 'submission-form.metadata.optional'}}</small>
+      </label>
+
+      <textarea maxlength="1000" rows="8" placeholder={{t 'submission-form.metadata.description-placeholder'}} class="form-control" id="description" {{on 'input' (pick 'target.value' (set @model 'description'))}}>{{@model.description}}</textarea>
 
       <div class="form-text text-end">
+        {{!-- template-lint-disable no-bare-strings --}}
         {{or @model.description.length 0}} / 1000
       </div>
 
       <div class="form-text">
-        Submission データの補足説明をここに記入してください（日本語可）。生物の説明（common nameや性質など）、単離生物由来でない場合は塩基配列をどうやって得たのか、そのほか、DDBJ キュレータに知らせたいこと等を入力できます。DDBJ に登録した配列を更新する場合は対象の Accession を記入してください。
+        {{t 'submission-form.metadata.description-text-html'}}
       </div>
     </div>
   </div>
 
   <div class="card">
     <div class="card-body">
-      <p>通知メールの言語 <small class="text-danger">必須</small></p>
+      <p>
+        {{t 'submission-form.metadata.email-language'}}
+        <small class="text-danger">{{t 'submission-form.metadata.required'}}</small>
+      </p>
 
       <RadioGroup as |group|>
         {{#each (enum 'locales') as |locale|}}
@@ -157,7 +199,7 @@
               <radio.input checked={{eq @model.emailLanguage locale.key}} required class="form-check-input" {{on 'change' (set @model 'emailLanguage' locale.key)}} />
 
               <radio.label class="form-check-label">
-                {{t (concat 'locales.' locale.key) locale=locale.key}}
+                {{t (concat 'locales.' locale.key)}}
               </radio.label>
             </group.radio>
           </div>

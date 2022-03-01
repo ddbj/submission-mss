@@ -124,8 +124,41 @@ submission-form:
       </dl>
 
   metadata:
-    datatype-text-html: |
+    required: Required
+    optional: Optional
+
+    entries-html: |
+      <p>Enter the number of total entries among the sequence files, and specify the <a href="https://www.ddbj.nig.ac.jp/documents/data-release-policy-e.html" target="_blank" rel="noopener noreferrer">hold date</a>.</p>
+
+    entries-count: Number of entries
+    hold-date: Hold-date
+    release-immediately: Release immediately
+
+    contact-person-html: |
+      <p>Enter the contact who is displayed at contact line' of the submission file and has responsibility for the submission.</p>
+
+    email: E-mail
+    full-name: Full name
+    affiliation: Institution
+
+    other-person-html: |
+      <p>Fill the section, if other persons also have the responsibility of the submission and want to receive the email that informs accession number and announce of the publication.</p>
+
+    remove: Remove
+    no-other-person: No other person added.
+    add: Add
+
+    sequencer: Select the type of the nucleotide sequencer
+    data-type: Data type
+
+    data-type-text-html: |
       Select the <a href="https://www.ddbj.nig.ac.jp/ddbj/data-categories-e.html#sub" target="_blank" rel="noopener noreferrer">type of the submission</a>. Use the <a href="https://www.ddbj.nig.ac.jp/submission-e.html" target="_blank" rel="noopener noreferrer">navigation tool</a> if you cannot determine the type.
+
+    description: Fill the additional information
+    description-placeholder: Draft genome sequences with annotations from the five Pseudomonas dibenzothiophene-degrading strains isolated from activated sludge.
+    description-text-html: ''
+
+    email-language: Select the language for the email
 
 file-list:
   add-files: Add files
