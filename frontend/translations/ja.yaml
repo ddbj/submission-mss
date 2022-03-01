@@ -1,4 +1,8 @@
 application:
+  title: MSS 登録フォーム
+  toggle-nav: ナビゲーションの表示/非表示
+  language: Language
+
   locale:
     ja: 日本語
     en: English

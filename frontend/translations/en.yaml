@@ -1,4 +1,8 @@
 application:
+  title: MSS Submission Form
+  toggle-nav: Toggle navigation
+  language: Language
+
   locale:
     ja: Japanese
     en: English
