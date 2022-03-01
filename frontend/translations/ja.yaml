@@ -50,6 +50,10 @@ index:
 
 home:
   title: ホーム
+  login-as-html: |
+    <strong>{account}</strong> としてログインしています
+  logout: ログアウト
+  new-submission: 新規登録を開始する
 
 submission-form:
   title: 新規登録申請

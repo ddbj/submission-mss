@@ -50,6 +50,10 @@ index:
 
 home:
   title: Home
+  login-as-html: |
+    You are logged in as <strong>{account}</strong>
+  logout: Logout
+  new-submission: New submission
 
 submission-form:
   title: New Submission
