@@ -169,6 +169,11 @@ complete:
 
   back-to-home: Go to home
 
+upload-progress-modal:
+  title: Upload submission files
+  loading: Loading...
+  cancel: Cancel
+
 upload-form:
   title: Upload
   description-html: |

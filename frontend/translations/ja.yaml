@@ -171,6 +171,11 @@ complete:
 
   back-to-home: ホームに戻る
 
+upload-progress-modal:
+  title: 登録ファイルのアップロード
+  loading: Loading...
+  cancel: キャンセル
+
 upload-form:
   title: アップロード
   description-html: |

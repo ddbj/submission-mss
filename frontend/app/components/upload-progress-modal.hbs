@@ -5,7 +5,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id={{id}}>登録ファイルのアップロード</h5>
+          <h5 class="modal-title" id={{id}}>{{t 'upload-progress-modal.title'}}</h5>
         </div>
 
         <div class="modal-body vstack gap-3">
@@ -15,7 +15,7 @@
 
               {{#unless upload.isStarted}}
                 <div class="spinner-border spinner-border-sm text-primary" role="status">
-                  <span class="visually-hidden">Loading...</span>
+                  <span class="visually-hidden">{{t 'upload-progress-modal.loading'}}</span>
                 </div>
               {{/unless}}
             </div>
@@ -29,7 +29,7 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" {{on 'click' this.hide}}>キャンセル</button>
+          <button type="button" class="btn btn-secondary" {{on 'click' this.hide}}>{{t 'upload-progress-modal.cancel'}}</button>
         </div>
       </div>
     </div>
