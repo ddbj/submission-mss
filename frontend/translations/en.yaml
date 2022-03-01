@@ -137,8 +137,8 @@ file-list:
     remove: Remove
 
 confirm:
-  prerequisites: Prerequisites
-  files: Files
+  prerequisites: Requirement
+  files: Submission file
   entries-count: Entries count
   hold-date: Hold date
   immediate-release: Immediate release
