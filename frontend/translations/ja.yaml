@@ -101,9 +101,25 @@ submission-form:
     back-to-home: ホームに戻る
 
   files:
+    q-html: |
+      <p>
+        <a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener noreferrer">UME (Parser, transChecker)</a> でチェック済みの登録ファイルを作成済みであればアップロードしてください。
+      </p>
+
     a1: DFAST で作成した Bacterial complete genome または WGS の登録ファイルをアップロードする
     a2: DFAST を使わず作成した登録ファイルをアップロードする
     a3: 申し込み後に登録ファイルを作成する
+
+    instructions-html: |
+      <p>アノテーションファイルと塩基配列ファイルでペアになるようにアップロードしてください。複数ペアをアップロード可能です。ファイル名から拡張子を除いた名称が同一なファイルがペアになります。読み込めるファイル名拡張子は次の通りです。圧縮ファイルをアップロードしないでください。</p>
+
+      <dl>
+        <dt>アノテーションファイル</dt>
+        <dd><code>.ann</code>, <code>.annt.tsv</code>, <code>.ann.txt</code></dd>
+
+        <dt>塩基配列ファイル</dt>
+        <dd><code>.fasta</code>, <code>.seq.fa</code>, <code>.fa</code>, <code>.fna</code>, <code>.seq</code></dd>
+      </dl>
 
   metadata:
     datatype-text-html: |
@@ -112,8 +128,15 @@ submission-form:
 file-list:
   add-files: ファイルの追加
   stats: '{filesCount} ファイル、{totalFileSize}'
-  select-files: クリックしてファイルを選択
+  select-files: ファイルを選択
   placeholder: '[[[select-files]]]するか、ここにファイルをドロップしてください。'
+
+  item:
+    loading: 読み込み中...
+    contact-person: コンタクトパーソン
+    hold-date: 公開予定日
+    entries-count: エントリ数
+    remove: 削除
 
 confirm:
   prerequisites: 事前質問

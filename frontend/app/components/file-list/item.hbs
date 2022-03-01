@@ -2,7 +2,7 @@
   <div class="align-self-start">
     {{#if @file.isParsing}}
       <div class="spinner-border spinner-border-seconcary spinner-border-sm opacity-50" role="status">
-        <span class="visually-hidden">Loading...</span>
+        <span class="visually-hidden">{{t 'file-list.item.loading'}}</span>
       </div>
     {{else}}
       {{#if @errors.length}}
@@ -18,12 +18,12 @@
 
     <small class="hstack gap-3 text-muted">
       {{#if @file.isParsing}}
-        Parsing...
+        {{t 'file-list.item.loading'}}
       {{else}}
         {{#with @file.parsedData as |data|}}
           {{#if @file.isAnnotation}}
             <div>
-              <b>Contact person</b>
+              <b>{{t 'file-list.item.contact-person'}}</b>
               {{#with data.contactPerson as |person|}}
                 {{person.fullName}}
                 &lt;{{person.email}}&gt;
@@ -34,14 +34,14 @@
             </div>
 
             <div>
-              <b>Hold date</b>
+              <b>{{t 'file-list.item.hold-date'}}</b>
               {{or data.holdDate '-'}}
             </div>
           {{/if}}
 
           {{#if @file.isSequence}}
             <div>
-              <b>エントリ数</b>
+              <b>{{t 'file-list.item.entries-count'}}</b>
               {{format-number data.entriesCount}}
             </div>
           {{/if}}
@@ -60,7 +60,7 @@
 
   <div class="ms-auto">
     <button type="button" class="btn btn-link p-2" {{on 'click' (prevent-default (fn @onRemove @file))}}>
-      {{svg-jar 'no-entry-24' class='octicon fill-danger' role='img' desc='削除'}}
+      {{svg-jar 'no-entry-24' class='octicon fill-danger' role='img' desc=(t 'file-list.item.remove')}}
     </button>
   </div>
 </li>

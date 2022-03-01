@@ -59,10 +59,10 @@ submission-form:
   title: New Submission
 
   steps:
-    prerequisite: Prerequisites
-    files:        Files
-    metadata:     Metadata
-    confirm:      Confirmation
+    prerequisite: Requirement
+    files:        Submission file
+    metadata:     Enter the information
+    confirm:      Confirmation of the application
     complete:     Complete
 
   nav:
@@ -82,29 +82,42 @@ submission-form:
         <li>same contact person</li>
         <li>same submission data type</li>
         <li>same publication date</li>
-        <li>same BioProject ID
       </ul>
 
-    q-1: Which of the following explanations applies to the nucleotide sequence you are applying for?
+    q-1: Select one that matches to the submission.
 
-    a1-1: I have determined the nucleotide sequence by my study.
-    a1-2: I have created the nucleotide sequences by assembling from the publicly available data (TPA).
+    a1-1: Yes, I have determined the nucleotide sequence by my study.
+    a1-2: No, I have created the nucleotide sequences by assembling from the publicly available data.
 
-    q-2: If you want to apply for TPA submission in MSS, information about the sequence creation for which you are applying must be published in a peer-reviewed paper. Please select the appropriate one.
+    q-2: A paper, which describes information about the assembly, should be finally published from a peer-reviewed journal, if you would like to submit TPA to MSS. Select one from the items below.
 
-    a2-1: I plan to (or have already) submitted a paper to a peer-reviewed academic journal.
-    a2-2: Not planned.
+    a2-1: I will submit (or have submitted) a paper to peer-reviewed journal.
+    a2-2: No, I have no plan to submit a paper.
 
     about-tpa-url: https://www.ddbj.nig.ac.jp/ddbj/tpa-e.html
     about-tpa:     About TPA
 
-    unacceptable: You cannot proceed with the TPA application unless you prepare a paper.
-    back-to-home: Back to home
+    unacceptable: Regarding TPA, you cannot apply to MSS unless you will prepare a paper.
+    back-to-home: Go to home
 
   files:
+    q-html: |
+      <p>You can upload the submission files that have been checked by <a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener noreferrer">UME (Parser and transChecker)</a>, if you already have. </p>
+
     a1: I would like to upload the Bacterial complete genome or WGS submission files that have been prepared by DFAST.
     a2: I would like to upload the submission files that have been prepared without using DFAST.
-    a3: I will prepare submission file after the application to MSS.
+    a3: I will prepare submission file after the application.
+
+    instructions-html: |
+      <p>Upload the annotation and nucleotide sequence file as a pair. Multiple pair files can be uploaded. The system determines as a pair whose filenames without the extension has the same name. The uploadable files are shown below. Do not upload the compressed files.</p>
+
+      <dl>
+        <dt>Annotation file</dt>
+        <dd><code>.ann</code>, <code>.annt.tsv</code>, <code>.ann.txt</code></dd>
+
+        <dt>Sequence file</dt>
+        <dd><code>.fasta</code>, <code>.seq.fa</code>, <code>.fa</code>, <code>.fna</code>, <code>.seq</code></dd>
+      </dl>
 
   metadata:
     datatype-text-html: |
@@ -113,8 +126,15 @@ submission-form:
 file-list:
   add-files: Add files
   stats: '{filesCount, plural, =1 {1 file} other {# files}}, {totalFileSize}'
-  select-files: Click to select files
-  placeholder: '[[[select-files]]], or drop files here.'
+  select-files: Select the files
+  placeholder: '[[[select-files]]] or drag them here.'
+
+  item:
+    loading: Loading...
+    contact-person: Contact person
+    hold-date: Hold date
+    entries-count: Number of entries
+    remove: Remove
 
 confirm:
   prerequisites: Prerequisites

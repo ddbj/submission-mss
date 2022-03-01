@@ -2,9 +2,7 @@
   <div class="vstack gap-3">
     <div class="card">
       <div class="card-body">
-        <p>
-          <a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener noreferrer">UME</a> (Parser, transChecker) でチェック済みの登録ファイルを作成済みであればアップロードしてください。
-        </p>
+        {{t 'submission-form.files.q-html' htmlSafe=true}}
 
         <RadioGroup as |group|>
           <div class="form-check">
@@ -43,12 +41,7 @@
     {{#if (or (eq @state.uploadType 'dfast') (eq @state.uploadType 'without-dfast'))}}
       <div class="card">
         <div class="card-body">
-          <ul>
-            <li>登録ファイルを圧縮せずにアップロードしてください。</li>
-            <li>前提条件に従っていれば、複数セットの登録ファイルをアップロードできます。</li>
-            <li>各 Submission のファイル拡張子は必ず <code>.ann</code> (アノテーションファイル)、<code>.fasta</code> (塩基配列) とし、拡張子を除く名称を同一にしてください。</li>
-            <li>Linux の <code>ls</code> コマンドでの名前ソート順に Accession 番号が発行されます。</li>
-          </ul>
+          {{t 'submission-form.files.instructions-html' htmlSafe=true}}
 
           <FileList @files={{@state.files}} @crossoverErrors={{this.crossoverErrors}} @onAdd={{this.addFile}} @onRemove={{this.removeFile}} />
         </div>
