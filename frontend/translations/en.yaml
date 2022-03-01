@@ -168,3 +168,18 @@ complete:
     </p>
 
   back-to-home: Go to home
+
+upload-form:
+  title: Upload
+  description-html: |
+    <p>You can upload submission files for MSS Submission ID <strong>{massId}</strong> from this page.</p>
+  instructions-html: |
+    <ul>
+      <li>Please upload submission files without compression.</li>
+      <li>The file extension should be <code>.ann</code> (annotation file) or <code>.fasta</code> (nucleotide sequence).</li>
+    </ul>
+  upload: Upload
+  complete-html: |
+    <h1 class="display-6 my-4">Upload completed</h1>
+    <p>You will receive an email from mass@ddbj.nig.ac.jp to the address you entered. Please do not (re-)send submission files as an email attachment.</p>
+  back-to-home: Back to home

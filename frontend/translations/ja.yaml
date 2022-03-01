@@ -170,3 +170,18 @@ complete:
     </p>
 
   back-to-home: ホームに戻る
+
+upload-form:
+  title: アップロード
+  description-html: |
+    <p>この画面から MSS 申し込み ID <strong>{massId}</strong> の登録ファイルをアップロードできます。</p>
+  instructions-html: |
+    <ul>
+      <li>登録ファイルを圧縮せずにアップロードしてください。</li>
+      <li>ファイル拡張子は <code>.ann</code> (アノテーションファイル)、<code>.fasta</code> (塩基配列) にしてください。</li>
+    </ul>
+  upload: アップロード
+  complete-html: |
+    <h1 class="display-6 my-4">アップロード完了</h1>
+    <p>mass@ddbj.nig.ac.jp より、入力いただいたアドレス宛にメールが通知されます。メール添付での登録ファイル(再)送付はご遠慮ください。</p>
+  back-to-home: ホームに戻る
