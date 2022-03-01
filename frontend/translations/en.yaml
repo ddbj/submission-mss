@@ -115,3 +115,32 @@ file-list:
   stats: '{filesCount, plural, =1 {1 file} other {# files}}, {totalFileSize}'
   select-files: Click to select files
   placeholder: '[[[select-files]]], or drop files here.'
+
+confirm:
+  prerequisites: Prerequisites
+  files: Files
+  entries-count: Entries count
+  hold-date: Hold date
+  immediate-release: Immediate release
+  contact-person: Contact person
+  other-people: Other people
+  sequencer-type: Sequencer type
+  data-type: Data type
+  description: Description
+  email-language: Email language
+
+  blank: Blank
+  confirm-message: Please check the information you have entered, and if you are satisfied, click the "Submit" button. You cannot modify the information after you click the button.
+
+  nav:
+    submit: Submit
+    back: Back
+
+complete:
+  description-html: |
+    <p>
+      We have accepted the application. The MSS application ID is {massId}.<br />
+      An email from mass@ddbj.nig.ac.jp will be sent to the address(es) filled in the form. We would like to ask you not to (re-)send the submission files by email attachment.
+    </p>
+
+  back-to-home: Go to home

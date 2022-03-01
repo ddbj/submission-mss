@@ -114,3 +114,32 @@ file-list:
   stats: '{filesCount} ファイル、{totalFileSize}'
   select-files: クリックしてファイルを選択
   placeholder: '[[[select-files]]]するか、ここにファイルをドロップしてください。'
+
+confirm:
+  prerequisites: 事前質問
+  files: 登録ファイル
+  entries-count: エントリ数
+  hold-date: 公開予定日
+  immediate-release: 即時公開
+  contact-person: コンタクトパーソン
+  other-people: 追加登録担当者
+  sequencer-type: シークエンサーのタイプ
+  data-type: データ種別
+  description: 補足説明
+  email-language: 通知メールの言語
+
+  blank: なし
+  confirm-message: 入力内容をご確認のうえ、よろしければ登録申請ボタンを押してください。クリック後は修正できません。
+
+  nav:
+    submit: 登録申請
+    back: 戻る
+
+complete:
+  description-html: |
+    <p>
+      登録申請を受け付けました。MSS申し込みIDは {massId} です。<br />
+      mass@ddbj.nig.ac.jp より、入力いただいたアドレス宛にメールが通知されます。メール添付での登録ファイル(再)送付はご遠慮ください。
+    </p>
+
+  back-to-home: ホームに戻る

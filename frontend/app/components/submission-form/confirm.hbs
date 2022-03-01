@@ -2,7 +2,7 @@
   <form {{on 'submit' (prevent-default (fn this.submit modal))}}>
     <div class="vstack gap-3">
       <div class="card">
-        <div class="card-header">事前質問</div>
+        <div class="card-header">{{t 'confirm.prerequisites'}}</div>
 
         <div class="card-body">
           <ul class="mb-0">
@@ -33,7 +33,7 @@
 
       {{#with @state.files as |files|}}
         <div class="card">
-          <div class="card-header">登録ファイル</div>
+          <div class="card-header">{{t 'confirm.files'}}</div>
 
           <ul class="list-group list-group-flush">
             {{#each files as |file|}}
@@ -44,7 +44,7 @@
       {{/with}}
 
       <div class="card">
-        <div class="card-header">エントリ数</div>
+        <div class="card-header">{{t 'confirm.entries-count'}}</div>
 
         <div class="card-body">
           {{@model.entriesCount}}
@@ -52,15 +52,15 @@
       </div>
 
       <div class="card">
-        <div class="card-header">公開予定日</div>
+        <div class="card-header">{{t 'confirm.hold-date'}}</div>
 
         <div class="card-body">
-          {{or @model.holdDate '即時公開'}}
+          {{or @model.holdDate (t 'confirm.immediate release')}}
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header">コンタクトパーソン</div>
+        <div class="card-header">{{t 'confirm.contact-person'}}</div>
 
         <div class="card-body">
           {{#let @model.contactPerson as |person|}}
@@ -70,7 +70,7 @@
       </div>
 
       <div class="card">
-        <div class="card-header">追加連絡先</div>
+        <div class="card-header">{{t 'confirm.other-people'}}</div>
 
         {{#if @model.otherPeople}}
           <ul class="list-group list-group-flush">
@@ -80,13 +80,13 @@
           </ul>
         {{else}}
           <div class="card-body">
-            なし
+            {{t 'confirm.blank'}}
           </div>
         {{/if}}
       </div>
 
       <div class="card">
-        <div class="card-header">シークエンサー</div>
+        <div class="card-header">{{t 'confirm.sequencer-type'}}</div>
 
         <div class="card-body">
           {{t (concat 'sequencers.' @model.sequencer)}}
@@ -94,7 +94,7 @@
       </div>
 
       <div class="card">
-        <div class="card-header">データ種別</div>
+        <div class="card-header">{{t 'confirm.data-type'}}</div>
 
         <div class="card-body">
           {{t (concat 'data_types.' @model.dataType)}}
@@ -102,33 +102,33 @@
       </div>
 
       <div class="card">
-        <div class="card-header">補足説明</div>
+        <div class="card-header">{{t 'confirm.description'}}</div>
 
         <div class="card-body">
           {{#if @model.description}}
             <div style="white-space: pre-wrap;">{{@model.description}}</div>
           {{else}}
-            なし
+            {{t 'confirm.blank'}}
           {{/if}}
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header">通知メールの言語</div>
+        <div class="card-header">{{t 'confirm.email-language'}}</div>
 
         <div class="card-body">
           {{t (concat 'locales.' @model.emailLanguage)}}
         </div>
       </div>
 
-      <p>入力内容をご確認のうえ、よろしければ登録申請ボタンを押してください。クリック後は修正できません。</p>
+      <p>{{t 'confirm.confirm-message'}}</p>
     </div>
 
     <hr />
 
     <div class="hstack gap-3 justify-content-end">
-      <a href class="btn btn-outline-primary px-4" {{on 'click' (prevent-default @nav.goPrev)}}>戻る</a>
-      <button type="submit" class="btn btn-primary px-5">登録申請</button>
+      <a href class="btn btn-outline-primary px-4" {{on 'click' (prevent-default @nav.goPrev)}}>{{t 'confirm.nav.back'}}</a>
+      <button type="submit" class="btn btn-primary px-5">{{t 'confirm.nav.submit'}}</button>
     </div>
   </form>
 </UploadProgressModal>
