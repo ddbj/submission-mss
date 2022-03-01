@@ -6,6 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import 'bootstrap/js/src/dropdown';
 
 export default class ApplicationController extends Controller {
+  @service intl;
   @service session;
 
   @tracked locale;

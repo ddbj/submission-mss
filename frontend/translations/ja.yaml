@@ -1,0 +1,112 @@
+application:
+  locale:
+    ja: 日本語
+    en: English
+
+index:
+  title: MSS 登録フォーム
+
+  description-html: |
+    <p>Mass Submission System (MSS) は、比較的大規模な塩基配列データ (reads ではない) をファイル送付により登録するサービスです。登録予定データが、以下の条件に該当する場合は MSS をご利用ください。</p>
+
+    <ul>
+      <li>
+        Web 版塩基配列登録システムが対応していない登録
+
+        <ul>
+          <li><a href="https://www.ddbj.nig.ac.jp/ddbj/est.html">EST</a>、STS、<a href="https://www.ddbj.nig.ac.jp/ddbj/tsa.html">TSA</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/htc.html">HTC</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/gss.html">GSS</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/htg.html">HTG</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/wgs.html">WGS</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/con.html">CON</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/tls.html">TLS</a></li>
+          <li>データ種別の詳細は、<a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#division">登録データ種別</a>をご確認ください。</li>
+        </ul>
+      </li>
+
+      <li>
+        配列が長い場合
+
+        <ul>
+          <li>目安は 500 kb 以上</li>
+        </ul>
+      </li>
+
+      <li>
+        １エントリあたりに多数の Feature がある場合
+
+        <ul>
+          <li>目安は 30 以上</li>
+        </ul>
+      </li>
+
+      <li>
+        エントリ数 (登録する配列の数) が多い場合
+
+        <ul>
+          <li>目安は 500 以上、1000 を超えると Web 版塩基配列登録システムでは分割が必要です</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p>登録を始めるには D-way アカウントでログインしてください。</p>
+
+  login: D-way アカウントでログイン
+
+home:
+  title: ホーム
+
+submission-form:
+  title: 新規登録申請
+
+  steps:
+    prerequisite: 前提条件の確認
+    files:        登録ファイルの選択
+    metadata:     情報の入力
+    confirm:      申請内容の確認
+    complete:     完了
+
+  nav:
+    next: 次へ
+    back: 戻る
+
+  prerequisite:
+    description-html: |
+      <p>
+        登録可能なデータは次の通りです。<br />
+        <a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept" target="_blank" rel="noopener noreferrer">https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept</a>
+      </p>
+
+      <p>以下のすべてに該当する場合のみ申し込みできます。いずれか該当しない場合は submission を分け、submsssion ごとに MSS 申し込みを行ってください。</p>
+
+      <ul>
+        <li>コンタクトパーソンが同一である</li>
+        <li>登録データ種別が1種類である</li>
+        <li>公開予定日が同一である</li>
+      </ul>
+
+    q-1: 今回登録する配列について当てはまるものを選択してください。
+
+    a1-1: 自身の研究で配列決定した塩基配列である
+    a1-2: 公開されているデータからアセンブルした塩基配列 (TPA) である
+
+    q-2: MSS で TPA の登録を申請する場合、申請対象の配列作成に関する情報が査読付き論文として公開される必要があります。当てはまるものを選択してください。
+
+    a2-1: 査読付き学術雑誌に論文を投稿する予定がある、あるいは投稿済みである
+    a2-2: 投稿の予定はない
+
+    about-tpa-url: https://www.ddbj.nig.ac.jp/ddbj/tpa.html
+    about-tpa:     TPA とは
+
+    unacceptable: TPA の場合、論文を準備しないのであれば申し込みできません。
+    back-to-home: ホームに戻る
+
+  files:
+    a1: DFAST で作成した Bacterial complete genome または WGS の登録ファイルをアップロードする
+    a2: DFAST を使わず作成した登録ファイルをアップロードする
+    a3: 申し込み後に登録ファイルを作成する
+
+  metadata:
+    datatype-text-html: |
+      <a href="https://www.ddbj.nig.ac.jp/ddbj/data-categories.html#sub" target="_blank" rel="noopener noreferrer">データ種別</a>を選択してください。種別を判断できない場合、<a href="https://www.ddbj.nig.ac.jp/submission.html" target="_blank" rel="noopener noreferrer">登録ナビゲーションツール</a>をご利用ください。
+
+file-list:
+  add-files: ファイルの追加
+  stats: '{filesCount} ファイル、{totalFileSize}'
+  select-files: クリックしてファイルを選択
+  placeholder: '[[[select-files]]]するか、ここにファイルをドロップしてください。'

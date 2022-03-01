@@ -1,0 +1,113 @@
+application:
+  locale:
+    ja: Japanese
+    en: English
+
+index:
+  title: MSS Submission Form
+
+  description-html: |
+    <p>Mass Submission System (MSS) is the service to accept relatively large scale nucleotide sequence data (not reads) through sending text files. We at DDBJ recommend using MSS when:</p>
+
+    <ul>
+      <li>
+        the submission is not applicable for Nucleotide Sequence Submission System (NSSS)
+
+        <ul>
+          <li><a href="https://www.ddbj.nig.ac.jp/ddbj/est-e.html">EST</a>, STS, <a href="https://www.ddbj.nig.ac.jp/ddbj/tsa-e.html">TSA</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/htc-e.html">HTC</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/gss-e.html">GSS</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/htg-e.html">HTG</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/wgs-e.html">WGS</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/con-e.html">CON</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/tls-e.html">TLS</a></li>
+          <li>See <a href="https://www.ddbj.nig.ac.jp/documents/data-categories-e.html#division">Categories for Sequence Data</a> in detail.</li>
+        </ul>
+      </li>
+
+      <li>
+        the submission with long sequences.
+
+        <ul>
+          <li>greater than 500 kb in its length</li>
+        </ul>
+      </li>
+
+      <li>
+        the complex submission containing many features
+
+        <ul>
+          <li>more than 30 features</li>
+        </ul>
+      </li>
+
+      <li>
+        the submission consists of large number of sequences.
+
+        <ul>
+          <li>greater than 500, when number of sequences is greater than 1000, you have to submit two or more times via NSSS</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p>Login with D-way account to start a new submission</p>
+
+  login: Login with D-way Account
+
+home:
+  title: Home
+
+submission-form:
+  title: New Submission
+
+  steps:
+    prerequisite: Prerequisites
+    files:        Files
+    metadata:     Metadata
+    confirm:      Confirmation
+    complete:     Complete
+
+  nav:
+    back: Back
+    next: Next
+
+  prerequisite:
+    description-html: |
+      <p>
+        Acceptable nucleotide sequences<br />
+        <a href="https://www.ddbj.nig.ac.jp/documents/data-categories-e.html" target="_blank" rel="noopener noreferrer">https://www.ddbj.nig.ac.jp/documents/data-categories-e.html</a>
+      </p>
+
+      <p>You can apply for the submission or upload the submission files when the submission matches the following requirements.You must separate into some submissions and apply for MSS with each submission when the submission does not match any of the following requirements.</p>
+
+      <ul>
+        <li>same contact person</li>
+        <li>same submission data type</li>
+        <li>same publication date</li>
+        <li>same BioProject ID
+      </ul>
+
+    q-1: Which of the following explanations applies to the nucleotide sequence you are applying for?
+
+    a1-1: I have determined the nucleotide sequence by my study.
+    a1-2: I have created the nucleotide sequences by assembling from the publicly available data (TPA).
+
+    q-2: If you want to apply for TPA submission in MSS, information about the sequence creation for which you are applying must be published in a peer-reviewed paper. Please select the appropriate one.
+
+    a2-1: I plan to (or have already) submitted a paper to a peer-reviewed academic journal.
+    a2-2: Not planned.
+
+    about-tpa-url: https://www.ddbj.nig.ac.jp/ddbj/tpa-e.html
+    about-tpa:     About TPA
+
+    unacceptable: You cannot proceed with the TPA application unless you prepare a paper.
+    back-to-home: Back to home
+
+  files:
+    a1: I would like to upload the Bacterial complete genome or WGS submission files that have been prepared by DFAST.
+    a2: I would like to upload the submission files that have been prepared without using DFAST.
+    a3: I will prepare submission file after the application to MSS.
+
+  metadata:
+    datatype-text-html: |
+      Select the <a href="https://www.ddbj.nig.ac.jp/ddbj/data-categories-e.html#sub" target="_blank" rel="noopener noreferrer">type of the submission</a>. Use the <a href="https://www.ddbj.nig.ac.jp/submission-e.html" target="_blank" rel="noopener noreferrer">navigation tool</a> if you cannot determine the type.
+
+file-list:
+  add-files: Add files
+  stats: '{filesCount, plural, =1 {1 file} other {# files}}, {totalFileSize}'
+  select-files: Click to select files
+  placeholder: '[[[select-files]]], or drop files here.'

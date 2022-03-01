@@ -12,13 +12,13 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarLang" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Language
+            Language: {{t (concat 'application.locale.' this.locale)}}
           </a>
 
           <ul class="dropdown-menu" aria-labelledby="navbarLang">
             <li>
-              <a class="dropdown-item" href {{on 'click' (prevent-default (fn this.changeLocale 'ja'))}}>日本語</a>
-              <a class="dropdown-item" href {{on 'click' (prevent-default (fn this.changeLocale 'en'))}}>English</a>
+              <a class="dropdown-item" href {{on 'click' (prevent-default (fn this.changeLocale 'ja'))}}>{{t 'application.locale.ja'}}</a>
+              <a class="dropdown-item" href {{on 'click' (prevent-default (fn this.changeLocale 'en'))}}>{{t 'application.locale.en'}}</a>
             </li>
           </ul>
         </li>

@@ -11,19 +11,23 @@
     <div class="card-footer d-flex justify-content-between align-items-center bg-white">
       <div>
         <button type="button" class="btn btn-outline-primary" {{on 'click' (prevent-default this.selectFiles)}}>
-          ファイルの追加
+          {{t 'file-list.add-files'}}
         </button>
       </div>
 
       <div>
-        {{@files.length}}ファイル、{{filesize (sum (map-by 'size' @files))}}
+        {{t 'file-list.stats' filesCount=@files.length totalFileSize=(filesize (sum (map-by 'size' @files)))}}
       </div>
     </div>
   </div>
 {{else}}
   <div class="card border-2 border-dashed {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
     <div class="card-body py-5 text-center text-muted">
-      <a href="#" class="stretched-link" {{on 'click' (prevent-default this.selectFiles)}}>ファイルを選択</a>するか、ここにファイルをドロップしてください。
+      <I18n @i18nid="file-list.placeholder" as |MessageScope|>
+        <MessageScope>
+          <:select-files><a href="#" class="stretched-link" {{on 'click' (prevent-default this.selectFiles)}}>{{t 'file-list.select-files'}}</a></:select-files>
+        </MessageScope>
+      </I18n>
     </div>
   </div>
 {{/if}}

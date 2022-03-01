@@ -1,42 +1,5 @@
-<h1 class="display-6 my-4">MSS 登録フォーム</h1>
+<h1 class="display-6 my-4">{{t 'index.title'}}</h1>
 
-<p>Mass Submission System (MSS) は、比較的大規模な塩基配列データ (reads ではない) をファイル送付により登録するサービスです。登録予定データが、以下の条件に該当する場合は MSS をご利用ください。</p>
+{{t 'index.description-html' htmlSafe=true}}
 
-<ul>
-  <li>
-    Web 版塩基配列登録システムが対応していない登録
-
-    <ul>
-      <li><a href="/ddbj/est.html">EST</a>、STS、<a href="/ddbj/tsa.html">TSA</a>、<a href="/ddbj/htc.html">HTC</a>、<a href="/ddbj/gss.html">GSS</a>、<a href="/ddbj/htg.html">HTG</a>、<a href="/ddbj/wgs.html">WGS</a>、<a href="/ddbj/con.html">CON</a>、<a href="/ddbj/tls.html">TLS</a></li>
-      <li>データ種別の詳細は、<a href="/documents/data-categories.html#division">登録データ種別</a>をご確認ください。</li>
-    </ul>
-  </li>
-
-  <li>
-    配列が長い場合
-
-    <ul>
-      <li>目安は 500 kb 以上</li>
-    </ul>
-  </li>
-
-  <li>
-    １エントリあたりに多数の Feature がある場合
-
-    <ul>
-      <li>目安は 30 以上</li>
-    </ul>
-  </li>
-
-  <li>
-    エントリ数 (登録する配列の数) が多い場合
-
-    <ul>
-      <li>目安は 500 以上、1000 を超えると Web 版塩基配列登録システムでは分割が必要です</li>
-    </ul>
-  </li>
-</ul>
-
-<p>登録を始めるには D-way アカウントでログインしてください。</p>
-
-<a {{on 'click' (prevent-default this.authenticate)}} href class="btn btn-primary btn-lg">D-way アカウントでログイン</a>
+<a {{on 'click' (prevent-default this.authenticate)}} href class="btn btn-primary btn-lg">{{t 'index.login'}}</a>
