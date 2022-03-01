@@ -143,9 +143,9 @@ file-list:
 confirm:
   prerequisites: Requirement
   files: Submission file
-  entries-count: Entries count
+  entries-count: Number of entries
   hold-date: Hold date
-  immediate-release: Immediate release
+  release-immediately: Release immediately
   contact-person: Contact person
   other-people: Other people
   sequencer-type: Sequencer type

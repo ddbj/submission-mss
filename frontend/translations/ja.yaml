@@ -147,7 +147,7 @@ confirm:
   files: 登録ファイル
   entries-count: エントリ数
   hold-date: 公開予定日
-  immediate-release: 即時公開
+  release-immediately: 即時公開
   contact-person: コンタクトパーソン
   other-people: 追加登録担当者
   sequencer-type: シークエンサーのタイプ
