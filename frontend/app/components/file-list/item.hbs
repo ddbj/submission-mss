@@ -20,32 +20,35 @@
       {{#if @file.isParsing}}
         {{t 'file-list.item.loading'}}
       {{else}}
-        {{#with @file.parsedData as |data|}}
+        {{#if @file.parsedData}}
           {{#if @file.isAnnotation}}
             <div>
               <b>{{t 'file-list.item.contact-person'}}</b>
-              {{#with data.contactPerson as |person|}}
-                {{person.fullName}}
-                &lt;{{person.email}}&gt;
-                ({{person.affiliation}})
-              {{else}}
-                -
-              {{/with}}
+
+              {{#let @file.parsedData.contactPerson as |person|}}
+                {{#if person}}
+                  {{person.fullName}}
+                  &lt;{{person.email}}&gt;
+                  ({{person.affiliation}})
+                {{else}}
+                  -
+                {{/if}}
+              {{/let}}
             </div>
 
             <div>
               <b>{{t 'file-list.item.hold-date'}}</b>
-              {{or data.holdDate '-'}}
+              {{or @file.parsedData.holdDate '-'}}
             </div>
           {{/if}}
 
           {{#if @file.isSequence}}
             <div>
               <b>{{t 'file-list.item.entries-count'}}</b>
-              {{format-number data.entriesCount}}
+              {{format-number @file.parsedData.entriesCount}}
             </div>
           {{/if}}
-        {{/with}}
+        {{/if}}
       {{/if}}
     </small>
 

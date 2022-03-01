@@ -9,23 +9,25 @@
         </div>
 
         <div class="modal-body vstack gap-3">
-          {{#with this.uploadFiles.currentUpload as |upload|}}
-            <div class="d-flex gap-2 align-items-center">
-              <div>{{upload.file.name}}</div>
+          {{#let this.uploadFiles.currentUpload as |upload|}}
+            {{#if upload}}
+              <div class="d-flex gap-2 align-items-center">
+                <div>{{upload.file.name}}</div>
 
-              {{#unless upload.isStarted}}
-                <div class="spinner-border spinner-border-sm text-primary" role="status">
-                  <span class="visually-hidden">{{t 'upload-progress-modal.loading'}}</span>
-                </div>
-              {{/unless}}
-            </div>
+                {{#unless upload.isStarted}}
+                  <div class="spinner-border spinner-border-sm text-primary" role="status">
+                    <span class="visually-hidden">{{t 'upload-progress-modal.loading'}}</span>
+                  </div>
+                {{/unless}}
+              </div>
 
-            <div class="progress">
-              {{#let (percentage this.uploadFiles.uploadedSize this.uploadFiles.totalSize) as |percentage|}}
-                <div class="progress-bar" role="progressbar" {{style (hash width=(concat percentage '%'))}} aria-valuenow={{percentage}} aria-valuemin="0" aria-valuemax="100"></div>
-              {{/let}}
-            </div>
-          {{/with}}
+              <div class="progress">
+                {{#let (percentage this.uploadFiles.uploadedSize this.uploadFiles.totalSize) as |percentage|}}
+                  <div class="progress-bar" role="progressbar" {{style (hash width=(concat percentage '%'))}} aria-valuenow={{percentage}} aria-valuemin="0" aria-valuemax="100"></div>
+                {{/let}}
+              </div>
+            {{/if}}
+          {{/let}}
         </div>
 
         <div class="modal-footer">

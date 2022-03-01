@@ -31,17 +31,17 @@
         </div>
       </div>
 
-      {{#with @state.files as |files|}}
+      {{#if @state.files}}
         <div class="card">
           <div class="card-header">{{t 'confirm.files'}}</div>
 
           <ul class="list-group list-group-flush">
-            {{#each files as |file|}}
+            {{#each @state.files as |file|}}
               <li class="list-group-item">{{file.name}}</li>
             {{/each}}
           </ul>
         </div>
-      {{/with}}
+      {{/if}}
 
       <div class="card">
         <div class="card-header">{{t 'confirm.entries-count'}}</div>
