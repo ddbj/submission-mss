@@ -10,7 +10,7 @@ application:
 index:
   title: MSS Submission Form
 
-  description-html: |
+  instructions-html: |
     <p>Mass Submission System (MSS) is the service to accept relatively large scale nucleotide sequence data (not reads) through sending text files. We at DDBJ recommend using MSS when:</p>
 
     <ul>
@@ -74,7 +74,7 @@ submission-form:
     next: Next
 
   prerequisite:
-    description-html: |
+    instructions-html: |
       <p>
         Acceptable nucleotide sequences<br />
         <a href="https://www.ddbj.nig.ac.jp/documents/data-categories-e.html" target="_blank" rel="noopener noreferrer">https://www.ddbj.nig.ac.jp/documents/data-categories-e.html</a>
@@ -161,7 +161,7 @@ confirm:
     back: Back
 
 complete:
-  description-html: |
+  complete-message-html: |
     <p>
       We have accepted the application. The MSS application ID is {massId}.<br />
       An email from mass@ddbj.nig.ac.jp will be sent to the address(es) filled in the form. We would like to ask you not to (re-)send the submission files by email attachment.
@@ -176,15 +176,20 @@ upload-progress-modal:
 
 upload-form:
   title: Upload
+
   description-html: |
     <p>You can upload submission files for MSS Submission ID <strong>{massId}</strong> from this page.</p>
+
   instructions-html: |
     <ul>
       <li>Please upload submission files without compression.</li>
       <li>The file extension should be <code>.ann</code> (annotation file) or <code>.fasta</code> (nucleotide sequence).</li>
     </ul>
+
   upload: Upload
+
   complete-html: |
     <h1 class="display-6 my-4">Upload completed</h1>
     <p>You will receive an email from mass@ddbj.nig.ac.jp to the address you entered. Please do not (re-)send submission files as an email attachment.</p>
+
   back-to-home: Back to home

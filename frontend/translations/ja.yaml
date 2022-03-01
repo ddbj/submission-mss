@@ -10,7 +10,7 @@ application:
 index:
   title: MSS 登録フォーム
 
-  description-html: |
+  instructions-html: |
     <p>Mass Submission System (MSS) は、比較的大規模な塩基配列データ (reads ではない) をファイル送付により登録するサービスです。登録予定データが、以下の条件に該当する場合は MSS をご利用ください。</p>
 
     <ul>
@@ -74,7 +74,7 @@ submission-form:
     back: 戻る
 
   prerequisite:
-    description-html: |
+    instructions-html: |
       <p>
         登録可能なデータは次の通りです。<br />
         <a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept" target="_blank" rel="noopener noreferrer">https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept</a>
@@ -163,7 +163,7 @@ confirm:
     back: 戻る
 
 complete:
-  description-html: |
+  complete-message-html: |
     <p>
       登録申請を受け付けました。MSS申し込みIDは {massId} です。<br />
       mass@ddbj.nig.ac.jp より、入力いただいたアドレス宛にメールが通知されます。メール添付での登録ファイル(再)送付はご遠慮ください。
@@ -178,15 +178,20 @@ upload-progress-modal:
 
 upload-form:
   title: アップロード
+
   description-html: |
     <p>この画面から MSS 申し込み ID <strong>{massId}</strong> の登録ファイルをアップロードできます。</p>
+
   instructions-html: |
     <ul>
       <li>登録ファイルを圧縮せずにアップロードしてください。</li>
       <li>ファイル拡張子は <code>.ann</code> (アノテーションファイル)、<code>.fasta</code> (塩基配列) にしてください。</li>
     </ul>
+
   upload: アップロード
+
   complete-html: |
     <h1 class="display-6 my-4">アップロード完了</h1>
     <p>mass@ddbj.nig.ac.jp より、入力いただいたアドレス宛にメールが通知されます。メール添付での登録ファイル(再)送付はご遠慮ください。</p>
+
   back-to-home: ホームに戻る
