@@ -223,6 +223,10 @@ upload-progress-modal:
   loading: Loading...
   cancel: Cancel
 
+submission-file:
+  invalid-filename: 'Filename must be alphanumeric characters and the following symbols are not allowed: \/:*?"<>|.'
+  unsupported-filetype: Unsupported file type.
+
 annotation-file-parser:
   invalid-hold-date: hold_date must be an 8-digit number (YYYYMMDD)
   invalid-contact-person: Contact person information (contact, email, institute) must be included or not included at all.

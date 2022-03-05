@@ -26,6 +26,10 @@ export class SubmissionFile {
     const {name, type, lastModified} = file;
 
     this.rawFile = new File([file], name.replaceAll(/\s/g, '_'), {type, lastModified});
+
+    if (!/^((?![\\/:*?"<>|. ]])[ -~])*$/.test(this.basename)) {
+      this.errors = [...this.errors, {id: 'submission-file.invalid-filename'}];
+    }
   }
 
   get isParseSucceeded() {
@@ -61,11 +65,11 @@ export class SubmissionFile {
           try {
             const {id, value} = JSON.parse(err);
 
-            this.errors = [{id, value}];
+            this.errors = [...this.errors, {id, value}];
           } catch (e) {
             console.error(e.message);
 
-            this.errors = [err];
+            this.errors = [...this.errors, err];
           }
 
           reject(err);
@@ -100,7 +104,14 @@ export class SequenceFile extends SubmissionFile {
 export class UnsupportedFile extends SubmissionFile {
   static extensions = [];
 
-  errors = ['登録ファイルの拡張子は .ann, .fasta のいずれかです。'];
+  constructor() {
+    super(...arguments);
+
+    this.errors = [
+      ...this.errors,
+      {id: 'submission-file.unsupported-filetype'}
+    ];
+  }
 
   parse() {
     this.isParsing = false;

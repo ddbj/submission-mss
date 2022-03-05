@@ -235,6 +235,10 @@ upload-progress-modal:
   loading: Loading...
   cancel: キャンセル
 
+submission-file:
+  invalid-filename: 'ファイル名は半角英数字にしてください。また、次の記号は使えません: \/:*?"<>|.'
+  unsupported-filetype: 対応していないファイル形式です。
+
 annotation-file-parser:
   invalid-hold-date: hold_date は8桁の数字 (YYYYMMDD) で指定してください。
   invalid-contact-person: コンタクトパーソンの情報 (contact, email, institute) のうち一部だけを指定することはできません。
