@@ -59,7 +59,15 @@ export class SubmissionFile {
 
       worker.addEventListener('message', ({data: [err, payload]}) => {
         if (err) {
-          this.errors = [err];
+          try {
+            const {id, value} = JSON.parse(err);
+
+            this.errors = [{id, value}];
+          } catch (e) {
+            console.error(e.message);
+
+            this.errors = [err];
+          }
 
           reject(err);
         } else {

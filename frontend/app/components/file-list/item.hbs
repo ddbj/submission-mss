@@ -55,7 +55,13 @@
     {{#if @errors}}
       <ul class="list-unstyled text-danger">
         {{#each @errors as |error|}}
-          <li>{{error}}</li>
+          <li>
+            {{#if error.id}}
+              {{t error.id}}
+            {{else}}
+              {{error}}
+            {{/if}}
+          </li>
         {{/each}}
       </ul>
     {{/if}}

@@ -28,7 +28,7 @@ async function parse(file) {
     }
   }
 
-  if (!entriesCount) { throw new Error('エントリが1つも含まれていません。'); }
+  if (!entriesCount) { throw new Error(JSON.stringify({id: 'sequence-file-parser.no-entries'})); }
 
   return {entriesCount};
 }

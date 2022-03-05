@@ -74,7 +74,7 @@
   {{#if (and @state.maybeTpa (eq @model.tpa false))}}
     <p>{{t 'submission-form.prerequisite.unacceptable'}}</p>
 
-    <LinkTo @route="home">{{t 'submission-form.prerequisite.back-to-home'}}</LinkTo>
+    <LinkTo @route="home">{{t 'go-to-home'}}</LinkTo>
   {{else}}
     <div class="hstack gap-3 justify-content-end">
       <button type="submit" class="btn btn-primary px-5">{{t 'submission-form.nav.next'}}</button>

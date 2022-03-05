@@ -1,3 +1,5 @@
+go-to-home: Go to home
+
 application:
   title: MSS Submission Form
   toggle-nav: Toggle navigation
@@ -90,7 +92,6 @@ submission-form:
     about-tpa:     TPA
 
     unacceptable: Regarding TPA, you cannot apply to MSS unless you will prepare a paper.
-    back-to-home: Go to home
 
   files:
     q-html: |
@@ -148,52 +149,29 @@ submission-form:
 
     email-language: Select the language for the email
 
-file-list:
-  add-files: Add files
-  stats: '{filesCount, plural, =1 {1 file} other {# files}}, {totalFileSize}'
-  select-files: Select the files
-  placeholder: '[[[select-files]]] or drag them here.'
-
-  item:
-    loading: Loading...
-    contact-person: Contact person
-    hold-date: Hold date
+  confirm:
+    prerequisites: Requirement
+    files: Submission file
     entries-count: Number of entries
-    remove: Remove
+    hold-date: Hold date
+    release-immediately: Release immediately
+    contact-person: Contact person
+    other-people: Other people
+    sequencer-type: Sequencer type
+    data-type: Data type
+    description: Description
+    email-language: Email language
 
-confirm:
-  prerequisites: Requirement
-  files: Submission file
-  entries-count: Number of entries
-  hold-date: Hold date
-  release-immediately: Release immediately
-  contact-person: Contact person
-  other-people: Other people
-  sequencer-type: Sequencer type
-  data-type: Data type
-  description: Description
-  email-language: Email language
-
-  blank: Blank
-  confirm-message: Please check the information you have entered, and if you are satisfied, click the "Submit" button. You cannot modify the information after you click the button.
-
-  nav:
+    blank: Blank
+    confirm-message: Please check the information you have entered, and if you are satisfied, click the "Submit" button. You cannot modify the information after you click the button.
     submit: Submit
-    back: Back
 
-complete:
-  complete-message-html: |
-    <p>
-      We have accepted the application. The MSS application ID is {massId}.<br />
-      An email from mass@ddbj.nig.ac.jp will be sent to the address(es) filled in the form. We would like to ask you not to (re-)send the submission files by email attachment.
-    </p>
-
-  back-to-home: Go to home
-
-upload-progress-modal:
-  title: Upload submission files
-  loading: Loading...
-  cancel: Cancel
+  complete:
+    complete-message-html: |
+      <p>
+        We have accepted the application. The MSS application ID is {massId}.<br />
+        An email from mass@ddbj.nig.ac.jp will be sent to the address(es) filled in the form. We would like to ask you not to (re-)send the submission files by email attachment.
+      </p>
 
 upload-form:
   title: Upload
@@ -214,3 +192,28 @@ upload-form:
     <p>You will receive an email from mass@ddbj.nig.ac.jp to the address you entered. Please do not (re-)send submission files as an email attachment.</p>
 
   back-to-home: Back to home
+
+file-list:
+  add-files: Add files
+  stats: '{filesCount, plural, =1 {1 file} other {# files}}, {totalFileSize}'
+  select-files: Select the files
+  placeholder: '[[[select-files]]] or drag them here.'
+
+  item:
+    loading: Loading...
+    contact-person: Contact person
+    hold-date: Hold date
+    entries-count: Number of entries
+    remove: Remove
+
+upload-progress-modal:
+  title: Upload submission files
+  loading: Loading...
+  cancel: Cancel
+
+annotation-file-parser:
+  invalid-hold-date: hold_date must be an 8-digit number (YYYYMMDD)
+  invalid-contact-person: Contact person information (contact, email, institute) must be included or not included at all.
+
+sequence-file-parser:
+  no-entries: No entries found.

@@ -59,7 +59,7 @@ COMMON	SUBMITTER		contact	Alice Liddell
 
     assert.rejects(
       new AnnotationFile(file).parse(),
-      /^Contact person information \(contact, email, institute\) must be included or not included at all\./
+      JSON.stringify({id: 'invalid-contact-person'})
     );
   });
 
@@ -72,7 +72,7 @@ COMMON	DATE		hold_date	foo
 
     assert.rejects(
       new AnnotationFile(file).parse(),
-      /hold_date must be an 8-digit number \(YYYYMMDD\), but: foo/
+      JSON.stringify({id: 'invalid-hold-date', value: 'foo'})
     );
   });
 });
