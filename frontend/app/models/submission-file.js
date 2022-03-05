@@ -22,8 +22,10 @@ export class SubmissionFile {
   @tracked parsedData;
   @tracked errors = [];
 
-  constructor(rawFile) {
-    this.rawFile = rawFile;
+  constructor(file) {
+    const {name, type, lastModified} = file;
+
+    this.rawFile = new File([file], name.replaceAll(/\s/g, '_'), {type, lastModified});
   }
 
   get isParseSucceeded() {

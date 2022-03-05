@@ -38,8 +38,7 @@ COMMON	SUBMITTER		contact	Alice Liddell
   test('empty' , async function(assert) {
     assert.expect(2);
 
-    const file = new File([outdent`
-    `], 'foo.ann');
+    const file = new File([''], 'foo.ann');
 
     const {
       contactPerson,
@@ -74,5 +73,14 @@ COMMON	DATE		hold_date	foo
       new AnnotationFile(file).parse(),
       JSON.stringify({id: 'invalid-hold-date', value: 'foo'})
     );
+  });
+
+  test('replace whitespace in filename', async function(assert) {
+    assert.expect(1);
+
+    const file      = new File([''], 'foo bar baz.ann');
+    const {rawFile} = new AnnotationFile(file);
+
+    assert.strictEqual(rawFile.name, 'foo_bar_baz.ann');
   });
 });
