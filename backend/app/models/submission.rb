@@ -12,4 +12,8 @@ class Submission < ApplicationRecord
     enumerize :sequencer,      in: enums.fetch(:sequencers).map {|item| item.fetch(:key) }, i18n_scope: 'mssform.sequencers'
     enumerize :email_language, in: enums.fetch(:locales).map    {|item| item.fetch(:key) }, i18n_scope: 'mssform.locales'
   end
+
+  def root_dir
+    Pathname.new(ENV.fetch('SUBMISSIONS_DIR')).join(mass_id)
+  end
 end

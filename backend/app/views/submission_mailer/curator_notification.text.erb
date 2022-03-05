@@ -27,7 +27,7 @@
 
 ## data_arrival_date
 <% @submission.uploads.each do |upload| -%>
-<%= upload.timestamp %>: <%= upload.directory_path %>
+<%= upload.timestamp %>: <%= upload.files_dir %>
 <% end -%>
 
 ## sequencer
