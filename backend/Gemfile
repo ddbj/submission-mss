@@ -24,6 +24,7 @@ end
 group :test do
   gem 'climate_control'
   gem 'factory_bot_rails', group: :development
-  gem 'rspec-rails',       group: :development
+  gem 'rspec-default_http_header'
+  gem 'rspec-rails', group: :development
   gem 'webmock'
 end

@@ -5,12 +5,6 @@ using TmpUploadedFile
 RSpec.describe ProcessSubmissionJob do
   include ActiveJob::TestHelper
 
-  around do |example|
-    Dir.mktmpdir do |dir|
-      ClimateControl.modify SUBMISSIONS_DIR: dir, &example
-    end
-  end
-
   before do
     submission = create(:submission, **{
       id:             42,
@@ -41,7 +35,7 @@ RSpec.describe ProcessSubmissionJob do
           ]
         })
       ]
-    }).reload
+    })
 
     stub_request(:post, 'https://www.googleapis.com/oauth2/v4/token').to_return(
       headers: {

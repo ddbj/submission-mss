@@ -8,5 +8,9 @@ FactoryBot.define do
     data_type      { Submission.data_type.values.sample }
     description    { 'some description' }
     email_language { Submission.email_language.values.sample }
+
+    after :create do |model|
+      model.reload # load generated column (mass_id)
+    end
   end
 end

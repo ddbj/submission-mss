@@ -22,7 +22,7 @@ RSpec.describe UploadJob do
       id:   42,
       user: build(:user, :alice),
       contact_person: build(:contact_person, :alice)
-    }).reload
+    })
 
     upload = create(:upload, **{
       submission:,

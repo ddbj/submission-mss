@@ -1,7 +1,7 @@
 class SubmissionsController < ApplicationController
   def show
-    if current_user.submissions.where(mass_id: params.require(:mass_id)).exists?
-      head :no_content
+    if submission = current_user.submissions.where(mass_id: params.require(:mass_id)).take
+      head submission.upload_disabled? ? :forbidden : :no_content
     else
       head :not_found
     end

@@ -24,7 +24,7 @@ RSpec.describe SubmissionMailer do
         ],
 
         uploads: uploaded ? [build(:upload)] : []
-      }).reload
+      })
     end
 
     example 'email_language=ja, uploaded=true' do
@@ -157,7 +157,7 @@ RSpec.describe SubmissionMailer do
           build(:other_person, :bob),
           build(:other_person, :carol)
         ]
-      }).reload
+      })
 
       mail = SubmissionMailer.with(submission:).curator_notification
 

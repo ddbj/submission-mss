@@ -8,7 +8,7 @@ class ApplicationController < ActionController::API
     return @current_user if @current_user
 
     if token = openid_token_payload
-      @current_user = User.find_or_initialize_by(openid_sub: token.fetch('sub')).tap {|user|
+      @current_user = User.find_or_initialize_by(openid_sub: token.fetch(:sub)).tap {|user|
         user.update! id_token: token
       }
     else
@@ -38,10 +38,13 @@ class ApplicationController < ActionController::API
 
   def openid_token_payload
     return nil unless header = request.headers['Authorization']
-    return nil unless token  = /\ABearer (?<token>\S+)\z/.match(header)&.named_captures.fetch('token')
+    return nil unless token  = /\ABearer (?<token>\S+)\z/.match(header)&.named_captures&.fetch('token')
 
-    config               = Rails.root.join('../config/openid-configuration.json').open(&JSON.method(:load))
-    algorithms, jwks_uri = config.fetch_values('id_token_signing_alg_values_supported', 'jwks_uri')
+    config = Rails.root.join('../config/openid-configuration.json').open {|f|
+      JSON.load(f, nil, symbolize_names: true, create_additions: false)
+    }
+
+    algorithms, jwks_uri = config.fetch_values(:id_token_signing_alg_values_supported, :jwks_uri)
 
     jwks = ->(opts) {
       Rails.cache.fetch(:openid_jwks, force: opts[:invalidate]) {
@@ -54,6 +57,7 @@ class ApplicationController < ActionController::API
     }
 
     payload, _header = JWT.decode(token, nil, true, algorithms:, jwks:, verify_aud: true, aud: ENV.fetch('OPENID_CLIENT_ID'))
-    payload
+
+    payload.symbolize_keys
   end
 end

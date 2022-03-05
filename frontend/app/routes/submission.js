@@ -13,7 +13,7 @@ export default class SubmissionRoute extends Route {
       headers: this.session.authorizationHeader
     });
 
-    if (res.status === 404) {
+    if (!res.ok) {
       this.router.transitionTo('index');
     }
 

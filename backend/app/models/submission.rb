@@ -16,4 +16,8 @@ class Submission < ApplicationRecord
   def root_dir
     Pathname.new(ENV.fetch('SUBMISSIONS_DIR')).join(mass_id)
   end
+
+  def upload_disabled?
+    root_dir.join('disable-upload').exist?
+  end
 end

@@ -236,6 +236,8 @@ GEM
     rexml (3.2.5)
     rspec-core (3.11.0)
       rspec-support (~> 3.11.0)
+    rspec-default_http_header (0.0.6)
+      rspec-rails (> 3.0)
     rspec-expectations (3.11.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.11.0)
@@ -301,6 +303,7 @@ DEPENDENCIES
   pg
   puma
   rails (~> 7.0.0)
+  rspec-default_http_header
   rspec-rails
   sidekiq
   webmock
