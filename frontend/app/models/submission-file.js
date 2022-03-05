@@ -41,16 +41,13 @@ export class SubmissionFile {
   }
 
   get basename() {
-    const {name}    = this.rawFile;
-    const {extname} = this;
+    const {name, extname} = this;
 
     return extname ? name.slice(0, -extname.length) : name;
   }
 
   get extname() {
-    const {name} = this.rawFile;
-
-    return this.constructor.extensions.find(ext => name.endsWith(ext));
+    return this.constructor.extensions.find(ext => this.name.endsWith(ext));
   }
 
   parse() {
