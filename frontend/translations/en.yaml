@@ -95,7 +95,7 @@ submission-form:
 
   files:
     q-html: |
-      <p>You can upload the submission files that have been checked by <a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener noreferrer">UME (Parser and transChecker)</a>, if you already have. </p>
+      <p>If you have a submission file that have been already checked by <a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener noreferrer">UME (parser and transChecker)</a>, please upload it. </p>
 
     a1: I would like to upload the Bacterial complete genome or WGS submission files that have been prepared by DFAST.
     a2: I would like to upload the submission files that have been prepared without using DFAST.
@@ -137,40 +137,42 @@ submission-form:
     no-other-person: No other person added.
     add: Add
 
-    sequencer: Select the type of the nucleotide sequencer
+    sequencer: Select the type of the nucleotide sequencing technology.
     data-type: Data type
 
     data-type-text-html: |
       Select the <a href="https://www.ddbj.nig.ac.jp/ddbj/data-categories-e.html#sub" target="_blank" rel="noopener noreferrer">type of the submission</a>. Use the <a href="https://www.ddbj.nig.ac.jp/submission-e.html" target="_blank" rel="noopener noreferrer">navigation tool</a> if you cannot determine the type.
 
-    description: Fill the additional information
-    description-placeholder: Draft genome sequences with annotations from the five Pseudomonas dibenzothiophene-degrading strains isolated from activated sludge.
-    description-text-html: ''
+    description: Supplementary Information
+    description-placeholder: e.g. Annotated draft genome sequences of five Pseudomonas dibenzothiophene-degrading strains isolated from activated sludge.
+
+    description-text-html: |
+      Please provide a supplemental description of your submission data here (Japanese is acceptable). If you are updating a sequence registered with DDBJ, please enter the target accession
 
     email-language: Select the language for the email
 
   confirm:
-    prerequisites: Requirement
-    files: Submission file
+    prerequisites: Nucleotide Sequences
+    files: Registration file
     entries-count: Number of entries
-    hold-date: Hold date
+    hold-date: Scheduled release date
     release-immediately: Release immediately
     contact-person: Contact person
-    other-people: Other people
+    other-people: Additional information
     sequencer-type: Sequencer type
     data-type: Data type
-    description: Description
-    email-language: Email language
+    description: Supplemental description
+    email-language: Language of notification E-mail
 
     blank: Blank
-    confirm-message: Please check the information you have entered, and if you are satisfied, click the "Submit" button. You cannot modify the information after you click the button.
-    submit: Submit
+    confirm-message: Please, check the information, then press the "Registration Application" button. You cannot modify the information after clicking.
+    submit: Registration Application
 
   complete:
     complete-message-html: |
       <p>
-        We have accepted the application. The MSS application ID is {massId}.<br />
-        An email from mass@ddbj.nig.ac.jp will be sent to the address(es) filled in the form. We would like to ask you not to (re-)send the submission files by email attachment.
+        Your application has been accepted. The MSS application ID is {massId}.<br />
+        An email from mass@ddbj.nig.ac.jp will be sent to the address(es) filled in the form. Please do not send submission file(s) as E-mail attachments.
       </p>
 
 upload-form:
