@@ -184,10 +184,7 @@ submission-form:
 
     blank: なし
     confirm-message: 入力内容をご確認のうえ、よろしければ登録申請ボタンを押してください。クリック後は修正できません。
-
-    nav:
-      submit: 登録申請
-      back: 戻る
+    submit: 登録申請
 
   complete:
     complete-message-html: |
