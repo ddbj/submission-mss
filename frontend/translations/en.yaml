@@ -11,11 +11,11 @@ index:
   title: MSS Submission Form
 
   instructions-html: |
-    <p>Mass Submission System (MSS) is the service to accept relatively large scale nucleotide sequence data (not reads) through sending text files. We at DDBJ recommend using MSS when:</p>
+    <p>Mass Submission System (MSS) is the service for submitting relatively large nucleotide sequence data (not reads) by sending text files. We at DDBJ recommend using MSS when:</p>
 
     <ul>
       <li>
-        the submission is not applicable for Nucleotide Sequence Submission System (NSSS)
+        Submission is not applicable for Nucleotide Sequence Submission System (NSSS)
 
         <ul>
           <li><a href="https://www.ddbj.nig.ac.jp/ddbj/est-e.html">EST</a>, STS, <a href="https://www.ddbj.nig.ac.jp/ddbj/tsa-e.html">TSA</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/htc-e.html">HTC</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/gss-e.html">GSS</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/htg-e.html">HTG</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/wgs-e.html">WGS</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/con-e.html">CON</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/tls-e.html">TLS</a></li>
@@ -24,27 +24,15 @@ index:
       </li>
 
       <li>
-        the submission with long sequences.
-
-        <ul>
-          <li>greater than 500 kb in its length</li>
-        </ul>
+        Submission with sequences length greater than 500 kb.
       </li>
 
       <li>
-        the complex submission containing many features
-
-        <ul>
-          <li>more than 30 features</li>
-        </ul>
+        Submission file with more than, approximately, 30 features.
       </li>
 
       <li>
-        the submission consists of large number of sequences.
-
-        <ul>
-          <li>greater than 500, when number of sequences is greater than 1000, you have to submit two or more times via NSSS</li>
-        </ul>
+        Submission consists of more than 500 sequences. If the number of sequences is greater than 1000, you have to submit two or more times via NSSS.
       </li>
     </ul>
 
@@ -57,7 +45,7 @@ home:
   login-as-html: |
     You are logged in as <strong>{account}</strong>
   logout: Logout
-  new-submission: New submission
+  new-submission: Start new submission
 
 submission-form:
   title: New Submission
@@ -80,7 +68,7 @@ submission-form:
         <a href="https://www.ddbj.nig.ac.jp/documents/data-categories-e.html" target="_blank" rel="noopener noreferrer">https://www.ddbj.nig.ac.jp/documents/data-categories-e.html</a>
       </p>
 
-      <p>You can apply for the submission or upload the submission files when the submission matches the following requirements.You must separate into some submissions and apply for MSS with each submission when the submission does not match any of the following requirements.</p>
+      <p>You can apply for the submission or upload the submission files when the submission matches the following requirements. Otherwise, you must aggregate the submissions until requirements are achieved.</p>
 
       <ul>
         <li>same contact person</li>
@@ -88,18 +76,18 @@ submission-form:
         <li>same publication date</li>
       </ul>
 
-    q-1: Select one that matches to the submission.
+    q-1: Select one that matches the submission type.
 
     a1-1: Yes, I have determined the nucleotide sequence by my study.
     a1-2: No, I have created the nucleotide sequences by assembling from the publicly available data.
 
-    q-2: A paper, which describes information about the assembly, should be finally published from a peer-reviewed journal, if you would like to submit TPA to MSS. Select one from the items below.
+    q-2: If you would like to submit TPA to MSS, a paper which describes information about the assembly, should be finally published on a peer-reviewed journal. Select one from the items below.
 
-    a2-1: I will submit (or have submitted) a paper to peer-reviewed journal.
+    a2-1: I will submit (or have already submitted) a paper to a peer-reviewed journal.
     a2-2: No, I have no plan to submit a paper.
 
     about-tpa-url: https://www.ddbj.nig.ac.jp/ddbj/tpa-e.html
-    about-tpa:     About TPA
+    about-tpa:     TPA
 
     unacceptable: Regarding TPA, you cannot apply to MSS unless you will prepare a paper.
     back-to-home: Go to home
