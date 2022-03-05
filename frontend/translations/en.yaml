@@ -112,6 +112,14 @@ submission-form:
         <dd><code>.fasta</code>, <code>.seq.fa</code>, <code>.fa</code>, <code>.fna</code>, <code>.seq</code></dd>
       </dl>
 
+    errors:
+      no-annotation: There is no corresponding annotation file.
+      duplicate-annotations: Duplicate annotation files with the same name exist.
+      no-sequence: There is no corresponding sequence file.
+      duplicate-sequences: Duplicate sequence files with the same name exist.
+      different-contact-person: Contact person must be the same for all annotation files.
+      different-hold-date: Hold date must be the same for all annotation files.
+
   metadata:
     required: Required
     optional: Optional

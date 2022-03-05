@@ -129,6 +129,8 @@ submission-form:
       duplicate-annotations: 同名のアノテーションファイルが複数あります。
       no-sequence: 対応する配列ファイルがありません。
       duplicate-sequences: 同名の配列ファイルが複数あります。
+      different-contact-person: コンタクトパーソンはすべてのアノテーションファイルで同一でなければなりません。
+      different-hold-date: 公開予定日はすべてのアノテーションファイルで同一でなければなりません。
 
   metadata:
     required: 必須

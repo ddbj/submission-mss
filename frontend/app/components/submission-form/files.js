@@ -145,25 +145,25 @@ function validatePair(errors, files) {
 
     if (!annotations.length) {
       for (const file of sequences) {
-        errors.get(file).push('対応するアノテーションファイルがありません。');
+        errors.get(file).push({id: 'submission-form.files.errors.no-annotation'});
       }
     }
 
     if (annotations.length > 1) {
       for (const file of annotations) {
-        errors.get(file).push('同名のアノテーションファイルが複数あります。');
+        errors.get(file).push({id: 'submission-form.files.errors.duplicate-annotations'});
       }
     }
 
     if (!sequences.length) {
       for (const file of annotations) {
-        errors.get(file).push('対応する配列ファイルがありません。');
+        errors.get(file).push({id: 'submission-form.files.errors.no-sequence'});
       }
     }
 
     if (sequences.length > 1) {
       for (const file of sequences) {
-        errors.get(file).push('同名の配列ファイルが複数あります。');
+        errors.get(file).push({id: 'submission-form.files.errors.duplicate-sequences'});
       }
     }
   }
@@ -186,13 +186,13 @@ function validateSameness(errors, files) {
 
   if (contactPersonSet.size > 1) {
     for (const file of files) {
-      errors.get(file).push('コンタクトパーソンはすべてのアノテーションファイルで同一でなければなりません。');
+      errors.get(file).push({id: 'submission-form.files.errors.different-contact-person'});
     }
   }
 
   if (holdDateSet.size > 1) {
     for (const file of files) {
-      errors.get(file).push('公開予定日はすべてのアノテーションファイルで同一でなければなりません。');
+      errors.get(file).push({id: 'submission-form.files.errors.different-hold-date'});
     }
   }
 }
