@@ -41,6 +41,7 @@ jobs:
           bundler-cache: true
           working-directory: backend
 
+      - run: ln -s openid-configuration.local.json ../config/openid-configuration.json
       - run: bin/rails db:test:load
       - run: bundle exec rspec
 
@@ -65,5 +66,5 @@ jobs:
 
       - run: yarn install --frozen-lockfile
 
-      - run: echo '{}' > ../config/openid-configuration.json
+      - run: ln -s openid-configuration.local.json ../config/openid-configuration.json
       - run: yarn test
