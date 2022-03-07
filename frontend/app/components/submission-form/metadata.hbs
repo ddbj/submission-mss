@@ -44,7 +44,7 @@
               <small class="text-danger">{{t 'submission-form.metadata.required'}}</small>
             </label>
 
-            <input type="email" value={{person.email}} readonly={{@state.isContactPersonReadonly}} required title={{t 'submission-form.metadata.email-title'}} class="form-control" id="contactPerson.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
+            <input type="email" value={{person.email}} readonly={{@state.isContactPersonReadonly}} required class="form-control" id="contactPerson.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
           </div>
 
           <div class="col">
@@ -84,7 +84,7 @@
                     <small class="text-danger">{{t 'submission-form.metadata.required'}}</small>
                   </label>
 
-                  <input type="email" value={{person.email}} required={{true}} title={{t 'submission-form.metadata.email-title'}} class="form-control" id="otherPerson.{{i}}.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
+                  <input type="email" value={{person.email}} required={{true}} class="form-control" id="otherPerson.{{i}}.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
                 </div>
 
                 <div class="col">

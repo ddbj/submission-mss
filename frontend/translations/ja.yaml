@@ -171,7 +171,6 @@ submission-form:
 
     email-language: 通知メールの言語
 
-    email-title: 英字, 数字, @, .[ピリオド], -[ハイフン], _[アンダース丘]
     full-name-title: "英字, .[ピリオド], ,[コンマ], -[ハイフン], '[アポストロフィー], [空白]."
     affiliation-title: 英数記号, ただし \ [バックスラッシュ], ` [バッククォート] 以外
 
