@@ -159,7 +159,7 @@ submission-form:
 
     email-language: Select the language for the email
 
-    full-name-title: "alphabets, .[period], ,[comma], -[hyphen], '[apostrophe], [space]."
+    full-name-title: "alphabets, .[period], ,[comma], -[hyphen], '[single-quote], [space]."
     affiliation-title: All printable characters but not \ [back-slash], ` [back-quote]
 
   confirm:
