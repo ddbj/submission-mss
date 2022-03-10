@@ -31,6 +31,7 @@ FROM ruby:${RUBY_VERSION:?}
 
 ARG APP_GID
 ARG APP_UID
+ARG BUNDLER_VERSION
 
 ENV BUNDLE_CLEAN=true
 ENV BUNDLE_DEPLOYMENT=true
@@ -44,7 +45,7 @@ ENV TZ=Japan
 
 EXPOSE 3000
 
-RUN gem install bundler:2.3.7
+RUN gem install bundler --version ${BUNDLER_VERSION:?}
 
 WORKDIR /app/config/
 COPY ./config/ ./

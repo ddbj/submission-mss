@@ -10,6 +10,7 @@ export COMPOSE_FILE=$dir/base.yml:$dir/$STAGE.yml
 export COMPOSE_PROJECT_NAME=mssform-$STAGE
 export DOCKER_BUILDKIT=1
 
+export BUNDLER_VERSION=$(grep 'BUNDLED WITH' -A1 $dir/../backend/Gemfile.lock | tail -n1 | sed 's/\s*//g')
 export NODE_VERSION=$(cat $dir/../frontend/.node-version)
 export RUBY_VERSION=$(cat $dir/../backend/.ruby-version)
 
