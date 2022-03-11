@@ -45,6 +45,8 @@ ENV TZ=Japan
 
 EXPOSE 3000
 
+COPY ./docker/rails/irbrc /.irbrc
+
 RUN gem install bundler --version ${BUNDLER_VERSION:?}
 
 WORKDIR /app/config/
