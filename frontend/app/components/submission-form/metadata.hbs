@@ -1,4 +1,4 @@
-<form class="vstack gap-3" {{on 'submit' (prevent-default @nav.goNext)}}>
+<form class="vstack gap-3" {{on 'submit' (prevent-default @nav.goNext)}} {{leaving-confirmation}}>
   <div class="card">
     <div class="card-body bg-lighth">
       {{t 'submission-form.metadata.entries-html' htmlSafe=true}}
