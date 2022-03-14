@@ -14,17 +14,17 @@ export default class FileListComponent extends Component {
     this.fileInputElement.click();
   }
 
-  @action async addFiles(files) {
+  @action addFiles(rawFiles) {
     this.dragOver = false;
 
-    const promises = Array.from(files).map((rawFile) => {
-      const file = SubmissionFile.fromRawFile(rawFile);
+    const files = Array.from(rawFiles).map(SubmissionFile.fromRawFile);
 
+    for (const file of files) {
       this.args.onAdd(file);
 
-      return file.parse();
-    });
-
-    await Promise.all(promises);
+      file.parse().then(() => {
+        file.calculateDigest();
+      });
+    }
   }
 }

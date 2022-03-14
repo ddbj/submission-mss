@@ -1,6 +1,6 @@
 import { tracked } from '@glimmer/tracking';
 
-import { DirectUpload } from '@rails/activestorage';
+import { DirectUpload } from 'mssform/models/direct-upload';
 
 export default class UploadFiles {
   @tracked uploads;
@@ -41,7 +41,7 @@ class UploadFile {
   }
 
   perform() {
-    const upload = new DirectUpload(this.file, '/api/direct_uploads', {
+    const upload = new DirectUpload(this.file.rawFile, '/api/direct_uploads', {
       directUploadWillStoreFileWithXHR: (xhr) => {
         xhr.upload.addEventListener('loadstart', () => {
           this.isStarted = true;
@@ -51,7 +51,7 @@ class UploadFile {
           this.uploadedSize = loaded;
         });
       }
-    });
+    }, this.file.checksum);
 
     return new Promise((resolve, reject) => {
       upload.create((err, blob) => {

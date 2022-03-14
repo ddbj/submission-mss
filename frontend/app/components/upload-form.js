@@ -33,7 +33,7 @@ export default class UploadFormComponent extends Component {
   }
 
   @action async submit(uploadProgressModal) {
-    const blobs = await uploadProgressModal.performUpload(this.files.map(f => f.rawFile));
+    const blobs = await uploadProgressModal.performUpload(this.files);
 
     const body = new FormData();
 

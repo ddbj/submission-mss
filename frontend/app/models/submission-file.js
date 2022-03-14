@@ -58,7 +58,7 @@ export class SubmissionFile {
     this.isParsing = true;
 
     return new Promise((resolve, reject) => {
-      const worker = new Worker(this.constructor.workerURL);
+      const worker = new Worker(this.constructor.parserURL);
 
       worker.addEventListener('message', ({data: [err, payload]}) => {
         if (err) {
@@ -85,18 +85,36 @@ export class SubmissionFile {
       this.isParsing = false;
     });
   }
+
+  calculateDigest() {
+    this.checksum = new Promise((resolve, reject) => {
+      const worker = new Worker('/workers/calculate-digest.js', {type: 'module'});
+
+      worker.addEventListener('message', ({data: [err, digest]}) => {
+        if (err) {
+          console.error(err);
+
+          reject(err);
+        } else {
+          resolve(digest);
+        }
+      });
+
+      worker.postMessage({file: this.rawFile});
+    });
+  }
 }
 
 export class AnnotationFile extends SubmissionFile {
   static extensions = ['.ann', '.annt.tsv', '.ann.txt'];
-  static workerURL  = '/workers/annotation-file-parser.js';
+  static parserURL  = '/workers/annotation-file-parser.js';
 
   isAnnotation = true;
 }
 
 export class SequenceFile extends SubmissionFile {
   static extensions = ['.fasta', '.seq.fa', '.fa', '.fna', '.seq'];
-  static workerURL  = '/workers/sequence-file-parser.js';
+  static parserURL  = '/workers/sequence-file-parser.js';
 
   isSequence = true;
 }
