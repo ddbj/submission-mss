@@ -50,9 +50,15 @@ index:
       </li>
     </ul>
 
-    <p>登録を始めるには D-way アカウントでログインしてください。</p>
+    <p>登録を始めるには <a href="https://www.ddbj.nig.ac.jp/account.html">D-way アカウント</a>でログインしてください。</p>
 
   login: D-way アカウントでログイン
+
+  reset-password-html: |
+    <a href="https://www.ddbj.nig.ac.jp/contact.html?db=dway">ユーザ名またはパスワードを忘れてしまった</a>
+
+  create-account-html: |
+    <a href="https://ddbj.nig.ac.jp/D-way/contents/general/reserve_account_page">新規アカウント登録</a>
 
 home:
   title: ホーム

@@ -38,9 +38,15 @@ index:
       </li>
     </ul>
 
-    <p>Login with D-way account to start a new submission</p>
+    <p>Login with <a href="https://www.ddbj.nig.ac.jp/account-e.html">D-way account</a> to start a new submission.</p>
 
   login: Login with D-way Account
+
+  reset-password-html: |
+    <a href="https://www.ddbj.nig.ac.jp/contact_e.html?db=dway">Forgot username or password</a>
+
+  create-account-html: |
+    <a href="https://ddbj.nig.ac.jp/D-way/contents/general/reserve_account_page">Register a new account</a>
 
 home:
   title: Home
