@@ -126,7 +126,7 @@ services:
       - |
           set -e
 
-          curl --retry 3 --silent --show-error --output /dev/null http://minio:9000
+          curl --retry 5 --silent --show-error --output /dev/null http://minio:9000
 
           mc alias set minio http://minio:9000 $${MINIO_ROOT_USER:?} $${MINIO_ROOT_PASSWORD:?}
           mc mb --ignore-existing minio/uploads
