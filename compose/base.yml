@@ -17,7 +17,7 @@ services:
 
     depends_on:
       - rails
-      - minio
+      - minio-setup
 
   rails: &rails
     build:
@@ -67,7 +67,7 @@ services:
         condition: service_healthy
       memcached:
         condition: service_started
-      minio:
+      minio-setup:
         condition: service_started
 
   sidekiq:
@@ -117,6 +117,12 @@ services:
     volumes:
       - minio:/data
 
+    healthcheck:
+      test: [CMD, curl, -v, --fail, --retry, '3', --retry-connrefused, --silent, --show-error, --output, /dev/null, http://localhost:9000/minio/health/live]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
   minio-setup:
     image: minio/mc:latest
 
@@ -125,8 +131,6 @@ services:
       - -xc
       - |
           set -e
-
-          curl --retry 5 --silent --show-error --output /dev/null http://minio:9000
 
           mc alias set minio http://minio:9000 $${MINIO_ROOT_USER:?} $${MINIO_ROOT_PASSWORD:?}
           mc mb --ignore-existing minio/uploads
@@ -140,4 +144,5 @@ services:
       MINIO_SECRET_ACCESS_KEY:
 
     depends_on:
-      - minio
+      minio:
+        condition: service_healthy
