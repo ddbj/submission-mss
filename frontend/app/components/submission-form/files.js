@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { dropTask } from 'ember-concurrency';
 import { NotFoundError } from '@ember-data/adapter/error';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
@@ -61,8 +62,8 @@ export default class SubmissionFormFilesComponent extends Component {
     state.files = state.files.filter(f => f !== file);
   }
 
-  @action async goNext() {
-    await this.fillDataFromLastSubmission();
+  @dropTask *goNext() {
+    yield this.fillDataFromLastSubmission();
     this.fillDataFromSubmissionFiles();
 
     this.args.nav.goNext();
