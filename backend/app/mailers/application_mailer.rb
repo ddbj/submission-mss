@@ -1,7 +1,7 @@
 class ApplicationMailer < ActionMailer::Base
   layout 'mailer'
 
-  default from: email_address_with_name('mass@ddbj.nig.ac.jp', 'DDBJ Mass Submission System (MSS)')
+  default from: -> { ENV.fetch('CURATOR_ML_ADDRESS') }
 
   after_action do
     if stage = ENV['STAGE'] and stage != 'production'

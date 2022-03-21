@@ -16,7 +16,7 @@ class SubmissionMailer < ApplicationMailer
     @row        = WorkingList.instance.to_row(@submission)
 
     mail(
-      to:      ApplicationMailer.default_params.fetch(:from),
+      to:      ENV.fetch('CURATOR_ML_ADDRESS'),
       subject: "[DDBJ:#{@submission.mass_id}] #{@submission.data_type_text}"
     )
   end

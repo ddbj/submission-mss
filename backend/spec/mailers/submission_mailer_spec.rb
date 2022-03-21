@@ -1,13 +1,5 @@
 require 'rails_helper'
 
-using Module.new {
-  refine ActionMailer::MessageDelivery do
-    def newline_normalized_body
-      body.decoded.gsub("\r\n", "\n")
-    end
-  end
-}
-
 RSpec.describe SubmissionMailer do
   describe 'submitter_confirmation' do
     def create_submission(email_language:, uploaded:)
@@ -32,13 +24,13 @@ RSpec.describe SubmissionMailer do
 
       mail = SubmissionMailer.with(submission:).submitter_confirmation
 
-      expect(mail.from).to contain_exactly('mass@ddbj.nig.ac.jp')
-      expect(mail.to).to   contain_exactly('alice+idp@example.com')
-      expect(mail.cc).to   contain_exactly('alice+contact@foo.example.com', 'bob@bar.example.com', 'carol@baz.example.com')
+      expect(mail).to deliver_from('Admin <mssform@example.com>')
+      expect(mail).to deliver_to('alice+idp@example.com')
+      expect(mail).to cc_to('alice+contact@foo.example.com', 'bob@bar.example.com', 'carol@baz.example.com')
 
-      expect(mail.subject).to eq('[DDBJ:NSUB000042] WGS: Whole Genome Shotgun')
+      expect(mail).to have_subject('[DDBJ:NSUB000042] WGS: Whole Genome Shotgun')
 
-      expect(mail.newline_normalized_body).to include(<<~BODY)
+      expect(mail).to have_body_text(<<~BODY)
         ご登録者 様
 
         大規模塩基配列データ登録システム Mass Submission System (MSS) をご利用下さいまして、ありがとうございます。
@@ -46,7 +38,7 @@ RSpec.describe SubmissionMailer do
         私共ではお送りいただいた情報について、国際塩基配列データベース (DDBJ/ENA/GenBank) が定める規則に従い査定作業を行います。
       BODY
 
-      expect(mail.newline_normalized_body).to include(<<~BODY)
+      expect(mail).to have_body_text(<<~BODY)
         Submission file の再提出を求められた際は、次の URL から upload してください。
         http://mssform.example.com/home/submission/NSUB000042/upload?locale=ja
       BODY
@@ -57,7 +49,7 @@ RSpec.describe SubmissionMailer do
 
       mail = SubmissionMailer.with(submission:).submitter_confirmation
 
-      expect(mail.newline_normalized_body).to include(<<~BODY)
+      expect(mail).to have_body_text(<<~BODY)
         Dear Submitter,
 
         Thank you for using DDBJ Mass Submission System (MSS) for large-scale sequence data submission.
@@ -65,7 +57,7 @@ RSpec.describe SubmissionMailer do
         We will check and annotate them on the basis of the manual and rules common to the DDBJ, EMBL-Bank, and GenBank.
       BODY
 
-      expect(mail.newline_normalized_body).to include(<<~BODY)
+      expect(mail).to have_body_text(<<~BODY)
         If you are asked for re-submitting the files, upload the submission file(s) from the URL below.
         http://mssform.example.com/home/submission/NSUB000042/upload?locale=en
       BODY
@@ -76,18 +68,18 @@ RSpec.describe SubmissionMailer do
 
       mail = SubmissionMailer.with(submission:).submitter_confirmation
 
-      expect(mail.newline_normalized_body).to include(<<~BODY)
+      expect(mail).to have_body_text(<<~BODY)
         大規模塩基配列データ登録システム Mass Submission System (MSS) をご利用下さいまして、ありがとうございます。
 
         登録には「アノテーションファイル」と「配列ファイル」が必要です。
       BODY
 
-      expect(mail.newline_normalized_body).to include(<<~BODY)
+      expect(mail).to have_body_text(<<~BODY)
         Submission対象のデータタイプに関する説明です。
         https://www.ddbj.nig.ac.jp/ddbj/wgs.html
       BODY
 
-      expect(mail.newline_normalized_body).to include(<<~BODY)
+      expect(mail).to have_body_text(<<~BODY)
         Submission file(s)完成後、以下の URL から upload してください。
         http://mssform.example.com/home/submission/NSUB000042/upload?locale=ja
       BODY
@@ -98,18 +90,18 @@ RSpec.describe SubmissionMailer do
 
       mail = SubmissionMailer.with(submission:).submitter_confirmation
 
-      expect(mail.newline_normalized_body).to include(<<~BODY)
+      expect(mail).to have_body_text(<<~BODY)
         Thank you for using DDBJ Mass Submission System (MSS) for large-scale sequence data submission.
 
         Annotation and sequence files are needed for the registration.
       BODY
 
-      expect(mail.newline_normalized_body).to include(<<~BODY)
+      expect(mail).to have_body_text(<<~BODY)
         Regarding the explanation of the datatype that you have chosen, visit the site below.
         https://www.ddbj.nig.ac.jp/ddbj/wgs-e.html
       BODY
 
-      expect(mail.newline_normalized_body).to include(<<~BODY)
+      expect(mail).to have_body_text(<<~BODY)
         Upload the submission file(s) from the URL below, after you completely create them.
         http://mssform.example.com/home/submission/NSUB000042/upload?locale=en
       BODY
@@ -121,9 +113,9 @@ RSpec.describe SubmissionMailer do
 
         mail = SubmissionMailer.with(submission:).submitter_confirmation
 
-        expect(mail.from).to contain_exactly('mass@ddbj.nig.ac.jp')
-        expect(mail.to).to   contain_exactly('alice+idp@example.com')
-        expect(mail.cc).to   contain_exactly('alice+contact@foo.example.com', 'carol@baz.example.com')
+        expect(mail).to deliver_from('Admin <mssform@example.com>')
+        expect(mail).to deliver_to('alice+idp@example.com')
+        expect(mail).to cc_to('alice+contact@foo.example.com', 'carol@baz.example.com')
       end
     end
   end
@@ -161,12 +153,12 @@ RSpec.describe SubmissionMailer do
 
       mail = SubmissionMailer.with(submission:).curator_notification
 
-      expect(mail.from).to contain_exactly('mass@ddbj.nig.ac.jp')
-      expect(mail.to).to   contain_exactly('mass@ddbj.nig.ac.jp')
+      expect(mail).to deliver_from('Admin <mssform@example.com>')
+      expect(mail).to deliver_to('Admin <mssform@example.com>')
 
-      expect(mail.subject).to eq('[DDBJ:NSUB000042] WGS: Whole Genome Shotgun')
+      expect(mail).to have_subject('[DDBJ:NSUB000042] WGS: Whole Genome Shotgun')
 
-      expect(mail.newline_normalized_body).to include(<<~BODY)
+      expect(mail).to have_body_text(<<~BODY)
         ## mass-id
         NSUB000042
 
