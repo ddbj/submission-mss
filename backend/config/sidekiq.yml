@@ -1,3 +1,4 @@
 :queues:
   - default
   - mailers
+max_retries: 12 # About < 12 hours. Ref: https://github.com/mperham/sidekiq/wiki/Error-Handling#automatic-job-retry
