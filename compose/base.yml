@@ -33,6 +33,7 @@ services:
         RUBY_VERSION:
 
     environment:
+      CURATOR_ML_ADDRESS:          '"DDBJ Mass Submission System (MSS)" <mass@ddbj.nig.ac.jp>'
       DATABASE_URL:                postgresql://postgres@postgres/mssform
       FORCE_SSL:
       GOOGLE_ACCOUNT_TYPE:         service_account
@@ -40,7 +41,6 @@ services:
       GOOGLE_CLIENT_ID:
       GOOGLE_PRIVATE_KEY:
       MAIL_ALLOWED_DOMAINS:
-      MAIL_FROM:                   '"DDBJ Mass Submission System (MSS)" <mass@ddbj.nig.ac.jp>'
       MEMCACHE_SERVERS:            memcached
       MINIO_ACCESS_KEY_ID:
       MINIO_BUCKET:                uploads
