@@ -1,2 +1,5 @@
 at025
 at026
+
+[all:vars]
+ansible_user=w3const
