@@ -13,6 +13,10 @@ Rails.application.routes.draw do
     resources :direct_uploads, only: :create
   end
 
+  namespace 'debug' do
+    get :error
+  end
+
   get '*paths', to: 'frontends#show', constraints: -> (req) {
     !req.xhr? && req.format.html?
   }
