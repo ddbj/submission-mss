@@ -21,6 +21,8 @@ class Upload < ApplicationRecord
     work.rename files_dir
 
     update! copied: true
+
+    files.purge
   end
 
   def files_dir
