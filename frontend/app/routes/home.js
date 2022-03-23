@@ -5,11 +5,15 @@ export default class HomeRoute extends Route {
   @service appauth;
   @service session;
 
-  beforeModel(transition) {
-    this.session.requireAuthentication(transition, () => {
+  async beforeModel(transition) {
+    const isAuthenticated = await this.session.requireAuthentication(transition, () => {
       this.appauth.makeAuthorizationRequest(transition.intent.url);
 
       transition.abort();
     });
+
+    if (!isAuthenticated) { return; }
+
+    await this.session.validateToken();
   }
 }
