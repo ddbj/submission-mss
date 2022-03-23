@@ -18,14 +18,11 @@ export default class AppAuthAuthenticator extends BaseAuthenticator {
     const {isAuthenticated, data} = this.session;
 
     if (isAuthenticated) {
-      const response = await this.appauth.makeTokenRequestFromRefreshToken(
-        data.authenticated.refresh_token
-      );
+      const response = await this.appauth.makeTokenRequestFromRefreshToken(data.authenticated.refresh_token);
 
       return response.toJson();
     } else {
-      const { response, returnTo } =
-        await this.appauth.makeTokenRequestFromAuthorizationRequest();
+      const {response, returnTo} = await this.appauth.makeTokenRequestFromAuthorizationRequest();
 
       this.session.returnTo = returnTo;
 
