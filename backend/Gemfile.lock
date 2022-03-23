@@ -69,8 +69,8 @@ GEM
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     aws-eventstream (1.2.0)
-    aws-partitions (1.565.0)
-    aws-sdk-core (3.129.0)
+    aws-partitions (1.568.0)
+    aws-sdk-core (3.130.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
@@ -86,7 +86,7 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     builder (3.2.4)
     climate_control (1.0.1)
-    concurrent-ruby (1.1.9)
+    concurrent-ruby (1.1.10)
     connection_pool (2.2.5)
     crack (0.4.5)
       rexml
@@ -100,6 +100,7 @@ GEM
     digest (3.1.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
+    e2mmap (0.1.0)
     email_spec (2.2.0)
       htmlentities (~> 4.3.3)
       launchy (~> 2.1)
@@ -107,10 +108,12 @@ GEM
     enumerize (2.5.0)
       activesupport (>= 3.2)
     erubi (1.10.0)
+    et-orbi (1.2.7)
+      tzinfo
     exception_notification (4.5.0)
       actionmailer (>= 5.2, < 8)
       activesupport (>= 5.2, < 8)
-    factory_bot (6.2.0)
+    factory_bot (6.2.1)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
@@ -123,6 +126,9 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
+    fugit (1.5.2)
+      et-orbi (~> 1.1, >= 1.1.8)
+      raabro (~> 1.4)
     globalid (1.0.0)
       activesupport (>= 5.0)
     google-apis-core (0.4.2)
@@ -134,7 +140,7 @@ GEM
       retriable (>= 2.0, < 4.a)
       rexml
       webrick
-    google-apis-sheets_v4 (0.11.0)
+    google-apis-sheets_v4 (0.12.0)
       google-apis-core (>= 0.4, < 2.a)
     googleauth (1.1.2)
       faraday (>= 0.17.3, < 3.a)
@@ -168,7 +174,7 @@ GEM
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
-    loofah (2.14.0)
+    loofah (2.15.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -204,6 +210,7 @@ GEM
     public_suffix (4.0.6)
     puma (5.6.2)
       nio4r (~> 2.0)
+    raabro (1.4.0)
     racc (1.6.0)
     rack (2.2.3)
     rack-test (1.1.0)
@@ -264,10 +271,19 @@ GEM
       rspec-support (~> 3.10)
     rspec-support (3.11.0)
     ruby2_keywords (0.0.5)
+    rufus-scheduler (3.8.1)
+      fugit (~> 1.1, >= 1.1.6)
     sidekiq (6.4.1)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
+    sidekiq-scheduler (3.1.1)
+      e2mmap
+      redis (>= 3, < 5)
+      rufus-scheduler (~> 3.2)
+      sidekiq (>= 3)
+      thwait
+      tilt (>= 1.4.0)
     signet (0.16.1)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.0)
@@ -275,6 +291,9 @@ GEM
       multi_json (~> 1.10)
     strscan (3.0.1)
     thor (1.2.1)
+    thwait (0.2.0)
+      e2mmap
+    tilt (2.0.10)
     timeout (0.2.0)
     trailblazer-option (0.1.2)
     tzinfo (2.0.4)
@@ -282,7 +301,7 @@ GEM
     uber (0.1.0)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.8)
+    unf_ext (0.0.8.1)
     webmock (3.14.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
@@ -318,6 +337,7 @@ DEPENDENCIES
   rspec-default_http_header
   rspec-rails
   sidekiq
+  sidekiq-scheduler
   webmock
 
 RUBY VERSION
