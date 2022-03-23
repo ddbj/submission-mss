@@ -88,7 +88,7 @@ export class SubmissionFile {
 
   calculateDigest() {
     this.checksum = new Promise((resolve, reject) => {
-      const worker = new Worker('/workers/calculate-digest.js', {type: 'module'});
+      const worker = new Worker('/workers/calculate-digest.js');
 
       worker.addEventListener('message', ({data: [err, digest]}) => {
         if (err) {
