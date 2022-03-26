@@ -12,7 +12,7 @@ export default class HomeRoute extends Route {
       transition.abort();
     });
 
-    if (hasToken && !(await this.session.renewToken())) {
+    if (hasToken && !(await this.session.validateToken())) {
       this.session.invalidate();
     }
   }
