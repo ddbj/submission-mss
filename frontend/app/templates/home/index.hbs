@@ -3,7 +3,7 @@
 <h1 class="display-6 my-4">{{t 'home.title'}}</h1>
 
 <p>
-  {{t 'home.login-as-html' account=this.session.idToken.preferred_username htmlSafe=true}}
+  {{t 'home.login-as-html' account=this.session.idTokenPayload.preferred_username htmlSafe=true}}
   <small>(<a {{on 'click' (prevent-default this.logout)}} href>{{t 'home.logout'}}</a>)</small>
 </p>
 

@@ -18,13 +18,13 @@ export default class UploadFiles {
     return this.uploads.reduce((acc, {uploadedSize}) => acc + uploadedSize, 0);
   }
 
-  async perform() {
+  async perform(session) {
     const blobs = [];
 
     for (const upload of this.uploads) {
       this.currentUpload = upload;
 
-      blobs.push(await upload.perform());
+      blobs.push(await upload.perform(session));
     }
 
     return blobs;
@@ -40,8 +40,14 @@ class UploadFile {
     this.file = file;
   }
 
-  perform() {
+  perform(session) {
     const upload = new DirectUpload(this.file.rawFile, '/api/direct_uploads', {
+      directUploadWillCreateBlobWithXHR: (xhr) => {
+        session.renewToken();
+
+        xhr.setRequestHeader('Authorization', session.authorizationHeader.Authorization);
+      },
+
       directUploadWillStoreFileWithXHR: (xhr) => {
         xhr.upload.addEventListener('loadstart', () => {
           this.isStarted = true;

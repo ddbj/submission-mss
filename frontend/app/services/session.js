@@ -7,18 +7,16 @@ import { AppAuthError } from '@openid/appauth';
 export default class SessionService extends SimpleAuthSessionService {
   @service appauth;
 
-  get idToken() {
-    if (!this.isAuthenticated) { return null; }
+  get idTokenPayload() {
+    const token = this.data.authenticated.id_token;
 
-    return jwtDecode(this.data.authenticated.id_token);
+    return token ? jwtDecode(token) : null;
   }
 
   get authorizationHeader() {
-    if (!this.isAuthenticated) { return {}; }
+    const token = this.data.authenticated.id_token;
 
-    return {
-      Authorization: `Bearer ${this.data.authenticated.id_token}`
-    };
+    return token ? {Authorization: `Bearer ${token}`} : {};
   }
 
   async renewToken() {
