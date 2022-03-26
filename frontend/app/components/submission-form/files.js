@@ -8,6 +8,8 @@ import { AnnotationFile, SequenceFile } from 'mssform/models/submission-file';
 
 export default class SubmissionFormFilesComponent extends Component {
   @service store;
+  @service session;
+  @service router;
 
   allowedFileExtensions = {
     annotation: AnnotationFile.extensions,
@@ -80,6 +82,12 @@ export default class SubmissionFormFilesComponent extends Component {
     let last;
 
     try {
+      if (!(await this.session.renewToken())) {
+        alert('Your session has been expired. Please re-login.');
+
+        this.router.transitionTo('index');
+      }
+
       last = await this.store.queryRecord('submission', {lastSubmitted: true});
     } catch (e) {
       if (e instanceof NotFoundError) {

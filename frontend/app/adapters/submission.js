@@ -6,8 +6,6 @@ export default class SubmissionAdapter extends ApplicationAdapter {
 
   async queryRecord(store, type, query) {
     if (query.lastSubmitted) {
-      await this.session.renewToken();
-
       return this.ajax('/api/submissions/last_submitted', 'GET', {
         headers: this.session.authorizationHeader
       });

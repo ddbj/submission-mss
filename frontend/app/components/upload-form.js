@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 
 export default class UploadFormComponent extends Component {
   @service session;
+  @service router;
 
   @tracked files           = [];
   @tracked crossoverErrors = new Map();
@@ -41,7 +42,11 @@ export default class UploadFormComponent extends Component {
       body.append('files[]', blob.signed_id);
     }
 
-    await this.session.renewToken();
+    if (!(await this.session.renewToken())) {
+      alert('Your session has been expired. Please re-login.');
+
+      this.router.transitionTo('')
+    }
 
     await fetch(`/api/submissions/${this.args.model.id}/uploads`, {
       method:  'POST',

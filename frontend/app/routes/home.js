@@ -6,14 +6,14 @@ export default class HomeRoute extends Route {
   @service session;
 
   async beforeModel(transition) {
-    const isAuthenticated = await this.session.requireAuthentication(transition, () => {
+    const hasToken = await this.session.requireAuthentication(transition, () => {
       this.appauth.makeAuthorizationRequest(transition.intent.url);
 
       transition.abort();
     });
 
-    if (!isAuthenticated) { return; }
-
-    await this.session.validateToken();
+    if (hasToken && !(await this.session.renewToken())) {
+      this.session.invalidate();
+    }
   }
 }
