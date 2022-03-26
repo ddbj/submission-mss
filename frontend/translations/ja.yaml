@@ -119,16 +119,11 @@ submission-form:
     a2: DFAST を使わず作成した登録ファイルをアップロードする
     a3: 申し込み後に登録ファイルを作成する
 
+    annotation-file: アノテーションファイル
+    sequence-file:   塩基配列ファイル
+
     instructions-html: |
       <p>アノテーションファイルと塩基配列ファイルでペアになるようにアップロードしてください。複数ペアをアップロード可能です。ファイル名から拡張子を除いた名称が同一なファイルがペアになります。読み込めるファイル名拡張子は次の通りです。圧縮ファイルをアップロードしないでください。</p>
-
-      <dl>
-        <dt>アノテーションファイル</dt>
-        <dd><code>.ann</code>, <code>.annt.tsv</code>, <code>.ann.txt</code></dd>
-
-        <dt>塩基配列ファイル</dt>
-        <dd><code>.fasta</code>, <code>.seq.fa</code>, <code>.fa</code>, <code>.fna</code>, <code>.seq</code></dd>
-      </dl>
 
     errors:
       no-annotation: 対応するアノテーションファイルがありません。

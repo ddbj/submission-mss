@@ -4,8 +4,15 @@ import { NotFoundError } from '@ember-data/adapter/error';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 
+import { AnnotationFile, SequenceFile } from 'mssform/models/submission-file';
+
 export default class SubmissionFormFilesComponent extends Component {
   @service store;
+
+  allowedFileExtensions = {
+    annotation: AnnotationFile.extensions,
+    sequence:   SequenceFile.extensions
+  };
 
   get crossoverErrors() {
     const {files} = this.args.state;
