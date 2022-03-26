@@ -2,12 +2,22 @@ import { modifier } from 'ember-modifier';
 
 export default modifier(() => {
   function errorHandler(error) {
-    alert(`Something went wrong: ${error.message}`);
+    alert(`Error: ${error.message}`);
 
     throw error;
   }
 
-  window.addEventListener('error', errorHandler);
+  function unhandledRejectionHandler(event) {
+    alert(`Error: ${event.reason}`);
 
-  return () => window.removeEventListener('error', errorHandler);
+    // PromiseRejectionEvent will be output to console.
+  }
+
+  window.addEventListener('error', errorHandler);
+  window.addEventListener('unhandledrejection', unhandledRejectionHandler);
+
+  return () => {
+    window.removeEventListener('error', errorHandler);
+    window.removeEventListener('unhandledrejection', unhandledRejectionHandler);
+  }
 });
