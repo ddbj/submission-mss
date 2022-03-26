@@ -20,19 +20,27 @@ export default class SessionService extends SimpleAuthSessionService {
   }
 
   async renewToken() {
-    try {
-      await this.appauth.makeTokenRequestFromRefreshToken(this.data.authenticated.refresh_token);
-    } catch (e) {
-      // Detect HTTP error
-      if (e instanceof AppAuthError && /^\d{3}$/.test(e.message)) {
-        console.error(e);
-
-        return false;
-      } else {
-        throw e;
-      }
-    }
-
-    return true;
+    return await skipAppAuthError(async () => await this.authenticate('authenticator:appauth'));
   }
+
+  async validateToken() {
+    return await skipAppAuthError(async () => await this.appauth.makeTokenRequestFromRefreshToken(this.data.authenticated.refresh_token));
+  }
+}
+
+async function skipAppAuthError(fn) {
+  try {
+    await fn();
+  } catch (e) {
+    // Detect HTTP error
+    if (e instanceof AppAuthError && /^\d{3}$/.test(e.message)) {
+      console.error(e);
+
+      return false;
+    } else {
+      throw e;
+    }
+  }
+
+  return true;
 }
