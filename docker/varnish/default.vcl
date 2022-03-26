@@ -11,6 +11,8 @@ backend minio {
 sub vcl_recv {
   if (req.url ~ "^/uploads/") {
     set req.backend_hint = minio;
+
+    return (pipe);
   } else {
     set req.backend_hint = rails;
   }
