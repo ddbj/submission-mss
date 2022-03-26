@@ -220,7 +220,7 @@ file-list:
 
 upload-progress-modal:
   title: Upload submission files
-  loading: Loading...
+  calculating: Calculating hash...
   cancel: Cancel
 
 submission-file:

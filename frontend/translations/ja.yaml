@@ -232,7 +232,7 @@ file-list:
 
 upload-progress-modal:
   title: 登録ファイルのアップロード
-  loading: Loading...
+  calculating: ハッシュ値の計算中...
   cancel: キャンセル
 
 submission-file:

@@ -8,15 +8,15 @@
           <h5 class="modal-title" id={{id}}>{{t 'upload-progress-modal.title'}}</h5>
         </div>
 
-        <div class="modal-body vstack gap-3">
+        <div class="modal-body vstack gap-2">
           {{#let this.uploadFiles.currentUpload as |upload|}}
             {{#if upload}}
               <div class="d-flex gap-2 align-items-center">
-                <div>{{upload.file.name}}</div>
+                <b>{{upload.file.name}}</b>
 
                 {{#unless upload.isStarted}}
                   <div class="spinner-border spinner-border-sm text-primary" role="status">
-                    <span class="visually-hidden">{{t 'upload-progress-modal.loading'}}</span>
+                    <span class="visually-hidden">{{t 'upload-progress-modal.calculating'}}</span>
                   </div>
                 {{/unless}}
               </div>
@@ -25,6 +25,10 @@
                 {{#let (percentage this.uploadFiles.uploadedSize this.uploadFiles.totalSize) as |percentage|}}
                   <div class="progress-bar" role="progressbar" {{style (hash width=(concat percentage '%'))}} aria-valuenow={{percentage}} aria-valuemin="0" aria-valuemax="100"></div>
                 {{/let}}
+              </div>
+
+              <div class="text-muted">
+                {{filesize this.uploadFiles.uploadedSize}} / {{filesize this.uploadFiles.totalSize}}
               </div>
             {{/if}}
           {{/let}}
