@@ -16,8 +16,10 @@ services:
       - /var/lib/varnish:exec
 
     depends_on:
-      - rails
-      - minio-setup
+      rails:
+        condition: service_started
+      minio-setup:
+        condition: service_completed_successfully
 
   rails: &rails
     build:
@@ -66,11 +68,11 @@ services:
       postgres:
         condition: service_healthy
       redis:
-        condition: service_healthy
+        condition: service_started
       memcached:
         condition: service_started
       minio-setup:
-        condition: service_started
+        condition: service_completed_successfully
 
   sidekiq:
     <<: *rails
