@@ -6,11 +6,10 @@ import { handleAppAuthHTTPError, handleFetchError } from 'mssform/utils/error-ha
 export default class SubmissionRoute extends Route {
   @service session;
 
-  async model({id}, transition) {
+  async model({id}) {
     try {
       await this.session.renewToken();
     } catch (e) {
-      transition.abort();
       handleAppAuthHTTPError(e, this.session);
       return;
     }
@@ -21,7 +20,6 @@ export default class SubmissionRoute extends Route {
     });
 
     if (!res.ok) {
-      transition.abort();
       handleFetchError(res, this.session);
       return;
     }
