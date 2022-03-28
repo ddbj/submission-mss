@@ -42,8 +42,8 @@ class UploadFile {
 
   perform(session) {
     const upload = new DirectUpload(this.file.rawFile, '/api/direct_uploads', {
-      directUploadWillCreateBlobWithXHR: (xhr) => {
-        session.renewToken();
+      directUploadWillCreateBlobWithXHR: async (xhr) => {
+        await session.renewToken();
 
         xhr.setRequestHeader('Authorization', session.authorizationHeader.Authorization);
       },
@@ -59,14 +59,6 @@ class UploadFile {
       }
     }, this.file.checksum);
 
-    return new Promise((resolve, reject) => {
-      upload.create((err, blob) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(blob);
-        }
-      });
-    });
+    return upload.create();
   }
 }

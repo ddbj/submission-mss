@@ -2,22 +2,42 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 
+import {
+  handleAdapterError,
+  handleAppAuthHTTPError,
+  handleUploadError
+} from 'mssform/utils/error-handler';
+
 export default class SubmissionFormConfirmComponent extends Component {
   @service session;
-  @service router;
 
   @action async submit(uploadProgressModal) {
     const {state, model, nav} = this.args;
 
-    const blobs = await uploadProgressModal.performUpload(state.files);
+    let blobs;
+
+    try {
+      blobs = await uploadProgressModal.performUpload(state.files);
+    } catch (e) {
+      handleUploadError(e, this.session);
+      return;
+    }
+
     model.files = blobs.map(({signed_id}) => signed_id);
 
-    if (!(await this.session.renewToken())) {
-      alert('Your session has been expired. Please re-login.');
-
-      this.router.transitionTo('index');
+    try {
+      await this.session.renewToken();
+    } catch (e) {
+      handleAppAuthHTTPError(e, this.session);
+      return;
     }
-    await model.save();
+
+    try {
+      await model.save();
+    } catch (e) {
+      handleAdapterError(e, this.session);
+      return;
+    }
 
     nav.goNext();
   }

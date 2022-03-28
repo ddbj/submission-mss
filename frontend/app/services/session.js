@@ -1,11 +1,13 @@
 import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 import SimpleAuthSessionService from 'ember-simple-auth/services/session';
 import jwtDecode from 'jwt-decode';
-import { AppAuthError } from '@openid/appauth';
 
 export default class SessionService extends SimpleAuthSessionService {
   @service appauth;
+
+  @tracked leavingConfirmationDisabled = false;
 
   get idTokenPayload() {
     const token = this.data.authenticated.id_token;
@@ -20,27 +22,10 @@ export default class SessionService extends SimpleAuthSessionService {
   }
 
   async renewToken() {
-    return await skipAppAuthError(async () => await this.authenticate('authenticator:appauth'));
+    await this.authenticate('authenticator:appauth');
   }
 
   async validateToken() {
-    return await skipAppAuthError(async () => await this.appauth.makeTokenRequestFromRefreshToken(this.data.authenticated.refresh_token));
+    await this.appauth.makeTokenRequestFromRefreshToken(this.data.authenticated.refresh_token);
   }
-}
-
-async function skipAppAuthError(fn) {
-  try {
-    await fn();
-  } catch (e) {
-    // Detect HTTP error
-    if (e instanceof AppAuthError && /^\d{3}$/.test(e.message)) {
-      console.error(e);
-
-      return false;
-    } else {
-      throw e;
-    }
-  }
-
-  return true;
 }

@@ -1,4 +1,4 @@
-<form {{on 'submit' (prevent-default (perform this.goNext))}} {{leaving-confirmation}}>
+<form {{on 'submit' (prevent-default (perform this.goNext))}} {{leaving-confirmation disabled=this.session.leavingConfirmationDisabled}}>
   <div class="vstack gap-3">
     <div class="card">
       <div class="card-body">

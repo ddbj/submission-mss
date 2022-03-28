@@ -8,7 +8,10 @@ export default modifier(() => {
   }
 
   function unhandledRejectionHandler(event) {
-    alert(`Error: ${event.reason}`);
+    const {reason} = event;
+    const message = reason instanceof String ? reason : reason.message || JSON.stringify(reason);
+
+    alert(`Error: ${message}`);
 
     // PromiseRejectionEvent will be output to console.
   }

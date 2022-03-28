@@ -1,6 +1,8 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
+import { handleAppAuthHTTPError } from 'mssform/utils/error-handler';
+
 export default class HomeRoute extends Route {
   @service appauth;
   @service session;
@@ -12,8 +14,13 @@ export default class HomeRoute extends Route {
       transition.abort();
     });
 
-    if (hasToken && !(await this.session.validateToken())) {
-      this.session.invalidate();
+    if (hasToken) {
+      try {
+        await this.session.validateToken();
+      } catch (e) {
+        handleAppAuthHTTPError(e, this.session);
+        return;
+      }
     }
   }
 }
