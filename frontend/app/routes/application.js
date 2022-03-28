@@ -13,6 +13,9 @@ export default class ApplicationRoute extends Route {
   };
 
   async beforeModel(transition) {
+    window.addEventListener('error', errorHandler);
+    window.addEventListener('unhandledrejection', unhandledRejectionHandler);
+
     await this.session.setup();
 
     const {queryParams} = transition.to;
@@ -34,6 +37,21 @@ export default class ApplicationRoute extends Route {
       this.router.replaceWith(name, {queryParams: {locale: this.intl.primaryLocale}});
     }
   }
+}
+
+function errorHandler(error) {
+  alert(`Error: ${error.message}`);
+
+  throw error;
+}
+
+function unhandledRejectionHandler(event) {
+  const {reason} = event;
+  const message = reason instanceof String ? reason : reason.message || JSON.stringify(reason);
+
+  alert(`Error: ${message}`);
+
+  // PromiseRejectionEvent will be output to console.
 }
 
 function enumTranslations(locale) {
