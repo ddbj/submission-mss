@@ -26,8 +26,14 @@ export default class UploadProgressModalComponent extends Component {
     this.uploadFiles = new UploadFiles(files);
 
     this.modal.show();
-    const blobs = await this.uploadFiles.perform(this.session);
-    this.modal.hide();
+
+    let blobs;
+
+    try {
+      blobs = await this.uploadFiles.perform(this.session);
+    } finally {
+      this.modal.hide();
+    }
 
     return blobs;
   }

@@ -5,9 +5,11 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 
 import { AnnotationFile, SequenceFile } from 'mssform/models/submission-file';
+import { handleAppAuthHTTPError, handleAdapterError } from 'mssform/utils/error-handler';
 
 export default class SubmissionFormFilesComponent extends Component {
   @service store;
+  @service session;
 
   allowedFileExtensions = {
     annotation: AnnotationFile.extensions,
@@ -70,24 +72,31 @@ export default class SubmissionFormFilesComponent extends Component {
   }
 
   @dropTask *goNext() {
-    yield this.fillDataFromLastSubmission();
+    try {
+      yield this.session.renewToken();
+    } catch (e) {
+      handleAppAuthHTTPError(e, this.session);
+      return;
+    }
+
+    try {
+      yield this.fillDataFromLastSubmission();
+    } catch (e) {
+      if (e instanceof NotFoundError) {
+        // do nothing
+      } else {
+        handleAdapterError(e, this.session);
+        return;
+      }
+    }
+
     this.fillDataFromSubmissionFiles();
 
     this.args.nav.goNext();
   }
 
   async fillDataFromLastSubmission() {
-    let last;
-
-    try {
-      last = await this.store.queryRecord('submission', {lastSubmitted: true});
-    } catch (e) {
-      if (e instanceof NotFoundError) {
-        // do nothing
-      } else {
-        throw e;
-      }
-    }
+    const last = await this.store.queryRecord('submission', {lastSubmitted: true});
 
     if (!last) { return; }
 

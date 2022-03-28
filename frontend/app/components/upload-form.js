@@ -3,6 +3,8 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
+import { handleAppAuthHTTPError, handleFetchError, handleUploadError } from 'mssform/utils/error-handler';
+
 export default class UploadFormComponent extends Component {
   @service session;
 
@@ -33,7 +35,14 @@ export default class UploadFormComponent extends Component {
   }
 
   @action async submit(uploadProgressModal) {
-    const blobs = await uploadProgressModal.performUpload(this.files);
+    let blobs;
+
+    try {
+      blobs = await uploadProgressModal.performUpload(this.files);
+    } catch (e) {
+      handleUploadError(e, this.session);
+      return;
+    }
 
     const body = new FormData();
 
@@ -41,13 +50,23 @@ export default class UploadFormComponent extends Component {
       body.append('files[]', blob.signed_id);
     }
 
-    await this.session.renewToken();
+    try {
+      await this.session.renewToken();
+    } catch (e) {
+      handleAppAuthHTTPError(e, this.session);
+      return;
+    }
 
-    await fetch(`/api/submissions/${this.args.model.id}/uploads`, {
+    const res = await fetch(`/api/submissions/${this.args.model.id}/uploads`, {
       method:  'POST',
       headers: this.session.authorizationHeader,
       body
     });
+
+    if (!res.ok) {
+      handleFetchError(res, this.session);
+      return;
+    }
 
     this.isCompleted = true;
   }
