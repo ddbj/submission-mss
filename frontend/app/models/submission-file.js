@@ -66,13 +66,15 @@ export class SubmissionFile {
             const {id, value} = JSON.parse(err);
 
             this.errors = [...this.errors, {id, value}];
+
+            resolve();
           } catch (e) {
-            console.error(e.message);
+            console.error(e);
 
             this.errors = [...this.errors, err];
-          }
 
-          reject(err);
+            reject(err);
+          }
         } else {
           this.parsedData = payload;
 
