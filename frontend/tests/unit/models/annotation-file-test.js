@@ -52,27 +52,31 @@ COMMON	SUBMITTER		contact	Alice Liddell
   test('invalid contact person', async function(assert) {
     assert.expect(1);
 
-    const file = new File([outdent`
+    const raw = new File([outdent`
 COMMON	SUBMITTER		contact	Alice Liddell
     `], 'foo.ann');
 
-    assert.rejects(
-      new AnnotationFile(file).parse(),
-      JSON.stringify({id: 'invalid-contact-person'})
-    );
+    const file = new AnnotationFile(raw);
+    await file.parse();
+
+    assert.deepEqual(file.errors, [
+      {id: 'annotation-file-parser.invalid-contact-person', value: undefined}
+    ]);
   });
 
   test('invalid hold_date', async function(assert) {
     assert.expect(1);
 
-    const file = new File([outdent`
+    const raw = new File([outdent`
 COMMON	DATE		hold_date	foo
     `], 'foo.ann');
 
-    assert.rejects(
-      new AnnotationFile(file).parse(),
-      JSON.stringify({id: 'invalid-hold-date', value: 'foo'})
-    );
+    const file = new AnnotationFile(raw);
+    await file.parse();
+
+    assert.deepEqual(file.errors, [
+      {id: 'annotation-file-parser.invalid-hold-date', value: 'foo'}
+    ]);
   });
 
   test('replace whitespace in filename', async function(assert) {
