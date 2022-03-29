@@ -43,29 +43,7 @@
         <div class="card-body">
           {{t 'submission-form.files.instructions-html' htmlSafe=true}}
 
-          <dl>
-            <dt>{{t 'submission-form.files.annotation-file'}}</dt>
-            <dd>
-              <ul class="list-inline mb-0">
-                {{#each this.allowedFileExtensions.annotation as |extension|}}
-                  <li class="list-inline-item">
-                    <code>{{extension}}</code>
-                  </li>
-                {{/each}}
-              </ul>
-            </dd>
-
-            <dt>{{t 'submission-form.files.sequence-file'}}</dt>
-            <dd>
-              <ul class="list-inline mb-0">
-                {{#each this.allowedFileExtensions.sequence as |extension|}}
-                  <li class="list-inline-item">
-                    <code>{{extension}}</code>
-                  </li>
-                {{/each}}
-              </ul>
-            </dd>
-          </dl>
+          <FileList::SupportedFileTypes />
 
           <FileList @files={{@state.files}} @crossoverErrors={{this.crossoverErrors}} @onAdd={{this.addFile}} @onRemove={{this.removeFile}} />
         </div>

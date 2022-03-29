@@ -107,9 +107,6 @@ submission-form:
     a2: I would like to upload the submission files that have been prepared without using DFAST.
     a3: I will prepare submission file after the application.
 
-    annotation-file: Annotation file
-    sequence-file:   Sequence file
-
     instructions-html: |
       <p>Upload the annotation and nucleotide sequence file as a pair. Multiple pair files can be uploaded. The system determines as a pair whose filenames without the extension has the same name. The uploadable files are shown below. Do not upload the compressed files.</p>
 
@@ -194,10 +191,7 @@ upload-form:
     <p>You can upload submission files for MSS Submission ID <strong>{massId}</strong> from this page.</p>
 
   instructions-html: |
-    <ul>
-      <li>Please upload submission files without compression.</li>
-      <li>The file extension should be <code>.ann</code> (annotation file) or <code>.fasta</code> (nucleotide sequence).</li>
-    </ul>
+    <p>The uploadable files are shown below. Do not upload the compressed files.</p>
 
   upload: Upload
 
@@ -210,6 +204,10 @@ file-list:
   stats: '{filesCount, plural, =1 {1 file} other {# files}}, {totalFileSize}'
   select-files: Select the files
   placeholder: '[[[select-files]]] or drag them here.'
+
+  supported-file-types:
+    annotation-file: Annotation file
+    sequence-file: Sequence file
 
   item:
     loading: Loading...

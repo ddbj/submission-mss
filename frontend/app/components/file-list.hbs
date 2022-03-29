@@ -1,3 +1,13 @@
+<style>
+  .border-dashed {
+    border-style: dashed;
+  }
+
+  .drag-over * {
+    pointer-events: none;
+  }
+</style>
+
 <input type="file" multiple accept={{join ', ' this.allowedExtensions}} class="d-none" {{did-insert (set this 'fileInputElement')}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInputElement.value' ''))}} {{!-- template-lint-disable require-input-label --}} />
 
 {{#if @files}}

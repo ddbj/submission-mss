@@ -119,9 +119,6 @@ submission-form:
     a2: DFAST を使わず作成した登録ファイルをアップロードする
     a3: 申し込み後に登録ファイルを作成する
 
-    annotation-file: アノテーションファイル
-    sequence-file:   塩基配列ファイル
-
     instructions-html: |
       <p>アノテーションファイルと塩基配列ファイルでペアになるようにアップロードしてください。複数ペアをアップロード可能です。ファイル名から拡張子を除いた名称が同一なファイルがペアになります。読み込めるファイル名拡張子は次の通りです。圧縮ファイルをアップロードしないでください。</p>
 
@@ -206,10 +203,7 @@ upload-form:
     <p>この画面から MSS 申し込み ID <strong>{massId}</strong> の登録ファイルをアップロードできます。</p>
 
   instructions-html: |
-    <ul>
-      <li>登録ファイルを圧縮せずにアップロードしてください。</li>
-      <li>ファイル拡張子は <code>.ann</code> (アノテーションファイル)、<code>.fasta</code> (塩基配列) にしてください。</li>
-    </ul>
+    <p>読み込めるファイル名拡張子は次の通りです。圧縮ファイルをアップロードしないでください。</p>
 
   upload: アップロード
 
@@ -222,6 +216,10 @@ file-list:
   stats: '{filesCount} ファイル、{totalFileSize}'
   select-files: ファイルを選択
   placeholder: '[[[select-files]]]するか、ここにファイルをドロップしてください。'
+
+  supported-file-types:
+    annotation-file: アノテーションファイル
+    sequence-file: 塩基配列ファイル
 
   item:
     loading: 読み込み中...

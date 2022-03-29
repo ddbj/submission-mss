@@ -16,6 +16,8 @@
         <div class="card-body">
           {{t 'upload-form.instructions-html' htmlSafe=true}}
 
+          <FileList::SupportedFileTypes />
+
           <FileList @files={{this.files}} @crossoverErrors={{this.crossoverErrors}} @onAdd={{this.addFile}} @onRemove={{this.removeFile}} />
         </div>
       </div>
