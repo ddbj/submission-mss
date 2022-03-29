@@ -6,8 +6,11 @@ import jwtDecode from 'jwt-decode';
 
 export default class SessionService extends SimpleAuthSessionService {
   @service appauth;
+  @service router;
 
   @tracked leavingConfirmationDisabled = false;
+
+  returnTo = null;
 
   get idTokenPayload() {
     const token = this.data.authenticated.id_token;
@@ -27,5 +30,11 @@ export default class SessionService extends SimpleAuthSessionService {
 
   async validateToken() {
     await this.appauth.makeTokenRequestFromRefreshToken(this.data.authenticated.refresh_token);
+  }
+
+  handleAuthentication(routeAfterAuthentication) {
+    this.router.transitionTo(this.returnTo || routeAfterAuthentication);
+
+    this.returnTo = null;
   }
 }
