@@ -135,5 +135,7 @@ export class UnsupportedFile extends SubmissionFile {
 
   parse() {
     this.isParsing = false;
+
+    return Promise.resolve();
   }
 }
