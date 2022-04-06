@@ -34,7 +34,7 @@ class WorkingList
       [to_row(submission).fetch(:data_arrival_date)]
     ])
 
-    @service.update_spreadsheet_value @sheet_id, "#{@sheet_name}!K#{row}", range, **{
+    @service.update_spreadsheet_value @sheet_id, "#{@sheet_name}!L#{row}", range, **{
       value_input_option: 'RAW'
     }
   end

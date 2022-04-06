@@ -66,7 +66,7 @@ RSpec.describe UploadJob do
       )
     )
 
-    stub_request(:put, 'https://sheets.googleapis.com/v4/spreadsheets/SHEET_ID/values/SHEET_NAME!K101').with(query: hash_including)
+    stub_request(:put, 'https://sheets.googleapis.com/v4/spreadsheets/SHEET_ID/values/SHEET_NAME!L101').with(query: hash_including)
 
     UploadJob.perform_now upload
   end
@@ -77,7 +77,7 @@ RSpec.describe UploadJob do
     expect(dir.ftype).to                     eq('directory')
     expect(dir.join('example.ann').ftype).to eq('file')
 
-    expect(WebMock).to have_requested(:put, 'https://sheets.googleapis.com/v4/spreadsheets/SHEET_ID/values/SHEET_NAME!K101').with(
+    expect(WebMock).to have_requested(:put, 'https://sheets.googleapis.com/v4/spreadsheets/SHEET_ID/values/SHEET_NAME!L101').with(
       query: {
         valueInputOption: 'RAW'
       },
