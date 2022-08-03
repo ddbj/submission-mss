@@ -94,10 +94,6 @@ async function* makeLineIterator(reader) {
 }
 
 class ContactPerson {
-  fullName;
-  email;
-  affiliation;
-
   get isFulfilled() {
     return this.fullName && this.email && this.affiliation;
   }
