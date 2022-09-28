@@ -1,7 +1,9 @@
 ARG NODE_VERSION
 ARG RUBY_VERSION
 
-FROM curlimages/curl:latest AS openid-configuration
+# >=curl-7.85 resolves *.localhost to 127.0.0.1
+# https://github.com/curl/curl/pull/9296
+FROM curlimages/curl:7.84.0 AS openid-configuration
 
 ARG OPENID_CONFIGURATION_ENDPOINT
 
