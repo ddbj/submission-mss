@@ -1,7 +1,7 @@
 go-to-home: Go to home
 
 application:
-  title: MSS Submission Form
+  title: MSS Application Form
   toggle-nav: Toggle navigation
   language: Language
 
@@ -10,7 +10,7 @@ application:
     en: English
 
 index:
-  title: MSS Submission Form
+  title: MSS Application Form
 
   instructions-html: |
     <p>Mass Submission System (MSS) is the service for submitting relatively large nucleotide sequence data (not reads) by sending text files. We at DDBJ recommend using MSS when:</p>
