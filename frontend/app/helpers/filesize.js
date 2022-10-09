@@ -1,8 +1,8 @@
 import { helper } from '@ember/component/helper';
 import { isNone } from '@ember/utils';
 
-import _filesize from 'filesize';
+import { filesize } from 'filesize';
 
-export default helper(function filesize([bytes], opts = {}) {
-  return isNone(bytes) ? null : _filesize(bytes, opts);
+export default helper(function _filesize([bytes], opts = {}) {
+  return isNone(bytes) ? null : filesize(bytes, opts);
 });
