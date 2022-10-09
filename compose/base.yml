@@ -95,7 +95,7 @@ services:
       retries: 30
 
   redis:
-    image: redis:6
+    image: redis:7
     command: [--appendonly, 'yes']
 
     volumes:
