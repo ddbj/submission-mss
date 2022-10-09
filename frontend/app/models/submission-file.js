@@ -80,6 +80,8 @@ export class SubmissionFile {
 
           resolve(payload);
         }
+
+        worker.terminate();
       });
 
       worker.postMessage({file: this.rawFile});
@@ -100,6 +102,8 @@ export class SubmissionFile {
         } else {
           resolve(digest);
         }
+
+        worker.terminate();
       });
 
       worker.postMessage({file: this.rawFile});
