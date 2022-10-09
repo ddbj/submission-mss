@@ -8,7 +8,7 @@ RSpec.describe 'submissions', type: :request do
 
     let(:default_headers) {
       {
-        Authorization: "Bearer TOKEN"
+        Authorization: 'Bearer TOKEN'
       }
     }
 
