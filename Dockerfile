@@ -49,7 +49,7 @@ EXPOSE 3000
 
 COPY ./docker/rails/irbrc /.irbrc
 
-RUN gem install bundler --version ${BUNDLER_VERSION:?}
+RUN gem install bundler --version ${BUNDLER_VERSION:?} --no-document
 
 WORKDIR /app/config/
 COPY ./config/ ./
