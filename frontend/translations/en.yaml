@@ -101,7 +101,7 @@ submission-form:
 
   files:
     q-html: |
-      <p>If you have a submission file that have been already checked by <a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener noreferrer">UME (parser and transChecker)</a>, please upload it. </p>
+      <p>If you have a submission file that has been already checked by <a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener noreferrer">UME (parser and transChecker)</a>, please upload it. </p>
 
     a1: I would like to upload the Bacterial complete genome or WGS submission files that have been prepared by DFAST.
     a2: I would like to upload the submission files that have been prepared without using DFAST.
