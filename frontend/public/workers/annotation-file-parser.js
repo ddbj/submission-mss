@@ -44,7 +44,7 @@ async function parse(file) {
       case 'hold_date': {
         const m = value.match(/^(\d{4})(\d{2})(\d{2})$/);
 
-        if (!m) { throw new Error(JSON.stringify({id: 'annotation-file-parser.invalid-hold-date', value})) }
+        if (!m) { throw new Error(JSON.stringify({id: 'annotation-file-parser.invalid-hold-date', value})); }
 
         holdDate = m.slice(1).join('-');
         break;

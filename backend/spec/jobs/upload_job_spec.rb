@@ -93,4 +93,3 @@ RSpec.describe UploadJob do
     expect(ActionMailer::MailDeliveryJob).to have_been_enqueued.with('SubmissionMailer', 'curator_notification', any_args)
   end
 end
-
