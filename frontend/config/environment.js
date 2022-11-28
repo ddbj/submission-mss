@@ -14,7 +14,7 @@ module.exports = function (environment) {
     end_session_endpoint,
   } = JSON.parse(fs.readFileSync(path.join(__dirname, '../../config/openid-configuration.json')));
 
-  let ENV = {
+  const ENV = {
     modulePrefix: 'mssform',
     environment,
     rootURL: '/',
