@@ -1,17 +1,18 @@
+volumes:
+  submissions:
+
 services:
   rails: &rails-local
     build:
       extra_hosts:
-        - keycloak.localhost:${HOST_GATEWAY_IP:-172.17.0.1}
+        - keycloak:${HOST_GATEWAY_IP:-172.17.0.1}
 
     extra_hosts:
-      - keycloak.localhost:host-gateway
+      - keycloak:host-gateway
       - mssform.localhost:host-gateway
 
     volumes:
-      - type: bind
-        source: ../submissions
-        target: /app/submissions
+      - submissions:/app/submissions
 
     depends_on:
       - mailhog
