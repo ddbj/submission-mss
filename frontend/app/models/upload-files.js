@@ -45,7 +45,7 @@ class UploadFile {
       directUploadWillCreateBlobWithXHR: async (xhr) => {
         await session.renewToken();
 
-        xhr.setRequestHeader('Authorization', session.authorizationHeader.Authorization);
+        xhr.setRequestHeader('Authorization', `Bearer ${session.idToken}`);
       },
 
       directUploadWillStoreFileWithXHR: (xhr) => {

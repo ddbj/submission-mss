@@ -1,0 +1,33 @@
+<h2 class="mt-5">Recent Submissions</h2>
+
+<table class="table" {{did-insert this.loadSubmissions}}>
+  <thead>
+    <tr>
+      <th>Mass ID</th>
+      <th>Submission Date</th>
+      <th>Status</th>
+      <th>Accession</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {{#each (sort-by 'id:desc' this.submissions) as |submission|}}
+      <tr>
+        <td>
+          <LinkTo @route="submission" @model={{submission}}>{{submission.id}}</LinkTo>
+        </td>
+
+        <td>{{format-date submission.createdAt}}</td>
+        <td>{{submission.status}}</td>
+
+        <td>
+          <ul class="list-unstyled">
+            {{#each submission.accessions as |accession|}}
+              <li><code>{{accession}}</code></li>
+            {{/each}}
+          </ul>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

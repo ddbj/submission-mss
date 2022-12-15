@@ -15,7 +15,11 @@ RSpec.describe SubmissionMailer do
           build(:other_person, :carol)
         ],
 
-        uploads: uploaded ? [build(:upload)] : []
+        uploads: uploaded ? [
+          build(:upload, **{
+            via: build(:webui_upload)
+          })
+        ] : []
       })
     end
 
@@ -133,7 +137,6 @@ RSpec.describe SubmissionMailer do
         description:    'some description',
         contact_person: build(:contact_person, :alice),
         sequencer:      'ngs',
-        dfast:          true,
         hold_date:      '2020-02-01',
         tpa:            true,
         data_type:      'wgs',
@@ -141,8 +144,8 @@ RSpec.describe SubmissionMailer do
         email_language: 'ja',
 
         uploads: [
-          build(:upload, created_at: '2020-01-02 12:34:56'),
-          build(:upload, created_at: '2020-01-03 12:34:56')
+          build(:upload, created_at: '2020-01-02 12:34:56', via: build(:webui_upload)),
+          build(:upload, created_at: '2020-01-03 12:34:56', via: build(:webui_upload))
         ],
 
         other_people: [
@@ -193,8 +196,8 @@ RSpec.describe SubmissionMailer do
         ## sequencer
         NGS
 
-        ## annotation_pipeline
-        DFAST
+        ## upload_via
+        webui
 
         ## HUP
         2020-02-01

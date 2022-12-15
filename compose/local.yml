@@ -1,5 +1,7 @@
 volumes:
+  mass:
   submissions:
+  work:
 
 services:
   rails: &rails-local
@@ -12,7 +14,9 @@ services:
       - mssform.localhost:host-gateway
 
     volumes:
+      - mass:/submission/keycloak/submissions/keycloak/mass
       - submissions:/app/submissions
+      - work:/app/work
 
     depends_on:
       - mailhog

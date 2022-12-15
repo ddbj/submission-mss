@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
 import ENV from 'mssform/config/environment';
+import { HandledFetchError } from 'mssform/services/fetch';
 
 export default class ApplicationRoute extends Route {
   @service intl;
@@ -40,7 +41,9 @@ export default class ApplicationRoute extends Route {
 }
 
 function errorHandler(error) {
-  alert(`Error: ${error.message}`);
+  if (!(error instanceof HandledFetchError)) {
+    alert(`Error: ${error.message}`);
+  }
 
   throw error;
 }
@@ -49,7 +52,9 @@ function unhandledRejectionHandler(event) {
   const {reason} = event;
   const message = reason instanceof String ? reason : reason.message || JSON.stringify(reason);
 
-  alert(`Error: ${message}`);
+  if (!(reason instanceof HandledFetchError)) {
+    alert(`Error: ${message}`);
+  }
 
   // PromiseRejectionEvent will be output to console.
 }

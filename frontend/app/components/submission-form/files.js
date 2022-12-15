@@ -1,7 +1,8 @@
 import Component from '@glimmer/component';
-import { dropTask } from 'ember-concurrency';
+
 import { NotFoundError } from '@ember-data/adapter/error';
 import { action } from '@ember/object';
+import { dropTask } from 'ember-concurrency';
 import { service } from '@ember/service';
 
 import { handleAppAuthHTTPError, handleAdapterError } from 'mssform/utils/error-handler';
@@ -25,27 +26,36 @@ export default class SubmissionFormFilesComponent extends Component {
   }
 
   get isNextButtonEnabled() {
-    const {uploadType, files} = this.args.state;
+    const {uploadVia} = this.args.model;
+    const {files}     = this.args.state;
 
-    if (!uploadType)   { return false; }
+    if (!uploadVia)    { return false; }
     if (!files.length) { return false; }
 
     for (const file of files) {
       if (file.isParsing || file.errors.length) { return false; }
     }
 
-    for (const errors of this.crossoverErrors.values()) {
-      if (errors.length) { return false; }
+    for (const errs of this.crossoverErrors.values()) {
+      if (errs.length) { return false; }
     }
 
     return true;
   }
 
-  @action setUploadType(val) {
+  @action setUploadVia(val) {
     const {model, state} = this.args;
 
-    state.uploadType = val;
-    model.dfast      = val === 'dfast';
+    model.uploadVia    = val;
+    model.extractionId = null;
+    state.files        = [];
+  }
+
+  @action onExtractProgress({id, files}) {
+    const {model, state} = this.args;
+
+    model.extractionId = id;
+    state.files        = files;
   }
 
   @action addFile(file) {
@@ -121,10 +131,8 @@ export default class SubmissionFormFilesComponent extends Component {
     const {contactPerson, holdDate} = files.find(({isAnnotation}) => isAnnotation).parsedData;
 
     Object.assign(model.contactPerson, contactPerson || {});
-    state.isContactPersonReadonly = !!contactPerson;
 
-    model.holdDate           = holdDate;
-    state.releaseImmediately = !holdDate;
+    model.holdDate = holdDate;
 
     model.entriesCount = files.filter(({isSequence}) => isSequence).reduce((acc, file) => {
       return acc + file.parsedData.entriesCount;

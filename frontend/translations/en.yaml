@@ -13,30 +13,31 @@ index:
   title: MSS Application Form
 
   instructions-html: |
-    <p>Mass Submission System (MSS) is the service for submitting relatively large nucleotide sequence data (not reads) by sending text files. We at DDBJ recommend using MSS when:</p>
+    <p>Mass Submission System (MSS) accepts <a href="https://www.ddbj.nig.ac.jp/ddbj/mss-e.html#outline" target="_blank">the following (1 - 3) nucleotide sequence data (not reads)</a>.<br />
+    We also ask you to see <a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept" target="_blank">"Acceptable data for DDBJ"</a>.</p>
 
-    <ul>
+    <ol>
       <li>
-        Submission is not applicable for Nucleotide Sequence Submission System (NSSS)
+        Either of the following categories or amounts of sequence data
 
         <ul>
-          <li><a href="https://www.ddbj.nig.ac.jp/ddbj/est-e.html">EST</a>, STS, <a href="https://www.ddbj.nig.ac.jp/ddbj/tsa-e.html">TSA</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/htc-e.html">HTC</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/gss-e.html">GSS</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/htg-e.html">HTG</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/wgs-e.html">WGS</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/con-e.html">CON</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/tls-e.html">TLS</a></li>
-          <li>See <a href="https://www.ddbj.nig.ac.jp/documents/data-categories-e.html#division">Categories for Sequence Data</a> in detail.</li>
+          <li>
+            <a href="https://www.ddbj.nig.ac.jp/ddbj/est-e.html" target="_blank">EST</a>, STS, <a href="https://www.ddbj.nig.ac.jp/ddbj/tsa-e.html" target="_blank">TSA</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/htc-e.html" target="_blank">HTC</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/gss-e.html" target="_blank">GSS</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/htg-e.html" target="_blank">HTG</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/wgs-e.html" target="_blank">WGS</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/con-e.html" target="_blank">CON</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/tls-e.html" target="_blank">TLS</a>
+
+            <ul>
+              <li>See <a href="https://www.ddbj.nig.ac.jp/documents/data-categories-e.html#detail" target="_blank">Annotated/Assembled Data Categories</a> for details.</li>
+            </ul>
+          </li>
+
+          <li>Submission with long sequences, greater than 500 kb in its length</li>
+          <li>Complex submission containing many features for one sequence, more than 30 features</li>
+          <li>Submission consists of large number of sequences, greater than 100 in total</li>
         </ul>
       </li>
 
-      <li>
-        Submission with sequences length greater than 500 kb.
-      </li>
-
-      <li>
-        Submission file with more than, approximately, 30 features.
-      </li>
-
-      <li>
-        Submission consists of more than 100 sequences.
-      </li>
-    </ul>
+      <li>Regardless finished or draft level, sequence data of whole-length scale replicons</li>
+      <li>Sequence data to be described BioProject or BioSample in DBLINK</li>
+    </ol>
 
     <p>Login with <a href="https://www.ddbj.nig.ac.jp/account-e.html">D-way account</a> to start a new submission.</p>
 
@@ -71,12 +72,7 @@ submission-form:
 
   prerequisite:
     instructions-html: |
-      <p>
-        Acceptable nucleotide sequences<br />
-        <a href="https://www.ddbj.nig.ac.jp/documents/data-categories-e.html" target="_blank" rel="noopener noreferrer">https://www.ddbj.nig.ac.jp/documents/data-categories-e.html</a>
-      </p>
-
-      <p>You can apply for the submission or upload the submission files when the submission matches the following requirements. Otherwise, you must aggregate the submissions until requirements are achieved.</p>
+      <p>You can <a href="https://www.ddbj.nig.ac.jp/ddbj/mss.html#submission" target="_blank">apply as one submission</a> when the submission matches the all requirements below. Otherwise, you must separate the submission files so that each submission becomes to match the requirements, and apply each submission separately. See <a href="https://www.ddbj.nig.ac.jp/ddbj/mss-e.html#submission-1" target="_blank">"Example case where you must apply for the registration more than two times"</a>.</p>
 
       <ul>
         <li>same contact person</li>
@@ -101,10 +97,15 @@ submission-form:
 
   files:
     q-html: |
-      <p>If you have a submission file that has been already checked by <a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener noreferrer">UME (parser and transChecker)</a>, please upload it. </p>
+      <p>Select the file transferring method for the submission.<br />
+      In the case where you upload the submission files, be sure to check the format and/or translation of CDS feature by <a href="https://www.ddbj.nig.ac.jp/ddbj/ume-e.html" target="_blank">UME (Parser, transChecker)</a> and fix the errors. Finally, transfer the submission files having no errors.</p>
 
-    a1: I would like to upload the Bacterial complete genome or WGS submission files that have been prepared by DFAST.
-    a2: I would like to upload the submission files that have been prepared without using DFAST.
+    a1: Import the submission files from DFAST Job ID.
+    a2: Upload the submission files through the MSS form.
+    a3-html: Import the files which have been transferred to the directory in sftp submission server. <code>{userMassDir}</code>
+
+    a3-help-text: Data upload
+    a3-help-url: https://www.ddbj.nig.ac.jp/upload-e.html#upload
 
     instructions-html: |
       <p>Upload the annotation and nucleotide sequence file as a pair. Multiple pair files can be uploaded. The system determines as a pair whose filenames without the extension has the same name. The uploadable files are shown below. Do not upload the compressed files.</p>
@@ -121,16 +122,17 @@ submission-form:
     required: Required
     optional: Optional
 
+    notice-html: |
+      <p>The number of total entries, the hold data, and contact, which have been obtained from the submission files, are displayed below. If you find any inconsistency, go back to “2. Submission file” and transfer the revised submission files.</p>
+
     entries-html: |
-      <p>Enter the number of total entries among the sequence files, and specify the <a href="https://www.ddbj.nig.ac.jp/documents/data-release-policy-e.html" target="_blank" rel="noopener noreferrer">hold date</a>.</p>
+      The number of total entries among the sequence files and the <a href="https://www.ddbj.nig.ac.jp/documents/data-release-policy-e.html" target="_blank" rel="noopener noreferrer">hold date</a>
 
     entries-count: Number of entries
     hold-date: Hold-date
     release-immediately: Release immediately
 
-    contact-person-html: |
-      <p>Enter the contact who is displayed at contact line' of the submission file and has responsibility for the submission.</p>
-
+    contact-person: Contact person
     email: E-mail
     full-name: Full name
     affiliation: Institution
@@ -152,7 +154,8 @@ submission-form:
     description-placeholder: e.g. Annotated draft genome sequences of five Pseudomonas dibenzothiophene-degrading strains isolated from activated sludge.
 
     description-text-html: |
-      Please provide a supplemental description of your submission data here (Japanese is acceptable). If you are updating a sequence registered with DDBJ, please enter the target accession
+      <p>Please provide a supplemental description of your submission data here (Japanese is acceptable). If you are updating a sequence registered with DDBJ, please enter the target accession.</p>
+      <p><strong>We recommend describing here. The description can aid curator to quickly obtain the summary of the submission.</strong></p>
 
     email-language: Select the language for the email
 
@@ -166,22 +169,20 @@ submission-form:
     hold-date: Scheduled release date
     release-immediately: Release immediately
     contact-person: Contact person
-    other-people: Additional information
+    other-people: Other person in charge
     sequencer-type: Sequencer type
     data-type: Data type
     description: Supplemental description
     email-language: Language of notification E-mail
 
     blank: Blank
-    confirm-message: Please, check the information, then press the "Registration Application" button. You cannot modify the information after clicking.
-    submit: Registration Application
+    confirm-message: Please, check the information, then press the "Apply for registration" button. You cannot modify the information after clicking.
+    submit: Apply for registration
 
   complete:
     complete-message-html: |
-      <p>
-        Your application has been accepted. The MSS application ID is {massId}.<br />
-        An email from mass@ddbj.nig.ac.jp will be sent to the address(es) filled in the form. Please do not send submission file(s) as E-mail attachments.
-      </p>
+      <p>Your application has been accepted. The MSS application ID is <b>{massId}</b>.<br />
+      Email from mass@ddbj.nig.ac.jp will be sent to the email address(es) filled in the form and to the address registered in your D-way account. Please do not send additional submission file(s) by e-mail attachments.</p>
 
 upload-form:
   title: Upload
@@ -230,3 +231,12 @@ annotation-file-parser:
 
 sequence-file-parser:
   no-entries: No entries found.
+
+dfast-extractor:
+  ids-label: DFAST job IDs
+
+  ids-help-html: |
+    <p>36-digits ID including hyphen. You need to <a href="https://dfast.ddbj.nig.ac.jp/help_login" target="_blank">fill the metadata and run "Format Check" in DFAST</a> before submitting the data.<br />
+    You can specify multiple job IDs by delimiting each ID with the line feed.</p>
+
+  submit: Retrieve submission files from DFAST

@@ -10,9 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_27_063532) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_08_172905) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "extraction_state", ["pending", "fulfilled", "rejected"]
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -52,6 +56,58 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_27_063532) do
     t.index ["submission_id"], name: "index_contact_people_on_submission_id"
   end
 
+  create_table "dfast_extraction_files", force: :cascade do |t|
+    t.bigint "extraction_id", null: false
+    t.string "name", null: false
+    t.string "dfast_job_id", null: false
+    t.boolean "parsing", null: false
+    t.jsonb "parsed_data"
+    t.jsonb "_errors"
+    t.index ["extraction_id", "name"], name: "index_dfast_extraction_files_on_extraction_id_and_name", unique: true
+    t.index ["extraction_id"], name: "index_dfast_extraction_files_on_extraction_id"
+  end
+
+  create_table "dfast_extractions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.enum "state", default: "pending", null: false, enum_type: "extraction_state"
+    t.string "dfast_job_ids", null: false, array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_dfast_extractions_on_user_id"
+  end
+
+  create_table "dfast_uploads", force: :cascade do |t|
+    t.bigint "extraction_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["extraction_id"], name: "index_dfast_uploads_on_extraction_id"
+  end
+
+  create_table "mass_directory_extraction_files", force: :cascade do |t|
+    t.bigint "extraction_id", null: false
+    t.string "name", null: false
+    t.boolean "parsing", null: false
+    t.jsonb "parsed_data"
+    t.jsonb "_errors"
+    t.index ["extraction_id", "name"], name: "index_mass_directory_extraction_files_on_extraction_id_and_name", unique: true
+    t.index ["extraction_id"], name: "index_mass_directory_extraction_files_on_extraction_id"
+  end
+
+  create_table "mass_directory_extractions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.enum "state", default: "pending", null: false, enum_type: "extraction_state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_mass_directory_extractions_on_user_id"
+  end
+
+  create_table "mass_directory_uploads", force: :cascade do |t|
+    t.bigint "extraction_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["extraction_id"], name: "index_mass_directory_uploads_on_extraction_id"
+  end
+
   create_table "other_people", force: :cascade do |t|
     t.bigint "submission_id", null: false
     t.string "email", null: false
@@ -66,7 +122,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_27_063532) do
   create_table "submissions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.boolean "tpa", null: false
-    t.boolean "dfast", null: false
     t.integer "entries_count", null: false
     t.date "hold_date"
     t.string "sequencer", null: false
@@ -82,9 +137,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_27_063532) do
 
   create_table "uploads", force: :cascade do |t|
     t.bigint "submission_id", null: false
-    t.boolean "copied", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "via_type", null: false
+    t.bigint "via_id", null: false
     t.index ["submission_id"], name: "index_uploads_on_submission_id"
   end
 
@@ -96,6 +152,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_27_063532) do
     t.index ["openid_sub"], name: "index_users_on_openid_sub", unique: true
   end
 
+  create_table "webui_uploads", force: :cascade do |t|
+    t.boolean "copied", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "dfast_extraction_files", "dfast_extractions", column: "extraction_id"
+  add_foreign_key "dfast_uploads", "dfast_extractions", column: "extraction_id"
+  add_foreign_key "mass_directory_extraction_files", "mass_directory_extractions", column: "extraction_id"
+  add_foreign_key "mass_directory_uploads", "mass_directory_extractions", column: "extraction_id"
 end

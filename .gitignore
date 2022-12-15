@@ -1,4 +1,3 @@
 /compose/production.env
 /compose/staging.env
 /config/openid-configuration.json
-/submissions/

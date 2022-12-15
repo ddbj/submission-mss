@@ -1,9 +1,17 @@
 services:
   rails: &rails
+    group_add:
+      - '60000' # submitter
     volumes:
       - type: bind
         source: ~/submissions/$STAGE
         target: /app/submissions
+      - type: bind
+        source: /submission
+        target: /submission
+      - type: bind
+        source: ~/mssform/work/$STAGE
+        target: /app/work
 
   sidekiq:
     <<: *rails

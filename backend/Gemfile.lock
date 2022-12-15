@@ -263,6 +263,7 @@ GEM
       rspec-support (~> 3.12)
     rspec-support (3.12.0)
     ruby2_keywords (0.0.5)
+    rubyzip (2.3.2)
     rufus-scheduler (3.8.2)
       fugit (~> 1.1, >= 1.1.6)
     sidekiq (7.1.2)
@@ -323,6 +324,7 @@ DEPENDENCIES
   rails (~> 7.0.7)
   rspec-default_http_header
   rspec-rails
+  rubyzip
   sidekiq
   sidekiq-scheduler (>= 5.0.0.beta2)
   webmock

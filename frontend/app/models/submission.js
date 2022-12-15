@@ -6,7 +6,8 @@ export default class Submission extends Model {
   @hasMany('other-person', {async: false, inverse: null}) otherPeople;
 
   @attr('boolean') tpa;
-  @attr('boolean') dfast;
+  @attr('string')  uploadVia;
+  @attr('number')  extractionId;
   @attr            files;
   @attr('number')  entriesCount;
   @attr('string')  holdDate;
@@ -14,4 +15,10 @@ export default class Submission extends Model {
   @attr('string')  dataType;
   @attr('string')  description;
   @attr('string')  emailLanguage;
+
+  // readonly attributes
+  @attr('string') status;
+  @attr           accessions;
+  @attr('date')   createdAt;
+  @attr           fileNames;
 }

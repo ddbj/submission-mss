@@ -1,0 +1,11 @@
+<h1 class="display-6 my-4">{{@model.id}}</h1>
+
+<LinkTo @route="submission.upload" @model={{@model}} class="btn btn-outline-primary">再アップロード</LinkTo>
+
+<h2 class="mt-4">登録ファイル</h2>
+
+<ul class="list-group">
+  {{#each @model.fileNames as |name|}}
+    <li class="list-group-item">{{name}}</li>
+  {{/each}}
+</ul>

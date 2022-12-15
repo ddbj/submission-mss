@@ -18,10 +18,12 @@
               <li>{{t 'submission-form.prerequisite.a1-1'}}</li>
             {{/if}}
 
-            {{#if @model.dfast}}
+            {{#if (eq @model.uploadVia 'dfast')}}
               <li>{{t 'submission-form.files.a1'}}</li>
-            {{else}}
+            {{else if (eq @model.uploadVia 'webui')}}
               <li>{{t 'submission-form.files.a2'}}</li>
+            {{else if (eq @model.uploadVia 'mass_directory')}}
+              <li>{{t 'submission-form.files.a3-html' htmlSafe=true userMassDir=(user-mass-dir)}}</li>
             {{/if}}
           </ul>
         </div>

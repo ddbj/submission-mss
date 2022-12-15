@@ -29,6 +29,7 @@ services:
       args:
         APP_GID:
         APP_UID:
+        MASS_DIR_PATH_TEMPLATE:
         NODE_VERSION:
         OPENID_CLIENT_ID:
         OPENID_CONFIGURATION_ENDPOINT:
@@ -38,6 +39,7 @@ services:
       CURATOR_ML_ADDRESS:          '"DDBJ Mass Submission System (MSS)" <mass@ddbj.nig.ac.jp>'
       DATABASE_URL:                postgresql://postgres@postgres/mssform
       EXCEPTION_RECIPIENTS:
+      EXTRACTION_WORKDIR:          /app/work/extraction
       FORCE_SSL:
       GOOGLE_ACCOUNT_TYPE:         service_account
       GOOGLE_CLIENT_EMAIL:
@@ -45,6 +47,7 @@ services:
       GOOGLE_PRIVATE_KEY:
       IRB_USE_AUTOCOMPLETE:        'false'
       MAIL_ALLOWED_DOMAINS:
+      MASS_DIR_PATH_TEMPLATE:
       MEMCACHE_SERVERS:            memcached
       MINIO_ACCESS_KEY_ID:
       MINIO_BUCKET:                uploads

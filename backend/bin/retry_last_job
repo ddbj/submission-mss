@@ -1,0 +1,6 @@
+#!bin/rails runner
+
+set = Sidekiq::RetrySet.new
+job = set.to_a.last
+
+job&.retry

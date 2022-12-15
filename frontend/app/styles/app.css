@@ -5,3 +5,7 @@
 .fill-danger {
   fill: var(--bs-danger);
 }
+
+.border-dashed {
+  border-style: dashed;
+}

@@ -1,12 +1,12 @@
 class ProcessSubmissionJob < ApplicationJob
   queue_as :default
 
-  def perform(submission)
-    submission.uploads.first&.copy_files_to_submissions_dir
+  def perform(upload)
+    upload.via.copy_files_to_submissions_dir
 
-    WorkingList.instance.add_new_submission submission
+    WorkingList.instance.add_new_submission upload.submission
 
-    SubmissionMailer.with(submission:).submitter_confirmation.deliver_later
-    SubmissionMailer.with(submission:).curator_notification.deliver_later
+    SubmissionMailer.with(submission: upload.submission).submitter_confirmation.deliver_later
+    SubmissionMailer.with(submission: upload.submission).curator_notification.deliver_later
   end
 end

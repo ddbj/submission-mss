@@ -13,42 +13,31 @@ index:
   title: MSS 登録フォーム
 
   instructions-html: |
-    <p>Mass Submission System (MSS) は、比較的大規模な塩基配列データ (reads ではない) をファイル送付により登録するサービスです。登録予定データが、以下の条件に該当する場合は MSS をご利用ください。</p>
+    <p>Mass Submission System (MSS) では、<a href="https://www.ddbj.nig.ac.jp/ddbj/mss.html#outline"  target="_blank">以下 1 - 3 のいずれかに該当する配列データ登録ファイル(reads ではない)</a>を受け付けます。<br />
+    <a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept" target="_blank">DDBJ に登録可能なデータ</a>も合わせてお読みください。</p>
 
-    <ul>
+    <ol>
       <li>
-        Web 版塩基配列登録システムが対応していない登録
+        種別、または、量が以下に該当する配列データ
 
         <ul>
-          <li><a href="https://www.ddbj.nig.ac.jp/ddbj/est.html">EST</a>、STS、<a href="https://www.ddbj.nig.ac.jp/ddbj/tsa.html">TSA</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/htc.html">HTC</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/gss.html">GSS</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/htg.html">HTG</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/wgs.html">WGS</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/con.html">CON</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/tls.html">TLS</a></li>
-          <li>データ種別の詳細は、<a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#division">登録データ種別</a>をご確認ください。</li>
+          <li>
+            <a href="https://www.ddbj.nig.ac.jp/ddbj/est.html" target="_blank">EST</a>、STS、<a href="https://www.ddbj.nig.ac.jp/ddbj/tsa.html" target="_blank">TSA</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/htc.html" target="_blank">HTC</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/gss.html" target="_blank">GSS</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/htg.html" target="_blank">HTG</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/wgs.html" target="_blank">WGS</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/con.html" target="_blank">CON</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/tls.html" target="_blank">TLS</a>
+
+            <ul>
+              <li>データ種別の詳細は、<a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#detail" target="_blank">Annotated/Assembled データの区分</a>をご確認ください。</li>
+            </ul>
+          </li>
+
+          <li>１配列が長い場合、目安は 500 kb 以上</li>
+          <li>１配列あたりに多数の Feature がある場合、目安は 30 以上</li>
+          <li>登録する配列の数が多い場合、総計 100 を超えるとき</li>
         </ul>
       </li>
 
-      <li>
-        配列が長い場合
-
-        <ul>
-          <li>目安は 500 kb 以上</li>
-        </ul>
-      </li>
-
-      <li>
-        １エントリあたりに多数の Feature がある場合
-
-        <ul>
-          <li>目安は 30 以上</li>
-        </ul>
-      </li>
-
-      <li>
-        エントリ数 (登録する配列の数) が多い場合
-
-        <ul>
-          <li>100 を超えるとき</li>
-        </ul>
-      </li>
-    </ul>
+      <li>finished/draft の別を問わずレプリコン全長規模相当の配列データ</li>
+      <li>DBLINK に BioProject, BioSample の記載が必要な配列データ</li>
+    </ol>
 
     <p>登録を始めるには <a href="https://www.ddbj.nig.ac.jp/account.html">D-way アカウント</a>でログインしてください。</p>
 
@@ -83,12 +72,7 @@ submission-form:
 
   prerequisite:
     instructions-html: |
-      <p>
-        登録可能なデータは次の通りです。<br />
-        <a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept" target="_blank" rel="noopener noreferrer">https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept</a>
-      </p>
-
-      <p>以下のすべてに該当する場合のみ申し込みできます。いずれか該当しない場合は submission を分け、submsssion ごとに MSS 申し込みを行ってください。</p>
+      <p>以下のすべてに該当する場合のみ、<a href="https://www.ddbj.nig.ac.jp/ddbj/mss.html#submission" target="_blank">一度の submission として申し込みできます</a>。いずれか該当しない場合、各 submission が条件に合致するように submission ファイルを分け、別々に申し込みを行ってください。<a href="https://www.ddbj.nig.ac.jp/ddbj/mss.html#submission-1" target="_blank">複数回に分けての申し込みが必要な例</a>もご覧ください。</p>
 
       <ul>
         <li>コンタクトパーソンが同一である</li>
@@ -113,10 +97,15 @@ submission-form:
 
   files:
     q-html: |
-      <p><a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener noreferrer">UME (Parser, transChecker)</a> チェック済みのSubmission fileを作成済みであればuploadしてください。</p>
+      <p>Submission ファイルの送付方法を選択してください。<br />
+      登録ファイルをアップロードする場合は、事前に<a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank">UME (Parser, transChecker)</a>にてフォーマットやCDSフィーチャーの翻訳チェックを行い、エラーのないファイルを送付してください。</p>
 
-    a1: DFAST で作成した Bacterial complete genome または WGS の登録ファイルをアップロードする
-    a2: DFAST を使わず作成した登録ファイルをアップロードする
+    a1: DFASTのジョブIDから登録ファイルを取り込んで送付する
+    a2: 登録ファイルをこのMSSフォームからアップロードする
+    a3-html: ファイル受付用sftpサーバ <code>{userMassDir}</code> にアップロード済みの登録ファイルを送付する
+
+    a3-help-text: データのアップロード
+    a3-help-url: https://www.ddbj.nig.ac.jp/upload.html#upload
 
     instructions-html: |
       <p>アノテーションファイルと塩基配列ファイルでペアになるようにアップロードしてください。複数ペアをアップロード可能です。ファイル名から拡張子を除いた名称が同一なファイルがペアになります。読み込めるファイル名拡張子は次の通りです。圧縮ファイルをアップロードしないでください。</p>
@@ -133,16 +122,17 @@ submission-form:
     required: 必須
     optional: 任意
 
+    notice-html: |
+      <p>合計エントリ数と公開予定日、コンタクトパーソンは、submission fileから取得して表示しています。合致しない場合は、「2. 登録ファイルの選択」に戻り、修正したファイルで転送をやり直してください。</p>
+
     entries-html: |
-      <p>すべての配列ファイルの合計エントリ数と、<a href="https://www.ddbj.nig.ac.jp/documents/data-release-policy.html" target="_blank" rel="noopener noreferrer">公開予定日 (Hold date)</a> の希望があれば入力してください。</p>
+      すべての配列ファイルの合計エントリ数と<a href="https://www.ddbj.nig.ac.jp/documents/data-release-policy.html" target="_blank" rel="noopener noreferrer">公開予定日 (Hold date)</a>
 
     entries-count: エントリ数
     hold-date: 公開予定日
     release-immediately: 即時公開
 
-    contact-person-html: |
-      <p>登録ファイルの contact 行に記載する1名の登録責任者（コンタクトパーソン）について入力してください。</p>
-
+    contact-person: コンタクトパーソン
     email: E-mail アドレス
     full-name: フルネーム
     affiliation: 所属名 (英語表記)
@@ -161,10 +151,12 @@ submission-form:
       <a href="https://www.ddbj.nig.ac.jp/ddbj/data-categories.html#sub" target="_blank" rel="noopener noreferrer">データ種別</a>を選択してください。種別を判断できない場合、<a href="https://www.ddbj.nig.ac.jp/submission.html" target="_blank" rel="noopener noreferrer">登録ナビゲーションツール</a>をご利用ください。
 
     description: 補足説明
-    description-placeholder: e.g. 活性汚泥から単離した Dibenzothiophene分解能を有するPseudomonas属ストレイン5種のドラフトゲノム配列にアノテーションをつけたもの
 
     description-text-html: |
-      Submission データの補足説明をここに記入してください（日本語可）。生物の説明（common nameや性質など）、単離生物由来でない場合は塩基配列をどうやって得たのか、そのほか、DDBJ キュレータに知らせたいこと等を入力できます。DDBJ に登録した配列を更新する場合は対象の Accession を記入してください。
+      <p>Submission データの補足説明をここに記入してください（日本語可）。生物の説明（common nameや性質など）、単離生物由来でない場合は塩基配列をどうやって得たのか、そのほか、DDBJ キュレータに知らせたいこと等を入力できます。DDBJ に登録した配列を更新する場合は対象の Accession を記入してください。</p>
+      <p><strong>記載を推奨します。Curatorが登録概要を素早くつかむための手助けになりますのでご協力ください。</strong></p>
+
+    description-placeholder: e.g. 活性汚泥から単離した Dibenzothiophene分解能を有するPseudomonas属ストレイン5種のドラフトゲノム配列にアノテーションをつけたもの
 
     email-language: 通知メールの言語
 
@@ -190,10 +182,8 @@ submission-form:
 
   complete:
     complete-message-html: |
-      <p>
-        申し込みを受け付けました。MSS申し込みIDは {massId} です。<br />
-        mass@ddbj.nig.ac.jp より、入力いただいたアドレス宛にメールが通知されます。メール添付でのsubmissionファイル(再)送付はご遠慮ください。
-      </p>
+      <p>申し込みを受け付けました。MSS申し込みIDは <b>{massId}</b> です。<br />
+      mass@ddbj.nig.ac.jp より、入力いただいたアドレスとD-wayアカウントに登録されたメールアドレスにメールが通知されます。メール添付でのsubmissionファイル追加送付はご遠慮ください。</p>
 
 upload-form:
   title: アップロード
@@ -242,3 +232,12 @@ annotation-file-parser:
 
 sequence-file-parser:
   no-entries: エントリが1つも含まれていません。
+
+dfast-extractor:
+  ids-label: DFAST job IDs
+
+  ids-help-html: |
+    <p>ハイフンを含めた36桁のIDです。Submitするには、<a href="https://dfast.ddbj.nig.ac.jp/help_login" target="_blank">DFASTにてメタデータを入力し、Format Check</a>をしておいてください。<br />
+    複数のjob IDを指定する場合は改行で区切ってください。</p>
+
+  submit: Retrieve submission files from DFAST

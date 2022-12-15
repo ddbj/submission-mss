@@ -1,0 +1,6 @@
+{
+  _self: mass_directory_extraction_url(@extraction),
+  id:    @extraction.id,
+  state: @extraction.state,
+  files: render(partial: 'file', collection: @extraction.files)
+}
