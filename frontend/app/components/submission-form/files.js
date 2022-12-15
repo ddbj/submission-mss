@@ -101,7 +101,7 @@ export default class SubmissionFormFilesComponent extends Component {
     model.contactPerson.affiliation = last.contactPerson.affiliation;
 
     if (model.otherPeople.length === 0) {
-      for (const person of last.otherPeople.toArray()) {
+      for (const person of last.otherPeople.slice()) {
         model.otherPeople.createRecord({
           email:       person.email,
           fullName:    person.fullName,
