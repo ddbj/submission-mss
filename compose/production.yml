@@ -1,10 +1,5 @@
 services:
-  varnish:
-    restart: unless-stopped
-
   rails: &rails
-    restart: unless-stopped
-
     volumes:
       - type: bind
         source: ~/submissions/$STAGE
@@ -14,27 +9,18 @@ services:
     <<: *rails
 
   postgres:
-    restart: unless-stopped
-
     volumes:
       - type: bind
         source: ~/mssform/data/$STAGE/postgres
         target: /var/lib/postgresql/data
 
   redis:
-    restart: unless-stopped
-
     volumes:
       - type: bind
         source: ~/mssform/data/$STAGE/redis
         target: /data
 
-  memcached:
-    restart: unless-stopped
-
   minio:
-    restart: unless-stopped
-
     volumes:
       - type: bind
         source: ~/mssform/data/$STAGE/minio
