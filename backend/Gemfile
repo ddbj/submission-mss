@@ -17,7 +17,7 @@ gem 'mail', '~> 2.7.1' # https://github.com/mikel/mail/issues/1489
 gem 'pg'
 gem 'puma'
 gem 'sidekiq'
-gem 'sidekiq-scheduler', github: 'ursm/sidekiq-scheduler', branch: 'drop-redis-dep'
+gem 'sidekiq-scheduler', '>= 5.0.0.beta2'
 
 group :test do
   gem 'climate_control'
