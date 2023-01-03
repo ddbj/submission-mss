@@ -44,6 +44,7 @@ services:
       GOOGLE_CLIENT_EMAIL:
       GOOGLE_CLIENT_ID:
       GOOGLE_PRIVATE_KEY:
+      IRB_USE_AUTOCOMPLETE:        'false'
       MAIL_ALLOWED_DOMAINS:
       MEMCACHE_SERVERS:            memcached
       MINIO_ACCESS_KEY_ID:
