@@ -1,0 +1,7 @@
+.fill-success {
+  fill: var(--bs-success);
+}
+
+.fill-danger {
+  fill: var(--bs-danger);
+}

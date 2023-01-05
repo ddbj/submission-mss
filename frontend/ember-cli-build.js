@@ -2,12 +2,10 @@
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
+const funnel = require('broccoli-funnel');
+
 module.exports = function (defaults) {
   const app = new EmberApp(defaults, {
-    sassOptions: {
-      includePaths: ['node_modules']
-    },
-
     'ember-simple-auth': {
       useSessionSetupMethod: true
     },
@@ -19,5 +17,14 @@ module.exports = function (defaults) {
     }
   });
 
-  return app.toTree();
+  app.import('node_modules/@primer/octicons/build/build.css');
+  app.import('node_modules/bootstrap/dist/css/bootstrap.css');
+
+  const sourcemaps = funnel('node_modules/bootstrap', {
+    srcDir:  'dist/css',
+    destDir: 'assets',
+    include: ['bootstrap.css.map']
+  });
+
+  return app.toTree([sourcemaps]);
 };
