@@ -13,7 +13,6 @@
           "options": [
             "--no-lint-fix",
             "--no-welcome",
-            "--yarn",
             "--embroider",
             "--ci-provider=github"
           ]
