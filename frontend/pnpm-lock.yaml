@@ -14,6 +14,7 @@ specifiers:
   babel-eslint: ^10.1.0
   bootstrap: ^5.1.3
   broccoli-asset-rev: ^3.0.0
+  broccoli-funnel: ^3.0.8
   concurrently: ^7.6.0
   ember-auto-import: ^2.5.0
   ember-cli: ~4.9.2
@@ -22,7 +23,6 @@ specifiers:
   ember-cli-dependency-checker: ^3.3.1
   ember-cli-htmlbars: ^6.1.1
   ember-cli-inject-live-reload: ^2.1.0
-  ember-cli-sass: ^11.0.1
   ember-cli-sri: ^2.1.1
   ember-cli-terser: ^4.0.2
   ember-composable-helpers: ^5.0.0
@@ -56,7 +56,6 @@ specifiers:
   outdent: ^0.8.0
   qunit: ^2.19.3
   qunit-dom: ^2.0.0
-  sass: ^1.49.0
   webpack: ^5.75.0
 
 devDependencies:
@@ -73,6 +72,7 @@ devDependencies:
   babel-eslint: 10.1.0_eslint@7.32.0
   bootstrap: 5.2.3_@popperjs+core@2.11.6
   broccoli-asset-rev: 3.0.0
+  broccoli-funnel: 3.0.8
   concurrently: 7.6.0
   ember-auto-import: 2.5.0_webpack@5.75.0
   ember-cli: 4.9.2
@@ -81,7 +81,6 @@ devDependencies:
   ember-cli-dependency-checker: 3.3.1_ember-cli@4.9.2
   ember-cli-htmlbars: 6.1.1
   ember-cli-inject-live-reload: 2.1.0
-  ember-cli-sass: 11.0.1
   ember-cli-sri: 2.1.1
   ember-cli-terser: 4.0.2
   ember-composable-helpers: 5.0.0
@@ -115,7 +114,6 @@ devDependencies:
   outdent: 0.8.0
   qunit: 2.19.3
   qunit-dom: 2.0.0
-  sass: 1.57.1
   webpack: 5.75.0
 
 packages:
@@ -3395,6 +3393,7 @@ packages:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
     dev: true
+    optional: true
 
   /binaryextensions/2.3.0:
     resolution: {integrity: sha512-nAihlQsYGyc5Bwq6+EsubvANYGExeJKHDO3RjnvwU042fawQTQfM3Kxn7IHUXQOz4bzfwsGYYHGSvXyW4zOGLg==}
@@ -3987,17 +3986,6 @@ packages:
       - supports-color
     dev: true
 
-  /broccoli-sass-source-maps/4.1.0:
-    resolution: {integrity: sha512-So3gTlP9AEJTponlRoL9Ti+xaMX1LnJUWD52mVT0Oq6PI8nIjX97XMW91JfY/4CXsprIDyGe/7rkiauE+XHdPQ==}
-    engines: {node: '>=10.24.1'}
-    dependencies:
-      broccoli-caching-writer: 3.0.3
-      include-path-searcher: 0.1.0
-      rsvp: 4.8.5
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
   /broccoli-slow-trees/3.1.0:
     resolution: {integrity: sha512-FRI7mRTk2wjIDrdNJd6znS7Kmmne4VkAkl8Ix1R/VoePFMD0g0tEl671xswzFqaRjpT9Qu+CC4hdXDLDJBuzMw==}
     dependencies:
@@ -4452,6 +4440,7 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
+    optional: true
 
   /chownr/1.1.4:
     resolution: {integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==}
@@ -5805,18 +5794,6 @@ packages:
       broccoli-funnel: 2.0.2
       debug: 3.2.7
       process-relative-require: 1.0.0
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
-  /ember-cli-sass/11.0.1:
-    resolution: {integrity: sha512-RMlFPMK4kaB+67seF/IIoY3EC4rRd+L58q+lyElrxB3FcQTgph/qmGwtqf9Up7m3SDbPiA7cccCOSmgReMgCXA==}
-    engines: {node: '>= 10.*'}
-    dependencies:
-      broccoli-funnel: 2.0.2
-      broccoli-merge-trees: 3.0.2
-      broccoli-sass-source-maps: 4.1.0
-      ember-cli-version-checker: 2.2.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -8351,10 +8328,6 @@ packages:
     engines: {node: '>= 4'}
     dev: true
 
-  /immutable/4.2.1:
-    resolution: {integrity: sha512-7WYV7Q5BTs0nlQm7tl92rDYYoyELLKHoDMBKhrxEoiV4mrfVdRz8hzPiYOzH7yWjzoVEamxRuAqhxL2PLRwZYQ==}
-    dev: true
-
   /import-fresh/3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
     engines: {node: '>=6'}
@@ -8366,10 +8339,6 @@ packages:
   /imurmurhash/0.1.4:
     resolution: {integrity: sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==}
     engines: {node: '>=0.8.19'}
-    dev: true
-
-  /include-path-searcher/0.1.0:
-    resolution: {integrity: sha512-KlpXnsZOrBGo4PPKqPFi3Ft6dcRyh8fTaqgzqDRi8jKAsngJEWWOxeFIWC8EfZtXKaZqlsNf9XRwcQ49DVgl/g==}
     dev: true
 
   /infer-owner/1.0.4:
@@ -8563,6 +8532,7 @@ packages:
     dependencies:
       binary-extensions: 2.2.0
     dev: true
+    optional: true
 
   /is-boolean-object/1.1.2:
     resolution: {integrity: sha512-gDYaKHJmnj4aWxyj6YHyXVpdQawtVLHU5cb+eztPGczf6cjuTdwve5ZIEfgXqH4e57An1D1AKf8CZ3kYrQRqYA==}
@@ -10890,6 +10860,7 @@ packages:
     dependencies:
       picomatch: 2.3.1
     dev: true
+    optional: true
 
   /recast/0.18.10:
     resolution: {integrity: sha512-XNvYvkfdAN9QewbrxeTOjgINkdY/odTgTS56ZNEWL9Ml0weT4T3sFtvnTuF+Gxyu46ANcRm1ntrF6F5LAJPAaQ==}
@@ -11307,16 +11278,6 @@ packages:
       micromatch: 4.0.5
       minimist: 1.2.7
       walker: 1.0.8
-    dev: true
-
-  /sass/1.57.1:
-    resolution: {integrity: sha512-O2+LwLS79op7GI0xZ8fqzF7X2m/m8WFfI02dHOdsK5R2ECeS5F62zrwg/relM1rjSLy7Vd/DiMNIvPrQGsA0jw==}
-    engines: {node: '>=12.0.0'}
-    hasBin: true
-    dependencies:
-      chokidar: 3.5.3
-      immutable: 4.2.1
-      source-map-js: 1.0.2
     dev: true
 
   /sax/1.2.4:
