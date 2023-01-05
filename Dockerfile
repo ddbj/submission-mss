@@ -16,14 +16,16 @@ ARG OPENID_CLIENT_ID
 
 ENV OPENID_CLIENT_ID=${OPENID_CLIENT_ID:?}
 
+RUN npm install --global pnpm
+
 WORKDIR /app/config/
 COPY ./config/ ./
 COPY --from=openid-configuration /app/config/openid-configuration.json ./
 
 WORKDIR /app/frontend/
 COPY ./frontend/ ./
-RUN --mount=type=cache,target=/tmp/node_modules yarn install --frozen-lockfile --modules-folder /tmp/node_modules/ && cp --recursive --no-target-directory /tmp/node_modules/ ./node_modules/
-RUN yarn build
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm build
 
 ###
 
