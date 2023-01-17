@@ -62,7 +62,7 @@
     "ember-set-helper": "^2.0.1",
     "ember-simple-auth": "^4.1.1",
     "ember-source": "~4.9.1",
-    "ember-style-modifier": "^2.0.0",
+    "ember-style-modifier": "^3.0.0",
     "ember-svg-jar": "^2.3.4",
     "ember-template-lint": "^5.2.0",
     "ember-truth-helpers": "^3.0.0",
