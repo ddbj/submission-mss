@@ -13,7 +13,7 @@ gem 'googleauth'
 gem 'http'
 gem 'jb'
 gem 'jwt'
-gem 'mail', '~> 2.8.0' # https://github.com/mikel/mail/issues/1489
+gem 'mail', '~> 2.8.1' # https://github.com/mikel/mail/issues/1489
 gem 'pg'
 gem 'puma'
 gem 'sidekiq'
