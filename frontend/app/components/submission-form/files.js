@@ -27,9 +27,8 @@ export default class SubmissionFormFilesComponent extends Component {
   get isNextButtonEnabled() {
     const {uploadType, files} = this.args.state;
 
-    if (!uploadType)           { return false; }
-    if (uploadType === 'none') { return true;  }
-    if (!files.length)         { return false; }
+    if (!uploadType)   { return false; }
+    if (!files.length) { return false; }
 
     for (const file of files) {
       if (file.isParsing || file.errors.length) { return false; }
@@ -47,10 +46,6 @@ export default class SubmissionFormFilesComponent extends Component {
 
     state.uploadType = val;
     model.dfast      = val === 'dfast';
-
-    if (val === 'none') {
-      state.files = [];
-    }
   }
 
   @action addFile(file) {
@@ -120,10 +115,8 @@ export default class SubmissionFormFilesComponent extends Component {
   }
 
   fillDataFromSubmissionFiles() {
-    const {state, model}  = this.args;
-    const {uploadType, files} = state;
-
-    if (uploadType === 'none') { return; }
+    const {state, model} = this.args;
+    const {files}        = state;
 
     const {contactPerson, holdDate} = files.find(({isAnnotation}) => isAnnotation).parsedData;
 

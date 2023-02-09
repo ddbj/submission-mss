@@ -18,14 +18,10 @@
               <li>{{t 'submission-form.prerequisite.a1-1'}}</li>
             {{/if}}
 
-            {{#if @state.files.length}}
-              {{#if @model.dfast}}
-                <li>{{t 'submission-form.files.a1'}}</li>
-              {{else}}
-                <li>{{t 'submission-form.files.a2'}}</li>
-              {{/if}}
+            {{#if @model.dfast}}
+              <li>{{t 'submission-form.files.a1'}}</li>
             {{else}}
-              <li>{{t 'submission-form.files.a3'}}</li>
+              <li>{{t 'submission-form.files.a2'}}</li>
             {{/if}}
           </ul>
         </div>

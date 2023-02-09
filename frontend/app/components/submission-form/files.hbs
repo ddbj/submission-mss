@@ -24,16 +24,6 @@
               </radio.label>
             </group.radio>
           </div>
-
-          <div class="form-check">
-            <group.radio as |radio|>
-              <radio.input checked={{eq @state.uploadType 'none'}} required class="form-check-input" {{on 'change' (fn this.setUploadType 'none')}} />
-
-              <radio.label class="form-check-label">
-                {{t 'submission-form.files.a3'}}
-              </radio.label>
-            </group.radio>
-          </div>
         </RadioGroup>
       </div>
     </div>
