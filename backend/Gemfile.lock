@@ -263,7 +263,7 @@ GEM
     ruby2_keywords (0.0.5)
     rufus-scheduler (3.8.2)
       fugit (~> 1.1, >= 1.1.6)
-    sidekiq (7.0.3)
+    sidekiq (7.0.4)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
