@@ -1,7 +1,7 @@
 ARG NODE_VERSION
 ARG RUBY_VERSION
 
-FROM curlimages/curl:7.88.1 AS openid-configuration
+FROM curlimages/curl:8.00.1 AS openid-configuration
 
 ARG OPENID_CONFIGURATION_ENDPOINT
 
