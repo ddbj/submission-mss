@@ -4,9 +4,10 @@ working_list_states ||= {}
 state = working_list_states[submission.mass_id]
 
 {
-  id:         submission.mass_id,
-  created_at: submission.created_at.iso8601,
-  file_names: upload ? Dir.glob('*.*', base: upload.files_dir) : [],
-  status:     state&.status,
-  accessions: state&.accessions,
+  id:            submission.mass_id,
+  created_at:    submission.created_at.iso8601,
+  file_names:    upload ? Dir.glob('*.*', base: upload.files_dir) : nil,
+  dfast_job_ids: upload ? upload.via.dfast_job_ids : nil,
+  status:        state&.status,
+  accessions:    state&.accessions,
 }

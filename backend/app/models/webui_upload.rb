@@ -30,4 +30,8 @@ class WebuiUpload < ApplicationRecord
 
     files.purge
   end
+
+  def dfast_job_ids
+    nil
+  end
 end

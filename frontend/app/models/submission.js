@@ -21,4 +21,5 @@ export default class Submission extends Model {
   @attr           accessions;
   @attr('date')   createdAt;
   @attr           fileNames;
+  @attr           dfastJobIds;
 }

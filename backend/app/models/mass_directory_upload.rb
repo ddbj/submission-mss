@@ -14,4 +14,8 @@ class MassDirectoryUpload < ApplicationRecord
       FileUtils.cp file.fullpath, upload.files_dir
     end
   end
+
+  def dfast_job_ids
+    nil
+  end
 end

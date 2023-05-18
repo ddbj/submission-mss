@@ -5,6 +5,7 @@
     <tr>
       <th>Mass ID</th>
       <th>Submission Date</th>
+      <th>DFAST Job IDs</th>
       <th>Status</th>
       <th>Accession</th>
     </tr>
@@ -17,8 +18,33 @@
           <LinkTo @route="submission" @model={{submission}}>{{submission.id}}</LinkTo>
         </td>
 
-        <td>{{format-date submission.createdAt}}</td>
-        <td>{{submission.status}}</td>
+        <td>
+          {{format-date submission.createdAt}}
+        </td>
+
+        <td>
+          <ul class="list-unstyled m-0">
+            {{#each (take 3 submission.dfastJobIds) as |jobId|}}
+              <li><code>{{jobId}}</code></li>
+            {{/each}}
+          </ul>
+
+          {{#if (gt submission.dfastJobIds.length 3)}}
+            <details>
+              <summary>View all</summary>
+
+              <ul class="list-unstyled m-0">
+                {{#each (drop 3 submission.dfastJobIds) as |jobId|}}
+                  <li><code>{{jobId}}</code></li>
+                {{/each}}
+              </ul>
+            </details>
+          {{/if}}
+        </td>
+
+        <td>
+          {{submission.status}}
+        </td>
 
         <td>
           <ul class="list-unstyled m-0">
