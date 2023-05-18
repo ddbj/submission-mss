@@ -8,18 +8,34 @@ import { handleUploadError } from 'mssform/utils/error-handler';
 export default class UploadFormComponent extends Component {
   @service fetch;
 
-  @tracked uploadVia   = null;
-  @tracked files       = [];
-  @tracked isCompleted = false;
+  @tracked uploadVia       = null;
+  @tracked extractionId    = null;
+  @tracked files           = [];
+  @tracked isCompleted     = false;
+  @tracked crossoverErrors = new Map(); // always empty
 
   get isSubmitButtonEnabled() {
-    if (!this.files.length) { return false; }
+    const {uploadVia, files} = this;
 
-    for (const file of this.files) {
+    if (!uploadVia)    { return false; }
+    if (!files.length) { return false; }
+
+    for (const file of files) {
       if (file.isParsing || file.errors.length) { return false; }
     }
 
     return true;
+  }
+
+  @action setUploadVia(val) {
+    this.uploadVia    = val;
+    this.files        = [];
+    this.extractionId = null;
+  }
+
+  @action onExtractProgress({id, files}) {
+    this.extractionId = id;
+    this.files        = files;
   }
 
   @action addFile(file) {
@@ -31,9 +47,9 @@ export default class UploadFormComponent extends Component {
   }
 
   @action async submit(uploadProgressModal) {
-    const body = new FormData();
-
-    body.set('upload_via', this.uploadVia);
+    const attrs = {
+      via: this.uploadVia
+    };
 
     if (this.uploadVia == 'webui') {
       let blobs;
@@ -45,14 +61,21 @@ export default class UploadFormComponent extends Component {
         return;
       }
 
-      for (const blob of blobs) {
-        body.set('files[]', blob.signed_id);
-      }
+      attrs.files = blobs.map(blob => blob.signed_id);
+    } else {
+      attrs.extraction_id = this.extractionId;
     }
 
     await this.fetch.request(`/api/submissions/${this.args.model.id}/uploads`, {
       method: 'POST',
-      body
+
+      headers: {
+        'Content-Type': 'application/json'
+      },
+
+      body: JSON.stringify({
+        upload: attrs
+      })
     });
 
     this.isCompleted = true;
