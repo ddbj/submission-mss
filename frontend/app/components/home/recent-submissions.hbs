@@ -21,11 +21,23 @@
         <td>{{submission.status}}</td>
 
         <td>
-          <ul class="list-unstyled">
-            {{#each submission.accessions as |accession|}}
+          <ul class="list-unstyled m-0">
+            {{#each (take 3 submission.accessions) as |accession|}}
               <li><code>{{accession}}</code></li>
             {{/each}}
           </ul>
+
+          {{#if (gt submission.accessions.length 3)}}
+            <details>
+              <summary>View all</summary>
+
+              <ul class="list-unstyled m-0">
+                {{#each (drop 3 submission.accessions) as |accession|}}
+                  <li><code>{{accession}}</code></li>
+                {{/each}}
+              </ul>
+            </details>
+          {{/if}}
         </td>
       </tr>
     {{/each}}
