@@ -50,6 +50,15 @@ class CreateExtractionsAndUploads < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
+    reversible do |dir|
+      dir.up do
+        execute <<~SQL
+          INSERT INTO webui_uploads ( id, copied, created_at, updated_at )
+          SELECT id, copied, created_at, updated_at FROM uploads
+        SQL
+      end
+    end
+
     create_table :dfast_uploads do |t|
       t.references :extraction, foreign_key: {to_table: :dfast_extractions}
 
@@ -63,9 +72,20 @@ class CreateExtractionsAndUploads < ActiveRecord::Migration[7.0]
     end
 
     change_table :uploads do |t|
-      t.string :via_type, null: false
-      t.bigint :via_id,   null: false
+      t.string :via_type
+      t.bigint :via_id
     end
+
+    reversible do |dir|
+      dir.up do
+        execute <<~SQL
+          UPDATE uploads SET via_type = 'WebuiUpload', via_id = id
+        SQL
+      end
+    end
+
+    change_column_null :uploads, :via_type, false
+    change_column_null :uploads, :via_id,   false
 
     remove_column :uploads, :copied, :boolean, null: false, default: false
   end
