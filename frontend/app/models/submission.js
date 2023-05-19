@@ -17,9 +17,9 @@ export default class Submission extends Model {
   @attr('string')  emailLanguage;
 
   // readonly attributes
+  @hasMany('uploads', {async: false}) uploads;
+
   @attr('string') status;
   @attr           accessions;
   @attr('date')   createdAt;
-  @attr           fileNames;
-  @attr           dfastJobIds;
 }

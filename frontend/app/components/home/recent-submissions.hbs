@@ -23,23 +23,25 @@
         </td>
 
         <td>
-          <ul class="list-unstyled m-0">
-            {{#each (take 3 submission.dfastJobIds) as |jobId|}}
-              <li><code>{{jobId}}</code></li>
-            {{/each}}
-          </ul>
+          {{#let submission.uploads.firstObject as |upload|}}
+            <ul class="list-unstyled m-0">
+              {{#each (take 3 upload.dfastJobIds) as |jobId|}}
+                <li><code>{{jobId}}</code></li>
+              {{/each}}
+            </ul>
 
-          {{#if (gt submission.dfastJobIds.length 3)}}
-            <details>
-              <summary>View all</summary>
+            {{#if (gt submission.dfastJobIds.length 3)}}
+              <details>
+                <summary>View all</summary>
 
-              <ul class="list-unstyled m-0">
-                {{#each (drop 3 submission.dfastJobIds) as |jobId|}}
-                  <li><code>{{jobId}}</code></li>
-                {{/each}}
-              </ul>
-            </details>
-          {{/if}}
+                <ul class="list-unstyled m-0">
+                  {{#each (drop 3 upload.dfastJobIds) as |jobId|}}
+                    <li><code>{{jobId}}</code></li>
+                  {{/each}}
+                </ul>
+              </details>
+            {{/if}}
+          {{/let}}
         </td>
 
         <td>

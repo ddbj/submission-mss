@@ -6,11 +6,10 @@ export default class SubmissionSerializer extends ApplicationSerializer.extend(E
   attrs = {
     contactPerson: {embedded: 'always'},
     otherPeople:   {embedded: 'always'},
+    uploads:       {embedded: 'always', serialize: false},
 
-    status:      {serialize: false},
-    accession:   {serialize: false},
-    createdAt:   {serialize: false},
-    fileNames:   {serialize: false},
-    dfastJobIds: {serialize: false},
+    status:     {serialize: false},
+    accessions: {serialize: false},
+    createdAt:  {serialize: false},
   }
 }

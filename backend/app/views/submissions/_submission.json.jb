@@ -1,13 +1,18 @@
-upload = submission.uploads.first
-
 working_list_states ||= {}
 state = working_list_states[submission.mass_id]
 
 {
   id:            submission.mass_id,
   created_at:    submission.created_at.iso8601,
-  file_names:    upload ? Dir.glob('*.*', base: upload.files_dir) : nil,
-  dfast_job_ids: upload ? upload.via.dfast_job_ids : nil,
   status:        state&.status,
   accessions:    state&.accessions,
+
+  uploads: submission.uploads.map {|upload|
+    {
+      id:            upload.id,
+      created_at:    upload.created_at.iso8601,
+      files:         Dir.glob('*.*', base: upload.files_dir),
+      dfast_job_ids: upload.via.dfast_job_ids
+    }
+  }
 }
