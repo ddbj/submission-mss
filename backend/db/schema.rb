@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_08_172905) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_19_014954) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -73,6 +73,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_08_172905) do
     t.string "dfast_job_ids", null: false, array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "error"
     t.index ["user_id"], name: "index_dfast_extractions_on_user_id"
   end
 
@@ -98,6 +99,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_08_172905) do
     t.enum "state", default: "pending", null: false, enum_type: "extraction_state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "error"
     t.index ["user_id"], name: "index_mass_directory_extractions_on_user_id"
   end
 

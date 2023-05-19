@@ -1,6 +1,11 @@
 class ExtractMetadataJob < ApplicationJob
   def perform(extraction)
-    extraction.prepare_files
+    begin
+      extraction.prepare_files
+    rescue ExtractionError => e
+      extraction.update! state: 'rejected', error: {id: e.id, **e.data}
+      return
+    end
 
     extraction.files.find_each do |file|
       file.update!(

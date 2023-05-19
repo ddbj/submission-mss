@@ -43,5 +43,7 @@ class DfastExtraction < ApplicationRecord
         end
       end
     end
+  rescue OpenURI::HTTPError => e
+    raise ExtractionError.new(:failed_to_fetch, job_id:, reason: e.io.status.join(' '))
   end
 end

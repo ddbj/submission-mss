@@ -19,9 +19,15 @@
         <span class="visually-hidden">Loading...</span>
       </div>
     {{/if}}
+
+    {{#if this.error}}
+      <div class="text-danger mt-2">
+        Failed to fetch job (id=<code>{{this.error.job_id}}</code>). reason: {{this.error.reason}}
+      </div>
+    {{/if}}
   </form>
 
-  {{#if (and (not-eq this.files null) (not this.extracting))}}
+  {{#if this.files.length}}
     <ul class="list-group list-group-flush overflow-auto" style="max-height: 550px">
       {{#each (sort-by 'name' this.files) key='name' as |file|}}
         <DfastExtractor::Item @file={{file}} @errors={{append file.errors (or (map-get @crossoverErrors file) (array))}} />

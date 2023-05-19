@@ -2,5 +2,6 @@
   _self: dfast_extraction_url(@extraction),
   id:    @extraction.id,
   state: @extraction.state,
+  error: @extraction.error,
   files: render(partial: 'file', collection: @extraction.files)
 }

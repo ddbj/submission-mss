@@ -30,7 +30,7 @@ export default class DfastExtraction {
     this.url = url;
   }
 
-  async pollForResult(callback) {
+  async pollForResult(callback, onError) {
     for (;;) {
       const res     = await this.fetch.request(this.url);
       const payload = await res.json();
@@ -42,7 +42,9 @@ export default class DfastExtraction {
           await new Promise(resolve => setTimeout(resolve, 1000));
           continue;
         case 'fulfilled':
+          return;
         case 'rejected':
+          onError(payload.error);
           return;
         default:
           throw new Error('must not happen');
