@@ -87,7 +87,7 @@ GEM
     builder (3.2.4)
     climate_control (1.2.0)
     concurrent-ruby (1.2.2)
-    connection_pool (2.4.0)
+    connection_pool (2.4.1)
     crack (0.4.5)
       rexml
     crass (1.0.6)
@@ -263,7 +263,7 @@ GEM
     ruby2_keywords (0.0.5)
     rufus-scheduler (3.8.2)
       fugit (~> 1.1, >= 1.1.6)
-    sidekiq (7.1.0)
+    sidekiq (7.1.1)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
