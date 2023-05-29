@@ -6,6 +6,17 @@ const funnel = require('broccoli-funnel');
 
 module.exports = function (defaults) {
   const app = new EmberApp(defaults, {
+    // https://github.com/embroider-build/ember-auto-import/issues/126#issuecomment-889724104
+    autoImport: {
+      webpack: {
+        resolve: {
+          fallback: {
+            fs: false
+          }
+        }
+      }
+    },
+
     'ember-simple-auth': {
       useSessionSetupMethod: true
     },
