@@ -160,7 +160,7 @@ GEM
       concurrent-ruby (~> 1.0)
     jb (0.8.0)
     jmespath (1.6.2)
-    jwt (2.7.0)
+    jwt (2.7.1)
     launchy (2.5.2)
       addressable (~> 2.8)
     llhttp-ffi (0.4.0)
