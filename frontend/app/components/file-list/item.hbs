@@ -14,9 +14,9 @@
   </div>
 
   <div class={{if @file.isParsing 'opacity-50'}}>
-    {{@file.name}} <small class="text-muted">{{filesize @file.size}}</small>
+    {{@file.name}} <small class="text-body-secondary">{{filesize @file.size}}</small>
 
-    <small class="hstack gap-3 text-muted">
+    <small class="hstack gap-3 text-body-secondary">
       {{#if @file.isParsing}}
         {{t 'file-list.item.loading'}}
       {{else}}

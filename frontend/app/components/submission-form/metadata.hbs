@@ -17,7 +17,7 @@
           <div>
             <label for="holdDate" class="form-label">
               {{t 'submission-form.metadata.hold-date'}}
-              <small class="text-muted">{{t 'submission-form.metadata.optional'}}</small>
+              <small class="text-body-secondary">{{t 'submission-form.metadata.optional'}}</small>
             </label>
 
             <input type="date" value={{@model.holdDate}} readonly={{not (is-empty @state.files)}} disabled={{@state.releaseImmediately}} required class="form-control" id="holdDate" {{on 'change' (pick 'target.value' (set @model 'holdDate'))}} />
@@ -104,7 +104,7 @@
               </div>
             </li>
           {{else}}
-            <li class="list-group-item py-3 text-muted text-center">
+            <li class="list-group-item py-3 text-body-secondary text-center">
               {{t 'submission-form.metadata.no-other-person'}}
             </li>
           {{/each}}
@@ -169,7 +169,7 @@
     <div class="card-body">
       <label for="description" class="form-label">
         {{t 'submission-form.metadata.description'}}
-        <small class="text-muted">{{t 'submission-form.metadata.optional'}}</small>
+        <small class="text-body-secondary">{{t 'submission-form.metadata.optional'}}</small>
       </label>
 
       <textarea maxlength="1000" rows="8" placeholder={{t 'submission-form.metadata.description-placeholder'}} class="form-control" id="description" {{on 'input' (pick 'target.value' (set @model 'description'))}}>{{@model.description}}</textarea>
