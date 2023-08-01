@@ -10,8 +10,6 @@ module('Unit | Model | annotation file', function(hooks) {
 
   for (const newline of ['\n', '\r\n', '\r']) {
     test(`parse (newline: ${JSON.stringify(newline)})`, async function(assert) {
-      assert.expect(4);
-
       const file = new File([outdent({newline})`
 COMMON	SUBMITTER		contact	Alice Liddell
 			email	alice@example.com
@@ -36,8 +34,6 @@ COMMON	SUBMITTER		contact	Alice Liddell
   }
 
   test('empty' , async function(assert) {
-    assert.expect(2);
-
     const file = new File([''], 'foo.ann');
 
     const {
@@ -50,8 +46,6 @@ COMMON	SUBMITTER		contact	Alice Liddell
   });
 
   test('invalid contact person', async function(assert) {
-    assert.expect(1);
-
     const raw = new File([outdent`
 COMMON	SUBMITTER		contact	Alice Liddell
     `], 'foo.ann');
@@ -65,8 +59,6 @@ COMMON	SUBMITTER		contact	Alice Liddell
   });
 
   test('invalid hold_date', async function(assert) {
-    assert.expect(1);
-
     const raw = new File([outdent`
 COMMON	DATE		hold_date	foo
     `], 'foo.ann');
@@ -80,8 +72,6 @@ COMMON	DATE		hold_date	foo
   });
 
   test('replace whitespace in filename', async function(assert) {
-    assert.expect(1);
-
     const file      = new File([''], 'foo bar baz.ann');
     const {rawFile} = new AnnotationFile(file);
 
