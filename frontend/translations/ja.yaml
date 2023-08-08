@@ -98,7 +98,7 @@ submission-form:
   files:
     q-html: |
       <p>Submission ファイルの送付方法を選択してください。<br />
-      登録ファイルをアップロードする場合は、事前に<a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank">UME (Parser, transChecker)</a>にてフォーマットやCDSフィーチャーの翻訳チェックを行い、エラーのないファイルを送付してください。</p>
+      登録ファイルをアップロードする場合は、事前に<a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank">UME (Parser, transChecker)</a>にてフォーマットやCDSフィーチャーの翻訳チェックを行い、エラーのないファイルを送付してください。公開予定日を指定するには、<a href="https://www.ddbj.nig.ac.jp/ddbj/file-format.html#date" target="_blank">アノテーションファイルCOMMON領域にhold_dateの記載が必要</a>です。フォームへの入力で指定することはできません。</p>
 
     a1: DFASTのジョブIDから登録ファイルを取り込んで送付する
     a2: 登録ファイルをこのMSSフォームからアップロードする

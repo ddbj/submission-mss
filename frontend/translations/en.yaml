@@ -98,7 +98,7 @@ submission-form:
   files:
     q-html: |
       <p>Select the file transferring method for the submission.<br />
-      In the case where you upload the submission files, be sure to check the format and/or translation of CDS feature by <a href="https://www.ddbj.nig.ac.jp/ddbj/ume-e.html" target="_blank">UME (Parser, transChecker)</a> and fix the errors. Finally, transfer the submission files having no errors.</p>
+      In the case where you upload the submission files, be sure to check the format and/or translation of CDS feature by <a href="https://www.ddbj.nig.ac.jp/ddbj/ume-e.html" target="_blank">UME (Parser, transChecker)</a> and fix the errors. Finally, transfer the submission files having no errors. In order to specify the hold date, you <a href="https://www.ddbj.nig.ac.jp/ddbj/file-format-e.html#date" target="_blank">need to describe the hold_date in COMMON of the annotation file</a>. You cannot specify the hold date by the input area in the form.</p>
 
     a1: Import the submission files from DFAST Job ID.
     a2: Upload the submission files through the MSS form.
