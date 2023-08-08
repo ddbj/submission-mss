@@ -102,7 +102,15 @@ submission-form:
 
     a1: Import the submission files from DFAST Job ID.
     a2: Upload the submission files through the MSS form.
-    a3-html: Import the files which have been transferred to the directory in sftp submission server. <code>{userMassDir}</code>
+
+    a3-html: |
+      Submit all files which have been transferred to <code>{userMassDir}</code> directory in sftp submission server.
+
+    a3-note-html: |
+      <ul>
+        <li>Put only the submission files in mass directory of the sftp server before selecting this option.</li>
+        <li>Please wait for a few minutes until file loading starts. It depends on the amount of file sizes and numbers.</li>
+      </ul>
 
     a3-help-text: Data upload
     a3-help-url: https://www.ddbj.nig.ac.jp/upload-e.html#upload

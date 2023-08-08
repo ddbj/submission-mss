@@ -102,7 +102,15 @@ submission-form:
 
     a1: DFASTのジョブIDから登録ファイルを取り込んで送付する
     a2: 登録ファイルをこのMSSフォームからアップロードする
-    a3-html: ファイル受付用sftpサーバ <code>{userMassDir}</code> にアップロード済みの登録ファイルを送付する
+
+    a3-html: |
+      ファイル受付用sftpサーバ <code>{userMassDir}</code> にアップロード済みの全登録ファイルを送付する
+
+    a3-note-html: |
+      <ul>
+        <li>massディレクトリに登録ファイルのみを設置後、このオプションを選択してください</li>
+        <li>ファイル数やサイズが大きい場合、ロード開始画面が現れるまで数分かかります</li>
+      </ul>
 
     a3-help-text: データのアップロード
     a3-help-url: https://www.ddbj.nig.ac.jp/upload.html#upload
