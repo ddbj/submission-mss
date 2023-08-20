@@ -29,7 +29,6 @@ services:
       args:
         APP_GID:
         APP_UID:
-        BUNDLER_VERSION:
         NODE_VERSION:
         OPENID_CLIENT_ID:
         OPENID_CONFIGURATION_ENDPOINT:

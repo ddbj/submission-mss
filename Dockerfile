@@ -31,7 +31,6 @@ FROM ruby:${RUBY_VERSION:?}
 
 ARG APP_GID
 ARG APP_UID
-ARG BUNDLER_VERSION
 
 ENV BUNDLE_CLEAN=true
 ENV BUNDLE_DEPLOYMENT=true
@@ -47,7 +46,7 @@ EXPOSE 3000
 
 COPY ./docker/rails/irbrc /.irbrc
 
-RUN gem install bundler --version ${BUNDLER_VERSION:?} --no-document
+RUN gem update --system
 
 WORKDIR /app/config/
 COPY ./config/ ./
