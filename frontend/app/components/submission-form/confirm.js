@@ -13,17 +13,20 @@ export default class SubmissionFormConfirmComponent extends Component {
 
   @action async submit(uploadProgressModal) {
     const {state, model, nav} = this.args;
+    const {uploadVia}         = model;
 
-    let blobs;
+    if (uploadVia === 'webui') {
+      let blobs;
 
-    try {
-      blobs = await uploadProgressModal.performUpload(state.files);
-    } catch (e) {
-      handleUploadError(e, this.session);
-      return;
+      try {
+        blobs = await uploadProgressModal.performUpload(state.files);
+      } catch (e) {
+        handleUploadError(e, this.session);
+        return;
+      }
+
+      model.files = blobs.map(({signed_id}) => signed_id);
     }
-
-    model.files = blobs.map(({signed_id}) => signed_id);
 
     try {
       await this.session.renewToken();

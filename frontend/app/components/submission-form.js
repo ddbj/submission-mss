@@ -12,11 +12,8 @@ export default class SubmissionFormComponent extends Component {
 }
 
 class State {
-  @tracked maybeTpa                = null;
-  @tracked uploadType              = null;
-  @tracked files                   = [];
-  @tracked isContactPersonReadonly = false;
-  @tracked releaseImmediately      = true;
+  @tracked maybeTpa = null;
+  @tracked files    = [];
 }
 
 class Navigation {

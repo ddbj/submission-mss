@@ -12,8 +12,10 @@ RUN curl ${OPENID_CONFIGURATION_ENDPOINT:?} > ./openid-configuration.json
 
 FROM node:${NODE_VERSION:?} AS frontend
 
+ARG MASS_DIR_PATH_TEMPLATE
 ARG OPENID_CLIENT_ID
 
+ENV MASS_DIR_PATH_TEMPLATE=${MASS_DIR_PATH_TEMPLATE:?}
 ENV OPENID_CLIENT_ID=${OPENID_CLIENT_ID:?}
 
 WORKDIR /app/config/
@@ -45,6 +47,18 @@ ENV TZ=Japan
 EXPOSE 3000
 
 COPY ./docker/rails/irbrc /.irbrc
+
+RUN apt-get update && apt-get install --assume-yes \
+  unzip \
+  gzip \
+  ncompress \
+  bzip2 \
+  lzip \
+  lzma \
+  lzop \
+  xz-utils \
+  zstd \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN gem update --system
 

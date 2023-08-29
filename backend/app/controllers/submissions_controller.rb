@@ -1,28 +1,36 @@
 class SubmissionsController < ApplicationController
+  def index
+    @submissions         = current_user.submissions
+    @working_list_states = WorkingList.instance.collect_statuses_and_accessions(current_user.submissions.map(&:mass_id))
+  end
+
   def show
     mass_id = params.require(:mass_id)
 
-    if submission = current_user.submissions.where(mass_id:).take
-      head submission.upload_disabled? ? :forbidden : :no_content
-    else
-      head :not_found
-    end
+    @submission = current_user.submissions.where(mass_id:).take!
+
+    head :forbidden if @submission.upload_disabled?
   end
 
   def create
-    @submission = current_user.submissions.create!(submission_params.except(:files, :contact_person, :other_people)) {|submission|
-      files, contact_person, other_people = submission_params.values_at(:files, :contact_person, :other_people)
+    ActiveRecord::Base.transaction do
+      upload_via, contact_person, other_people = submission_params.values_at(:upload_via, :contact_person, :other_people)
 
-      submission.uploads.build files: files if files.presence
+      @submission = current_user.submissions.create!(submission_params.except(:upload_via, :contact_person, :other_people, :extraction_id, :files)) {|submission|
 
-      submission.build_contact_person contact_person
+        submission.build_contact_person contact_person
 
-      other_people.each_with_index do |person, i|
-        submission.other_people.build **person, position: i
-      end
-    }.reload
+        other_people.each_with_index do |person, i|
+          submission.other_people.build **person, position: i
+        end
+      }.reload
 
-    ProcessSubmissionJob.perform_later @submission
+      upload = @submission.uploads.create!(
+        via: Upload.find_via(upload_via).from_params(**submission_params.to_h.symbolize_keys)
+      )
+
+      ProcessSubmissionJob.perform_later upload
+    end
   end
 
   def last_submitted
@@ -34,7 +42,8 @@ class SubmissionsController < ApplicationController
   def submission_params
     params.require(:submission).permit(
       :tpa,
-      :dfast,
+      :upload_via,
+      :extraction_id,
       :entries_count,
       :hold_date,
       :sequencer,

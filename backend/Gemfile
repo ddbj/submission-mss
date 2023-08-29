@@ -16,6 +16,7 @@ gem 'jwt'
 gem 'mail', '~> 2.8.1' # https://github.com/mikel/mail/issues/1489
 gem 'pg'
 gem 'puma'
+gem 'rubyzip', require: 'zip'
 gem 'sidekiq'
 gem 'sidekiq-scheduler', '>= 5.0.0.beta2'
 

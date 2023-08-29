@@ -8,7 +8,8 @@ RSpec.describe 'submissions', type: :request do
 
     let(:default_headers) {
       {
-        Authorization: 'Bearer TOKEN'
+        Authorization: 'Bearer TOKEN',
+        Accept:        'application/json'
       }
     }
 
@@ -23,13 +24,13 @@ RSpec.describe 'submissions', type: :request do
 
       get '/api/submissions/NSUB000042'
 
-      expect(response).to have_http_status(:no_content)
+      expect(response).to have_http_status(:ok)
     end
 
     example 'not found' do
-      get '/api/submissions/NSUB000042'
-
-      expect(response).to have_http_status(:not_found)
+      expect {
+        get '/api/submissions/NSUB000042'
+      }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     example 'upload disabled' do

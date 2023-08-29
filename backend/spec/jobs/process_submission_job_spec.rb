@@ -10,7 +10,6 @@ RSpec.describe ProcessSubmissionJob do
       id:             42,
       user:           build(:user, :alice),
       tpa:            true,
-      dfast:          true,
       entries_count:  101,
       hold_date:      '2022-01-03',
       contact_person: build(:contact_person, :alice),
@@ -23,18 +22,19 @@ RSpec.describe ProcessSubmissionJob do
       other_people: [
         build(:other_person, :bob),
         build(:other_person, :carol)
-      ],
-
-      uploads: [
-        build(:upload, **{
-          created_at: '2022-01-02 12:34:56',
-
-          files: [
-            Rack::Test::UploadedFile.tmp('example.ann'),
-            Rack::Test::UploadedFile.tmp('example.fasta')
-          ]
-        })
       ]
+    })
+
+    upload = create(:upload, **{
+      submission:,
+      created_at: '2022-01-02 12:34:56',
+
+      via: build(:webui_upload, **{
+        files: [
+          Rack::Test::UploadedFile.tmp('example.ann'),
+          Rack::Test::UploadedFile.tmp('example.fasta')
+        ]
+      })
     })
 
     stub_request(:post, 'https://www.googleapis.com/oauth2/v4/token').to_return(
@@ -46,7 +46,7 @@ RSpec.describe ProcessSubmissionJob do
 
     stub_request(:post, 'https://sheets.googleapis.com/v4/spreadsheets/SHEET_ID/values/SHEET_NAME!A1:append').with(query: hash_including)
 
-    ProcessSubmissionJob.perform_now submission
+    ProcessSubmissionJob.perform_now upload
   end
 
   example do
@@ -80,7 +80,7 @@ RSpec.describe ProcessSubmissionJob do
             nil,
             nil,
             'Sanger dideoxy sequencing',
-            'DFAST',
+            'webui',
             '2022-01-03',
             true,
             'WGS',

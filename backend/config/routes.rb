@@ -1,6 +1,8 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   scope :api do
-    resources :submissions, only: %i(show create), param: :mass_id do
+    resources :submissions, only: %i(index show create), param: :mass_id do
       collection do
         get :last_submitted
       end
@@ -9,6 +11,9 @@ Rails.application.routes.draw do
         resources :uploads, only: :create
       end
     end
+
+    resources :dfast_extractions,          only: %i(show create)
+    resources :mass_directory_extractions, only: %i(show create)
 
     resources :direct_uploads, only: :create
   end

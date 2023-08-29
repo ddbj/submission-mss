@@ -7,7 +7,7 @@
         <RadioGroup as |group|>
           <div class="form-check">
             <group.radio as |radio|>
-              <radio.input checked={{eq @state.uploadType 'dfast'}} required class="form-check-input" {{on 'change' (fn this.setUploadType 'dfast')}} />
+              <radio.input checked={{eq @model.uploadVia 'dfast'}} required class="form-check-input" {{on 'change' (fn this.setUploadVia 'dfast')}} />
 
               <radio.label class="form-check-label">
                 {{t 'submission-form.files.a1'}}
@@ -17,18 +17,40 @@
 
           <div class="form-check">
             <group.radio as |radio|>
-              <radio.input checked={{eq @state.uploadType 'without-dfast'}} required class="form-check-input" {{on 'change' (fn this.setUploadType 'without-dfast')}} />
+              <radio.input checked={{eq @model.uploadVia 'webui'}} required class="form-check-input" {{on 'change' (fn this.setUploadVia 'webui')}} />
 
               <radio.label class="form-check-label">
                 {{t 'submission-form.files.a2'}}
               </radio.label>
             </group.radio>
           </div>
+
+          <div class="hstack gap-3">
+            <div class="form-check">
+              <group.radio as |radio|>
+                <radio.input checked={{eq @model.uploadVia 'mass_directory'}} required class="form-check-input" {{on 'change' (fn this.setUploadVia 'mass_directory')}} />
+
+                <radio.label class="form-check-label">
+                  {{t 'submission-form.files.a3-html' htmlSafe=true userMassDir=(user-mass-dir)}}
+                </radio.label>
+
+                {{t 'submission-form.files.a3-note-html' htmlSafe=true}}
+              </group.radio>
+            </div>
+
+            <small>
+              <a href={{t 'submission-form.files.a3-help-url'}} target="_blank" rel="noopener noreferrer">
+                {{svg-jar 'question-16' class='octicon' width='14px' style='margin-top: 2px'}} {{t 'submission-form.files.a3-help-text'}}
+              </a>
+            </small>
+          </div>
         </RadioGroup>
       </div>
     </div>
 
-    {{#if (or (eq @state.uploadType 'dfast') (eq @state.uploadType 'without-dfast'))}}
+    {{#if (eq @model.uploadVia 'dfast')}}
+      <DfastExtractor @onPoll={{this.onExtractProgress}} @crossoverErrors={{this.crossoverErrors}} />
+    {{else if (eq @model.uploadVia 'webui')}}
       <div class="card">
         <div class="card-body">
           {{t 'submission-form.files.instructions-html' htmlSafe=true}}
@@ -38,6 +60,8 @@
           <FileList @files={{@state.files}} @crossoverErrors={{this.crossoverErrors}} @onAdd={{this.addFile}} @onRemove={{this.removeFile}} />
         </div>
       </div>
+    {{else if (eq @model.uploadVia 'mass_directory')}}
+      <MassDirectoryExtractor @onPoll={{this.onExtractProgress}} @crossoverErrors={{this.crossoverErrors}} />
     {{/if}}
   </div>
 

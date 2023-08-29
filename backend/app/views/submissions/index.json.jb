@@ -1,0 +1,3 @@
+{
+  submissions: render(@submissions, working_list_states: @working_list_states)
+}

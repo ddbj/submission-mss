@@ -28,9 +28,11 @@ RSpec.describe UploadJob do
       submission:,
       created_at: '2022-01-02 12:34:56',
 
-      files: [
-        Rack::Test::UploadedFile.tmp('example.ann')
-      ]
+      via: build(:webui_upload, **{
+        files: [
+          Rack::Test::UploadedFile.tmp('example.ann')
+        ]
+      })
     })
 
     stub_request(:post, 'https://www.googleapis.com/oauth2/v4/token').to_return(

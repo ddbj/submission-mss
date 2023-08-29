@@ -2,7 +2,7 @@ class UploadJob < ApplicationJob
   queue_as :default
 
   def perform(upload)
-    upload.copy_files_to_submissions_dir
+    upload.via.copy_files_to_submissions_dir
 
     submission = upload.submission
 

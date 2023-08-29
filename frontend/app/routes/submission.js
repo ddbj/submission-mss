@@ -1,29 +1,13 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
-import { handleAppAuthHTTPError, handleFetchError } from 'mssform/utils/error-handler';
-
 export default class SubmissionRoute extends Route {
   @service session;
+  @service store;
 
   async model({id}) {
-    try {
-      await this.session.renewToken();
-    } catch (e) {
-      handleAppAuthHTTPError(e, this.session);
-      return;
-    }
+    await this.session.renewToken();
 
-    const res = await fetch(`/api/submissions/${id}`, {
-      method:  'HEAD',
-      headers: this.session.authorizationHeader
-    });
-
-    if (!res.ok) {
-      handleFetchError(res, this.session);
-      return;
-    }
-
-    return {id};
+    return await this.store.findRecord('submission', id);
   }
 }

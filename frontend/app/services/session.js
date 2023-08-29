@@ -12,16 +12,14 @@ export default class SessionService extends SimpleAuthSessionService {
 
   returnTo = null;
 
-  get idTokenPayload() {
-    const token = this.data.authenticated.id_token;
-
-    return token ? jwtDecode(token) : null;
+  get idToken() {
+    return this.data.authenticated.id_token;
   }
 
-  get authorizationHeader() {
-    const token = this.data.authenticated.id_token;
+  get idTokenPayload() {
+    const {idToken} = this;
 
-    return token ? {Authorization: `Bearer ${token}`} : {};
+    return idToken ? jwtDecode(idToken) : null;
   }
 
   async renewToken() {

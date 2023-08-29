@@ -56,7 +56,7 @@ class WorkingList
       check_start_date:           nil,
       finish_date:                nil,
       sequencer:                  submission.sequencer_text,
-      annotation_pipeline:        submission.dfast? ? 'DFAST' : nil,
+      upload_via:                 submission.uploads.first.via_ident,
       hup:                        submission.hold_date || 'non-HUP',
       tpa:                        submission.tpa?,
       data_type:                  submission.data_type.upcase,
@@ -72,6 +72,26 @@ class WorkingList
       mail_e:                     nil,
       memo:                       nil
     }
+  end
+
+  WorkingListState = Data.define(:status, :accessions)
+
+  def collect_statuses_and_accessions(target_mass_ids)
+    mass_ids, statuses, accessions = [
+      "#{@sheet_name}!A2:A",
+      "#{@sheet_name}!D2:D",
+      "#{@sheet_name}!U2:U"
+    ].map {|range|
+      @service.get_spreadsheet_values(@sheet_id, range).values&.map(&:first) || []
+    }
+
+    mass_ids.zip(statuses, accessions).filter_map {|mass_id, status, accession|
+      next false unless target_mass_ids.include?(mass_id)
+
+      state = WorkingListState.new(status:, accessions: accession&.split(',') || [])
+
+      [mass_id, state]
+    }.to_h
   end
 
   private

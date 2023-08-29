@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe SubmissionMailer do
   describe 'submitter_confirmation' do
-    def create_submission(email_language:, uploaded:)
+    def create_submission(email_language:)
       create(:submission, **{
         id:             42,
         user:           build(:user, :alice),
@@ -13,14 +13,12 @@ RSpec.describe SubmissionMailer do
         other_people: [
           build(:other_person, :bob),
           build(:other_person, :carol)
-        ],
-
-        uploads: uploaded ? [build(:upload)] : []
+        ]
       })
     end
 
-    example 'email_language=ja, uploaded=true' do
-      submission = create_submission(email_language: 'ja', uploaded: true)
+    example 'email_language=ja' do
+      submission = create_submission(email_language: 'ja')
 
       mail = SubmissionMailer.with(submission:).submitter_confirmation
 
@@ -44,8 +42,8 @@ RSpec.describe SubmissionMailer do
       BODY
     end
 
-    example 'email_language=en, uploaded=true' do
-      submission = create_submission(email_language: 'en', uploaded: true)
+    example 'email_language=en' do
+      submission = create_submission(email_language: 'en')
 
       mail = SubmissionMailer.with(submission:).submitter_confirmation
 
@@ -63,53 +61,9 @@ RSpec.describe SubmissionMailer do
       BODY
     end
 
-    example 'email_language=ja, uploaded=false' do
-      submission = create_submission(email_language: 'ja', uploaded: false)
-
-      mail = SubmissionMailer.with(submission:).submitter_confirmation
-
-      expect(mail).to have_body_text(<<~BODY)
-        大規模塩基配列データ登録システム Mass Submission System (MSS) をご利用下さいまして、ありがとうございます。
-
-        登録には「アノテーションファイル」と「配列ファイル」が必要です。
-      BODY
-
-      expect(mail).to have_body_text(<<~BODY)
-        Submission対象のデータタイプに関する説明です。
-        https://www.ddbj.nig.ac.jp/ddbj/wgs.html
-      BODY
-
-      expect(mail).to have_body_text(<<~BODY)
-        Submission file(s)完成後、以下の URL から upload してください。
-        http://mssform.example.com/home/submission/NSUB000042/upload?locale=ja
-      BODY
-    end
-
-    example 'email_language=en, uploaded=false' do
-      submission = create_submission(email_language: 'en', uploaded: false)
-
-      mail = SubmissionMailer.with(submission:).submitter_confirmation
-
-      expect(mail).to have_body_text(<<~BODY)
-        Thank you for using DDBJ Mass Submission System (MSS) for large-scale sequence data submission.
-
-        Annotation and sequence files are needed for the registration.
-      BODY
-
-      expect(mail).to have_body_text(<<~BODY)
-        Regarding the explanation of the datatype that you have chosen, visit the site below.
-        https://www.ddbj.nig.ac.jp/ddbj/wgs-e.html
-      BODY
-
-      expect(mail).to have_body_text(<<~BODY)
-        Upload the submission file(s) from the URL below, after you completely create them.
-        http://mssform.example.com/home/submission/NSUB000042/upload?locale=en
-      BODY
-    end
-
     example 'allowed domains' do
       ClimateControl.modify MAIL_ALLOWED_DOMAINS: 'foo.example.com,baz.example.com' do
-        submission = create_submission(email_language: 'ja', uploaded: true)
+        submission = create_submission(email_language: 'ja')
 
         mail = SubmissionMailer.with(submission:).submitter_confirmation
 
@@ -133,7 +87,6 @@ RSpec.describe SubmissionMailer do
         description:    'some description',
         contact_person: build(:contact_person, :alice),
         sequencer:      'ngs',
-        dfast:          true,
         hold_date:      '2020-02-01',
         tpa:            true,
         data_type:      'wgs',
@@ -141,8 +94,8 @@ RSpec.describe SubmissionMailer do
         email_language: 'ja',
 
         uploads: [
-          build(:upload, created_at: '2020-01-02 12:34:56'),
-          build(:upload, created_at: '2020-01-03 12:34:56')
+          build(:upload, created_at: '2020-01-02 12:34:56', via: build(:webui_upload)),
+          build(:upload, created_at: '2020-01-03 12:34:56', via: build(:webui_upload))
         ],
 
         other_people: [
@@ -193,8 +146,8 @@ RSpec.describe SubmissionMailer do
         ## sequencer
         NGS
 
-        ## annotation_pipeline
-        DFAST
+        ## upload_via
+        webui
 
         ## HUP
         2020-02-01

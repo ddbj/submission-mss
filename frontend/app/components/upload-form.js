@@ -3,27 +3,39 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { handleAppAuthHTTPError, handleFetchError, handleUploadError } from 'mssform/utils/error-handler';
+import { handleUploadError } from 'mssform/utils/error-handler';
 
 export default class UploadFormComponent extends Component {
-  @service session;
+  @service fetch;
 
+  @tracked uploadVia       = null;
+  @tracked extractionId    = null;
   @tracked files           = [];
-  @tracked crossoverErrors = new Map();
   @tracked isCompleted     = false;
+  @tracked crossoverErrors = new Map(); // always empty
 
   get isSubmitButtonEnabled() {
-    if (!this.files.length) { return false; }
+    const {uploadVia, files} = this;
 
-    for (const file of this.files) {
+    if (!uploadVia)    { return false; }
+    if (!files.length) { return false; }
+
+    for (const file of files) {
       if (file.isParsing || file.errors.length) { return false; }
     }
 
-    for (const errors of this.crossoverErrors.values()) {
-      if (errors.length) { return false; }
-    }
-
     return true;
+  }
+
+  @action setUploadVia(val) {
+    this.uploadVia    = val;
+    this.files        = [];
+    this.extractionId = null;
+  }
+
+  @action onExtractProgress({id, files}) {
+    this.extractionId = id;
+    this.files        = files;
   }
 
   @action addFile(file) {
@@ -35,38 +47,36 @@ export default class UploadFormComponent extends Component {
   }
 
   @action async submit(uploadProgressModal) {
-    let blobs;
+    const attrs = {
+      via: this.uploadVia
+    };
 
-    try {
-      blobs = await uploadProgressModal.performUpload(this.files);
-    } catch (e) {
-      handleUploadError(e, this.session);
-      return;
+    if (this.uploadVia == 'webui') {
+      let blobs;
+
+      try {
+        blobs = await uploadProgressModal.performUpload(this.files);
+      } catch (e) {
+        handleUploadError(e, this.session);
+        return;
+      }
+
+      attrs.files = blobs.map(blob => blob.signed_id);
+    } else {
+      attrs.extraction_id = this.extractionId;
     }
 
-    const body = new FormData();
+    await this.fetch.request(`/api/submissions/${this.args.model.id}/uploads`, {
+      method: 'POST',
 
-    for (const blob of blobs) {
-      body.append('files[]', blob.signed_id);
-    }
+      headers: {
+        'Content-Type': 'application/json'
+      },
 
-    try {
-      await this.session.renewToken();
-    } catch (e) {
-      handleAppAuthHTTPError(e, this.session);
-      return;
-    }
-
-    const res = await fetch(`/api/submissions/${this.args.model.id}/uploads`, {
-      method:  'POST',
-      headers: this.session.authorizationHeader,
-      body
+      body: JSON.stringify({
+        upload: attrs
+      })
     });
-
-    if (!res.ok) {
-      handleFetchError(res, this.session);
-      return;
-    }
 
     this.isCompleted = true;
   }
