@@ -23,7 +23,7 @@
         </td>
 
         <td>
-          {{#let submission.uploads.firstObject as |upload|}}
+          {{#let (get submission.uploads '0') as |upload|}}
             <ul class="list-unstyled m-0">
               {{#each (take 3 upload.dfastJobIds) as |jobId|}}
                 <li><code>{{jobId}}</code></li>
