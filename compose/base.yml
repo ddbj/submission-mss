@@ -6,6 +6,7 @@ volumes:
 services:
   varnish:
     build: ../docker/varnish
+    user: root # https://github.com/varnish/docker-varnish/issues/53
 
     environment:
       VARNISH_HTTP_PORT: 8080
