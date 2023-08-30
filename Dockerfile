@@ -56,6 +56,7 @@ RUN apt-get update && apt-get install --assume-yes \
   lzip \
   lzma \
   lzop \
+  postgresql-client \
   xz-utils \
   zstd \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
