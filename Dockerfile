@@ -18,14 +18,17 @@ ARG OPENID_CLIENT_ID
 ENV MASS_DIR_PATH_TEMPLATE=${MASS_DIR_PATH_TEMPLATE:?}
 ENV OPENID_CLIENT_ID=${OPENID_CLIENT_ID:?}
 
+RUN corepack enable
+RUN corepack prepare pnpm@latest-8 --activate
+
 WORKDIR /app/config/
 COPY ./config/ ./
 COPY --from=openid-configuration /app/config/openid-configuration.json ./
 
 WORKDIR /app/frontend/
 COPY ./frontend/ ./
-RUN --mount=type=cache,target=/root/.npm npm ci
-RUN npm run build
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm build
 
 ###
 
