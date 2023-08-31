@@ -7,8 +7,6 @@ module('Unit | Model | submission file', function(hooks) {
   setupTest(hooks);
 
   test('invalid filename', async function(assert) {
-    assert.expect(1);
-
     const file     = new File([''], 'こんにちは.ann');
     const {errors} = SubmissionFile.fromRawFile(file);
 
@@ -16,8 +14,6 @@ module('Unit | Model | submission file', function(hooks) {
   });
 
   test('unsupported filetype', async function(assert) {
-    assert.expect(1);
-
     const file     = new File([''], 'foo.txt');
     const {errors} = SubmissionFile.fromRawFile(file);
 
