@@ -42,8 +42,8 @@ devDependencies:
     specifier: ^19.7.0
     version: 19.7.0
   '@rails/activestorage':
-    specifier: ^7.0.7
-    version: 7.0.7
+    specifier: ^7.0.8
+    version: 7.0.8
   active-model-adapter:
     specifier: ^4.0.1
     version: 4.0.1(webpack@5.88.2)
@@ -2579,8 +2579,8 @@ packages:
       object-assign: 4.1.1
     dev: true
 
-  /@rails/activestorage@7.0.7:
-    resolution: {integrity: sha512-EoiGMWUmRzYQhOQ1ifTFHuYNdOHP3f0YOhrKsFlshrV8vzkRkip1Ks3BMzW98cYOw7v6PUPmEeBxgb4jY2U2+g==}
+  /@rails/activestorage@7.0.8:
+    resolution: {integrity: sha512-CxPyCxTV0HIaZP8qqH11tkESNl8TrQsIAesAgeOXDOl0BkaN6nC0/Mq2/0ngezBu9CZbFzfHtP2g6Yl8BWkV8g==}
     dependencies:
       spark-md5: 3.0.2
     dev: true
