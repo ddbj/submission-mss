@@ -13,7 +13,9 @@ using Module.new {
 }
 
 class MassDirectoryExtraction < ApplicationRecord
-  FILE_EXT     = %w(ann annt.tsv ann.txt fasta seq.fa fa fna seq)
+  ANN_EXT      = %w(ann annt.tsv ann.txt)
+  SEQ_EXT      = %w(fasta seq.fa fa fna seq)
+  FILE_EXT     = ANN_EXT + SEQ_EXT
   ARCHIVE_EXT  = %w(zip tar tar.gz tgz taz tar.Z taZ tar.bz2 tz2 tbz2 tbz tar.lz tar.lzma tlz tar.lzo tar.xz tar.zst tzst)
 
   COMPRESS = {

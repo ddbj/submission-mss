@@ -27,12 +27,12 @@ class ExtractMetadataJob < ApplicationJob
 
   def parse(file)
     case File.extname(file.name)
-    when '.ann'
+    when *MassDirectoryExtraction::ANN_EXT.map { ".#{_1}" }
       parse_ann(file)
-    when '.fasta'
-      parse_fasta(file)
+    when *MassDirectoryExtraction::SEQ_EXT.map { ".#{_1}" }
+      parse_seq(file)
     else
-      raise file.name
+      raise "unsupported file: #{file.name}"
     end
   end
 
@@ -79,7 +79,7 @@ class ExtractMetadataJob < ApplicationJob
     }
   end
 
-  def parse_fasta(file)
+  def parse_seq(file)
     count = 0
     buf   = String.new(capacity: 1.megabyte)
     bol   = true
