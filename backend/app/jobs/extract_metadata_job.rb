@@ -1,21 +1,23 @@
 class ExtractMetadataJob < ApplicationJob
   def perform(extraction)
-    begin
-      extraction.prepare_files
-    rescue ExtractionError => e
-      extraction.update! state: 'rejected', error: {id: e.id, **e.data}
-      return
-    end
+    ActiveRecord::Base.transaction do
+      begin
+        extraction.prepare_files
+      rescue ExtractionError => e
+        extraction.update! state: 'rejected', error: {id: e.id, **e.data}
+        return
+      end
 
-    extraction.files.find_each do |file|
-      file.update!(
-        parsing:     false,
-        parsed_data: parse(file),
-        _errors:     []
-      )
-    end
+      extraction.files.find_each do |file|
+        file.update!(
+          parsing:     false,
+          parsed_data: parse(file),
+          _errors:     []
+        )
+      end
 
-    extraction.update! state: 'fulfilled'
+      extraction.update! state: 'fulfilled'
+    end
   rescue => e
     Rails.logger.error '******'
     Rails.logger.error e
