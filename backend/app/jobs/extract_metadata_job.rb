@@ -16,6 +16,11 @@ class ExtractMetadataJob < ApplicationJob
     end
 
     extraction.update! state: 'fulfilled'
+  rescue => e
+    Rails.logger.error '******'
+    Rails.logger.error e
+
+    raise
   end
 
   private
