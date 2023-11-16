@@ -7,7 +7,7 @@ RSpec.describe ProcessSubmissionJob do
 
   before do
     submission = create(:submission, **{
-      id:             42,
+      mass_id:        'NSUB000042',
       user:           build(:user, :alice),
       tpa:            true,
       entries_count:  101,

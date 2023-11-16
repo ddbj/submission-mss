@@ -4,7 +4,7 @@ RSpec.describe SubmissionMailer do
   describe 'submitter_confirmation' do
     def create_submission(email_language:)
       create(:submission, **{
-        id:             42,
+        mass_id:        'NSUB000042',
         user:           build(:user, :alice),
         contact_person: build(:contact_person, :alice),
         data_type:      'wgs',
@@ -81,7 +81,7 @@ RSpec.describe SubmissionMailer do
 
     example do
       submission = create(:submission, **{
-        id:             42,
+        mass_id:        'NSUB000042',
         user:           build(:user, :alice),
         created_at:     '2020-01-01',
         description:    'some description',

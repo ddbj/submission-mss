@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'submissions', type: :request do
   include RSpec::DefaultHttpHeader
 
-  describe 'GET /api/submissions/:id' do
+  describe 'GET /api/submissions/:mass_id' do
     let(:user) { create(:user, :alice) }
 
     let(:default_headers) {
@@ -20,7 +20,7 @@ RSpec.describe 'submissions', type: :request do
     end
 
     example 'normal case' do
-      create :submission, id: 42, user: user
+      create :submission, mass_id: 'NSUB000042', user: user
 
       get '/api/submissions/NSUB000042'
 
@@ -34,7 +34,7 @@ RSpec.describe 'submissions', type: :request do
     end
 
     example 'upload disabled' do
-      submission = create(:submission, id: 42, user: user)
+      submission = create(:submission, mass_id: 'NSUB000042', user: user)
       File.write submission.root_dir.tap(&:mkpath).join('disable-upload'), ''
 
       get '/api/submissions/NSUB000042'

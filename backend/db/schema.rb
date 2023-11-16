@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_19_014954) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_16_015143) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -130,10 +130,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_014954) do
     t.string "data_type", null: false
     t.string "description"
     t.string "email_language", null: false
-    t.virtual "mass_id", type: :string, as: "('NSUB'::text || lpad((id)::text, 6, '0'::text))", stored: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["mass_id"], name: "index_submissions_on_mass_id"
+    t.string "mass_id", null: false
+    t.index ["mass_id"], name: "index_submissions_on_mass_id", unique: true
     t.index ["user_id"], name: "index_submissions_on_user_id"
   end
 

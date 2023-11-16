@@ -19,8 +19,8 @@ RSpec.describe UploadJob do
 
   before do
     submission = create(:submission, **{
-      id:   42,
-      user: build(:user, :alice),
+      mass_id:        'NSUB000042',
+      user:           build(:user, :alice),
       contact_person: build(:contact_person, :alice)
     })
 
