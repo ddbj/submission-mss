@@ -4,7 +4,7 @@ class AddMassIdToSubmissions < ActiveRecord::Migration[7.0]
     add_column :submissions, :mass_id, :string
 
     execute <<~SQL
-      UPDATE submissions SET mass_id = 'NSUB' || LPAD(CAST(id AS text), 6)
+      UPDATE submissions SET mass_id = 'NSUB' || LPAD(CAST(id AS text), 6, '0')
     SQL
 
     change_column_null :submissions, :mass_id, false
