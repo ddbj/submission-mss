@@ -28,9 +28,9 @@ RSpec.describe 'submissions', type: :request do
     end
 
     example 'not found' do
-      expect {
-        get '/api/submissions/NSUB000042'
-      }.to raise_error(ActiveRecord::RecordNotFound)
+      get '/api/submissions/NSUB000042'
+
+      expect(response).to have_http_status(:not_found)
     end
 
     example 'upload disabled' do
