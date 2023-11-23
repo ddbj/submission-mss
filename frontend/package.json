@@ -78,7 +78,7 @@
     "eslint-plugin-n": "^16.3.1",
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-qunit": "^8.0.1",
-    "filesize": "^10.0.12",
+    "filesize": "^10.1.0",
     "js-yaml": "^4.1.0",
     "jwt-decode": "^3.1.2",
     "loader.js": "^4.7.0",
