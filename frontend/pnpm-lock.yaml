@@ -39,8 +39,8 @@ devDependencies:
     specifier: ^2.11.8
     version: 2.11.8
   '@primer/octicons':
-    specifier: ^19.7.0
-    version: 19.7.0
+    specifier: ^19.8.0
+    version: 19.8.0
   '@rails/activestorage':
     specifier: ^7.0.8
     version: 7.0.8
@@ -2608,8 +2608,8 @@ packages:
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
     dev: true
 
-  /@primer/octicons@19.7.0:
-    resolution: {integrity: sha512-24lel5MYOTXXdm2VPKAT2JIAJU7rnirVfa/1HGBjTvLdUpk789Lz/QA4o7klYhVdjIJW0rw5nOmU+bWSmfuNwg==}
+  /@primer/octicons@19.8.0:
+    resolution: {integrity: sha512-Imze/fyW41Io5fN+27T5EAeXJrgBjMbz6nzU+wYbRylXvIAjLPUvaJPVoStiFlgSU+TjTUJqg5A9rgMDzTyMCg==}
     dependencies:
       object-assign: 4.1.1
     dev: true
