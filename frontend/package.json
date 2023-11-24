@@ -70,7 +70,7 @@
     "ember-source": "~5.4.0",
     "ember-style-modifier": "^3.0.1",
     "ember-svg-jar": "^2.4.7",
-    "ember-template-lint": "^5.11.2",
+    "ember-template-lint": "^5.13.0",
     "ember-truth-helpers": "^4.0.3",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
