@@ -6345,7 +6345,7 @@ packages:
       ember-source: '>= 3.28.0'
     dependencies:
       '@embroider/addon-shim': 1.8.6
-      ember-source: 5.2.0(@babel/core@7.23.3)(@glimmer/component@1.1.2)(rsvp@4.8.5)(webpack@5.88.2)
+      ember-source: 5.2.0(@babel/core@7.23.3)(@glimmer/component@1.1.2)(rsvp@4.8.5)(webpack@5.89.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
