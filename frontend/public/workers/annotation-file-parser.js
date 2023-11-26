@@ -44,7 +44,9 @@ async function parse(file) {
       case 'hold_date': {
         const m = value.match(/^(\d{4})(\d{2})(\d{2})$/);
 
-        if (!m) { throw new Error(JSON.stringify({id: 'annotation-file-parser.invalid-hold-date', value})); }
+        if (!m) {
+          throw new Error(JSON.stringify({id: 'annotation-file-parser.invalid-hold-date', value}));
+        }
 
         holdDate = m.slice(1).join('-');
         break;
@@ -54,8 +56,14 @@ async function parse(file) {
     }
   }
 
+  if (contactPerson.isBlank) {
+    throw new Error(JSON.stringify({id: 'annotation-file-parser.missing-contact-person'}));
+  } else if (!contactPerson.isFulfilled) {
+    throw new Error(JSON.stringify({id: 'annotation-file-parser.invalid-contact-person'}));
+  }
+
   return {
-    contactPerson: contactPerson.toPayload(),
+    contactPerson,
     holdDate
   };
 }
@@ -100,15 +108,5 @@ class ContactPerson {
 
   get isBlank() {
     return !this.fullName && !this.email && !this.affiliation;
-  }
-
-  toPayload() {
-    if (this.isFulfilled) {
-      return this;
-    } else if (this.isBlank) {
-      return null;
-    } else {
-      throw new Error(JSON.stringify({id: 'annotation-file-parser.invalid-contact-person'}));
-    }
   }
 }

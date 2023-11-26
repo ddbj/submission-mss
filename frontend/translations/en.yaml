@@ -234,7 +234,8 @@ submission-file:
   unsupported-filetype: Unsupported file type.
 
 annotation-file-parser:
-  invalid-hold-date: hold_date must be an 8-digit number (YYYYMMDD)
+  invalid-hold-date: hold_date must be an 8-digit number (YYYYMMDD).
+  missing-contact-person: Contact person information (contact, email, institute) is missing.
   invalid-contact-person: Contact person information (contact, email, institute) must be included or not included at all.
 
 sequence-file-parser:

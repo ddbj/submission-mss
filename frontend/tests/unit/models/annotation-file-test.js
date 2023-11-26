@@ -34,15 +34,27 @@ COMMON	SUBMITTER		contact	Alice Liddell
   }
 
   test('empty' , async function(assert) {
-    const file = new File([''], 'foo.ann');
+    const raw = new File([''], 'foo.ann');
 
-    const {
-      contactPerson,
-      holdDate
-    } = await new AnnotationFile(file).parse();
+    const file = new AnnotationFile(raw);
+    await file.parse();
 
-    assert.strictEqual(contactPerson, null);
-    assert.strictEqual(holdDate,      null);
+    assert.deepEqual(file.errors, [
+      {id: 'annotation-file-parser.missing-contact-person', value: undefined}
+    ]);
+  });
+
+  test('missing contact person' , async function(assert) {
+    const raw = new File([outdent`
+COMMON	DATE		hold_date	20231126
+    `], 'foo.ann');
+
+    const file = new AnnotationFile(raw);
+    await file.parse();
+
+    assert.deepEqual(file.errors, [
+      {id: 'annotation-file-parser.missing-contact-person', value: undefined}
+    ]);
   });
 
   test('invalid contact person', async function(assert) {
