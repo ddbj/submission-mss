@@ -17,7 +17,7 @@ export default class Submission extends Model {
   @attr('string')  emailLanguage;
 
   // readonly attributes
-  @hasMany('uploads', {async: false, inverse: 'submission'}) uploads;
+  @hasMany('upload', {async: false, inverse: 'submission'}) uploads;
 
   @attr('string') status;
   @attr           accessions;
