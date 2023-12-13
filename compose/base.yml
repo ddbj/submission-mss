@@ -73,7 +73,7 @@ services:
       postgres:
         condition: service_healthy
       redis:
-        condition: service_started
+        condition: service_healthy
       memcached:
         condition: service_started
       minio-setup:
