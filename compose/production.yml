@@ -2,6 +2,7 @@ services:
   rails: &rails
     group_add:
       - '60000' # submitter
+
     volumes:
       - type: bind
         source: ~/submissions/$STAGE
