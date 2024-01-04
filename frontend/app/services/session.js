@@ -2,7 +2,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import SimpleAuthSessionService from 'ember-simple-auth/services/session';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 export default class SessionService extends SimpleAuthSessionService {
   @service appauth;
