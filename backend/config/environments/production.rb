@@ -84,7 +84,9 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
   config.action_mailer.delivery_method = :smtp
+  config.active_job.queue_adapter      = :sidekiq
   config.active_storage.service        = :minio
+  config.cache_store                   = :mem_cache_store
   config.public_file_server.enabled    = true
   config.require_master_key            = false
 
