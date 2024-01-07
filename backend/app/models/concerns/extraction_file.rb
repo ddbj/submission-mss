@@ -1,4 +1,99 @@
 module ExtractionFile
+  class ParseError < StandardError
+    def initialize(id, value = nil)
+      @id    = id
+      @value = value
+    end
+
+    attr_reader :id, :value
+  end
+
   def fullpath = extraction.working_dir.join(name)
   def size     = fullpath.size
+
+  def parse
+    case File.extname(name)
+    when *MassDirectoryExtraction::ANN_EXT.map { ".#{_1}" }
+      parse_ann
+    when *MassDirectoryExtraction::SEQ_EXT.map { ".#{_1}" }
+      parse_seq
+    else
+      raise "unsupported file: #{name}"
+    end
+  end
+
+  private
+
+  def parse_ann
+    in_common   = false
+    full_name   = nil
+    email       = nil
+    affiliation = nil
+    hold_date   = nil
+
+    fullpath.each_line chomp: true do |line|
+      break if full_name && email && affiliation && hold_date
+
+      entry, _feature, _location, qualifier, value = line.split("\t")
+
+      break if in_common && entry.present?
+
+      in_common = entry == 'COMMON' if entry.present?
+
+      next unless in_common
+
+      case qualifier
+      when 'contact'
+        full_name = value
+      when 'email'
+        email = value
+      when 'institute'
+        affiliation = value
+      when 'hold_date'
+        begin
+          hold_date = Date.strptime(value, '%Y%m%d').strftime('%Y-%m-%d')
+        rescue Date::Error
+          raise ParseError.new('annotation-file-parser.invalid-hold-date', value)
+        end
+      else
+        # do nothing
+      end
+    end
+
+    raise ParseError.new('annotation-file-parser.missing-contact-person') if !full_name && !email && !affiliation
+    raise ParseError.new('annotation-file-parser.invalid-contact-person') if !full_name || !email || !affiliation
+
+    {
+      contactPerson: {
+        fullName: full_name,
+        email:,
+        affiliation:
+      },
+
+      holdDate: hold_date
+    }
+  end
+
+  def parse_seq
+    count = 0
+    buf   = String.new(capacity: 1.megabyte)
+    bol   = true
+
+    fullpath.open 'rb' do |io|
+      while io.readpartial(1.megabyte, buf)
+        count += 1 if bol && buf.start_with?('>')
+        count += buf.scan(/[\r\n]>/).count
+
+        bol = buf.end_with?("\r", "\n")
+      end
+    rescue EOFError
+      # done
+    end
+
+    raise ParseError.new('sequence-file-parser.no-entries') if count.zero?
+
+    {
+      entriesCount: count
+    }
+  end
 end

@@ -6,7 +6,7 @@ addEventListener('message', async ({data: {file}}) => {
   } catch (err) {
     console.error(err);
 
-    postMessage([err, null]);
+    postMessage([err.message, null]);
   }
 });
 

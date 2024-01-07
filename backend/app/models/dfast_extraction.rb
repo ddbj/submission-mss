@@ -1,6 +1,15 @@
 require 'open-uri'
 
 class DfastExtraction < ApplicationRecord
+  class ExtractionError < StandardError
+    def initialize(id, **data)
+      @id   = id
+      @data = data
+    end
+
+    attr_reader :id, :data
+  end
+
   belongs_to :user
 
   has_many :files, dependent: :destroy, class_name: 'DfastExtractionFile', foreign_key: :extraction_id
