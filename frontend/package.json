@@ -83,7 +83,7 @@
     "jwt-decode": "^4.0.0",
     "loader.js": "^4.7.0",
     "outdent": "^0.8.0",
-    "prettier": "^3.2.4",
+    "prettier": "^3.2.5",
     "qunit": "^2.20.0",
     "qunit-dom": "^3.0.0",
     "stylelint": "^15.11.0",
