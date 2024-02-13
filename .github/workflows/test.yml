@@ -58,7 +58,7 @@ jobs:
       - id: node-version
         run: echo "VERSION=$(cat .node-version)" >> $GITHUB_OUTPUT
 
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v3
         with:
           version: 8
 
