@@ -1,0 +1,35 @@
+- hosts: all
+
+  vars_prompt:
+    - name: stage
+      prompt: stage
+      private: no
+
+    - name: mail_to
+      prompt: mail_to
+      private: no
+
+  tasks:
+    - file:
+        path: /home/w3const/bin
+
+    - get_url:
+        url: https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64
+        dest: /home/w3const/bin/jq
+        mode: '0755'
+
+    - cron:
+        name: PATH
+        env: true
+        job: '$PATH:/home/w3const/bin'
+
+    - cron:
+        name: MAIL_TO
+        env: true
+        job: '{{ mail_to }}'
+        insertafter: PATH
+
+    - cron:
+        name: healthcheck
+        minute: '*/10'
+        job: 'cd /home/w3const/mssform/deploy && ansible/healthcheck {{ stage }}'
