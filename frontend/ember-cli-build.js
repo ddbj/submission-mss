@@ -6,6 +6,12 @@ const funnel = require('broccoli-funnel');
 
 module.exports = function (defaults) {
   const app = new EmberApp(defaults, {
+    babel: {
+      plugins: [
+        require.resolve('ember-concurrency/async-arrow-task-transform'),
+      ],
+    },
+
     // https://github.com/embroider-build/ember-auto-import/issues/126#issuecomment-889724104
     autoImport: {
       webpack: {
