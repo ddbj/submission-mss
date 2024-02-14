@@ -126,8 +126,8 @@ devDependencies:
     specifier: ^11.0.1
     version: 11.0.1(ember-source@5.6.0)
   ember-set-helper:
-    specifier: ^2.0.1
-    version: 2.0.1
+    specifier: ^3.0.1
+    version: 3.0.1(@babel/core@7.23.9)
   ember-simple-auth:
     specifier: ^6.0.0
     version: 6.0.0(@ember/test-helpers@3.2.1)
@@ -6367,12 +6367,13 @@ packages:
       - supports-color
     dev: true
 
-  /ember-set-helper@2.0.1:
-    resolution: {integrity: sha512-6IIimVGOdehZcncH1ilCY4p7hWBtZqWYMc1Xodr1ATOCuIk6ZO1yztKcUQhlmwl7fE82gL4wHD01T6XP5W59Ng==}
-    engines: {node: 10.* || >= 12}
+  /ember-set-helper@3.0.1(@babel/core@7.23.9):
+    resolution: {integrity: sha512-Ord3CuttDiF88wiNpHNDjf4aFKPnHSkpeK7zFfH9nV7YdDFSJissDCZEg42A0ReWY1WuqWbc2hMl5XkgupdyZQ==}
     dependencies:
-      ember-cli-babel: 7.26.11
+      '@embroider/addon-shim': 1.8.7
+      decorator-transforms: 1.1.0(@babel/core@7.23.9)
     transitivePeerDependencies:
+      - '@babel/core'
       - supports-color
     dev: true
 
