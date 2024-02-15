@@ -1,0 +1,48 @@
+#!/usr/bin/env ruby
+
+require 'erb'
+require 'json'
+require 'open3'
+require 'tempfile'
+
+def send_email(subject: nil, body: nil)
+  recipients = File.readlines("#{ENV['HOME']}/.healthcheck/recipients").map(&:chomp).reject(&:empty?)
+
+  Tempfile.open 'healthcheck-mssform' do |f|
+    f.puts body
+    f.flush
+
+    system 'sendgmail_w3const.py', '--sj', subject, '--to', recipients.join(','), '--body', f.path
+  end
+end
+
+ENV['PATH'] += ":/cm/local/apps/docker/current/bin:#{ENV['HOME']}/w3const_base/curatortool"
+
+stage = ARGV[0]
+out, status = Open3.capture2e("compose/#{stage} ps --all --format json")
+
+unless status.success?
+  send_email subject: "[mssform][#{stage}] Healthcheck failed", body: <<-ERROR
+Error:
+#{out}
+  ERROR
+
+  exit 1
+end
+
+failed_services = out.lines.map {|line| JSON.parse(line) }.select {|service|
+  service['State'] == 'exited' && service['ExitCode'] != 0
+}
+
+exit 0 if failed_services.empty?
+
+send_email subject: "[mssform][#{stage}] Healthcheck failed", body: ERB.new(<<-ERB, nil, '-').result
+Summary:
+Several services of docker compose have been failed.
+Please check the error messages and restart them.
+
+Failed services:
+<%- failed_services.each do |service| -%>
+- <%= service['Service'] %>
+<%- end -%>
+ERB
