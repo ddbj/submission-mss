@@ -1,9 +1,8 @@
+import { run } from '@ember/runloop';
+
 import AdapterError from '@ember-data/adapter/error';
 import Configuration from 'ember-simple-auth/configuration';
-
 import { AppAuthError } from '@openid/appauth';
-import { scheduleTask } from 'ember-lifeline';
-
 
 function handleError(e, status, session) {
   if (status === 400 || status === 401) {
@@ -12,7 +11,8 @@ function handleError(e, status, session) {
     alert('Your session has been expired. Please re-login.');
 
     // To flush changes in leaving-confirmation modifier arguments.
-    scheduleTask(this, 'actions', () => {
+    // eslint-disable-next-line ember/no-runloop
+    run(() => {
       session.leavingConfirmationDisabled = true;
     });
 
