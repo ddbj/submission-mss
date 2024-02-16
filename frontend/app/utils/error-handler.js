@@ -12,7 +12,7 @@ function handleError(e, status, session) {
     alert('Your session has been expired. Please re-login.');
 
     // To flush changes in leaving-confirmation modifier arguments.
-    scheduleTask('render', this, () => {
+    scheduleTask(this, 'actions', () => {
       session.leavingConfirmationDisabled = true;
     });
 
