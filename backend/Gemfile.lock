@@ -119,9 +119,6 @@ GEM
     erubi (1.12.0)
     et-orbi (1.2.7)
       tzinfo
-    exception_notification (4.5.0)
-      actionmailer (>= 5.2, < 8)
-      activesupport (>= 5.2, < 8)
     factory_bot (6.4.5)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.4.3)
@@ -298,6 +295,11 @@ GEM
     rubyzip (2.3.2)
     rufus-scheduler (3.9.1)
       fugit (~> 1.1, >= 1.1.6)
+    sentry-rails (5.16.1)
+      railties (>= 5.0)
+      sentry-ruby (~> 5.16.1)
+    sentry-ruby (5.16.1)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
     sidekiq (7.2.2)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
@@ -342,7 +344,6 @@ DEPENDENCIES
   dalli
   email_spec
   enumerize
-  exception_notification
   factory_bot_rails
   google-apis-sheets_v4
   googleauth
@@ -356,6 +357,7 @@ DEPENDENCIES
   rspec-default_http_header
   rspec-rails
   rubyzip
+  sentry-rails
   sidekiq
   sidekiq-scheduler (>= 5.0.0.beta2)
   webmock
