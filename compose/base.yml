@@ -39,7 +39,6 @@ services:
     environment:
       CURATOR_ML_ADDRESS:          '"DDBJ Mass Submission System (MSS)" <mass@ddbj.nig.ac.jp>'
       DATABASE_URL:                postgresql://postgres@postgres/mssform
-      EXCEPTION_RECIPIENTS:
       EXTRACTION_WORKDIR:          /app/work/extraction
       FORCE_SSL:
       GOOGLE_ACCOUNT_TYPE:         service_account
