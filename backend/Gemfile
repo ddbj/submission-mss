@@ -17,6 +17,7 @@ gem 'pg'
 gem 'puma'
 gem 'rubyzip', require: 'zip'
 gem 'sentry-rails'
+gem 'sentry-sidekiq'
 gem 'sidekiq'
 gem 'sidekiq-scheduler', '>= 5.0.0.beta2'
 
