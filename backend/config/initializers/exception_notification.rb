@@ -15,6 +15,7 @@ ExceptionNotification.configure do |config|
   end
 
   config.ignored_exceptions = ExceptionNotifier.ignored_exceptions + %w(
+    RedisClient::CannotConnectError
     RedisClient::ReadTimeoutError
   )
 end
