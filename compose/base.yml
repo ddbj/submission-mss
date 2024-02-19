@@ -59,6 +59,8 @@ services:
       OPENID_CLIENT_ID:
       REDIS_URL:                   redis://redis
       SECRET_KEY_BASE:
+      SENTRY_CURRENT_ENV:
+      SENTRY_DSN:
       SMTP_ADDRESS:
       SMTP_AUTHENTICATION:
       SMTP_DOMAIN:
