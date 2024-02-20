@@ -13,7 +13,7 @@ class SubmissionsController < ApplicationController
   end
 
   def create
-    ActiveRecord::Base.transaction isolation: :serializable do
+    upload = ActiveRecord::Base.transaction(isolation: :serializable) {
       upload_via, contact_person, other_people = submission_params.values_at(:upload_via, :contact_person, :other_people)
 
       @submission = current_user.submissions.create!(submission_params.except(:upload_via, :contact_person, :other_people, :extraction_id, :files)) {|submission|
@@ -25,12 +25,12 @@ class SubmissionsController < ApplicationController
         end
       }
 
-      upload = @submission.uploads.create!(
+      @submission.uploads.create!(
         via: Upload.find_via(upload_via).from_params(**submission_params.to_h.symbolize_keys)
       )
+    }
 
-      ProcessSubmissionJob.perform_later upload
-    end
+    ProcessSubmissionJob.perform_later upload
   end
 
   def last_submitted
