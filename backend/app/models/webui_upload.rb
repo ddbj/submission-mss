@@ -26,9 +26,7 @@ class WebuiUpload < ApplicationRecord
     upload.files_dir.dirname.mkpath
     work.rename upload.files_dir
 
-    update! copied: true
-
-    files.purge
+    update! copied: true, files: []
   end
 
   def dfast_job_ids
