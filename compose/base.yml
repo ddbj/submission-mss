@@ -36,6 +36,8 @@ services:
         OPENID_CONFIGURATION_ENDPOINT:
         RUBY_VERSION:
 
+    init: true
+
     environment:
       CURATOR_ML_ADDRESS:          '"DDBJ Mass Submission System (MSS)" <mass@ddbj.nig.ac.jp>'
       DATABASE_URL:                postgresql://postgres@postgres/mssform
