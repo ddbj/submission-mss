@@ -58,7 +58,7 @@
     "ember-data": "~5.3.0",
     "ember-event-helpers": "^0.1.1",
     "ember-fetch": "^8.1.2",
-    "ember-intl": "6.4.0",
+    "ember-intl": "6.4.1",
     "ember-intl-component": "^1.0.0",
     "ember-load-initializers": "^2.1.2",
     "ember-modifier": "^4.1.0",
