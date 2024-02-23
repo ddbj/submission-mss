@@ -31,7 +31,9 @@ Error:
 end
 
 failed_services = out.lines.map {|line| JSON.parse(line) }.select {|service|
-  service['State'] == 'exited' && (service['ExitCode'] != 0 || service['ExitCode'] != 143)
+  state, exit_code = service.values_at('State', 'ExitCode')
+
+  state == 'exited' && !(exit_code == 0 || exit_code == 143)
 }
 
 exit 0 if failed_services.empty?
