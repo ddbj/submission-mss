@@ -176,7 +176,7 @@ GEM
       reline (>= 0.4.2)
     jb (0.8.2)
     jmespath (1.6.2)
-    jwt (2.8.0)
+    jwt (2.8.1)
       base64
     launchy (2.5.2)
       addressable (~> 2.8)
