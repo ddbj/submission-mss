@@ -1,14 +1,12 @@
-ext = File.extname(file.name)
-
 {
   name:             file.name,
-  basename:         File.basename(file.name, '.*'), # TODO double extension
+  basename:         file.basename,
   size:             file.size,
   isParsing:        file.parsing?,
   parsedData:       file.parsed_data,
   isParseSucceeded: !!file.parsed_data,
   errors:           file._errors,
-  isAnnotation:     ext == '.ann',
-  isSequence:       ext == '.fasta',
+  isAnnotation:     file.annotation?,
+  isSequence:       file.sequence?,
   jobId:            file.dfast_job_id,
 }

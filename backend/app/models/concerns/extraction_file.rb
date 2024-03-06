@@ -8,18 +8,35 @@ module ExtractionFile
     attr_reader :id, :value
   end
 
+  ANN_EXT  = %w(ann annt.tsv ann.txt)
+  SEQ_EXT  = %w(fasta seq.fa fa fna seq)
+  FILE_EXT = ANN_EXT + SEQ_EXT
+
   def fullpath = extraction.working_dir.join(name)
   def size     = fullpath.size
 
   def parse
-    case File.extname(name)
-    when *MassDirectoryExtraction::ANN_EXT.map { ".#{_1}" }
+    if ANN_EXT.any? { name.end_with?(".#{_1}") }
       parse_ann
-    when *MassDirectoryExtraction::SEQ_EXT.map { ".#{_1}" }
+    elsif SEQ_EXT.any? { name.end_with?(".#{_1}") }
       parse_seq
     else
       raise "unsupported file: #{name}"
     end
+  end
+
+  def annotation?
+    ANN_EXT.any? { name.end_with?(".#{_1}") }
+  end
+
+  def sequence?
+    SEQ_EXT.any? { name.end_with?(".#{_1}") }
+  end
+
+  def basename
+    ext = FILE_EXT.find { name.end_with?(".#{_1}") } || '*'
+
+    File.basename(name, ".#{ext}")
   end
 
   private
