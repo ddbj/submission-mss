@@ -13,10 +13,7 @@ using Module.new {
 }
 
 class MassDirectoryExtraction < ApplicationRecord
-  ANN_EXT      = %w(ann annt.tsv ann.txt)
-  SEQ_EXT      = %w(fasta seq.fa fa fna seq)
-  FILE_EXT     = ANN_EXT + SEQ_EXT
-  ARCHIVE_EXT  = %w(zip tar tar.gz tgz taz tar.Z taZ tar.bz2 tz2 tbz2 tbz tar.lz tar.lzma tlz tar.lzo tar.xz tar.zst tzst)
+  ARCHIVE_EXT = %w(zip tar tar.gz tgz taz tar.Z taZ tar.bz2 tz2 tbz2 tbz tar.lz tar.lzma tlz tar.lzo tar.xz tar.zst tzst)
 
   COMPRESS = {
     gz:   'gzip --decompress --force',
@@ -29,7 +26,7 @@ class MassDirectoryExtraction < ApplicationRecord
     zst:  'zstd -d -f',
   }.stringify_keys
 
-  COMPRESS_EXT = FILE_EXT.product(COMPRESS.keys).map { "#{_1}.#{_2}" }
+  COMPRESS_EXT = ExtractionFile::FILE_EXT.product(COMPRESS.keys).map { "#{_1}.#{_2}" }
 
   belongs_to :user
 
@@ -56,14 +53,14 @@ class MassDirectoryExtraction < ApplicationRecord
   end
 
   def unarchive_and_copy_files(dir)
-    paths = Pathname.glob("**/*.{#{[*FILE_EXT, *ARCHIVE_EXT, *COMPRESS_EXT].join(',')}}", base: dir)
+    paths = Pathname.glob("**/*.{#{[*ExtractionFile::FILE_EXT, *ARCHIVE_EXT, *COMPRESS_EXT].join(',')}}", base: dir)
 
     return if paths.empty?
 
     working_dir.mkpath
 
     paths.each do |src|
-      if src.match_ext?(FILE_EXT)
+      if src.match_ext?(ExtractionFile::FILE_EXT)
         copy_file dir, src
       elsif ext = src.match_ext?(ARCHIVE_EXT)
         Dir.mktmpdir do |tmp|
