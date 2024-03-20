@@ -69,7 +69,7 @@
     "ember-simple-auth": "^6.0.0",
     "ember-source": "~5.7.0",
     "ember-style-modifier": "^4.3.0",
-    "ember-svg-jar": "^2.4.8",
+    "ember-svg-jar": "^2.4.9",
     "ember-template-lint": "^5.13.0",
     "ember-truth-helpers": "^4.0.3",
     "eslint": "^8.57.0",

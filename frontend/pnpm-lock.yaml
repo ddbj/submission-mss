@@ -138,8 +138,8 @@ devDependencies:
     specifier: ^4.3.0
     version: 4.3.0(@ember/string@3.1.1)(ember-source@5.7.0)
   ember-svg-jar:
-    specifier: ^2.4.8
-    version: 2.4.8(@glint/template@1.3.0)
+    specifier: ^2.4.9
+    version: 2.4.9(@glint/template@1.3.0)
   ember-template-lint:
     specifier: ^5.13.0
     version: 5.13.0
@@ -6466,7 +6466,7 @@ packages:
       fs-tree-diff: 2.0.1
       hash-for-dep: 1.5.1
       heimdalljs-logger: 0.1.10
-      json-stable-stringify: 1.1.0
+      json-stable-stringify: 1.1.1
       semver: 7.5.4
       silent-error: 1.1.1
       strip-bom: 4.0.0
@@ -7301,11 +7301,11 @@ packages:
       - supports-color
     dev: true
 
-  /ember-svg-jar@2.4.8(@glint/template@1.3.0):
-    resolution: {integrity: sha512-xXfPzpJ+aP9k4w6FOboAcABdoK1VF+12sTM6y8CJI4biLNzphmkQ0zFr+m+8w9U8PPTUlaRqeJShTGOa4y9z6g==}
+  /ember-svg-jar@2.4.9(@glint/template@1.3.0):
+    resolution: {integrity: sha512-d/8rdE2nDUt6xVMpTqbohE4kHAaoY+P/7jWCWow3UQGtaGhvURXfKgo8TG/UVK+TfTgJInN6JcU76XLg+MWEtw==}
     engines: {node: 12.* || 14.* || >= 16}
     dependencies:
-      '@embroider/macros': 1.13.4(@glint/template@1.3.0)
+      '@embroider/macros': 1.14.0(@glint/template@1.3.0)
       broccoli-caching-writer: 3.0.3
       broccoli-concat: 4.2.5
       broccoli-funnel: 3.0.8
