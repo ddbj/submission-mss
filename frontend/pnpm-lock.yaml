@@ -165,8 +165,8 @@ devDependencies:
     specifier: ^8.1.1
     version: 8.1.1(eslint@8.57.0)
   filesize:
-    specifier: ^10.1.0
-    version: 10.1.0
+    specifier: ^10.1.1
+    version: 10.1.1
   js-yaml:
     specifier: ^4.1.0
     version: 4.1.0
@@ -6724,7 +6724,7 @@ packages:
       execa: 5.1.1
       exit: 0.1.2
       express: 4.18.2
-      filesize: 10.1.0
+      filesize: 10.1.1
       find-up: 5.0.0
       find-yarn-workspace-root: 2.0.0
       fixturify-project: 2.1.1
@@ -8177,8 +8177,8 @@ packages:
       flat-cache: 3.2.0
     dev: true
 
-  /filesize@10.1.0:
-    resolution: {integrity: sha512-GTLKYyBSDz3nPhlLVPjPWZCnhkd9TrrRArNcy8Z+J2cqScB7h2McAzR6NBX6nYOoWafql0roY8hrocxnZBv9CQ==}
+  /filesize@10.1.1:
+    resolution: {integrity: sha512-L0cdwZrKlwZQkMSFnCflJ6J2Y+5egO/p3vgRSDQGxQt++QbUZe5gMbRO6kg6gzwQDPvq2Fk9AmoxUNfZ5gdqaQ==}
     engines: {node: '>= 10.4.0'}
     dev: true
 
