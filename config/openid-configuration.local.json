@@ -1,22 +1,26 @@
 {
-  "issuer": "http://keycloak.localhost:8080/auth/realms/master",
-  "authorization_endpoint": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/auth",
-  "token_endpoint": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/token",
-  "introspection_endpoint": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/token/introspect",
-  "userinfo_endpoint": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/userinfo",
-  "end_session_endpoint": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/logout",
+  "issuer": "http://keycloak.localhost:8080/realms/master",
+  "authorization_endpoint": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/auth",
+  "token_endpoint": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/token",
+  "introspection_endpoint": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/token/introspect",
+  "userinfo_endpoint": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/userinfo",
+  "end_session_endpoint": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/logout",
   "frontchannel_logout_session_supported": true,
   "frontchannel_logout_supported": true,
-  "jwks_uri": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/certs",
-  "check_session_iframe": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/login-status-iframe.html",
+  "jwks_uri": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/certs",
+  "check_session_iframe": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/login-status-iframe.html",
   "grant_types_supported": [
     "authorization_code",
     "implicit",
     "refresh_token",
     "password",
     "client_credentials",
-    "urn:ietf:params:oauth:grant-type:device_code",
-    "urn:openid:params:grant-type:ciba"
+    "urn:openid:params:grant-type:ciba",
+    "urn:ietf:params:oauth:grant-type:device_code"
+  ],
+  "acr_values_supported": [
+    "0",
+    "1"
   ],
   "response_types_supported": [
     "code",
@@ -34,8 +38,9 @@
   ],
   "id_token_signing_alg_values_supported": [
     "PS384",
-    "ES384",
     "RS384",
+    "EdDSA",
+    "ES384",
     "HS256",
     "HS512",
     "ES256",
@@ -61,8 +66,9 @@
   ],
   "userinfo_signing_alg_values_supported": [
     "PS384",
-    "ES384",
     "RS384",
+    "EdDSA",
+    "ES384",
     "HS256",
     "HS512",
     "ES256",
@@ -74,10 +80,24 @@
     "RS512",
     "none"
   ],
+  "userinfo_encryption_alg_values_supported": [
+    "RSA-OAEP",
+    "RSA-OAEP-256",
+    "RSA1_5"
+  ],
+  "userinfo_encryption_enc_values_supported": [
+    "A256GCM",
+    "A192GCM",
+    "A128GCM",
+    "A128CBC-HS256",
+    "A192CBC-HS384",
+    "A256CBC-HS512"
+  ],
   "request_object_signing_alg_values_supported": [
     "PS384",
-    "ES384",
     "RS384",
+    "EdDSA",
+    "ES384",
     "HS256",
     "HS512",
     "ES256",
@@ -111,7 +131,7 @@
     "form_post.jwt",
     "jwt"
   ],
-  "registration_endpoint": "http://keycloak.localhost:8080/auth/realms/master/clients-registrations/openid-connect",
+  "registration_endpoint": "http://keycloak.localhost:8080/realms/master/clients-registrations/openid-connect",
   "token_endpoint_auth_methods_supported": [
     "private_key_jwt",
     "client_secret_basic",
@@ -121,8 +141,9 @@
   ],
   "token_endpoint_auth_signing_alg_values_supported": [
     "PS384",
-    "ES384",
     "RS384",
+    "EdDSA",
+    "ES384",
     "HS256",
     "HS512",
     "ES256",
@@ -142,8 +163,9 @@
   ],
   "introspection_endpoint_auth_signing_alg_values_supported": [
     "PS384",
-    "ES384",
     "RS384",
+    "EdDSA",
+    "ES384",
     "HS256",
     "HS512",
     "ES256",
@@ -156,8 +178,9 @@
   ],
   "authorization_signing_alg_values_supported": [
     "PS384",
-    "ES384",
     "RS384",
+    "EdDSA",
+    "ES384",
     "HS256",
     "HS512",
     "ES256",
@@ -199,14 +222,15 @@
   "claims_parameter_supported": true,
   "scopes_supported": [
     "openid",
-    "profile",
+    "phone",
     "web-origins",
+    "profile",
     "address",
     "offline_access",
-    "roles",
     "email",
-    "phone",
-    "microprofile-jwt"
+    "roles",
+    "microprofile-jwt",
+    "acr"
   ],
   "request_parameter_supported": true,
   "request_uri_parameter_supported": true,
@@ -216,7 +240,7 @@
     "S256"
   ],
   "tls_client_certificate_bound_access_tokens": true,
-  "revocation_endpoint": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/revoke",
+  "revocation_endpoint": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/revoke",
   "revocation_endpoint_auth_methods_supported": [
     "private_key_jwt",
     "client_secret_basic",
@@ -226,8 +250,9 @@
   ],
   "revocation_endpoint_auth_signing_alg_values_supported": [
     "PS384",
-    "ES384",
     "RS384",
+    "EdDSA",
+    "ES384",
     "HS256",
     "HS512",
     "ES256",
@@ -240,16 +265,17 @@
   ],
   "backchannel_logout_supported": true,
   "backchannel_logout_session_supported": true,
-  "device_authorization_endpoint": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/auth/device",
+  "device_authorization_endpoint": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/auth/device",
   "backchannel_token_delivery_modes_supported": [
     "poll",
     "ping"
   ],
-  "backchannel_authentication_endpoint": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/ext/ciba/auth",
+  "backchannel_authentication_endpoint": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/ext/ciba/auth",
   "backchannel_authentication_request_signing_alg_values_supported": [
     "PS384",
-    "ES384",
     "RS384",
+    "EdDSA",
+    "ES384",
     "ES256",
     "RS256",
     "ES512",
@@ -258,15 +284,16 @@
     "RS512"
   ],
   "require_pushed_authorization_requests": false,
-  "pushed_authorization_request_endpoint": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/ext/par/request",
+  "pushed_authorization_request_endpoint": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/ext/par/request",
   "mtls_endpoint_aliases": {
-    "token_endpoint": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/token",
-    "revocation_endpoint": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/revoke",
-    "introspection_endpoint": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/token/introspect",
-    "device_authorization_endpoint": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/auth/device",
-    "registration_endpoint": "http://keycloak.localhost:8080/auth/realms/master/clients-registrations/openid-connect",
-    "userinfo_endpoint": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/userinfo",
-    "pushed_authorization_request_endpoint": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/ext/par/request",
-    "backchannel_authentication_endpoint": "http://keycloak.localhost:8080/auth/realms/master/protocol/openid-connect/ext/ciba/auth"
-  }
+    "token_endpoint": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/token",
+    "revocation_endpoint": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/revoke",
+    "introspection_endpoint": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/token/introspect",
+    "device_authorization_endpoint": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/auth/device",
+    "registration_endpoint": "http://keycloak.localhost:8080/realms/master/clients-registrations/openid-connect",
+    "userinfo_endpoint": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/userinfo",
+    "pushed_authorization_request_endpoint": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/ext/par/request",
+    "backchannel_authentication_endpoint": "http://keycloak.localhost:8080/realms/master/protocol/openid-connect/ext/ciba/auth"
+  },
+  "authorization_response_iss_parameter_supported": true
 }
