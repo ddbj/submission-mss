@@ -33,8 +33,8 @@ devDependencies:
     specifier: ^1.1.2
     version: 1.1.2
   '@openid/appauth':
-    specifier: ^1.3.1
-    version: 1.3.1
+    specifier: ^1.3.2
+    version: 1.3.2
   '@popperjs/core':
     specifier: ^2.11.8
     version: 2.11.8
@@ -2886,8 +2886,8 @@ packages:
       fastq: 1.16.0
     dev: true
 
-  /@openid/appauth@1.3.1:
-    resolution: {integrity: sha512-e54kpi219wES2ijPzeHe1kMnT8VKH8YeTd1GAn9BzVBmutz3tBgcG1y8a4pziNr4vNjFnuD4W446Ua7ELnNDiA==}
+  /@openid/appauth@1.3.2:
+    resolution: {integrity: sha512-NoOejniaqzOEbHg3RcBZtTriYqhqpQFgTC4lDNaRbgRCnpz6n8PlxWlCbh2N1K5qKawfxRP29/Wiho3FrXQ3Qw==}
     dependencies:
       '@types/base64-js': 1.3.2
       '@types/jquery': 3.5.29
