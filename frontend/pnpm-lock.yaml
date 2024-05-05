@@ -186,8 +186,8 @@ devDependencies:
     specifier: ^2.20.1
     version: 2.20.1
   qunit-dom:
-    specifier: ^3.0.0
-    version: 3.0.0
+    specifier: ^3.1.2
+    version: 3.1.2
   stylelint:
     specifier: ^15.11.0
     version: 15.11.0(typescript@5.3.3)
@@ -11483,8 +11483,8 @@ packages:
       underscore.string: 3.3.6
     dev: true
 
-  /qunit-dom@3.0.0:
-    resolution: {integrity: sha512-rqGZ9ZgOvtOY+Ph2ElCJ4pRIHouMZmI3DWK35Xr3x3c17/gIwOHHyKAQk6XetqhqepS6p+oXvK6Bx1uZu5jJuw==}
+  /qunit-dom@3.1.2:
+    resolution: {integrity: sha512-urHvzhDxihYrMBpsT/Fk7So79CPfvS0ZwZw2VPA+0JV1Q1XP2IhDg/PLHTt+r2j7787iQAOpILx2GjwAa6CpnA==}
     dev: true
 
   /qunit@2.20.1:
