@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { modifier } from 'ember-modifier';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
@@ -12,9 +13,9 @@ export default class UploadProgressModalComponent extends Component {
 
   @tracked uploadFiles;
 
-  @action setModal(element) {
+  setModal = modifier((element) => {
     this.modal = new Modal(element);
-  }
+  });
 
   @action hide() {
     this.modal.hide();

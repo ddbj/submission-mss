@@ -1,4 +1,4 @@
-<div {{did-insert this.fetchFiles}} class="card">
+<div {{this.fetchFiles}} class="card">
   <ul class="list-group list-group-flush overflow-auto" style="max-height: 550px">
     {{#each (sort-by 'name' this.files) key='name' as |file|}}
       <MassDirectoryExtractor::Item @file={{file}} @errors={{append file.errors (or (map-get @crossoverErrors file) (array))}} />
