@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
 import { getOwner } from '@ember/application';
+import { modifier } from 'ember-modifier';
 import { tracked } from '@glimmer/tracking';
 
 import MassDirectoryExtraction from 'mssform/models/mass-directory-extraction';
@@ -8,8 +8,7 @@ import MassDirectoryExtraction from 'mssform/models/mass-directory-extraction';
 export default class MassDirectoryExtractorComponent extends Component {
   @tracked files = [];
 
-  @action
-  async fetchFiles() {
+  fetchFiles = modifier(async () => {
     const extraction = await MassDirectoryExtraction.create(getOwner(this));
 
     await extraction.pollForResult(payload => {
@@ -17,5 +16,5 @@ export default class MassDirectoryExtractorComponent extends Component {
 
       this.args?.onPoll(payload);
     });
-  }
+  });
 }

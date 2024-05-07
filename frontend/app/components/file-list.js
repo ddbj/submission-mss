@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { modifier } from 'ember-modifier';
 import { tracked } from '@glimmer/tracking';
 
 import { SubmissionFile } from 'mssform/models/submission-file';
@@ -9,6 +10,10 @@ export default class FileListComponent extends Component {
   fileInputElement  = null;
 
   @tracked dragOver = false;
+
+  setFileInputElement = modifier((element) => {
+    this.fileInputElement = element;
+  });
 
   @action selectFiles() {
     this.fileInputElement.click();

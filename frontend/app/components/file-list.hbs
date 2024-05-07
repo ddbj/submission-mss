@@ -4,7 +4,7 @@
   }
 </style>
 
-<input type="file" multiple accept={{join ', ' this.allowedExtensions}} class="d-none" {{did-insert (set this 'fileInputElement')}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInputElement.value' ''))}} {{!-- template-lint-disable require-input-label --}} />
+<input type="file" multiple accept={{join ', ' this.allowedExtensions}} class="d-none" {{this.setFileInputElement}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInputElement.value' ''))}} {{!-- template-lint-disable require-input-label --}} />
 
 {{#if @files}}
   <div class="card {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
