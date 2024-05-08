@@ -4,5 +4,5 @@ Announcement: [New application form for Mass Submission System (MSS) is availabl
 
 ## Internals
 
-- `backend` - API server, Rails application in API-only mode
-- `frontend` - Web UI, single-page application with Ember.js
+- `api` - API server, Rails application in API-only mode
+- `web` - Web UI, single-page application with Ember.js

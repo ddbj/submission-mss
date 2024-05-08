@@ -2,12 +2,12 @@ version: 2
 
 updates:
   - package-ecosystem: bundler
-    directory: /backend
+    directory: /api
     schedule:
       interval: daily
 
   - package-ecosystem: npm
-    directory: /frontend
+    directory: /web
     schedule:
       interval: daily
 
