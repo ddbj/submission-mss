@@ -10,7 +10,7 @@ RUN curl ${OPENID_CONFIGURATION_ENDPOINT:?} > ./openid-configuration.json
 
 ###
 
-FROM node:${NODE_VERSION:?} AS frontend
+FROM node:${NODE_VERSION:?} AS web
 
 ARG MASS_DIR_PATH_TEMPLATE
 ARG OPENID_CLIENT_ID
@@ -25,8 +25,8 @@ WORKDIR /app/config/
 COPY ./config/ ./
 COPY --from=openid-configuration /app/config/openid-configuration.json ./
 
-WORKDIR /app/frontend/
-COPY ./frontend/ ./
+WORKDIR /app/web/
+COPY ./web/ ./
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm build
 
@@ -40,7 +40,7 @@ ARG APP_UID
 ENV BUNDLE_CLEAN=true
 ENV BUNDLE_DEPLOYMENT=true
 ENV BUNDLE_JOBS=4
-ENV BUNDLE_PATH=/app/backend/vendor/bundle/
+ENV BUNDLE_PATH=/app/api/vendor/bundle/
 ENV BUNDLE_WITHOUT=development:test
 ENV RAILS_ENV=production
 ENV RAILS_LOG_TO_STDOUT=true
@@ -70,10 +70,10 @@ WORKDIR /app/config/
 COPY ./config/ ./
 COPY --from=openid-configuration /app/config/openid-configuration.json ./
 
-WORKDIR /app/backend/
-COPY ./backend/ ./
+WORKDIR /app/api/
+COPY ./api/ ./
 RUN --mount=type=cache,target=/tmp/bundle/ BUNDLE_PATH=/tmp/bundle/ bundle install && cp --recursive --no-target-directory /tmp/bundle/ ./vendor/bundle/
-COPY --from=frontend /app/frontend/dist/ ./public/
+COPY --from=web /app/web/dist/ ./public/
 RUN install --directory --owner=${APP_UID:?} --group=${APP_GID:?} ./tmp/
 
 USER ${APP_UID:?}:${APP_GID:?}

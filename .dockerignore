@@ -1,6 +1,6 @@
-/backend/log/
-/backend/storage/
-/backend/tmp/
+/api/log/
+/api/storage/
+/api/tmp/
 /config/openid-configuration.json
-/frontend/dist/
-/frontend/node_modules/
+/web/dist/
+/web/node_modules/

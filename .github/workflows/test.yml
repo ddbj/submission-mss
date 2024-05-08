@@ -25,7 +25,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: backend
+        working-directory: api
 
     env:
       PGHOST: localhost
@@ -39,7 +39,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          working-directory: backend
+          working-directory: api
 
       - run: ln -s openid-configuration.local.json ../config/openid-configuration.json
       - run: bin/rails db:prepare
@@ -50,7 +50,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: frontend
+        working-directory: web
 
     steps:
       - uses: actions/checkout@v4
@@ -61,9 +61,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version-file: frontend/.node-version
+          node-version-file: web/.node-version
           cache: pnpm
-          cache-dependency-path: frontend/pnpm-lock.yaml
+          cache-dependency-path: web/pnpm-lock.yaml
 
       - run: pnpm install --frozen-lockfile
       - run: ln -s openid-configuration.local.json ../config/openid-configuration.json
