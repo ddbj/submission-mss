@@ -105,8 +105,8 @@ importers:
         specifier: ^8.1.2
         version: 8.1.2
       ember-intl:
-        specifier: 6.5.4
-        version: 6.5.4(@babel/core@7.24.5)(typescript@5.4.5)(webpack@5.91.0)
+        specifier: 6.5.5
+        version: 6.5.5(typescript@5.4.5)(webpack@5.91.0)
       ember-intl-component:
         specifier: ^1.0.0
         version: 1.0.0(@babel/core@7.24.5)(webpack@5.91.0)
@@ -3237,8 +3237,8 @@ packages:
     resolution: {integrity: sha512-BJdLVRpUTNNzvC1GYZMhuTcVuIqE4dCWcIe2MCNOASx9R00WEKzJNMeoTUGU9AESvuWbI9nRUlMUjnHMUIJ4sg==}
     engines: {node: 12.* || 14.* || >= 16}
 
-  ember-intl@6.5.4:
-    resolution: {integrity: sha512-MnbWypfRN9oojWjxSlOVyhXpq9p4ckrvKSFP75a7zmoxcR2oMBze5o8dT+v7egAbx5RSqcv0cRMsnf0k55vQAg==}
+  ember-intl@6.5.5:
+    resolution: {integrity: sha512-ce+SyhrnzHMgxuX7eIv1PSs5GY0uJpG/33QxGMvrRqavDEzvhhAq9G56dedoMygFT6bKPr/dZuLpDmz7hhk8Kg==}
     engines: {node: 16.* || >= 18}
     peerDependencies:
       typescript: ^4.8.0 || ^5.0.0
@@ -11026,8 +11026,9 @@ snapshots:
       - supports-color
       - webpack
 
-  ember-intl@6.5.4(@babel/core@7.24.5)(typescript@5.4.5)(webpack@5.91.0):
+  ember-intl@6.5.5(typescript@5.4.5)(webpack@5.91.0):
     dependencies:
+      '@babel/core': 7.24.5
       '@formatjs/icu-messageformat-parser': 2.7.6
       '@formatjs/intl': 2.10.2(typescript@5.4.5)
       broccoli-caching-writer: 3.0.3
@@ -11050,7 +11051,6 @@ snapshots:
     optionalDependencies:
       typescript: 5.4.5
     transitivePeerDependencies:
-      - '@babel/core'
       - '@glint/template'
       - supports-color
       - webpack
