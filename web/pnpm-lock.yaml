@@ -165,8 +165,8 @@ importers:
         specifier: ^8.1.1
         version: 8.1.1(eslint@8.57.0)
       filesize:
-        specifier: ^10.1.1
-        version: 10.1.1
+        specifier: ^10.1.2
+        version: 10.1.2
       js-yaml:
         specifier: ^4.1.0
         version: 4.1.0
@@ -3693,8 +3693,8 @@ packages:
     resolution: {integrity: sha512-TfW7/1iI4Cy7Y8L6iqNdZQVvdXn0f8B4QcIXmkIbtTIe/Okm/nSlHb4IwGzRVOd3WfSieCgvf5cMzEfySAIl0g==}
     engines: {node: '>=12.0.0'}
 
-  filesize@10.1.1:
-    resolution: {integrity: sha512-L0cdwZrKlwZQkMSFnCflJ6J2Y+5egO/p3vgRSDQGxQt++QbUZe5gMbRO6kg6gzwQDPvq2Fk9AmoxUNfZ5gdqaQ==}
+  filesize@10.1.2:
+    resolution: {integrity: sha512-Dx770ai81ohflojxhU+oG+Z2QGvKdYxgEr9OSA8UVrqhwNHjfH9A8f5NKfg83fEH8ZFA5N5llJo5T3PIoZ4CRA==}
     engines: {node: '>= 10.4.0'}
 
   fill-range@4.0.0:
@@ -10779,7 +10779,7 @@ snapshots:
       execa: 5.1.1
       exit: 0.1.2
       express: 4.19.2
-      filesize: 10.1.1
+      filesize: 10.1.2
       find-up: 5.0.0
       find-yarn-workspace-root: 2.0.0
       fixturify-project: 2.1.1
@@ -11812,7 +11812,7 @@ snapshots:
     dependencies:
       flat-cache: 3.2.0
 
-  filesize@10.1.1: {}
+  filesize@10.1.2: {}
 
   fill-range@4.0.0:
     dependencies:
