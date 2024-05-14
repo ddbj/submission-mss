@@ -18,8 +18,7 @@ ARG OPENID_CLIENT_ID
 ENV MASS_DIR_PATH_TEMPLATE=${MASS_DIR_PATH_TEMPLATE:?}
 ENV OPENID_CLIENT_ID=${OPENID_CLIENT_ID:?}
 
-RUN corepack enable
-RUN corepack prepare pnpm@latest-9 --activate
+RUN corepack enable pnpm
 
 WORKDIR /app/config/
 COPY ./config/ ./
