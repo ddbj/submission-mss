@@ -121,7 +121,7 @@ importers:
         version: 8.2.3(ember-source@5.8.0(@babel/core@7.24.6)(@glimmer/component@1.1.2(@babel/core@7.24.6))(rsvp@4.8.5)(webpack@5.91.0))
       ember-qunit:
         specifier: ^8.0.2
-        version: 8.0.2(@ember/test-helpers@3.3.0(ember-source@5.8.0(@babel/core@7.24.6)(@glimmer/component@1.1.2(@babel/core@7.24.6))(rsvp@4.8.5)(webpack@5.91.0))(webpack@5.91.0))(ember-source@5.8.0(@babel/core@7.24.6)(@glimmer/component@1.1.2(@babel/core@7.24.6))(rsvp@4.8.5)(webpack@5.91.0))(qunit@2.20.1)
+        version: 8.0.2(@ember/test-helpers@3.3.0(ember-source@5.8.0(@babel/core@7.24.6)(@glimmer/component@1.1.2(@babel/core@7.24.6))(rsvp@4.8.5)(webpack@5.91.0))(webpack@5.91.0))(ember-source@5.8.0(@babel/core@7.24.6)(@glimmer/component@1.1.2(@babel/core@7.24.6))(rsvp@4.8.5)(webpack@5.91.0))(qunit@2.21.0)
       ember-resolver:
         specifier: ^11.0.1
         version: 11.0.1(ember-source@5.8.0(@babel/core@7.24.6)(@glimmer/component@1.1.2(@babel/core@7.24.6))(rsvp@4.8.5)(webpack@5.91.0))
@@ -183,8 +183,8 @@ importers:
         specifier: ^3.2.5
         version: 3.2.5
       qunit:
-        specifier: ^2.20.1
-        version: 2.20.1
+        specifier: ^2.21.0
+        version: 2.21.0
       qunit-dom:
         specifier: ^3.1.2
         version: 3.1.2
@@ -4026,13 +4026,16 @@ packages:
 
   glob@5.0.15:
     resolution: {integrity: sha512-c9IPMazfRITpmAAKi22dK1VKxGDX9ehhqfABDriL/lzO92xcUKEJPQHrVA/2YHSNFB4iFlykVmWvwo48nr3OxA==}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   glob@8.1.0:
     resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
     engines: {node: '>=12'}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   glob@9.3.5:
     resolution: {integrity: sha512-e1LleDykUz2Iu+MTYdkSsuWX8lvAjAcs0Xef0lNIu0S2wOAzuTxCJtcd9S3cijlwYF18EsU3rzb8jPVobxDh9Q==}
@@ -5582,8 +5585,8 @@ packages:
   qunit-dom@3.1.2:
     resolution: {integrity: sha512-urHvzhDxihYrMBpsT/Fk7So79CPfvS0ZwZw2VPA+0JV1Q1XP2IhDg/PLHTt+r2j7787iQAOpILx2GjwAa6CpnA==}
 
-  qunit@2.20.1:
-    resolution: {integrity: sha512-scZfyhX8mmP3u/CN2y3CutQb+ppalbpqmm7g/X62M2yOt8ofzsxrRaC+MPmYm/tXxpzs9HGrVeCxZwLoP0tuAA==}
+  qunit@2.21.0:
+    resolution: {integrity: sha512-kJJ+uzx5xDWk0oRrbOZ3zsm+imPULE58ZMIrNl+3POZl4a1k6VXj2E4OiqTmZ9j6hh9egE3kNgnAti9Q+BG6Yw==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -5779,14 +5782,17 @@ packages:
 
   rimraf@2.6.3:
     resolution: {integrity: sha512-mwqeW5XsA2qAejG46gYdENaxXjx9onRNCfn7L0duuP4hCuTIi/QO7PDK07KJfp1d+izWPrzEJDcSqBa0OZQriA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rimraf@2.7.1:
     resolution: {integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rollup-pluginutils@2.8.2:
@@ -11265,14 +11271,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ember-qunit@8.0.2(@ember/test-helpers@3.3.0(ember-source@5.8.0(@babel/core@7.24.6)(@glimmer/component@1.1.2(@babel/core@7.24.6))(rsvp@4.8.5)(webpack@5.91.0))(webpack@5.91.0))(ember-source@5.8.0(@babel/core@7.24.6)(@glimmer/component@1.1.2(@babel/core@7.24.6))(rsvp@4.8.5)(webpack@5.91.0))(qunit@2.20.1):
+  ember-qunit@8.0.2(@ember/test-helpers@3.3.0(ember-source@5.8.0(@babel/core@7.24.6)(@glimmer/component@1.1.2(@babel/core@7.24.6))(rsvp@4.8.5)(webpack@5.91.0))(webpack@5.91.0))(ember-source@5.8.0(@babel/core@7.24.6)(@glimmer/component@1.1.2(@babel/core@7.24.6))(rsvp@4.8.5)(webpack@5.91.0))(qunit@2.21.0):
     dependencies:
       '@ember/test-helpers': 3.3.0(ember-source@5.8.0(@babel/core@7.24.6)(@glimmer/component@1.1.2(@babel/core@7.24.6))(rsvp@4.8.5)(webpack@5.91.0))(webpack@5.91.0)
       '@embroider/addon-shim': 1.8.7
       '@embroider/macros': 1.16.1
       ember-cli-test-loader: 3.1.0
       ember-source: 5.8.0(@babel/core@7.24.6)(@glimmer/component@1.1.2(@babel/core@7.24.6))(rsvp@4.8.5)(webpack@5.91.0)
-      qunit: 2.20.1
+      qunit: 2.21.0
     transitivePeerDependencies:
       - '@glint/template'
       - supports-color
@@ -13883,7 +13889,7 @@ snapshots:
 
   qunit-dom@3.1.2: {}
 
-  qunit@2.20.1:
+  qunit@2.21.0:
     dependencies:
       commander: 7.2.0
       node-watch: 0.7.3
