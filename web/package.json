@@ -97,5 +97,5 @@
   "ember": {
     "edition": "octane"
   },
-  "packageManager": "pnpm@9.3.0"
+  "packageManager": "pnpm@9.4.0"
 }
