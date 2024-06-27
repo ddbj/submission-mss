@@ -105,8 +105,8 @@ importers:
         specifier: ^8.1.2
         version: 8.1.2
       ember-intl:
-        specifier: 6.5.5
-        version: 6.5.5(typescript@5.4.5)(webpack@5.92.1)
+        specifier: 7.0.3
+        version: 7.0.3(typescript@5.4.5)(webpack@5.92.1)
       ember-intl-component:
         specifier: ^1.0.0
         version: 1.0.0(@babel/core@7.24.7)(webpack@5.92.1)
@@ -2378,8 +2378,8 @@ packages:
     resolution: {integrity: sha512-qOhPa/Fj7s6TY8H8esGu5QNpMMQxz79h+urzrNYN6mn+9BnxlDGf5QZ+XeCDsxSjPqsSR56XOZOJmpeurnLMeg==}
     engines: {node: '>=0.10.0'}
 
-  cldr-core@44.1.0:
-    resolution: {integrity: sha512-ssbJaXu3pCkc4YqNC6xHhgleZG7YqnOFZ9laMlJfHOfnspoA9waI4AH54gKB3Fe/+wI4i3cVxKFdCTVGTRw+UA==}
+  cldr-core@45.0.0:
+    resolution: {integrity: sha512-gQVxy3gzOQpXiTRGmlKiRQFLYimrr1RgvqGKZCS61JgmdkeNm7+LZGx+Lhw5/AW0t8WMM/uZhf4CMva6LuUobQ==}
 
   clean-base-url@1.0.0:
     resolution: {integrity: sha512-9q6ZvUAhbKOSRFY7A/irCQ/rF0KIpa3uXpx6izm8+fp7b2H4hLeUJ+F1YYk9+gDQ/X8Q0MEyYs+tG3cht//HTg==}
@@ -3233,11 +3233,11 @@ packages:
     resolution: {integrity: sha512-BJdLVRpUTNNzvC1GYZMhuTcVuIqE4dCWcIe2MCNOASx9R00WEKzJNMeoTUGU9AESvuWbI9nRUlMUjnHMUIJ4sg==}
     engines: {node: 12.* || 14.* || >= 16}
 
-  ember-intl@6.5.5:
-    resolution: {integrity: sha512-ce+SyhrnzHMgxuX7eIv1PSs5GY0uJpG/33QxGMvrRqavDEzvhhAq9G56dedoMygFT6bKPr/dZuLpDmz7hhk8Kg==}
-    engines: {node: 16.* || >= 18}
+  ember-intl@7.0.3:
+    resolution: {integrity: sha512-RKSTdZJiMbv56QhrQU00+d8BQCTTY68h+MKiT/Ywg0HYPO75z69h/ss6oEJFg5D1Veu4PoIs4z9kFERobxNOBQ==}
+    engines: {node: 18.* || >= 20}
     peerDependencies:
-      typescript: ^4.8.0 || ^5.0.0
+      typescript: ^5.0.0
     peerDependenciesMeta:
       typescript:
         optional: true
@@ -3645,9 +3645,6 @@ packages:
 
   fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
-
-  fast-memoize@2.5.2:
-    resolution: {integrity: sha512-Ue0LwpDYErFbmNnZSF0UH6eImUwDmogUO1jyE+JbN2gsQz/jICm1Ve7t9QT0rNSsfJt+Hs4/S3GnsDVjL4HVrw==}
 
   fast-ordered-set@1.0.3:
     resolution: {integrity: sha512-MxBW4URybFszOx1YlACEoK52P6lE3xiFcPaGCUZ7QQOZ6uJXKo++Se8wa31SjcZ+NC/fdAWX7UtKEfaGgHS2Vg==}
@@ -9943,7 +9940,7 @@ snapshots:
       isobject: 3.0.1
       static-extend: 0.1.2
 
-  cldr-core@44.1.0: {}
+  cldr-core@45.0.0: {}
 
   clean-base-url@1.0.0: {}
 
@@ -11094,7 +11091,7 @@ snapshots:
       - supports-color
       - webpack
 
-  ember-intl@6.5.5(typescript@5.4.5)(webpack@5.92.1):
+  ember-intl@7.0.3(typescript@5.4.5)(webpack@5.92.1):
     dependencies:
       '@babel/core': 7.24.7
       '@formatjs/icu-messageformat-parser': 2.7.8
@@ -11103,19 +11100,16 @@ snapshots:
       broccoli-funnel: 3.0.8
       broccoli-merge-trees: 4.2.0
       broccoli-source: 3.0.1
-      broccoli-stew: 3.0.0
       calculate-cache-key-for-tree: 2.0.0
-      cldr-core: 44.1.0
+      cldr-core: 45.0.0
       ember-auto-import: 2.7.3(webpack@5.92.1)
       ember-cli-babel: 8.2.0(@babel/core@7.24.7)
       ember-cli-typescript: 5.3.0
       eventemitter3: 5.0.1
       extend: 3.0.2
-      fast-memoize: 2.5.2
       intl-messageformat: 10.5.14
       js-yaml: 4.1.0
       json-stable-stringify: 1.1.1
-      silent-error: 1.1.1
     optionalDependencies:
       typescript: 5.4.5
     transitivePeerDependencies:
@@ -11829,8 +11823,6 @@ snapshots:
   fast-json-stable-stringify@2.1.0: {}
 
   fast-levenshtein@2.0.6: {}
-
-  fast-memoize@2.5.2: {}
 
   fast-ordered-set@1.0.3:
     dependencies:
