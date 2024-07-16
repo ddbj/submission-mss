@@ -1,15 +1,6 @@
 - hosts: all
 
   tasks:
-    - file:
-        path: /home/w3const/bin
-        state: directory
-
-    - get_url:
-        url: https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64
-        dest: /home/w3const/bin/jq
-        mode: '0755'
-
     - git:
         repo: https://github.com/ddbj/w3const_base.git
         dest: ~/w3const_base
