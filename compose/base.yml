@@ -1,6 +1,5 @@
 volumes:
   postgres:
-  redis:
   minio:
 
 services:
@@ -59,7 +58,6 @@ services:
       MSS_WORKING_LIST_SHEET_ID:
       MSS_WORKING_LIST_SHEET_NAME:
       OPENID_CLIENT_ID:
-      REDIS_URL:                   redis://redis
       SECRET_KEY_BASE:
       SENTRY_CURRENT_ENV:
       SENTRY_DSN:
@@ -75,16 +73,14 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      redis:
-        condition: service_healthy
       memcached:
         condition: service_started
       minio-setup:
         condition: service_completed_successfully
 
-  sidekiq:
+  solid_queue:
     <<: *rails
-    command: [bundle, exec, sidekiq]
+    command: [bundle, exec, rake, solid_queue:start]
 
   postgres:
     image: postgres:14
@@ -98,18 +94,6 @@ services:
 
     healthcheck:
       test: [CMD, pg_isready, --username, postgres]
-      interval: 1s
-      timeout: 3s
-      retries: 30
-
-  redis:
-    image: redis:7
-
-    volumes:
-      - redis:/data
-
-    healthcheck:
-      test: [CMD, redis-cli, ping]
       interval: 1s
       timeout: 3s
       retries: 30

@@ -21,7 +21,7 @@ services:
     depends_on:
       - mailhog
 
-  sidekiq:
+  solid_queue:
     <<: *rails-local
 
   minio:

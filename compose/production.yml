@@ -14,7 +14,7 @@ services:
         source: ~/mssform/work/$STAGE
         target: /app/work
 
-  sidekiq:
+  solid_queue:
     <<: *rails
 
   postgres:
@@ -22,12 +22,6 @@ services:
       - type: bind
         source: ~/mssform/data/$STAGE/postgres
         target: /var/lib/postgresql/data
-
-  redis:
-    volumes:
-      - type: bind
-        source: ~/mssform/data/$STAGE/redis
-        target: /data
 
   minio:
     volumes:
