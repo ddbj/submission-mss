@@ -1,5 +1,3 @@
-require 'sidekiq/web'
-
 Rails.application.routes.draw do
   scope :api do
     resources :submissions, only: %i(index show create), param: :mass_id do

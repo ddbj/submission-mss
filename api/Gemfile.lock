@@ -182,7 +182,6 @@ GEM
     llhttp-ffi (0.5.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
-    logger (1.6.0)
     loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -263,8 +262,6 @@ GEM
     rake (13.2.1)
     rdoc (6.7.0)
       psych (>= 4.0.0)
-    redis-client (0.22.2)
-      connection_pool
     reline (0.5.9)
       io-console (~> 0.5)
     representable (3.2.0)
@@ -294,36 +291,26 @@ GEM
       rspec-support (~> 3.13)
     rspec-support (3.13.1)
     rubyzip (2.3.2)
-    rufus-scheduler (3.9.1)
-      fugit (~> 1.1, >= 1.1.6)
     sentry-rails (5.18.1)
       railties (>= 5.0)
       sentry-ruby (~> 5.18.1)
     sentry-ruby (5.18.1)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    sentry-sidekiq (5.18.1)
-      sentry-ruby (~> 5.18.1)
-      sidekiq (>= 3.0)
-    sidekiq (7.3.0)
-      concurrent-ruby (< 2)
-      connection_pool (>= 2.3.0)
-      logger
-      rack (>= 2.2.4)
-      redis-client (>= 0.22.2)
-    sidekiq-scheduler (5.0.5)
-      rufus-scheduler (~> 3.2)
-      sidekiq (>= 6, < 8)
-      tilt (>= 1.4.0, < 3)
     signet (0.19.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
       jwt (>= 1.5, < 3.0)
       multi_json (~> 1.10)
+    solid_queue (0.3.3)
+      activejob (>= 7.1)
+      activerecord (>= 7.1)
+      concurrent-ruby (>= 1.3.1)
+      fugit (~> 1.11.0)
+      railties (>= 7.1)
     stringio (3.1.1)
     strscan (3.1.0)
     thor (1.3.1)
-    tilt (2.4.0)
     timeout (0.4.1)
     trailblazer-option (0.1.2)
     tzinfo (2.0.6)
@@ -357,7 +344,6 @@ DEPENDENCIES
   http
   jb
   jwt
-  mail (~> 2.8.1)
   pg
   puma
   rails (~> 7.1.3)
@@ -365,9 +351,7 @@ DEPENDENCIES
   rspec-rails
   rubyzip
   sentry-rails
-  sentry-sidekiq
-  sidekiq
-  sidekiq-scheduler (>= 5.0.0.beta2)
+  solid_queue
   webmock
 
 RUBY VERSION

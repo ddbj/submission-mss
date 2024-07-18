@@ -25,4 +25,3 @@
           - ~/submissions/STAGE
           - ~/mssform/data/STAGE/minio
           - ~/mssform/data/STAGE/postgres
-          - ~/mssform/data/STAGE/redis
