@@ -23,5 +23,3 @@
           - production
         paths:
           - ~/submissions/STAGE
-          - ~/mssform/data/STAGE/minio
-          - ~/mssform/data/STAGE/postgres

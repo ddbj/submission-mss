@@ -14,17 +14,12 @@ services:
         source: ~/mssform/work/$STAGE
         target: /app/work
 
+    restart: unless-stopped
+
   solid_queue:
     <<: *rails
 
-  postgres:
-    volumes:
-      - type: bind
-        source: ~/mssform/data/$STAGE/postgres
-        target: /var/lib/postgresql/data
-
-  minio:
-    volumes:
-      - type: bind
-        source: ~/mssform/data/$STAGE/minio
-        target: /data
+networks:
+  default:
+    external:
+      name: mssform-$STAGE

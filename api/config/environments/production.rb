@@ -37,7 +37,7 @@ Rails.application.configure do
   # config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  # config.force_ssl = true
 
   # Log to STDOUT by default
   config.logger = ActiveSupport::Logger.new(STDOUT)
@@ -86,7 +86,9 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.active_job.queue_adapter      = :solid_queue
   config.active_storage.service        = :minio
+  config.assume_ssl                    = ENV['DISABLE_SSL'] != 'true'
   config.cache_store                   = :mem_cache_store
+  config.force_ssl                     = ENV['DISABLE_SSL'] != 'true'
   config.public_file_server.enabled    = true
   config.require_master_key            = false
 
