@@ -21,5 +21,5 @@ services:
 
 networks:
   default:
-    external:
-      name: mssform-$STAGE
+    external: true
+    name: mssform-$STAGE
