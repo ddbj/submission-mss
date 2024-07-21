@@ -9,7 +9,11 @@ services:
       extra_hosts:
         - keycloak:${HOST_GATEWAY_IP:-172.17.0.1}
 
+    environment:
+      DISABLE_SSL: 'true'
+
     extra_hosts:
+      - host.docker.internal:host-gateway
       - keycloak:host-gateway
       - mssform.localhost:host-gateway
 
@@ -23,11 +27,6 @@ services:
 
   solid_queue:
     <<: *rails-local
-
-  minio:
-    ports:
-      - 9000:9000
-      - 9001:9001
 
   mailhog:
     image: mailhog/mailhog
