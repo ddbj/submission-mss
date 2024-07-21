@@ -269,8 +269,8 @@ GEM
       trailblazer-option (>= 0.1.1, < 0.2.0)
       uber (< 0.2.0)
     retriable (3.1.2)
-    rexml (3.2.8)
-      strscan (>= 3.0.9)
+    rexml (3.3.2)
+      strscan
     rspec-core (3.13.0)
       rspec-support (~> 3.13.0)
     rspec-default_http_header (0.0.6)
