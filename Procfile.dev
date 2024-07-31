@@ -1,0 +1,4 @@
+api: cd api && bin/rails server
+web: cd web && pnpm start
+minio: docker compose up minio
+keycloak: docker compose up keycloak

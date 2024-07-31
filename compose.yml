@@ -1,0 +1,29 @@
+volumes:
+  minio:
+  keycloak:
+
+services:
+  minio:
+    image: minio/minio
+    command: server /data --console-address ':9001'
+
+    ports:
+      - 9000:9000
+      - 9001:9001
+
+    volumes:
+      - minio:/data
+
+  keycloak:
+    image: keycloak/keycloak:24.0
+    command: start-dev
+
+    ports:
+      - 8080:8080
+
+    environment:
+      KEYCLOAK_ADMIN: keycloak
+      KEYCLOAK_ADMIN_PASSWORD: keycloak
+
+    volumes:
+      - keycloak:/opt/keycloak/data
