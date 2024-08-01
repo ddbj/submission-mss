@@ -1,4 +1,4 @@
 api: cd api && bin/rails server
-web: cd web && pnpm start
+web: cd web && pnpm start --proxy http://localhost:3000
 minio: docker compose up minio
 keycloak: docker compose up keycloak
