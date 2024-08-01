@@ -1,4 +1,4 @@
 api: cd api && bin/rails server --port 3000
-web: cd web && pnpm start --port 4200 --proxy http://localhost:3001
+web: cd web && pnpm start --port 4200 --proxy http://localhost:3000
 minio: docker compose up minio
 keycloak: docker compose up keycloak
