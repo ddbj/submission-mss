@@ -17,4 +17,4 @@ set -o allexport
 source $dir/$STAGE.env
 set +o allexport
 
-exec docker compose $@
+exec docker compose "$@"
