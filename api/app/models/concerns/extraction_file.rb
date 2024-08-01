@@ -49,8 +49,6 @@ module ExtractionFile
     hold_date   = nil
 
     fullpath.each_line chomp: true do |line|
-      break if full_name && email && affiliation && hold_date
-
       entry, _feature, _location, qualifier, value = line.split("\t")
 
       break if in_common && entry.present?
@@ -61,10 +59,16 @@ module ExtractionFile
 
       case qualifier
       when 'contact'
+        raise ParseError.new('annotation-file-parser.duplicate-contact-person-information') if full_name
+        
         full_name = value
       when 'email'
+        raise ParseError.new('annotation-file-parser.duplicate-contact-person-information') if email
+
         email = value
       when 'institute'
+        raise ParseError.new('annotation-file-parser.duplicate-contact-person-information') if affiliation
+
         affiliation = value
       when 'hold_date'
         begin

@@ -19,8 +19,6 @@ async function parse(file) {
   let inCommon;
 
   for await (const line of makeLineIterator(reader)) {
-    if (contactPerson.isFulfilled && holdDate) { break; }
-
     const [entry, _feature, _location, qualifier, value] = line.replace(/\r\n|\n|\r$/, '').split('\t');
 
     if (inCommon && entry) { break; }
@@ -33,12 +31,24 @@ async function parse(file) {
 
     switch (qualifier) {
       case 'contact':
+        if (contactPerson.fullName) {
+          throw new Error(JSON.stringify({id: 'annotation-file-parser.duplicate-contact-person-information'}));
+        }
+
         contactPerson.fullName = value;
         break;
       case 'email':
+        if (contactPerson.email) {
+          throw new Error(JSON.stringify({id: 'annotation-file-parser.duplicate-contact-person-information'}));
+        }
+
         contactPerson.email = value;
         break;
       case 'institute':
+        if (contactPerson.affiliation) {
+          throw new Error(JSON.stringify({id: 'annotation-file-parser.duplicate-contact-person-information'}));
+        }
+
         contactPerson.affiliation = value;
         break;
       case 'hold_date': {
