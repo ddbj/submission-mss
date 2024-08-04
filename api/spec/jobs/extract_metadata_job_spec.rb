@@ -5,7 +5,7 @@ RSpec.describe ExtractMetadataJob, type: :job do
     File.write File.join(ENV.fetch('MASS_DIR_PATH_TEMPLATE'), path), content
   end
 
-  let(:extraction) { extraction = create(:mass_directory_extraction) }
+  let(:extraction) { create(:mass_directory_extraction) }
 
   describe 'ann' do
     example 'ok' do
@@ -79,6 +79,62 @@ RSpec.describe ExtractMetadataJob, type: :job do
 
         _errors: [
           {'id' => 'annotation-file-parser.invalid-contact-person', 'value' => nil}
+        ]
+      )
+    end
+
+    example 'duplicate contact person information (contact)' do
+      write_file 'foo.ann', <<~ANN
+        COMMON	SUBMITTER		contact	Alice Liddell
+        			contact	Alice Liddell
+      ANN
+
+      ExtractMetadataJob.perform_now extraction
+
+      expect(extraction.files.first).to have_attributes(
+        parsing: false,
+        parsed_data: nil,
+
+        _errors: [
+          {'id' => 'annotation-file-parser.duplicate-contact-person-information', 'value' => nil}
+        ]
+      )
+    end
+
+    example 'duplicate contact person information (email)' do
+      write_file 'foo.ann', <<~ANN
+        COMMON	SUBMITTER		contact	Alice Liddell
+        			email	alice@example.com
+        			email	alice@example.com
+      ANN
+
+      ExtractMetadataJob.perform_now extraction
+
+      expect(extraction.files.first).to have_attributes(
+        parsing: false,
+        parsed_data: nil,
+
+        _errors: [
+          {'id' => 'annotation-file-parser.duplicate-contact-person-information', 'value' => nil}
+        ]
+      )
+    end
+
+    example 'duplicate contact person information (institute)' do
+      write_file 'foo.ann', <<~ANN
+        COMMON	SUBMITTER		contact	Alice Liddell
+        			institute	Wonderland Inc.
+        			institute	Wonderland Inc.
+      ANN
+
+      ExtractMetadataJob.perform_now extraction
+
+      expect(extraction.files.first).to have_attributes(
+        parsing: false,
+        parsed_data: nil,
+
+        _errors: [
+          {'id' => 'annotation-file-parser.duplicate-contact-person-information', 'value' => nil}
         ]
       )
     end
