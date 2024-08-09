@@ -24,7 +24,7 @@ RSpec.describe SubmissionMailer do
 
       expect(mail).to deliver_from('Admin <mssform@example.com>')
       expect(mail).to deliver_to('alice+idp@example.com')
-      expect(mail).to cc_to('alice+contact@foo.example.com', 'bob@bar.example.com', 'carol@baz.example.com')
+      expect(mail).to cc_to('Alice Liddell <alice+contact@foo.example.com>', 'Bob <bob@bar.example.com>', 'Carol <carol@baz.example.com>')
 
       expect(mail).to have_subject('[DDBJ:NSUB000042] WGS: Whole Genome Shotgun')
 
@@ -69,7 +69,7 @@ RSpec.describe SubmissionMailer do
 
         expect(mail).to deliver_from('Admin <mssform@example.com>')
         expect(mail).to deliver_to('alice+idp@example.com')
-        expect(mail).to cc_to('alice+contact@foo.example.com', 'carol@baz.example.com')
+        expect(mail).to cc_to('Alice Liddell <alice+contact@foo.example.com>', 'Carol <carol@baz.example.com>')
       end
     end
   end
