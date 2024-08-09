@@ -54,7 +54,7 @@
     "ember-cli-terser": "^4.0.2",
     "ember-composable-helpers": "^5.0.0",
     "ember-concurrency": "^4.0.2",
-    "ember-data": "~5.3.3",
+    "ember-data": "~5.3.8",
     "ember-event-helpers": "^0.1.1",
     "ember-fetch": "^8.1.2",
     "ember-intl": "6.5.5",
