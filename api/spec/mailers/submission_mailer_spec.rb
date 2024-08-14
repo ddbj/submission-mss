@@ -8,7 +8,7 @@ RSpec.describe SubmissionMailer do
         user:           build(:user, :alice),
         contact_person: build(:contact_person, :alice),
         data_type:      'wgs',
-        email_language: ,
+        email_language:,
 
         other_people: [
           build(:other_person, :bob),

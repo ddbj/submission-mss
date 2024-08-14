@@ -44,7 +44,7 @@ RSpec.describe ExtractMetadataJob, type: :job do
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'annotation-file-parser.missing-contact-person', 'value' => nil}
+          { 'id' => 'annotation-file-parser.missing-contact-person', 'value' => nil }
         ]
       )
     end
@@ -61,7 +61,7 @@ RSpec.describe ExtractMetadataJob, type: :job do
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'annotation-file-parser.missing-contact-person', 'value' => nil}
+          { 'id' => 'annotation-file-parser.missing-contact-person', 'value' => nil }
         ]
       )
     end
@@ -78,7 +78,7 @@ RSpec.describe ExtractMetadataJob, type: :job do
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'annotation-file-parser.invalid-contact-person', 'value' => nil}
+          { 'id' => 'annotation-file-parser.invalid-contact-person', 'value' => nil }
         ]
       )
     end
@@ -96,7 +96,7 @@ RSpec.describe ExtractMetadataJob, type: :job do
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'annotation-file-parser.duplicate-contact-person-information', 'value' => nil}
+          { 'id' => 'annotation-file-parser.duplicate-contact-person-information', 'value' => nil }
         ]
       )
     end
@@ -115,7 +115,7 @@ RSpec.describe ExtractMetadataJob, type: :job do
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'annotation-file-parser.duplicate-contact-person-information', 'value' => nil}
+          { 'id' => 'annotation-file-parser.duplicate-contact-person-information', 'value' => nil }
         ]
       )
     end
@@ -134,7 +134,7 @@ RSpec.describe ExtractMetadataJob, type: :job do
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'annotation-file-parser.duplicate-contact-person-information', 'value' => nil}
+          { 'id' => 'annotation-file-parser.duplicate-contact-person-information', 'value' => nil }
         ]
       )
     end
@@ -151,7 +151,7 @@ RSpec.describe ExtractMetadataJob, type: :job do
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'annotation-file-parser.invalid-hold-date', 'value' => 'foo'}
+          { 'id' => 'annotation-file-parser.invalid-hold-date', 'value' => 'foo' }
         ]
       )
     end
@@ -195,7 +195,7 @@ RSpec.describe ExtractMetadataJob, type: :job do
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'sequence-file-parser.no-entries', 'value' => nil}
+          { 'id' => 'sequence-file-parser.no-entries', 'value' => nil }
         ]
       )
     end

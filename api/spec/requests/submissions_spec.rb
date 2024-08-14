@@ -15,7 +15,7 @@ RSpec.describe 'submissions', type: :request do
 
     before do
       expect(JWT).to receive(:decode) {
-        [user.id_token, nil]
+        [ user.id_token, nil ]
       }
     end
 

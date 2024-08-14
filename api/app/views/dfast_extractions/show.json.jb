@@ -3,5 +3,5 @@
   id:    @extraction.id,
   state: @extraction.state,
   error: @extraction.error,
-  files: render(partial: 'file', collection: @extraction.files)
+  files: render(partial: "file", collection: @extraction.files)
 }

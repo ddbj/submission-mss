@@ -8,6 +8,6 @@ class MassDirectoryExtractionsController < ApplicationController
 
     ExtractMetadataJob.perform_later @extraction
 
-    render 'show', status: :created
+    render "show", status: :created
   end
 end

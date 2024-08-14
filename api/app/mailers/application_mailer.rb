@@ -1,10 +1,10 @@
 class ApplicationMailer < ActionMailer::Base
-  layout 'mailer'
+  layout "mailer"
 
-  default from: -> { ENV.fetch('CURATOR_ML_ADDRESS') }
+  default from: -> { ENV.fetch("CURATOR_ML_ADDRESS") }
 
   after_action do
-    if stage = ENV['STAGE'] and stage != 'production'
+    if stage = ENV["STAGE"] and stage != "production"
       mail.subject.prepend "[#{stage.titlecase}] "
     end
   end

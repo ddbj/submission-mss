@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :user do
-    sequence(:openid_sub) {|i| "user:#{i}" }
+    sequence(:openid_sub) { |i| "user:#{i}" }
 
-    id_token {|user|
+    id_token { |user|
       uid = user.openid_sub.sub(':', '_')
 
       {
@@ -13,7 +13,7 @@ FactoryBot.define do
     }
 
     trait :alice do
-      id_token {|user|
+      id_token { |user|
         {
           sub:                user.openid_sub,
           preferred_username: 'alice-liddell',
