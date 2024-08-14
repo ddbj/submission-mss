@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root to: redirect("/web")
+
   scope :api do
     resources :submissions, only: %i(index show create), param: :mass_id do
       collection do

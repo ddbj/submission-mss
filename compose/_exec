@@ -11,7 +11,7 @@ export COMPOSE_PROJECT_NAME=mssform-$STAGE
 export DOCKER_BUILDKIT=1
 
 export NODE_VERSION=$(cat $dir/../web/.node-version)
-export RUBY_VERSION=$(cat $dir/../api/.ruby-version)
+export RUBY_VERSION=$(sed 's/^ruby-//' $dir/../api/.ruby-version)
 
 set -o allexport
 source $dir/$STAGE.env

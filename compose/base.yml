@@ -1,6 +1,6 @@
 services:
   varnish:
-    build: ../docker/varnish
+    build: varnish
     user: root # https://github.com/varnish/docker-varnish/issues/53
 
     environment:
@@ -18,7 +18,8 @@ services:
 
   rails: &rails
     build:
-      context: ..
+      context: ../
+      dockerfile: api/Dockerfile
 
       args:
         APP_GID:
