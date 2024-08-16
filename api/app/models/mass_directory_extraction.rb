@@ -5,32 +5,28 @@ using Module.new {
 
       exts.find { path.end_with?(".#{_1}") }
     end
-
-    def escape
-      Shellwords.escape(to_s)
-    end
   end
 }
 
 class MassDirectoryExtraction < ApplicationRecord
-  ARCHIVE_EXT = %w(zip tar tar.gz tgz taz tar.Z taZ tar.bz2 tz2 tbz2 tbz tar.lz tar.lzma tlz tar.lzo tar.xz tar.zst tzst)
+  ARCHIVE_EXT = %w[zip tar tar.gz tgz taz tar.Z taZ tar.bz2 tz2 tbz2 tbz tar.lz tar.lzma tlz tar.lzo tar.xz tar.zst tzst]
 
   COMPRESS = {
-    gz:   'gzip --decompress --force',
-    Z:    'compress -d -f',
-    bz2:  'bzip2 --decompress --force',
-    lz:   'lzip --decompress --force',
-    lzma: 'lzma --decompress --force',
-    lzo:  'lzop -d -f',
-    xz:   'xz --decompress --force',
-    zst:  'zstd -d -f',
+    gz:   %w[gzip --decompress --force],
+    Z:    %w[compress -d -f],
+    bz2:  %w[bzip2 --decompress --force],
+    lz:   %w[lzip --decompress --force],
+    lzma: %w[lzma --decompress --force],
+    lzo:  %w[lzop -d -f],
+    xz:   %w[xz --decompress --force],
+    zst:  %w[zstd -d -f]
   }.stringify_keys
 
   COMPRESS_EXT = ExtractionFile::FILE_EXT.product(COMPRESS.keys).map { "#{_1}.#{_2}" }
 
   belongs_to :user
 
-  has_many :files, dependent: :destroy, class_name: 'MassDirectoryExtractionFile', foreign_key: :extraction_id
+  has_many :files, dependent: :destroy, class_name: "MassDirectoryExtractionFile", foreign_key: :extraction_id
 
   def prepare_files
     ActiveRecord::Base.transaction do
@@ -39,7 +35,7 @@ class MassDirectoryExtraction < ApplicationRecord
   end
 
   def working_dir
-    Pathname.new(ENV.fetch('EXTRACTION_WORKDIR')).join("mass-directory-extraction-#{id}")
+    Pathname.new(ENV.fetch("EXTRACTION_WORKDIR")).join("mass-directory-extraction-#{id}")
   end
 
   private
@@ -47,13 +43,13 @@ class MassDirectoryExtraction < ApplicationRecord
   def user_mass_dir
     username = user.id_token.fetch(:preferred_username)
 
-    ENV.fetch('MASS_DIR_PATH_TEMPLATE').gsub('{user}', username).tap {|path|
+    ENV.fetch("MASS_DIR_PATH_TEMPLATE").gsub("{user}", username).tap { |path|
       raise "malformed directory path: #{path}" unless path == File.expand_path(path)
     }.then { Pathname.new(_1) }
   end
 
   def unarchive_and_copy_files(dir)
-    paths = Pathname.glob("**/*.{#{[*ExtractionFile::FILE_EXT, *ARCHIVE_EXT, *COMPRESS_EXT].join(',')}}", base: dir)
+    paths = Pathname.glob("**/*.{#{[ *ExtractionFile::FILE_EXT, *ARCHIVE_EXT, *COMPRESS_EXT ].join(',')}}", base: dir)
 
     return if paths.empty?
 
@@ -67,23 +63,23 @@ class MassDirectoryExtraction < ApplicationRecord
           tmp  = Pathname.new(tmp)
           dest = tmp.join(src.to_s.delete_suffix(".#{ext}")).tap(&:mkpath)
 
-          if src.to_s.end_with?('.zip')
-            system "unzip #{dir.join(src).escape} -d #{dest.escape}", exception: true
+          if src.to_s.end_with?(".zip")
+            system "unzip", dir.join(src).to_s, "-d", dest.to_s, exception: true
           else
-            system "tar --extract --file=#{dir.join(src).escape} --directory=#{dest.escape}", exception: true
+            system "tar", "--extract", "--file", dir.join(src).to_s, "--directory", dest.to_s, exception: true
           end
 
           unarchive_and_copy_files tmp
         end
       elsif ext = src.match_ext?(COMPRESS_EXT)
-        comp_ext = ext.split('.').last
+        comp_ext = ext.split(".").last
 
         Dir.mktmpdir do |tmp|
           tmp  = Pathname.new(tmp)
           dest = tmp.join(src.dirname).tap(&:mkpath)
 
           FileUtils.cp dir.join(src), dest
-          system "#{COMPRESS.fetch(comp_ext)} #{tmp.join(src).escape}", exception: true
+          system(*COMPRESS.fetch(comp_ext), tmp.join(src).to_s, exception: true)
 
           copy_file tmp, src.to_s.delete_suffix(".#{comp_ext}")
         end
@@ -103,6 +99,6 @@ class MassDirectoryExtraction < ApplicationRecord
   end
 
   def normalize_path(path)
-    path.to_s.gsub(%r([/ ]), '/' => '__', ' ' => '_')
+    path.to_s.gsub(%r{[/ ]}, "/" => "__", " " => "_")
   end
 end

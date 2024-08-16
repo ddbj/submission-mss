@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
+  root to: redirect("/web")
+
   scope :api do
-    resources :submissions, only: %i(index show create), param: :mass_id do
+    resources :submissions, only: %i[index show create], param: :mass_id do
       collection do
         get :last_submitted
       end
@@ -10,17 +12,17 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :dfast_extractions,          only: %i(show create)
-    resources :mass_directory_extractions, only: %i(show create)
+    resources :dfast_extractions,          only: %i[show create]
+    resources :mass_directory_extractions, only: %i[show create]
 
     resources :direct_uploads, only: :create
   end
 
-  namespace 'debug' do
+  namespace "debug" do
     get :error
   end
 
-  get '*paths', to: 'frontends#show', constraints: -> (req) {
+  get "*paths", to: "frontends#show", constraints: ->(req) {
     !req.xhr? && req.format.html?
   }
 

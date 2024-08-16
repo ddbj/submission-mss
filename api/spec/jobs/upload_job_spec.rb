@@ -49,7 +49,7 @@ RSpec.describe UploadJob do
 
       body: JSON.generate(
         valueRanges: [
-          values: 100.times.map {|i| ["CELL-#{i}"] }
+          values: 100.times.map { |i| [ "CELL-#{i}" ] }
         ]
       )
     )
@@ -62,7 +62,7 @@ RSpec.describe UploadJob do
       body: JSON.generate(
         valueRanges: [
           values: [
-            ['NSUB000042']
+            [ 'NSUB000042' ]
           ]
         ]
       )
@@ -86,7 +86,7 @@ RSpec.describe UploadJob do
 
       body: {
         values: [
-          ['20220102-123456']
+          [ '20220102-123456' ]
         ]
       }
     )

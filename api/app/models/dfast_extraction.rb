@@ -1,4 +1,4 @@
-require 'open-uri'
+require "open-uri"
 
 class DfastExtraction < ApplicationRecord
   class ExtractionError < StandardError
@@ -12,7 +12,7 @@ class DfastExtraction < ApplicationRecord
 
   belongs_to :user
 
-  has_many :files, dependent: :destroy, class_name: 'DfastExtractionFile', foreign_key: :extraction_id
+  has_many :files, dependent: :destroy, class_name: "DfastExtractionFile", foreign_key: :extraction_id
 
   validates :dfast_job_ids, presence: true
 
@@ -27,7 +27,7 @@ class DfastExtraction < ApplicationRecord
   end
 
   def working_dir
-    Pathname.new(ENV.fetch('EXTRACTION_WORKDIR')).join("mssform-dfast-uri-extraction-#{id}")
+    Pathname.new(ENV.fetch("EXTRACTION_WORKDIR")).join("mssform-dfast-uri-extraction-#{id}")
   end
 
   private
@@ -37,11 +37,11 @@ class DfastExtraction < ApplicationRecord
       zip = Zip::InputStream.new(body)
 
       while entry = zip.get_next_entry
-        next unless entry.name.end_with?('.ann', '.fasta')
+        next unless entry.name.end_with?(".ann", ".fasta")
 
-        dest_name = entry.name.gsub(%r([/ ]), '/' => '__', ' ' => '_')
+        dest_name = entry.name.gsub(%r{[/ ]}, "/" => "__", " " => "_")
 
-        working_dir.join(dest_name).open 'w' do |dest|
+        working_dir.join(dest_name).open "w" do |dest|
           IO.copy_stream entry.get_input_stream, dest
 
           files.create!(
@@ -53,6 +53,6 @@ class DfastExtraction < ApplicationRecord
       end
     end
   rescue OpenURI::HTTPError => e
-    raise ExtractionError.new(:failed_to_fetch, job_id:, reason: e.io.status.join(' '))
+    raise ExtractionError.new(:failed_to_fetch, job_id:, reason: e.io.status.join(" "))
   end
 end

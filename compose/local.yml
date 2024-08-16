@@ -11,6 +11,7 @@ services:
 
     environment:
       DISABLE_SSL: 'true'
+      DATABASE_URL: postgres://postgres@postgres/mssform
 
     extra_hosts:
       - host.docker.internal:host-gateway
@@ -23,10 +24,23 @@ services:
       - work:/app/work
 
     depends_on:
+      - postgres
+      - minio
       - mailhog
 
   solid_queue:
     <<: *rails-local
+
+  postgres:
+    image: postgres:16
+
+    environment:
+      POSTGRES_DB: mssform
+      POSTGRES_HOST_AUTH_METHOD: trust
+
+  minio:
+    image: minio/minio
+    command: [server, /data]
 
   mailhog:
     image: mailhog/mailhog

@@ -6,7 +6,7 @@ module Authentication
     return @current_user if @current_user
 
     if token = openid_token_payload
-      @current_user = User.find_or_initialize_by(openid_sub: token.fetch(:sub)).tap {|user|
+      @current_user = User.find_or_initialize_by(openid_sub: token.fetch(:sub)).tap { |user|
         user.update! id_token: token
       }
     else
@@ -24,7 +24,7 @@ module Authentication
     return if current_user
 
     render json: {
-      error: 'missing token'
+      error: "missing token"
     }, status: :unauthorized
   rescue JWT::DecodeError => e
     Rails.logger.error e
@@ -35,10 +35,10 @@ module Authentication
   end
 
   def openid_token_payload
-    return nil unless header = request.headers['Authorization']
-    return nil unless token  = /\ABearer (?<token>\S+)\z/.match(header)&.named_captures&.fetch('token')
+    return nil unless header = request.headers["Authorization"]
+    return nil unless token  = /\ABearer (?<token>\S+)\z/.match(header)&.named_captures&.fetch("token")
 
-    config = Rails.root.join('../config/openid-configuration.json').open {|f|
+    config = Rails.root.join("../config/openid-configuration.json").open { |f|
       JSON.load(f, nil, symbolize_names: true, create_additions: false)
     }
 
@@ -46,7 +46,7 @@ module Authentication
 
     jwks = ->(opts) {
       Rails.cache.fetch(:openid_jwks, force: opts[:invalidate]) {
-        HTTP.get(jwks_uri).then {|res|
+        HTTP.get(jwks_uri).then { |res|
           raise res.status unless res.status.success?
 
           res.parse
@@ -54,7 +54,7 @@ module Authentication
       }
     }
 
-    payload, _header = JWT.decode(token, nil, true, algorithms:, jwks:, verify_aud: true, aud: ENV.fetch('OPENID_CLIENT_ID'))
+    payload, _header = JWT.decode(token, nil, true, algorithms:, jwks:, verify_aud: true, aud: ENV.fetch("OPENID_CLIENT_ID"))
 
     payload.symbolize_keys
   end

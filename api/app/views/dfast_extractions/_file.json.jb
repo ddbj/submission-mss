@@ -8,5 +8,5 @@
   errors:           file._errors,
   isAnnotation:     file.annotation?,
   isSequence:       file.sequence?,
-  jobId:            file.dfast_job_id,
+  jobId:            file.dfast_job_id
 }

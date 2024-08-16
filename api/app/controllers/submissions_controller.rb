@@ -16,7 +16,7 @@ class SubmissionsController < ApplicationController
     upload = ActiveRecord::Base.transaction(isolation: :serializable) {
       upload_via, contact_person, other_people = submission_params.values_at(:upload_via, :contact_person, :other_people)
 
-      @submission = current_user.submissions.create!(submission_params.except(:upload_via, :contact_person, :other_people, :extraction_id, :files)) {|submission|
+      @submission = current_user.submissions.create!(submission_params.except(:upload_via, :contact_person, :other_people, :extraction_id, :files)) { |submission|
         submission.set_mass_id Submission.last_mass_id_seq.succ
         submission.build_contact_person contact_person
 

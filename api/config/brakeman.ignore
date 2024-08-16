@@ -1,0 +1,29 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "15fa85042e7af236350f1d3c02c863486c9ff3dba075e4da02b46da78c814cae",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "app/models/mass_directory_extraction.rb",
+      "line": 82,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "system(*{ :gz => ([\"gzip\", \"--decompress\", \"--force\"]), :Z => ([\"compress\", \"-d\", \"-f\"]), :bz2 => ([\"bzip2\", \"--decompress\", \"--force\"]), :lz => ([\"lzip\", \"--decompress\", \"--force\"]), :lzma => ([\"lzma\", \"--decompress\", \"--force\"]), :lzo => ([\"lzop\", \"-d\", \"-f\"]), :xz => ([\"xz\", \"--decompress\", \"--force\"]), :zst => ([\"zstd\", \"-d\", \"-f\"]) }.stringify_keys.fetch(src.match_ext?(ExtractionFile::FILE_EXT.product({ :gz => ([\"gzip\", \"--decompress\", \"--force\"]), :Z => ([\"compress\", \"-d\", \"-f\"]), :bz2 => ([\"bzip2\", \"--decompress\", \"--force\"]), :lz => ([\"lzip\", \"--decompress\", \"--force\"]), :lzma => ([\"lzma\", \"--decompress\", \"--force\"]), :lzo => ([\"lzop\", \"-d\", \"-f\"]), :xz => ([\"xz\", \"--decompress\", \"--force\"]), :zst => ([\"zstd\", \"-d\", \"-f\"]) }.stringify_keys.keys).map do\n \"#{_1}.#{_2}\"\n end).split(\".\").last), Pathname.new(tmp).join(src).to_s, :exception => true)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "MassDirectoryExtraction",
+        "method": "unarchive_and_copy_files"
+      },
+      "user_input": "_1",
+      "confidence": "Medium",
+      "cwe_id": [
+        77
+      ],
+      "note": ""
+    }
+  ],
+  "updated": "2024-08-15 00:06:52 +0900",
+  "brakeman_version": "6.1.2"
+}

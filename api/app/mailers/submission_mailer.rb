@@ -16,7 +16,7 @@ class SubmissionMailer < ApplicationMailer
     @row        = WorkingList.instance.to_row(@submission)
 
     mail(
-      to:      ENV.fetch('CURATOR_ML_ADDRESS'),
+      to:      ENV.fetch("CURATOR_ML_ADDRESS"),
       subject: "[DDBJ:#{@submission.mass_id}] #{@submission.data_type_text}"
     )
   end
@@ -29,10 +29,10 @@ class SubmissionMailer < ApplicationMailer
       *submission.other_people.order(:position)
     ]
 
-    return recipients unless allowed_domains = ENV['MAIL_ALLOWED_DOMAINS']&.split(',')
+    return recipients unless allowed_domains = ENV["MAIL_ALLOWED_DOMAINS"]&.split(",")
 
-    recipients.select {|recipient|
-      allowed_domains.any? {|domain| recipient.email.end_with?("@#{domain}") }
+    recipients.select { |recipient|
+      allowed_domains.any? { |domain| recipient.email.end_with?("@#{domain}") }
     }
   end
 end

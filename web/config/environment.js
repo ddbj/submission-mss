@@ -17,7 +17,7 @@ module.exports = function (environment) {
   const ENV = {
     modulePrefix: 'mssform',
     environment,
-    rootURL: '/',
+    rootURL: '/web/',
     locationType: 'history',
     EmberENV: {
       EXTEND_PROTOTYPES: false,
