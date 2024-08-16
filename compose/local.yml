@@ -1,26 +1,16 @@
 volumes:
-  mass:
-  submissions:
   work:
+  postgres:
+  minio:
 
 services:
   rails: &rails-local
-    build:
-      extra_hosts:
-        - keycloak:${HOST_GATEWAY_IP:-172.17.0.1}
-
-    environment:
-      DISABLE_SSL: 'true'
-      DATABASE_URL: postgres://postgres@postgres/mssform
-
     extra_hosts:
-      - host.docker.internal:host-gateway
-      - keycloak:host-gateway
       - mssform.localhost:host-gateway
 
     volumes:
-      - mass:/submission/keycloak/submissions/keycloak/mass
-      - submissions:/app/submissions
+      - ../api/tmp/submission:/submission
+      - ../api/tmp/submissions:/app/submissions
       - work:/app/work
 
     depends_on:
@@ -38,9 +28,15 @@ services:
       POSTGRES_DB: mssform
       POSTGRES_HOST_AUTH_METHOD: trust
 
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
   minio:
     image: minio/minio
     command: [server, /data]
+
+    volumes:
+      - minio:/data
 
   mailhog:
     image: mailhog/mailhog

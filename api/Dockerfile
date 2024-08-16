@@ -91,10 +91,12 @@ RUN apt-get update -qq && \
 # Copy built artifacts: gems, application
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /app/api /app/api
-COPY --from=web /app/web/dist /app/api/public/web
+COPY --from=web /app/web/dist/ /app/api/public
 
 # Run and own only the runtime files as a non-root user for security
-RUN chown -R ${APP_UID:?}:${APP_GID:?} db log tmp
+RUN groupadd --system --gid ${APP_GID:?} rails && \
+    useradd rails --uid ${APP_UID:?} --gid ${APP_GID:?} --create-home --shell /bin/bash && \
+    chown -R rails:rails log tmp
 USER ${APP_UID:?}:${APP_GID:?}
 
 # Entrypoint prepares the database.

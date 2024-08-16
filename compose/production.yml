@@ -5,11 +5,11 @@ services:
 
     volumes:
       - type: bind
-        source: ~/submissions/$STAGE
-        target: /app/submissions
-      - type: bind
         source: /submission
         target: /submission
+      - type: bind
+        source: ~/submissions/$STAGE
+        target: /app/submissions
       - type: bind
         source: ~/mssform/work/$STAGE
         target: /app/work

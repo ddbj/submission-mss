@@ -35,13 +35,12 @@ services:
     environment:
       CURATOR_ML_ADDRESS:          '"DDBJ Mass Submission System (MSS)" <mass@ddbj.nig.ac.jp>'
       DATABASE_URL:
+      DISABLE_SSL:
       EXTRACTION_WORKDIR:          /app/work/extraction
-      FORCE_SSL:
       GOOGLE_ACCOUNT_TYPE:         service_account
       GOOGLE_CLIENT_EMAIL:
       GOOGLE_CLIENT_ID:
       GOOGLE_PRIVATE_KEY:
-      IRB_USE_AUTOCOMPLETE:        'false'
       MAIL_ALLOWED_DOMAINS:
       MASS_DIR_PATH_TEMPLATE:
       MEMCACHE_SERVERS:            memcached
