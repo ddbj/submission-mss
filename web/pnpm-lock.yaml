@@ -63,8 +63,8 @@ importers:
         specifier: ^2.7.3
         version: 2.7.3(webpack@5.92.1)
       ember-cli:
-        specifier: ~5.9.0
-        version: 5.9.0(handlebars@4.7.8)(underscore@1.13.6)
+        specifier: ~5.10.0
+        version: 5.10.0(handlebars@4.7.8)(underscore@1.13.6)
       ember-cli-app-version:
         specifier: ^7.0.0
         version: 7.0.0(ember-source@5.9.0(@babel/core@7.24.7)(@glimmer/component@1.1.2(@babel/core@7.24.7))(rsvp@4.8.5)(webpack@5.92.1))
@@ -76,7 +76,7 @@ importers:
         version: 3.0.0
       ember-cli-dependency-checker:
         specifier: ^3.3.2
-        version: 3.3.2(ember-cli@5.9.0(handlebars@4.7.8)(underscore@1.13.6))
+        version: 3.3.2(ember-cli@5.10.0(handlebars@4.7.8)(underscore@1.13.6))
       ember-cli-htmlbars:
         specifier: ^6.3.0
         version: 6.3.0
@@ -3236,8 +3236,8 @@ packages:
     resolution: {integrity: sha512-rk7GY+FmLn/2e22HsZs0Ycrz8HQ1W3Fv+2TFOuEFW9optnDXDgkntPBIl6gact/LHsfBM5RKbM3dHsIIeLgl0Q==}
     engines: {node: 10.* || >= 12.*}
 
-  ember-cli@5.9.0:
-    resolution: {integrity: sha512-3+4F9STw4yRttzMCCrbpAwwQLtUqIwVug/Ve6rvUFvcpK//n8Q6N7iaPBHhYOFGwwok8Nr0jfkINxLWTl6WrlA==}
+  ember-cli@5.10.0:
+    resolution: {integrity: sha512-Y9nihTELz3dxphn/Fvw9/Gdwe5Q13Zlsh3wa4qXyy84CHRo9FcDNb8ka8UstaUxHoCcsASS6iUq8cos2krLRdA==}
     engines: {node: '>= 18'}
     hasBin: true
 
@@ -8580,13 +8580,13 @@ snapshots:
 
   '@ember-data/private-build-infra@5.4.0-beta.4':
     dependencies:
-      '@babel/core': 7.24.7
-      '@babel/plugin-transform-block-scoping': 7.24.7(@babel/core@7.24.7)
+      '@babel/core': 7.25.2
+      '@babel/plugin-transform-block-scoping': 7.24.7(@babel/core@7.25.2)
       '@babel/runtime': 7.24.7
       '@ember/edition-utils': 1.2.0
       '@embroider/macros': 1.16.2
       babel-import-util: 2.1.1
-      babel-plugin-debug-macros: 0.3.4(@babel/core@7.24.7)
+      babel-plugin-debug-macros: 0.3.4(@babel/core@7.25.2)
       babel-plugin-filter-imports: 4.0.0
       babel6-plugin-strip-class-callcheck: 6.0.0
       broccoli-debug: 0.6.5
@@ -8594,7 +8594,7 @@ snapshots:
       broccoli-merge-trees: 4.2.0
       calculate-cache-key-for-tree: 2.0.0
       chalk: 4.1.2
-      ember-cli-babel: 8.2.0(@babel/core@7.24.7)
+      ember-cli-babel: 8.2.0(@babel/core@7.25.2)
       ember-cli-path-utils: 1.0.0
       ember-cli-string-utils: 1.1.0
       ember-cli-version-checker: 5.1.2
@@ -10232,7 +10232,7 @@ snapshots:
 
   broccoli-babel-transpiler@7.8.1:
     dependencies:
-      '@babel/core': 7.24.7
+      '@babel/core': 7.25.2
       '@babel/polyfill': 7.12.1
       broccoli-funnel: 2.0.2
       broccoli-merge-trees: 3.0.2
@@ -11316,13 +11316,13 @@ snapshots:
 
   ember-auto-import@2.2.4(webpack@5.92.1):
     dependencies:
-      '@babel/core': 7.24.7
-      '@babel/plugin-proposal-class-properties': 7.18.6(@babel/core@7.24.7)
-      '@babel/plugin-proposal-decorators': 7.24.7(@babel/core@7.24.7)
-      '@babel/preset-env': 7.24.7(@babel/core@7.24.7)
+      '@babel/core': 7.25.2
+      '@babel/plugin-proposal-class-properties': 7.18.6(@babel/core@7.25.2)
+      '@babel/plugin-proposal-decorators': 7.24.7(@babel/core@7.25.2)
+      '@babel/preset-env': 7.24.7(@babel/core@7.25.2)
       '@babel/traverse': 7.24.7
       '@embroider/shared-internals': 0.40.0
-      babel-loader: 8.3.0(@babel/core@7.24.7)(webpack@5.92.1)
+      babel-loader: 8.3.0(@babel/core@7.25.2)(webpack@5.92.1)
       babel-plugin-ember-modules-api-polyfill: 3.5.0
       babel-plugin-htmlbars-inline-precompile: 5.3.1
       babel-plugin-syntax-dynamic-import: 6.18.0
@@ -11587,10 +11587,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ember-cli-dependency-checker@3.3.2(ember-cli@5.9.0(handlebars@4.7.8)(underscore@1.13.6)):
+  ember-cli-dependency-checker@3.3.2(ember-cli@5.10.0(handlebars@4.7.8)(underscore@1.13.6)):
     dependencies:
       chalk: 2.4.2
-      ember-cli: 5.9.0(handlebars@4.7.8)(underscore@1.13.6)
+      ember-cli: 5.10.0(handlebars@4.7.8)(underscore@1.13.6)
       find-yarn-workspace-root: 1.2.1
       is-git-url: 1.0.0
       resolve: 1.22.8
@@ -11781,7 +11781,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ember-cli@5.9.0(handlebars@4.7.8)(underscore@1.13.6):
+  ember-cli@5.10.0(handlebars@4.7.8)(underscore@1.13.6):
     dependencies:
       '@pnpm/find-workspace-dir': 6.0.3
       broccoli: 3.5.2
@@ -14858,9 +14858,9 @@ snapshots:
 
   remove-types@1.0.0:
     dependencies:
-      '@babel/core': 7.24.7
-      '@babel/plugin-syntax-decorators': 7.24.7(@babel/core@7.24.7)
-      '@babel/plugin-transform-typescript': 7.24.7(@babel/core@7.24.7)
+      '@babel/core': 7.25.2
+      '@babel/plugin-syntax-decorators': 7.24.7(@babel/core@7.25.2)
+      '@babel/plugin-transform-typescript': 7.24.7(@babel/core@7.25.2)
       prettier: 2.8.8
     transitivePeerDependencies:
       - supports-color
@@ -16140,7 +16140,7 @@ snapshots:
 
   workerpool@3.1.2:
     dependencies:
-      '@babel/core': 7.24.7
+      '@babel/core': 7.25.2
       object-assign: 4.1.1
       rsvp: 4.8.5
     transitivePeerDependencies:
