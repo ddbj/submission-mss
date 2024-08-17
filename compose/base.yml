@@ -43,7 +43,6 @@ services:
       GOOGLE_PRIVATE_KEY:
       MAIL_ALLOWED_DOMAINS:
       MASS_DIR_PATH_TEMPLATE:
-      MEMCACHE_SERVERS:            memcached
       MINIO_ACCESS_KEY_ID:
       MINIO_BUCKET:                uploads
       MINIO_ENDPOINT:
@@ -63,9 +62,3 @@ services:
       SMTP_USERNAME:
       STAGE:
       SUBMISSIONS_DIR:             /app/submissions
-
-    depends_on:
-      - memcached
-
-  memcached:
-    image: memcached:latest

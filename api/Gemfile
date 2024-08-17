@@ -17,6 +17,7 @@ gem "pg"
 gem "puma"
 gem "rubyzip", require: "zip"
 gem "sentry-rails"
+gem "solid_cache"
 gem "solid_queue"
 
 group :development do

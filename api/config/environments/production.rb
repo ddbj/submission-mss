@@ -92,7 +92,7 @@ Rails.application.configure do
   config.active_job.queue_adapter      = :solid_queue
   config.active_storage.service        = :minio
   config.assume_ssl                    = ENV["DISABLE_SSL"] != "true"
-  config.cache_store                   = :mem_cache_store
+  config.cache_store                   = :solid_cache_store
   config.force_ssl                     = ENV["DISABLE_SSL"] != "true"
 
   config.action_mailer.smtp_settings = {
