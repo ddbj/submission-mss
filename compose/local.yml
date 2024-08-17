@@ -4,7 +4,7 @@ volumes:
   minio:
 
 services:
-  rails: &rails-local
+  rails:
     extra_hosts:
       - mssform.localhost:host-gateway
 
@@ -14,12 +14,12 @@ services:
       - work:/app/work
 
     depends_on:
-      - postgres
-      - minio
-      - mailhog
-
-  solid_queue:
-    <<: *rails-local
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_started
+      mailhog:
+        condition: service_started
 
   postgres:
     image: postgres:16
@@ -30,6 +30,12 @@ services:
 
     volumes:
       - postgres:/var/lib/postgresql/data
+
+    healthcheck:
+      test: [CMD-SHELL, pg_isready]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   minio:
     image: minio/minio

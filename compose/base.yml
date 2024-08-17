@@ -16,7 +16,7 @@ services:
       rails:
         condition: service_started
 
-  rails: &rails
+  rails:
     build:
       context: ../
       dockerfile: api/Dockerfile
@@ -65,12 +65,7 @@ services:
       SUBMISSIONS_DIR:             /app/submissions
 
     depends_on:
-      memcached:
-        condition: service_started
-
-  solid_queue:
-    <<: *rails
-    command: [bundle, exec, rake, solid_queue:start]
+      - memcached
 
   memcached:
     image: memcached:latest
