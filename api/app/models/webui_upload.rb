@@ -1,13 +1,13 @@
 class WebuiUpload < ApplicationRecord
   include UploadVia
 
-  def self.from_params(files:, **)
-    new(files:)
-  end
-
   has_many_attached :files
 
   delegate :submission, to: :upload
+
+  def self.from_params(files:, **)
+    new(files:)
+  end
 
   def copy_files_to_submissions_dir
     return if copied?

@@ -39,7 +39,7 @@ class DfastExtraction < ApplicationRecord
       while entry = zip.get_next_entry
         next unless entry.name.end_with?(".ann", ".fasta")
 
-        dest_name = entry.name.gsub(%r{[/ ]}, "/" => "__", " " => "_")
+        dest_name = normalize_path(entry.name)
 
         working_dir.join(dest_name).open "w" do |dest|
           IO.copy_stream entry.get_input_stream, dest
@@ -54,5 +54,9 @@ class DfastExtraction < ApplicationRecord
     end
   rescue OpenURI::HTTPError => e
     raise ExtractionError.new(:failed_to_fetch, job_id:, reason: e.io.status.join(" "))
+  end
+
+  def normalize_path(path)
+    path.to_s.gsub(%r{[/ ]}, "/" => "__", " " => "_")
   end
 end
