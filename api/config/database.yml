@@ -21,8 +21,13 @@ default: &default
 
 
 development:
-  <<: *default
-  database: mssform_development
+  primary: &development_primary
+    <<: *default
+    database: mssform_development
+
+  cache:
+    <<: *development_primary
+    database_tasks: false
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -55,8 +60,13 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *default
-  database: mssform_test
+  primary: &test_primary
+    <<: *default
+    database: mssform_test
+
+  cache:
+    <<: *test_primary
+    database_tasks: false
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -79,7 +89,12 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  <<: *default
-  database: mssform_production
-  username: mssform
-  password: <%= ENV["MSSFORM_DATABASE_PASSWORD"] %>
+  primary: &production_primary
+    <<: *default
+    database: mssform_production
+    username: mssform
+    password: <%= ENV["MSSFORM_DATABASE_PASSWORD"] %>
+
+  cache:
+    <<: *production_primary
+    database_tasks: false
