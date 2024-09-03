@@ -289,7 +289,7 @@ GEM
     retriable (3.1.2)
     rexml (3.3.6)
       strscan
-    rspec-core (3.13.0)
+    rspec-core (3.13.1)
       rspec-support (~> 3.13.0)
     rspec-default_http_header (0.0.6)
       rspec-rails (> 3.0)
@@ -299,7 +299,7 @@ GEM
     rspec-mocks (3.13.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-rails (7.0.0)
+    rspec-rails (7.0.1)
       actionpack (>= 7.0)
       activesupport (>= 7.0)
       railties (>= 7.0)
