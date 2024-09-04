@@ -351,7 +351,7 @@ GEM
       faraday (>= 0.17.5, < 3.a)
       jwt (>= 1.5, < 3.0)
       multi_json (~> 1.10)
-    solid_cache (1.0.2)
+    solid_cache (1.0.4)
       activejob (>= 7.2)
       activerecord (>= 7.2)
       railties (>= 7.2)
