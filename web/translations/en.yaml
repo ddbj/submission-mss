@@ -237,7 +237,7 @@ annotation-file-parser:
   invalid-hold-date: hold_date must be an 8-digit number (YYYYMMDD).
   missing-contact-person: Contact person information (contact, email, institute) is missing.
   invalid-contact-person: Please check all the values of contact, email, institute in your annotation files were filled, and there is no typo in the letters of “contact, email, institute“.
-  duplicate-contact-person-information: Duplicate contact person information.
+  duplicate-contact-person-information: An annotation file cannot contain more than one primary contact information (contact, email, and institute values) for submission. Please list only one of each.
 
 sequence-file-parser:
   no-entries: No entries found.
