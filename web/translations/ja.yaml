@@ -238,7 +238,7 @@ annotation-file-parser:
   invalid-hold-date: hold_date は8桁の数字 (YYYYMMDD) で指定してください。
   missing-contact-person: コンタクトパーソンの情報 (contact, email, institute) が見つかりません。
   invalid-contact-person: アノテーションファイルのcontact, email, instituteのすべてに値が記載されているか、またcontact, email, instituteの文字列にタイプミスがないか、ご確認ください。
-  duplicate-contact-person-information: アノテーションファイルには、登録作業に関する代表連絡先（contact、email、instituteの値）は複数個は記載できません。それぞれ１つのみ記載してください。
+  duplicate-contact-person-information: アノテーションファイルには、登録作業に関する代表連絡先（contact、email、instituteの値）は複数個は記載できません。それぞれ１つ（各1行）のみ記載してください。
 
 sequence-file-parser:
   no-entries: エントリが1つも含まれていません。
