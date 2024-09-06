@@ -25,6 +25,11 @@ development:
     <<: *default
     database: mssform_development
 
+  queue:
+    <<: *development_primary
+    database: mssform_development_queue
+    migrations_paths: db/queue_migrate
+
   cache:
     <<: *development_primary
     database_tasks: false
@@ -64,6 +69,11 @@ test:
     <<: *default
     database: mssform_test
 
+  queue:
+    <<: *test_primary
+    database: mssform_test_queue
+    migrations_paths: db/queue_migrate
+
   cache:
     <<: *test_primary
     database_tasks: false
@@ -94,6 +104,11 @@ production:
     database: mssform_production
     username: mssform
     password: <%= ENV["MSSFORM_DATABASE_PASSWORD"] %>
+
+  queue:
+    <<: *production_primary
+    database: mssform_production_queue
+    migrations_paths: db/queue_migrate
 
   cache:
     <<: *production_primary

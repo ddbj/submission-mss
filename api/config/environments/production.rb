@@ -60,6 +60,7 @@ Rails.application.configure do
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter = :resque
+
   # config.active_job.queue_name_prefix = "mss_form_production"
 
   # Disable caching for Action Mailer templates even if Action Controller
@@ -94,6 +95,7 @@ Rails.application.configure do
   config.assume_ssl                    = ENV["DISABLE_SSL"] != "true"
   config.cache_store                   = :solid_cache_store
   config.force_ssl                     = ENV["DISABLE_SSL"] != "true"
+  config.solid_queue.connects_to       = { database: { writing: :queue } }
 
   config.action_mailer.smtp_settings = {
     address:        ENV.fetch("SMTP_ADDRESS"),
