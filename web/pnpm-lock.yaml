@@ -105,8 +105,8 @@ importers:
         specifier: ^8.1.2
         version: 8.1.2
       ember-intl:
-        specifier: 7.0.5
-        version: 7.0.5(typescript@5.4.5)(webpack@5.94.0)
+        specifier: 7.0.6
+        version: 7.0.6(@ember/test-helpers@3.3.1(@babel/core@7.25.2)(ember-source@5.11.0(@glimmer/component@1.1.2(@babel/core@7.25.2))(rsvp@4.8.5)(webpack@5.94.0))(webpack@5.94.0))(typescript@5.4.5)(webpack@5.94.0)
       ember-intl-component:
         specifier: ^1.0.0
         version: 1.0.0(@babel/core@7.25.2)(webpack@5.94.0)
@@ -3265,12 +3265,15 @@ packages:
     resolution: {integrity: sha512-BJdLVRpUTNNzvC1GYZMhuTcVuIqE4dCWcIe2MCNOASx9R00WEKzJNMeoTUGU9AESvuWbI9nRUlMUjnHMUIJ4sg==}
     engines: {node: 12.* || 14.* || >= 16}
 
-  ember-intl@7.0.5:
-    resolution: {integrity: sha512-B+G6y6q52iHWG3IfsD74h7xP2qdaDdVmWOTGz+c11AmtxHRg98JpuVbyBsfHiazwfo3gPC/9qdaCQjkMsXTlOw==}
+  ember-intl@7.0.6:
+    resolution: {integrity: sha512-56RDyd+xlp9Apmy6hKgMEt99PbsL0r9qvm9ogb5nwe5QSRret2f22P3oi9vqGCgs7ZfP23x6EXTp8HX43E4z5g==}
     engines: {node: 18.* || >= 20}
     peerDependencies:
+      '@ember/test-helpers': ^2.9.4 || ^3.2.0 || ^4.0.0
       typescript: ^5.0.0
     peerDependenciesMeta:
+      '@ember/test-helpers':
+        optional: true
       typescript:
         optional: true
 
@@ -11190,7 +11193,7 @@ snapshots:
       - supports-color
       - webpack
 
-  ember-intl@7.0.5(typescript@5.4.5)(webpack@5.94.0):
+  ember-intl@7.0.6(@ember/test-helpers@3.3.1(@babel/core@7.25.2)(ember-source@5.11.0(@glimmer/component@1.1.2(@babel/core@7.25.2))(rsvp@4.8.5)(webpack@5.94.0))(webpack@5.94.0))(typescript@5.4.5)(webpack@5.94.0):
     dependencies:
       '@babel/core': 7.25.2
       '@formatjs/icu-messageformat-parser': 2.7.8
@@ -11210,6 +11213,7 @@ snapshots:
       js-yaml: 4.1.0
       json-stable-stringify: 1.1.1
     optionalDependencies:
+      '@ember/test-helpers': 3.3.1(@babel/core@7.25.2)(ember-source@5.11.0(@glimmer/component@1.1.2(@babel/core@7.25.2))(rsvp@4.8.5)(webpack@5.94.0))(webpack@5.94.0)
       typescript: 5.4.5
     transitivePeerDependencies:
       - '@glint/template'
