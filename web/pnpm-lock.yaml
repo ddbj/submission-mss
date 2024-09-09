@@ -129,8 +129,8 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1(@babel/core@7.25.2)
       ember-simple-auth:
-        specifier: ^6.0.0
-        version: 6.0.0(@ember/test-helpers@3.3.1(@babel/core@7.25.2)(ember-source@5.11.0(@glimmer/component@1.1.2(@babel/core@7.25.2))(rsvp@4.8.5)(webpack@5.94.0))(webpack@5.94.0))
+        specifier: ^6.1.0
+        version: 6.1.0(@babel/core@7.25.2)(@ember/test-helpers@3.3.1(@babel/core@7.25.2)(ember-source@5.11.0(@glimmer/component@1.1.2(@babel/core@7.25.2))(rsvp@4.8.5)(webpack@5.94.0))(webpack@5.94.0))(eslint@8.57.0)
       ember-source:
         specifier: ~5.11.0
         version: 5.11.0(@glimmer/component@1.1.2(@babel/core@7.25.2))(rsvp@4.8.5)(webpack@5.94.0)
@@ -3322,8 +3322,8 @@ packages:
   ember-set-helper@3.0.1:
     resolution: {integrity: sha512-Ord3CuttDiF88wiNpHNDjf4aFKPnHSkpeK7zFfH9nV7YdDFSJissDCZEg42A0ReWY1WuqWbc2hMl5XkgupdyZQ==}
 
-  ember-simple-auth@6.0.0:
-    resolution: {integrity: sha512-9SzSFApxZ74CD4UxIeTV+poIPeXcRLXWM60cMvC1SwTYjoc/p9DeQF0pVm6m1XV6uA3kPUzEsEn4/GeHc2YX1w==}
+  ember-simple-auth@6.1.0:
+    resolution: {integrity: sha512-LhOl7TrOKlqb+0a/5STOoTSncDNuPELuFZ9+1SLduVX7DtdQr8VOEAmB8UaOnG0clJ9Bj6E3SczhXGjqd718Lw==}
     peerDependencies:
       '@ember/test-helpers': '>= 3 || > 2.7'
     peerDependenciesMeta:
@@ -11304,8 +11304,9 @@ snapshots:
       - '@babel/core'
       - supports-color
 
-  ember-simple-auth@6.0.0(@ember/test-helpers@3.3.1(@babel/core@7.25.2)(ember-source@5.11.0(@glimmer/component@1.1.2(@babel/core@7.25.2))(rsvp@4.8.5)(webpack@5.94.0))(webpack@5.94.0)):
+  ember-simple-auth@6.1.0(@babel/core@7.25.2)(@ember/test-helpers@3.3.1(@babel/core@7.25.2)(ember-source@5.11.0(@glimmer/component@1.1.2(@babel/core@7.25.2))(rsvp@4.8.5)(webpack@5.94.0))(webpack@5.94.0))(eslint@8.57.0):
     dependencies:
+      '@babel/eslint-parser': 7.25.1(@babel/core@7.25.2)(eslint@8.57.0)
       '@ember/test-waiters': 3.1.0
       '@embroider/addon-shim': 1.8.9
       '@embroider/macros': 1.16.2
@@ -11315,7 +11316,9 @@ snapshots:
     optionalDependencies:
       '@ember/test-helpers': 3.3.1(@babel/core@7.25.2)(ember-source@5.11.0(@glimmer/component@1.1.2(@babel/core@7.25.2))(rsvp@4.8.5)(webpack@5.94.0))(webpack@5.94.0)
     transitivePeerDependencies:
+      - '@babel/core'
       - '@glint/template'
+      - eslint
       - supports-color
 
   ember-source@5.11.0(@glimmer/component@1.1.2(@babel/core@7.25.2))(rsvp@4.8.5)(webpack@5.94.0):
