@@ -42,8 +42,8 @@ importers:
         specifier: ^19.11.0
         version: 19.11.0
       '@rails/activestorage':
-        specifier: ^7.2.0
-        version: 7.2.0
+        specifier: ^7.2.100
+        version: 7.2.100
       active-model-adapter:
         specifier: ^4.0.1
         version: 4.0.1(webpack@5.94.0)
@@ -1505,8 +1505,8 @@ packages:
   '@primer/octicons@19.11.0':
     resolution: {integrity: sha512-dJfi3I7zF4JyqHyHpxaUliUa//w4AmTYAo0i5KgKbz92ZQ0IizRU1rlW+eVdYk5nitAebpUX7gnKceZBDGW3XQ==}
 
-  '@rails/activestorage@7.2.0':
-    resolution: {integrity: sha512-jXK9tKDZn/j+ZeJuFdrtyrLNLWjzYRyp+mejWTfSp+egAp1okXsdfFNe8jqqgwcP8gytqJSPwo0sZwQVdQpuIA==}
+  '@rails/activestorage@7.2.100':
+    resolution: {integrity: sha512-gohCilm1E10W51Hc9iT960xX9TP11L5TJ4W1ufs9f3h5Ncsw01S/eHgVUfcdfszqw3G+28Z0MFu999+iSpgdTg==}
 
   '@simple-dom/document@1.4.0':
     resolution: {integrity: sha512-/RUeVH4kuD3rzo5/91+h4Z1meLSLP66eXqpVAw/4aZmYozkeqUkMprq0znL4psX/adEed5cBgiNJcfMz/eKZLg==}
@@ -8721,7 +8721,7 @@ snapshots:
     dependencies:
       object-assign: 4.1.1
 
-  '@rails/activestorage@7.2.0':
+  '@rails/activestorage@7.2.100':
     dependencies:
       spark-md5: 3.0.2
 
