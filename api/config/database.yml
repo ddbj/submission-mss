@@ -4,24 +4,12 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
-  primary:
-    <<: *default
-    database: mssform_development
-
-  cache:
-    <<: *default
-    database: mssform_cache_development
-    migrations_paths: db/cache_migrate
+  <<: *default
+  database: mssform_development
 
 test:
-  primary:
-    <<: *default
-    database: mssform_test
-
-  cache:
-    <<: *default
-    database: mssform_cache_development
-    migrations_paths: db/cache_migrate
+  <<: *default
+  database: mssform_test
 
 production:
   primary:
