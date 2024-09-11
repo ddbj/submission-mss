@@ -11,7 +11,7 @@ services:
         source: ~/submissions/$STAGE
         target: /app/submissions
       - type: bind
-        source: ~/mssform/work/$STAGE
+        source: ~/middleware/data/mssform-$STAGE/work
         target: /app/work
 
     restart: unless-stopped
