@@ -70,6 +70,21 @@ COMMON	SUBMITTER		contact	Alice Liddell
     ]);
   });
 
+  test('invalid email address', async function(assert) {
+    const raw = new File([outdent`
+COMMON	SUBMITTER		contact	Alice Liddell
+			email	foo
+			institute	Wonderland Inc.
+    `], 'foo.ann');
+
+    const file = new AnnotationFile(raw);
+    await file.parse();
+
+    assert.deepEqual(file.errors, [
+      {id: 'annotation-file-parser.invalid-email-address', value: 'foo'}
+    ]);
+  });
+
   test('duplicate contact person information (contact)', async function(assert) {
     const raw = new File([outdent`
 COMMON	SUBMITTER		contact	Alice Liddell

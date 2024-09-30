@@ -83,6 +83,26 @@ RSpec.describe ExtractMetadataJob, type: :job do
       )
     end
 
+    example 'invalid email' do
+      write_file 'foo.ann', <<~ANN
+        COMMON	SUBMITTER		contact	Alice Liddell
+        			email	foo
+        			institute	Wonderland Inc.
+        	DATE		hold_date	20200102
+      ANN
+
+      ExtractMetadataJob.perform_now extraction
+
+      expect(extraction.files.first).to have_attributes(
+        parsing: false,
+        parsed_data: nil,
+
+        _errors: [
+          { 'id' => 'annotation-file-parser.invalid-email-address', 'value' => 'foo' }
+        ]
+      )
+    end
+
     example 'duplicate contact person information (contact)' do
       write_file 'foo.ann', <<~ANN
         COMMON	SUBMITTER		contact	Alice Liddell
