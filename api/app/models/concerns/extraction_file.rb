@@ -63,6 +63,7 @@ module ExtractionFile
 
         full_name = value
       when "email"
+        raise ParseError.new("annotation-file-parser.invalid-email-address", value) unless value.match?(URI::MailTo::EMAIL_REGEXP)
         raise ParseError.new("annotation-file-parser.duplicate-contact-person-information") if email
 
         email = value

@@ -10,6 +10,9 @@ addEventListener('message', async ({data: {file}}) => {
   }
 });
 
+// https://html.spec.whatwg.org/#email-state-(type=email)
+const email_re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
 async function parse(file) {
   const reader = file.stream().getReader();
 
@@ -38,6 +41,10 @@ async function parse(file) {
         contactPerson.fullName = value;
         break;
       case 'email':
+        if (!email_re.test(value)) {
+          throw new Error(JSON.stringify({id: 'annotation-file-parser.invalid-email-address', value}));
+        }
+
         if (contactPerson.email) {
           throw new Error(JSON.stringify({id: 'annotation-file-parser.duplicate-contact-person-information'}));
         }
