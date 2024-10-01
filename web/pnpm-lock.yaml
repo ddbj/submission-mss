@@ -138,8 +138,8 @@ importers:
         specifier: ^4.4.0
         version: 4.4.0(@babel/core@7.25.2)(@ember/string@3.1.1)(ember-source@5.11.1(@glimmer/component@1.1.2(@babel/core@7.25.2))(rsvp@4.8.5)(webpack@5.95.0))
       ember-svg-jar:
-        specifier: ^2.5.0
-        version: 2.5.0
+        specifier: ^2.6.0
+        version: 2.6.0
       ember-template-lint:
         specifier: ^6.0.0
         version: 6.0.0
@@ -3336,8 +3336,8 @@ packages:
       '@ember/string': ^3.1.1 || ^4.0.0
       ember-source: ^3.28.0 || ^4.0.0 || >=5.0.0
 
-  ember-svg-jar@2.5.0:
-    resolution: {integrity: sha512-5NVGEsh8iM4YVL74lpEOFYN3/lTJVLn+oAvRxjcF9ptXKf5tMWEzdVb8xXyqnVTbOgWKyTrc482ndaW8/MGEIw==}
+  ember-svg-jar@2.6.0:
+    resolution: {integrity: sha512-LRG+BoQJTHPQlxfCPGIrOZo/UqXtadcOLuUjrhHRyQJJYDFEeJX5sWUsz/bJe48Bgi9FyOoQtdqrRAQ+COn2Kg==}
     engines: {node: 12.* || 14.* || >= 16}
 
   ember-template-imports@3.4.2:
@@ -11356,9 +11356,9 @@ snapshots:
       - '@babel/core'
       - supports-color
 
-  ember-svg-jar@2.5.0:
+  ember-svg-jar@2.6.0:
     dependencies:
-      '@embroider/macros': 1.16.2
+      '@embroider/macros': 1.16.6
       broccoli-caching-writer: 3.0.3
       broccoli-concat: 4.2.5
       broccoli-funnel: 3.0.8
