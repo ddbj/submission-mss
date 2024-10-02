@@ -42,7 +42,7 @@ jobs:
           working-directory: api
 
       - run: ln -s openid-configuration.local.json ../config/openid-configuration.json
-      - run: bin/rails db:prepare
+      - run: bin/rails db:test:prepare
       - run: bundle exec rspec
 
   scan_ruby:
