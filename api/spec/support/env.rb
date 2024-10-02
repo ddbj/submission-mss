@@ -4,14 +4,14 @@ RSpec.configure do |config|
       Dir.mktmpdir do |mass_dir|
         Dir.mktmpdir do |submissions_dir|
           env = {
-            CURATOR_ML_ADDRESS:          'Admin <mssform@example.com>',
+            CURATOR_ML_ADDRESS:          "Admin <mssform@example.com>",
             EXTRACTION_WORKDIR:          workdir,
             MAIL_ALLOWED_DOMAINS:        nil,
             MASS_DIR_PATH_TEMPLATE:      mass_dir,
-            MSSFORM_URL:                 'http://mssform.example.com',
-            MSS_WORKING_LIST_SHEET_ID:   'SHEET_ID',
-            MSS_WORKING_LIST_SHEET_NAME: 'SHEET_NAME',
-            OPENID_CLIENT_ID:            'CLIENT_ID',
+            MSSFORM_URL:                 "http://mssform.example.com",
+            MSS_WORKING_LIST_SHEET_ID:   "SHEET_ID",
+            MSS_WORKING_LIST_SHEET_NAME: "SHEET_NAME",
+            OPENID_CLIENT_ID:            "CLIENT_ID",
             STAGE:                       nil,
             SUBMISSIONS_DIR:             submissions_dir
           }

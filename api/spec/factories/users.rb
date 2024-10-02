@@ -3,7 +3,7 @@ FactoryBot.define do
     sequence(:openid_sub) { |i| "user:#{i}" }
 
     id_token { |user|
-      uid = user.openid_sub.sub(':', '_')
+      uid = user.openid_sub.sub(":", "_")
 
       {
         sub:                user.openid_sub,
@@ -16,8 +16,8 @@ FactoryBot.define do
       id_token { |user|
         {
           sub:                user.openid_sub,
-          preferred_username: 'alice-liddell',
-          email:              'alice+idp@example.com'
+          preferred_username: "alice-liddell",
+          email:              "alice+idp@example.com"
         }
       }
     end
