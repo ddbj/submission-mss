@@ -402,6 +402,7 @@ DEPENDENCIES
   googleauth
   http
   jb
+  json
   jwt
   pg
   puma
