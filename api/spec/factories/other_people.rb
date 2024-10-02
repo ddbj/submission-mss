@@ -3,13 +3,13 @@ FactoryBot.define do
     sequence :position
 
     trait :bob do
-      email     { 'bob@bar.example.com' }
-      full_name { 'Bob' }
+      email     { "bob@bar.example.com" }
+      full_name { "Bob" }
     end
 
     trait :carol do
-      email     { 'carol@baz.example.com' }
-      full_name { 'Carol' }
+      email     { "carol@baz.example.com" }
+      full_name { "Carol" }
     end
   end
 end

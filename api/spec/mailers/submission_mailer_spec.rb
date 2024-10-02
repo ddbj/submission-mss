@@ -1,13 +1,13 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe SubmissionMailer do
-  describe 'submitter_confirmation' do
+  describe "submitter_confirmation" do
     def create_submission(email_language:)
       create(:submission, **{
-        mass_id:        'NSUB000042',
+        mass_id:        "NSUB000042",
         user:           build(:user, :alice),
         contact_person: build(:contact_person, :alice),
-        data_type:      'wgs',
+        data_type:      "wgs",
         email_language:,
 
         other_people: [
@@ -17,16 +17,16 @@ RSpec.describe SubmissionMailer do
       })
     end
 
-    example 'email_language=ja' do
-      submission = create_submission(email_language: 'ja')
+    example "email_language=ja" do
+      submission = create_submission(email_language: "ja")
 
       mail = SubmissionMailer.with(submission:).submitter_confirmation
 
-      expect(mail).to deliver_from('Admin <mssform@example.com>')
-      expect(mail).to deliver_to('alice+idp@example.com')
-      expect(mail).to cc_to('Alice Liddell <alice+contact@foo.example.com>', 'Bob <bob@bar.example.com>', 'Carol <carol@baz.example.com>')
+      expect(mail).to deliver_from("Admin <mssform@example.com>")
+      expect(mail).to deliver_to("alice+idp@example.com")
+      expect(mail).to cc_to("Alice Liddell <alice+contact@foo.example.com>", "Bob <bob@bar.example.com>", "Carol <carol@baz.example.com>")
 
-      expect(mail).to have_subject('[DDBJ:NSUB000042] WGS: Whole Genome Shotgun')
+      expect(mail).to have_subject("[DDBJ:NSUB000042] WGS: Whole Genome Shotgun")
 
       expect(mail).to have_body_text(<<~BODY)
         ご登録者 様
@@ -42,8 +42,8 @@ RSpec.describe SubmissionMailer do
       BODY
     end
 
-    example 'email_language=en' do
-      submission = create_submission(email_language: 'en')
+    example "email_language=en" do
+      submission = create_submission(email_language: "en")
 
       mail = SubmissionMailer.with(submission:).submitter_confirmation
 
@@ -61,41 +61,41 @@ RSpec.describe SubmissionMailer do
       BODY
     end
 
-    example 'allowed domains' do
-      ClimateControl.modify MAIL_ALLOWED_DOMAINS: 'foo.example.com,baz.example.com' do
-        submission = create_submission(email_language: 'ja')
+    example "allowed domains" do
+      ClimateControl.modify MAIL_ALLOWED_DOMAINS: "foo.example.com,baz.example.com" do
+        submission = create_submission(email_language: "ja")
 
         mail = SubmissionMailer.with(submission:).submitter_confirmation
 
-        expect(mail).to deliver_from('Admin <mssform@example.com>')
-        expect(mail).to deliver_to('alice+idp@example.com')
-        expect(mail).to cc_to('Alice Liddell <alice+contact@foo.example.com>', 'Carol <carol@baz.example.com>')
+        expect(mail).to deliver_from("Admin <mssform@example.com>")
+        expect(mail).to deliver_to("alice+idp@example.com")
+        expect(mail).to cc_to("Alice Liddell <alice+contact@foo.example.com>", "Carol <carol@baz.example.com>")
       end
     end
   end
 
-  describe 'curator_notification' do
+  describe "curator_notification" do
     around do |example|
-      ClimateControl.modify(SUBMISSIONS_DIR: '/path/to/submissions', &example)
+      ClimateControl.modify(SUBMISSIONS_DIR: "/path/to/submissions", &example)
     end
 
     example do
       submission = create(:submission, **{
-        mass_id:        'NSUB000042',
+        mass_id:        "NSUB000042",
         user:           build(:user, :alice),
-        created_at:     '2020-01-01',
-        description:    'some description',
+        created_at:     "2020-01-01",
+        description:    "some description",
         contact_person: build(:contact_person, :alice),
-        sequencer:      'ngs',
-        hold_date:      '2020-02-01',
+        sequencer:      "ngs",
+        hold_date:      "2020-02-01",
         tpa:            true,
-        data_type:      'wgs',
+        data_type:      "wgs",
         entries_count:  101,
-        email_language: 'ja',
+        email_language: "ja",
 
         uploads: [
-          build(:upload, created_at: '2020-01-02 12:34:56', via: build(:webui_upload)),
-          build(:upload, created_at: '2020-01-03 12:34:56', via: build(:webui_upload))
+          build(:upload, created_at: "2020-01-02 12:34:56", via: build(:webui_upload)),
+          build(:upload, created_at: "2020-01-03 12:34:56", via: build(:webui_upload))
         ],
 
         other_people: [
@@ -106,10 +106,10 @@ RSpec.describe SubmissionMailer do
 
       mail = SubmissionMailer.with(submission:).curator_notification
 
-      expect(mail).to deliver_from('Admin <mssform@example.com>')
-      expect(mail).to deliver_to('Admin <mssform@example.com>')
+      expect(mail).to deliver_from("Admin <mssform@example.com>")
+      expect(mail).to deliver_to("Admin <mssform@example.com>")
 
-      expect(mail).to have_subject('[DDBJ:NSUB000042] WGS: Whole Genome Shotgun')
+      expect(mail).to have_subject("[DDBJ:NSUB000042] WGS: Whole Genome Shotgun")
 
       expect(mail).to have_body_text(<<~BODY)
         ## mass-id
