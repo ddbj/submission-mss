@@ -8,6 +8,7 @@ gem "aws-sdk-s3"
 gem "bootsnap", require: false
 gem "dalli"
 gem "enumerize"
+gem "fetch-api"
 gem "google-apis-sheets_v4"
 gem "googleauth"
 gem "http"
