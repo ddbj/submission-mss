@@ -1,5 +1,3 @@
-require "open-uri"
-
 class DfastExtraction < ApplicationRecord
   class ExtractionError < StandardError
     def initialize(id, **data)
@@ -33,27 +31,27 @@ class DfastExtraction < ApplicationRecord
   private
 
   def fetch_and_copy_files(job_id)
-    URI.parse("https://dfast.ddbj.nig.ac.jp/analysis/download/#{job_id}/ddbj_submission.zip").open do |body|
-      zip = Zip::InputStream.new(body)
+    res = Fetch::API.fetch("https://dfast.ddbj.nig.ac.jp/analysis/download/#{job_id}/ddbj_submission.zip")
 
-      while entry = zip.get_next_entry
-        next unless entry.name.end_with?(".ann", ".fasta")
+    raise ExtractionError.new(:failed_to_fetch, job_id:, reason: "#{res.status} #{res.status_text}") unless res.ok
 
-        dest_name = normalize_path(entry.name)
+    zip = Zip::InputStream.new(StringIO.new(res.body))
 
-        working_dir.join(dest_name).open "w" do |dest|
-          IO.copy_stream entry.get_input_stream, dest
+    while entry = zip.get_next_entry
+      next unless entry.name.end_with?(".ann", ".fasta")
 
-          files.create!(
-            name:         dest_name,
-            parsing:      true,
-            dfast_job_id: job_id
-          )
-        end
+      dest_name = normalize_path(entry.name)
+
+      working_dir.join(dest_name).open "w" do |dest|
+        IO.copy_stream entry.get_input_stream, dest
+
+        files.create!(
+          name:         dest_name,
+          parsing:      true,
+          dfast_job_id: job_id
+        )
       end
     end
-  rescue OpenURI::HTTPError => e
-    raise ExtractionError.new(:failed_to_fetch, job_id:, reason: e.io.status.join(" "))
   end
 
   def normalize_path(path)
