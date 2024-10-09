@@ -11,7 +11,6 @@ RSpec.configure do |config|
             MSSFORM_URL:                 "http://mssform.example.com",
             MSS_WORKING_LIST_SHEET_ID:   "SHEET_ID",
             MSS_WORKING_LIST_SHEET_NAME: "SHEET_NAME",
-            OPENID_CLIENT_ID:            "CLIENT_ID",
             STAGE:                       nil,
             SUBMISSIONS_DIR:             submissions_dir
           }

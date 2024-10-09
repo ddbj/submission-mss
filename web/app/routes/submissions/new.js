@@ -6,7 +6,7 @@ export default class SubmissionsNewRoute extends Route {
 
   model() {
     return this.store.createRecord('submission', {
-      contactPerson: this.store.createRecord('contact-person')
+      contactPerson: this.store.createRecord('contact-person'),
     });
   }
 }

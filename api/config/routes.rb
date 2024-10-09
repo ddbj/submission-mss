@@ -1,7 +1,14 @@
 Rails.application.routes.draw do
   root to: redirect("/web")
 
+  resource :auth, only: %i[] do
+    get :login
+    get :callback
+  end
+
   scope :api do
+    resource :me, only: %i[show]
+
     resources :submissions, only: %i[index show create], param: :mass_id do
       collection do
         get :last_submitted

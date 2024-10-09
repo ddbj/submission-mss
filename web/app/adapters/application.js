@@ -1,16 +1,20 @@
-import ActiveModelAdapter from 'active-model-adapter';
 import { service } from '@ember/service';
 
-export default class ApplicationAdapter extends ActiveModelAdapter {
-  @service session;
+import ActiveModelAdapter from 'active-model-adapter';
 
-  namespace = '/api';
+import ENV from 'mssform/config/environment';
+
+const url = new URL(ENV.apiURL);
+
+export default class ApplicationAdapter extends ActiveModelAdapter {
+  @service currentUser;
+
+  host = url.origin;
+  namespace = url.pathname.replace(/^\//, '');
 
   get headers() {
-    if (!this.session.isAuthenticated) { throw new Error('unauthenticated'); }
-
     return {
-      Authorization: `Bearer ${this.session.idToken}`
+      Authorization: `Bearer ${this.currentUser.apiKey}`,
     };
   }
 }

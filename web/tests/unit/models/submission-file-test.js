@@ -7,16 +7,16 @@ module('Unit | Model | submission file', function(hooks) {
   setupTest(hooks);
 
   test('invalid filename', async function(assert) {
-    const file     = new File([''], 'こんにちは.ann');
-    const {errors} = SubmissionFile.fromRawFile(file);
+    const file       = new File([''], 'こんにちは.ann');
+    const { errors } = SubmissionFile.fromRawFile(file);
 
-    assert.deepEqual(errors, [{id: 'submission-file.invalid-filename'}]);
+    assert.deepEqual(errors, [{ id: 'submission-file.invalid-filename' }]);
   });
 
   test('unsupported filetype', async function(assert) {
-    const file     = new File([''], 'foo.txt');
-    const {errors} = SubmissionFile.fromRawFile(file);
+    const file       = new File([''], 'foo.txt');
+    const { errors } = SubmissionFile.fromRawFile(file);
 
-    assert.deepEqual(errors, [{id: 'submission-file.unsupported-filetype'}]);
+    assert.deepEqual(errors, [{ id: 'submission-file.unsupported-filetype' }]);
   });
 });

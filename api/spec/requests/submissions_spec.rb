@@ -8,16 +8,10 @@ RSpec.describe "submissions", type: :request do
 
     let(:default_headers) {
       {
-        Authorization: "Bearer TOKEN",
+        Authorization: "Bearer #{user.api_key}",
         Accept:        "application/json"
       }
     }
-
-    before do
-      expect(JWT).to receive(:decode) {
-        [ user.id_token, nil ]
-      }
-    end
 
     example "normal case" do
       create :submission, mass_id: "NSUB000042", user: user

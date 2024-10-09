@@ -1,13 +1,7 @@
 import Controller from '@ember/controller';
-import { action } from '@ember/object';
-import { service } from '@ember/service';
+
+import ENV from 'mssform/config/environment';
 
 export default class IndexController extends Controller {
-  @service appauth;
-  @service router;
-
-  @action
-  authenticate() {
-    this.appauth.makeAuthorizationRequest(this.router.currentURL);
-  }
+  authorizeUrl = new URL('/auth/login', ENV.apiURL).href;
 }

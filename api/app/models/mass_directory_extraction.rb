@@ -41,9 +41,7 @@ class MassDirectoryExtraction < ApplicationRecord
   private
 
   def user_mass_dir
-    username = user.id_token.fetch(:preferred_username)
-
-    ENV.fetch("MASS_DIR_PATH_TEMPLATE").gsub("{user}", username).tap { |path|
+    ENV.fetch("MASS_DIR_PATH_TEMPLATE").gsub("{user}", user.uid).tap { |path|
       raise "malformed directory path: #{path}" unless path == File.expand_path(path)
     }.then { Pathname.new(_1) }
   end

@@ -23,8 +23,8 @@ RSpec.describe SubmissionMailer do
       mail = SubmissionMailer.with(submission:).submitter_confirmation
 
       expect(mail).to deliver_from("Admin <mssform@example.com>")
-      expect(mail).to deliver_to("alice+idp@example.com")
-      expect(mail).to cc_to("Alice Liddell <alice+contact@foo.example.com>", "Bob <bob@bar.example.com>", "Carol <carol@baz.example.com>")
+      expect(mail).to deliver_to("alice@example.com")
+      expect(mail).to cc_to("Alice Liddell <alice+contact@example.com>", "Bob <bob@bar.example.com>", "Carol <carol@baz.example.com>")
 
       expect(mail).to have_subject("[DDBJ:NSUB000042] WGS: Whole Genome Shotgun")
 
@@ -62,14 +62,14 @@ RSpec.describe SubmissionMailer do
     end
 
     example "allowed domains" do
-      ClimateControl.modify MAIL_ALLOWED_DOMAINS: "foo.example.com,baz.example.com" do
+      ClimateControl.modify MAIL_ALLOWED_DOMAINS: "example.com,baz.example.com" do
         submission = create_submission(email_language: "ja")
 
         mail = SubmissionMailer.with(submission:).submitter_confirmation
 
         expect(mail).to deliver_from("Admin <mssform@example.com>")
-        expect(mail).to deliver_to("alice+idp@example.com")
-        expect(mail).to cc_to("Alice Liddell <alice+contact@foo.example.com>", "Carol <carol@baz.example.com>")
+        expect(mail).to deliver_to("alice@example.com")
+        expect(mail).to cc_to("Alice Liddell <alice+contact@example.com>", "Carol <carol@baz.example.com>")
       end
     end
   end
@@ -122,7 +122,7 @@ RSpec.describe SubmissionMailer do
         some description
 
         ## contact_email
-        alice+contact@foo.example.com
+        alice+contact@example.com
 
         ## contact_person_name
         Alice Liddell
@@ -134,10 +134,10 @@ RSpec.describe SubmissionMailer do
         Bob <bob@bar.example.com>; Carol <carol@baz.example.com>
 
         ## D-way_account
-        alice-liddell
+        alice
 
         ## D-way_account_email
-        alice+idp@example.com
+        alice@example.com
 
         ## data_arrival_date
         20200102-123456: /path/to/submissions/NSUB000042/20200102-123456

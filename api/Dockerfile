@@ -7,26 +7,13 @@
 ARG NODE_VERSION
 ARG RUBY_VERSION
 
-FROM curlimages/curl:8.9.1 AS openid-configuration
-
-ARG OPENID_CONFIGURATION_ENDPOINT
-
-WORKDIR /app/config/
-RUN curl ${OPENID_CONFIGURATION_ENDPOINT:?} > ./openid-configuration.json
-
 FROM node:${NODE_VERSION:?} AS web
 
 ARG MASS_DIR_PATH_TEMPLATE
-ARG OPENID_CLIENT_ID
 
 ENV MASS_DIR_PATH_TEMPLATE=${MASS_DIR_PATH_TEMPLATE:?}
-ENV OPENID_CLIENT_ID=${OPENID_CLIENT_ID:?}
 
 RUN corepack enable pnpm
-
-WORKDIR /app/config/
-COPY ./config/ ./
-COPY --from=openid-configuration /app/config/openid-configuration.json ./
 
 WORKDIR /app/web/
 COPY ./web/ ./
@@ -35,10 +22,6 @@ RUN pnpm build
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
-
-WORKDIR /app/config/
-COPY ./config/ ./
-COPY --from=openid-configuration /app/config/openid-configuration.json ./
 
 # Rails app lives here
 WORKDIR /app/api

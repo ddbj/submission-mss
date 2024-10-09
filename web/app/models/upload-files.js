@@ -7,24 +7,24 @@ export default class UploadFiles {
   @tracked currentUpload = null;
 
   constructor(files) {
-    this.uploads = files.map(file => new UploadFile(file));
+    this.uploads = files.map((file) => new UploadFile(file));
   }
 
   get totalSize() {
-    return this.uploads.reduce((acc, {file}) => acc + file.size, 0);
+    return this.uploads.reduce((acc, { file }) => acc + file.size, 0);
   }
 
   get uploadedSize() {
-    return this.uploads.reduce((acc, {uploadedSize}) => acc + uploadedSize, 0);
+    return this.uploads.reduce((acc, { uploadedSize }) => acc + uploadedSize, 0);
   }
 
-  async perform(session) {
+  async perform(currentUser) {
     const blobs = [];
 
     for (const upload of this.uploads) {
       this.currentUpload = upload;
 
-      blobs.push(await upload.perform(session));
+      blobs.push(await upload.perform(currentUser));
     }
 
     return blobs;
@@ -40,24 +40,27 @@ class UploadFile {
     this.file = file;
   }
 
-  perform(session) {
-    const upload = new DirectUpload(this.file.rawFile, '/api/direct_uploads', {
-      directUploadWillCreateBlobWithXHR: async (xhr) => {
-        await session.renewToken();
+  perform(currentUser) {
+    const upload = new DirectUpload(
+      this.file.rawFile,
+      '/api/direct_uploads',
+      {
+        directUploadWillCreateBlobWithXHR: (xhr) => {
+          xhr.setRequestHeader('Authorization', `Bearer ${currentUser.apiKey}`);
+        },
 
-        xhr.setRequestHeader('Authorization', `Bearer ${session.idToken}`);
+        directUploadWillStoreFileWithXHR: (xhr) => {
+          xhr.upload.addEventListener('loadstart', () => {
+            this.isStarted = true;
+          });
+
+          xhr.upload.addEventListener('progress', ({ loaded }) => {
+            this.uploadedSize = loaded;
+          });
+        },
       },
-
-      directUploadWillStoreFileWithXHR: (xhr) => {
-        xhr.upload.addEventListener('loadstart', () => {
-          this.isStarted = true;
-        });
-
-        xhr.upload.addEventListener('progress', ({loaded}) => {
-          this.uploadedSize = loaded;
-        });
-      }
-    }, this.file.checksum);
+      this.file.checksum,
+    );
 
     return upload.create();
   }

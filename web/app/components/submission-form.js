@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 
 export default class SubmissionFormComponent extends Component {
   @service router;
-  @service session;
 
   state = new State();
   nav   = new Navigation();
@@ -22,7 +21,7 @@ class Navigation {
     'files',
     'metadata',
     'confirm',
-    'complete'
+    'complete',
   ];
 
   @tracked stepIndex = 0;
@@ -52,9 +51,9 @@ class Navigation {
   }
 
   @action gotoStep(step) {
-    if (this.currentStep === 'complete')                  { return; }
-    if (step === this.currentStep)                        { return; }
-    if (this.isFollowing(step) && step !== this.nextStep) { return; }
+    if (this.currentStep === 'complete') return;
+    if (step === this.currentStep) return;
+    if (this.isFollowing(step) && step !== this.nextStep) return;
 
     this.stepIndex = this.steps.indexOf(step);
 

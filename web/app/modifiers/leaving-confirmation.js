@@ -1,8 +1,6 @@
 import { modifier } from 'ember-modifier';
 
-export default modifier((_element, _positional, {disabled}) => {
-  if (disabled) { return; }
-
+export default modifier(() => {
   function preventUnload(event) {
     event.preventDefault();
     event.returnValue = '';

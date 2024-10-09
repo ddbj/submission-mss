@@ -5,15 +5,12 @@ import { action } from '@ember/object';
 import { dropTask } from 'ember-concurrency';
 import { service } from '@ember/service';
 
-import { handleAppAuthHTTPError, handleAdapterError } from 'mssform/utils/error-handler';
-
 export default class SubmissionFormFilesComponent extends Component {
   @service store;
-  @service session;
 
   get crossoverErrors() {
-    const {files} = this.args.state;
-    const errors  = new Map();
+    const { files } = this.args.state;
+    const errors    = new Map();
 
     for (const file of files) {
       errors.set(file, []);
@@ -26,66 +23,58 @@ export default class SubmissionFormFilesComponent extends Component {
   }
 
   get isNextButtonEnabled() {
-    const {uploadVia} = this.args.model;
-    const {files}     = this.args.state;
+    const { uploadVia } = this.args.model;
+    const { files }     = this.args.state;
 
-    if (!uploadVia)    { return false; }
-    if (!files.length) { return false; }
+    if (!uploadVia) return false;
+    if (!files.length) return false;
 
     for (const file of files) {
-      if (file.isParsing || file.errors.length) { return false; }
+      if (file.isParsing || file.errors.length) return false;
     }
 
     for (const errs of this.crossoverErrors.values()) {
-      if (errs.length) { return false; }
+      if (errs.length) return false;
     }
 
     return true;
   }
 
   @action setUploadVia(val) {
-    const {model, state} = this.args;
+    const { model, state } = this.args;
 
     model.uploadVia    = val;
     model.extractionId = null;
     state.files        = [];
   }
 
-  @action onExtractProgress({id, files}) {
-    const {model, state} = this.args;
+  @action onExtractProgress({ id, files }) {
+    const { model, state } = this.args;
 
     model.extractionId = id;
     state.files        = files;
   }
 
   @action addFile(file) {
-    const {state} = this.args;
+    const { state } = this.args;
 
     state.files = [...state.files, file];
   }
 
   @action removeFile(file) {
-    const {state} = this.args;
+    const { state } = this.args;
 
-    state.files = state.files.filter(f => f !== file);
+    state.files = state.files.filter((f) => f !== file);
   }
 
   @dropTask *goNext() {
-    try {
-      yield this.session.renewToken();
-    } catch (e) {
-      handleAppAuthHTTPError(e, this.session);
-      return;
-    }
-
     try {
       yield this.fillDataFromLastSubmission();
     } catch (e) {
       if (e instanceof NotFoundError) {
         // do nothing
       } else {
-        handleAdapterError(e, this.session);
-        return;
+        throw e;
       }
     }
 
@@ -95,11 +84,13 @@ export default class SubmissionFormFilesComponent extends Component {
   }
 
   async fillDataFromLastSubmission() {
-    const last = await this.store.queryRecord('submission', {lastSubmitted: true});
+    const last = await this.store.queryRecord('submission', {
+      lastSubmitted: true,
+    });
 
-    if (!last) { return; }
+    if (!last) return;
 
-    const {model} = this.args;
+    const { model } = this.args;
 
     model.contactPerson.email       = last.contactPerson.email;
     model.contactPerson.fullName    = last.contactPerson.fullName;
@@ -110,7 +101,7 @@ export default class SubmissionFormFilesComponent extends Component {
         model.otherPeople.createRecord({
           email:       person.email,
           fullName:    person.fullName,
-          affiliation: person.affiliation
+          affiliation: person.affiliation,
         });
       }
     }
@@ -125,16 +116,16 @@ export default class SubmissionFormFilesComponent extends Component {
   }
 
   fillDataFromSubmissionFiles() {
-    const {state, model} = this.args;
-    const {files}        = state;
+    const { state, model } = this.args;
+    const { files }        = state;
 
-    const {contactPerson, holdDate} = files.find(({isAnnotation}) => isAnnotation).parsedData;
+    const { contactPerson, holdDate } = files.find(({ isAnnotation }) => isAnnotation).parsedData;
 
     Object.assign(model.contactPerson, contactPerson || {});
 
     model.holdDate = holdDate;
 
-    model.entriesCount = files.filter(({isSequence}) => isSequence).reduce((acc, file) => {
+    model.entriesCount = files.filter(({ isSequence }) => isSequence).reduce((acc, file) => {
       return acc + file.parsedData.entriesCount;
     }, 0);
   }
@@ -151,46 +142,46 @@ function validatePair(errors, files) {
     const [annotations, sequences] = files.reduce(([ann, seq], file) => {
       return [
         file.isAnnotation ? [...ann, file] : ann,
-        file.isSequence   ? [...seq, file] : seq
+        file.isSequence   ? [...seq, file] : seq,
       ];
     }, [[], []]);
 
     if (!annotations.length) {
       for (const file of sequences) {
-        errors.get(file).push({id: 'submission-form.files.errors.no-annotation'});
+        errors.get(file).push({ id: 'submission-form.files.errors.no-annotation' });
       }
     }
 
     if (annotations.length > 1) {
       for (const file of annotations) {
-        errors.get(file).push({id: 'submission-form.files.errors.duplicate-annotations'});
+        errors.get(file).push({ id: 'submission-form.files.errors.duplicate-annotations' });
       }
     }
 
     if (!sequences.length) {
       for (const file of annotations) {
-        errors.get(file).push({id: 'submission-form.files.errors.no-sequence'});
+        errors.get(file).push({ id: 'submission-form.files.errors.no-sequence' });
       }
     }
 
     if (sequences.length > 1) {
       for (const file of sequences) {
-        errors.get(file).push({id: 'submission-form.files.errors.duplicate-sequences'});
+        errors.get(file).push({ id: 'submission-form.files.errors.duplicate-sequences' });
       }
     }
   }
 }
 
 function validateSameness(errors, files) {
-  files = files.filter(({isAnnotation, isParseSucceeded}) => isAnnotation && isParseSucceeded);
+  files = files.filter(({ isAnnotation, isParseSucceeded }) => isAnnotation && isParseSucceeded);
 
-  if (!files.length) { return []; }
+  if (!files.length) return [];
 
   const contactPersonSet = new Set();
   const holdDateSet      = new Set();
 
   for (const file of files) {
-    const {contactPerson, holdDate} = file.parsedData;
+    const { contactPerson, holdDate } = file.parsedData;
 
     contactPersonSet.add(JSON.stringify(contactPerson));
     holdDateSet.add(holdDate);
@@ -198,13 +189,13 @@ function validateSameness(errors, files) {
 
   if (contactPersonSet.size > 1) {
     for (const file of files) {
-      errors.get(file).push({id: 'submission-form.files.errors.different-contact-person'});
+      errors.get(file).push({ id: 'submission-form.files.errors.different-contact-person' });
     }
   }
 
   if (holdDateSet.size > 1) {
     for (const file of files) {
-      errors.get(file).push({id: 'submission-form.files.errors.different-hold-date'});
+      errors.get(file).push({ id: 'submission-form.files.errors.different-hold-date' });
     }
   }
 }
