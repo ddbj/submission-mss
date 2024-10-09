@@ -1,9 +1,9 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 export default class Submission extends Model {
-  @belongsTo('contact-person', {async: false, inverse: null}) contactPerson;
+  @belongsTo('contact-person', { async: false, inverse: null }) contactPerson;
 
-  @hasMany('other-person', {async: false, inverse: null}) otherPeople;
+  @hasMany('other-person', { async: false, inverse: null }) otherPeople;
 
   @attr('boolean') tpa;
   @attr('string')  uploadVia;
@@ -17,7 +17,7 @@ export default class Submission extends Model {
   @attr('string')  emailLanguage;
 
   // readonly attributes
-  @hasMany('upload', {async: false, inverse: 'submission'}) uploads;
+  @hasMany('upload', { async: false, inverse: 'submission' }) uploads;
 
   @attr('string') status;
   @attr           accessions;

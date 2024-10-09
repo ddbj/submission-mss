@@ -6,32 +6,19 @@ const funnel = require('broccoli-funnel');
 
 module.exports = function (defaults) {
   const app = new EmberApp(defaults, {
+    'ember-cli-babel': {
+      enableTypeScriptTransform: true,
+    },
+
     babel: {
       plugins: [
         require.resolve('ember-concurrency/async-arrow-task-transform'),
       ],
     },
 
-    // https://github.com/embroider-build/ember-auto-import/issues/126#issuecomment-889724104
-    autoImport: {
-      webpack: {
-        resolve: {
-          fallback: {
-            fs: false
-          }
-        }
-      }
-    },
-
-    'ember-simple-auth': {
-      useSessionSetupMethod: true
-    },
-
     svgJar: {
-      sourceDirs: [
-        'node_modules/@primer/octicons/build/svg'
-      ]
-    }
+      sourceDirs: ['node_modules/@primer/octicons/build/svg'],
+    },
   });
 
   app.import('node_modules/@primer/octicons/build/build.css');
@@ -40,7 +27,7 @@ module.exports = function (defaults) {
   const sourcemaps = funnel('node_modules/bootstrap', {
     srcDir:  'dist/css',
     destDir: 'assets',
-    include: ['bootstrap.css.map']
+    include: ['bootstrap.css.map'],
   });
 
   return app.toTree([sourcemaps]);

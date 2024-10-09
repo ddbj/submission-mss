@@ -11,7 +11,7 @@ export default class MassDirectoryExtractorComponent extends Component {
   fetchFiles = modifier(async () => {
     const extraction = await MassDirectoryExtraction.create(getOwner(this));
 
-    await extraction.pollForResult(payload => {
+    await extraction.pollForResult((payload) => {
       this.files = payload.files;
 
       this.args?.onPoll(payload);
