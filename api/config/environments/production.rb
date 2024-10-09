@@ -103,5 +103,5 @@ Rails.application.configure do
     user_name:      ENV.fetch("SMTP_USERNAME"),
     password:       ENV.fetch("SMTP_PASSWORD"),
     authentication: ENV.fetch("SMTP_AUTHENTICATION")
-  }
+  }.compact_blank
 end
