@@ -1,28 +1,33 @@
 import { service } from '@ember/service';
 import { setOwner } from '@ember/application';
 
+import { safeFetchWithModal } from 'mssform/utils/safe-fetch';
+
 export default class DfastExtraction {
   static async create(owner, ids) {
-    const fetchService = owner.lookup('service:fetch');
+    const currentUser = owner.lookup('service:current-user');
+    const errorModal = owner.lookup('service:error-modal');
 
-    const res = await fetchService.request(`/api/dfast_extractions`, {
+    const res = await safeFetchWithModal(`/api/dfast_extractions`, {
       method: 'POST',
 
       headers: {
-        'Content-Type': 'application/json'
+        ...currentUser.authorizationHeader,
+        'Content-Type': 'application/json',
       },
 
       body: JSON.stringify({
-        ids
-      })
-    });
+        ids,
+      }),
+    }, errorModal);
 
-    const {_self: url} = await res.json();
+    const { _self: url } = await res.json();
 
     return new DfastExtraction(owner, url);
   }
 
-  @service fetch;
+  @service currentUser;
+  @service errorModal;
 
   constructor(owner, url) {
     setOwner(this, owner);
@@ -32,14 +37,17 @@ export default class DfastExtraction {
 
   async pollForResult(callback, onError) {
     for (;;) {
-      const res     = await this.fetch.request(this.url);
+      const res = await safeFetchWithModal(this.url, {
+        headers: this.currentUser.authorizationHeader,
+      }, this.errorModal);
+
       const payload = await res.json();
 
       callback(payload);
 
       switch (payload.state) {
         case 'pending':
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise((resolve) => setTimeout(resolve, 1000));
           continue;
         case 'fulfilled':
           return;

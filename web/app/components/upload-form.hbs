@@ -10,7 +10,7 @@
   {{t 'upload-form.description-html' massId=@model.id htmlSafe=true}}
 
   <UploadProgressModal as |modal|>
-    <form {{on 'submit' (prevent-default (fn this.submit modal))}} {{leaving-confirmation disabled=this.session.leavingConfirmationDisabled}}>
+    <form {{on 'submit' (prevent-default (fn this.submit modal))}} {{leaving-confirmation}}>
       <div class="vstack gap-3">
         <div class="card">
           <div class="card-body">

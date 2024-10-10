@@ -1,4 +1,4 @@
-addEventListener('message', async ({data: {file}}) => {
+addEventListener('message', async ({ data: { file } }) => {
   try {
     const payload = await parse(file);
 
@@ -17,7 +17,7 @@ async function parse(file) {
   let entriesCount = 0;
   let isBOL        = true;
 
-  while (({done, value: chunk} = await reader.read()), !done) {
+  while ((({ done, value: chunk } = await reader.read()), !done)) {
     for (const byte of chunk) {
       if (isBOL && byte === gt) {
         entriesCount++;
@@ -28,9 +28,9 @@ async function parse(file) {
     }
   }
 
-  if (!entriesCount) { throw new Error(JSON.stringify({id: 'sequence-file-parser.no-entries'})); }
+  if (!entriesCount) throw new Error(JSON.stringify({ id: 'sequence-file-parser.no-entries' }));
 
-  return {entriesCount};
+  return { entriesCount };
 }
 
 const lf = '\n'.codePointAt(0);

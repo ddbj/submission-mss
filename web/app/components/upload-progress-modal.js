@@ -9,7 +9,7 @@ import Modal from 'bootstrap/js/src/modal';
 import UploadFiles from 'mssform/models/upload-files';
 
 export default class UploadProgressModalComponent extends Component {
-  @service session;
+  @service currentUser;
 
   @tracked uploadFiles;
 
@@ -22,7 +22,7 @@ export default class UploadProgressModalComponent extends Component {
   }
 
   async performUpload(files) {
-    if (!files.length) { return []; }
+    if (!files.length) return [];
 
     this.uploadFiles = new UploadFiles(files);
 
@@ -31,7 +31,7 @@ export default class UploadProgressModalComponent extends Component {
     let blobs;
 
     try {
-      blobs = await this.uploadFiles.perform(this.session);
+      blobs = await this.uploadFiles.perform(this.currentUser);
     } finally {
       this.modal.hide();
     }

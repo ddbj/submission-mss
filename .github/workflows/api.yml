@@ -31,7 +31,6 @@ jobs:
       PGHOST: localhost
       PGUSER: postgres
       RAILS_ENV: test
-      TZ: Japan
 
     steps:
       - uses: actions/checkout@v4
@@ -41,7 +40,6 @@ jobs:
           bundler-cache: true
           working-directory: api
 
-      - run: ln -s openid-configuration.local.json ../config/openid-configuration.json
       - run: bin/rails db:test:prepare
       - run: bundle exec rspec
 

@@ -1,15 +1,13 @@
 class User < ApplicationRecord
-  class SymbolizedJson < ActiveRecord::Type::Json
-    def deserialize(...)
-      super(...)&.symbolize_keys
-    end
+  def self.generate_api_key
+    "mssform_#{Base62.encode(SecureRandom.random_number(2 ** 256))}"
   end
 
-  has_many :submissions, dependent: :destroy
-  has_many :extractions, dependent: :destroy
+  has_many :submissions,                dependent: :destroy
+  has_many :dfast_extractions,          dependent: :destroy
+  has_many :mass_directory_extractions, dependent: :destroy
 
-  has_many :dfast_extractions
-  has_many :mass_directory_extractions
-
-  attribute :id_token, SymbolizedJson.new
+  before_create do |user|
+    user.api_key = self.class.generate_api_key
+  end
 end

@@ -3,5 +3,5 @@ class DirectUploadsController < ActiveStorage::DirectUploadsController
 
   skip_forgery_protection only: :create
 
-  before_action :require_authentication
+  before_action :authenticate
 end

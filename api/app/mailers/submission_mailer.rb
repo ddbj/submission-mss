@@ -4,7 +4,7 @@ class SubmissionMailer < ApplicationMailer
 
     I18n.with_locale @submission.email_language do
       mail(
-        to:      email_address_with_name(*@submission.user.id_token.values_at(:email, :name)),
+        to:      @submission.user.email,
         cc:      filter_recipients_by_allowed_domains(@submission).map(&:email_address_with_name),
         subject: "[DDBJ:#{@submission.mass_id}] #{@submission.data_type_text}"
       )

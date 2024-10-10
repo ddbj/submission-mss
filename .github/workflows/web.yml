@@ -24,5 +24,4 @@ jobs:
           cache-dependency-path: web/pnpm-lock.yaml
 
       - run: pnpm install --frozen-lockfile
-      - run: ln -s openid-configuration.local.json ../config/openid-configuration.json
       - run: pnpm test

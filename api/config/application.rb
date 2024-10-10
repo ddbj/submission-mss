@@ -39,9 +39,11 @@ module MSSForm
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
+    config.api_only = true
 
     config.active_storage.draw_routes = false
-    config.api_only                   = true
-    config.time_zone                  = ENV.fetch("TZ")
+    config.time_zone                  = "Japan"
+
+    config.x.oidc_issuer_url = ENV.fetch("OIDC_ISSUER_URL", "http://localhost:8080/realms/master")
   end
 end
