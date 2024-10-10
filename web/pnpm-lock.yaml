@@ -12,8 +12,8 @@ importers:
         specifier: ^7.25.8
         version: 7.25.8
       '@babel/eslint-parser':
-        specifier: ^7.25.7
-        version: 7.25.7(@babel/core@7.25.8)(eslint@8.57.1)
+        specifier: ^7.25.8
+        version: 7.25.8(@babel/core@7.25.8)(eslint@8.57.1)
       '@babel/plugin-proposal-decorators':
         specifier: ^7.25.7
         version: 7.25.7(@babel/core@7.25.8)
@@ -230,8 +230,8 @@ packages:
     resolution: {integrity: sha512-Oixnb+DzmRT30qu9d3tJSQkxuygWm32DFykT4bRoORPa9hZ/L4KhVB/XiRm6KG+roIEM7DBQlmg27kw2HZkdZg==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/eslint-parser@7.25.7':
-    resolution: {integrity: sha512-B+BO9x86VYsQHimucBAL1fxTJKF4wyKY6ZVzee9QgzdZOUfs3BaR6AQrgoGrRI+7IFS1wUz/VyQ+SoBcSpdPbw==}
+  '@babel/eslint-parser@7.25.8':
+    resolution: {integrity: sha512-Po3VLMN7fJtv0nsOjBDSbO1J71UhzShE9MuOSkWEV9IZQXzhZklYtzKZ8ZD/Ij3a0JBv1AG3Ny2L3jvAHQVOGg==}
     engines: {node: ^10.13.0 || ^12.13.0 || >=14.0.0}
     peerDependencies:
       '@babel/core': ^7.11.0
@@ -6866,7 +6866,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/eslint-parser@7.25.7(@babel/core@7.25.8)(eslint@8.57.1)':
+  '@babel/eslint-parser@7.25.8(@babel/core@7.25.8)(eslint@8.57.1)':
     dependencies:
       '@babel/core': 7.25.8
       '@nicolo-ribaudo/eslint-scope-5-internals': 5.1.1-v1
@@ -11271,7 +11271,7 @@ snapshots:
   ember-eslint-parser@0.5.2(@babel/core@7.25.8)(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1):
     dependencies:
       '@babel/core': 7.25.8
-      '@babel/eslint-parser': 7.25.7(@babel/core@7.25.8)(eslint@8.57.1)
+      '@babel/eslint-parser': 7.25.8(@babel/core@7.25.8)(eslint@8.57.1)
       '@glimmer/syntax': 0.92.0
       content-tag: 2.0.1
       eslint-scope: 7.2.2
@@ -11448,7 +11448,7 @@ snapshots:
 
   ember-simple-auth@6.1.0(@babel/core@7.25.8)(@ember/test-helpers@4.0.4(@babel/core@7.25.8)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.25.8))(rsvp@4.8.5)(webpack@5.95.0)))(eslint@8.57.1):
     dependencies:
-      '@babel/eslint-parser': 7.25.7(@babel/core@7.25.8)(eslint@8.57.1)
+      '@babel/eslint-parser': 7.25.8(@babel/core@7.25.8)(eslint@8.57.1)
       '@ember/test-waiters': 3.1.0
       '@embroider/addon-shim': 1.8.9
       '@embroider/macros': 1.16.2
