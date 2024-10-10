@@ -34,7 +34,9 @@ class AuthsController < ApplicationController
 
     access_token = oidc_client.access_token!(code_verifier:)
     userinfo     = access_token.userinfo!
-    user         = User.find_or_create_by!(uid: userinfo.preferred_username)
+    user         = User.find_or_initialize_by(uid: userinfo.preferred_username)
+
+    user.update! email: userinfo.email
 
     cookies[:api_key] = user.api_key
 
