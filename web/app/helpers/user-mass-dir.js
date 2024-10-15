@@ -2,15 +2,9 @@ import Helper from '@ember/component/helper';
 import { service } from '@ember/service';
 
 export default class UserMassDir extends Helper {
-  @service session;
+  @service currentUser;
 
   compute() {
-    const {idTokenPayload} = this.session;
-
-    if (!idTokenPayload) { return null; }
-
-    const {preferred_username} = idTokenPayload;
-
-    return `/submission/${preferred_username}/mass`;
+    return `/submission/${this.currentUser.uid}/mass`;
   }
 }

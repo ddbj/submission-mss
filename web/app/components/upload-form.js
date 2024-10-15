@@ -3,10 +3,11 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { handleUploadError } from 'mssform/utils/error-handler';
+import { safeFetchWithModal } from 'mssform/utils/safe-fetch';
 
 export default class UploadFormComponent extends Component {
-  @service fetch;
+  @service currentUser;
+  @service errorModal;
 
   @tracked uploadVia       = null;
   @tracked extractionId    = null;
@@ -15,13 +16,13 @@ export default class UploadFormComponent extends Component {
   @tracked crossoverErrors = new Map(); // always empty
 
   get isSubmitButtonEnabled() {
-    const {uploadVia, files} = this;
+    const { uploadVia, files } = this;
 
-    if (!uploadVia)    { return false; }
-    if (!files.length) { return false; }
+    if (!uploadVia) return false;
+    if (!files.length) return false;
 
     for (const file of files) {
-      if (file.isParsing || file.errors.length) { return false; }
+      if (file.isParsing || file.errors.length) return false;
     }
 
     return true;
@@ -33,7 +34,7 @@ export default class UploadFormComponent extends Component {
     this.extractionId = null;
   }
 
-  @action onExtractProgress({id, files}) {
+  @action onExtractProgress({ id, files }) {
     this.extractionId = id;
     this.files        = files;
   }
@@ -43,40 +44,34 @@ export default class UploadFormComponent extends Component {
   }
 
   @action removeFile(file) {
-    this.files = this.files.filter(f => f !== file);
+    this.files = this.files.filter((f) => f !== file);
   }
 
   @action async submit(uploadProgressModal) {
     const attrs = {
-      via: this.uploadVia
+      via: this.uploadVia,
     };
 
     if (this.uploadVia == 'webui') {
-      let blobs;
+      const blobs = await uploadProgressModal.performUpload(this.files);
 
-      try {
-        blobs = await uploadProgressModal.performUpload(this.files);
-      } catch (e) {
-        handleUploadError(e, this.session);
-        return;
-      }
-
-      attrs.files = blobs.map(blob => blob.signed_id);
+      attrs.files = blobs.map((blob) => blob.signed_id);
     } else {
       attrs.extraction_id = this.extractionId;
     }
 
-    await this.fetch.request(`/api/submissions/${this.args.model.id}/uploads`, {
+    await safeFetchWithModal(`/api/submissions/${this.args.model.id}/uploads`, {
       method: 'POST',
 
       headers: {
-        'Content-Type': 'application/json'
+        ...this.currentUser.authorizationHeader,
+        'Content-Type': 'application/json',
       },
 
       body: JSON.stringify({
-        upload: attrs
-      })
-    });
+        upload: attrs,
+      }),
+    }, this.errorModal);
 
     this.isCompleted = true;
   }

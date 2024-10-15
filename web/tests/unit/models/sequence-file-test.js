@@ -10,7 +10,7 @@ module('Unit | Model | sequence file', function(hooks) {
 
   for (const newline of ['\n', '\r\n', '\r']) {
     test(`parse (newline: ${JSON.stringify(newline)})`, async function(assert) {
-      const raw = new File([outdent({newline})`
+      const raw = new File([outdent({ newline })`
         >CLN01
         ggacaggctgccgcaggagccaggccgggagcaggaagaggcttcgggggagccggagaa
         ctgggccagatgcgcttcgtgggcgaagcctgaggaaaaagagagtgaggcaggagaatc
@@ -23,8 +23,8 @@ module('Unit | Model | sequence file', function(hooks) {
         //
       `], 'foo.fasta');
 
-      const file           = new SequenceFile(raw);
-      const {entriesCount} = await file.parse();
+      const file = new SequenceFile(raw);
+      const { entriesCount } = await file.parse();
 
       assert.strictEqual(entriesCount, 2);
     });
@@ -36,8 +36,6 @@ module('Unit | Model | sequence file', function(hooks) {
     const file = new SequenceFile(raw);
     await file.parse();
 
-    assert.deepEqual(file.errors, [
-      {id: 'sequence-file-parser.no-entries', value: undefined}
-    ]);
+    assert.deepEqual(file.errors, [{ id: 'sequence-file-parser.no-entries', value: undefined }]);
   });
 });

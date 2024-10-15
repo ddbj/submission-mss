@@ -4,7 +4,7 @@ export class SubmissionFile {
   static get allowedExtensions() {
     return [
       ...AnnotationFile.extensions,
-      ...SequenceFile.extensions
+      ...SequenceFile.extensions,
     ];
   }
 
@@ -15,7 +15,7 @@ export class SubmissionFile {
   }
 
   static matchExtension(filename) {
-    return this.extensions.some(ext => filename.endsWith(ext)) && this;
+    return this.extensions.some((ext) => filename.endsWith(ext)) && this;
   }
 
   @tracked isParsing = false;
@@ -23,12 +23,12 @@ export class SubmissionFile {
   @tracked errors = [];
 
   constructor(file) {
-    const {name, type, lastModified} = file;
+    const { name, type, lastModified } = file;
 
-    this.rawFile = new File([file], name.replaceAll(/\s/g, '_'), {type, lastModified});
+    this.rawFile = new File([file], name.replaceAll(/\s/g, '_'), { type, lastModified });
 
     if (!/^((?![\\/:*?"<>|. ]])[ -~])*$/.test(this.basename)) {
-      this.errors = [...this.errors, {id: 'submission-file.invalid-filename'}];
+      this.errors = [...this.errors, { id: 'submission-file.invalid-filename' }];
     }
   }
 
@@ -45,13 +45,13 @@ export class SubmissionFile {
   }
 
   get basename() {
-    const {name, extname} = this;
+    const { name, extname } = this;
 
     return extname ? name.slice(0, -extname.length) : name;
   }
 
   get extname() {
-    return this.constructor.extensions.find(ext => this.name.endsWith(ext));
+    return this.constructor.extensions.find((ext) => this.name.endsWith(ext));
   }
 
   parse() {
@@ -60,12 +60,12 @@ export class SubmissionFile {
     return new Promise((resolve, reject) => {
       const worker = new Worker(this.constructor.parserURL);
 
-      worker.addEventListener('message', ({data: [err, payload]}) => {
+      worker.addEventListener('message', ({ data: [err, payload] }) => {
         if (err) {
           try {
-            const {id, value} = JSON.parse(err);
+            const { id, value } = JSON.parse(err);
 
-            this.errors = [...this.errors, {id, value}];
+            this.errors = [...this.errors, { id, value }];
 
             resolve();
           } catch (e) {
@@ -84,7 +84,7 @@ export class SubmissionFile {
         worker.terminate();
       });
 
-      worker.postMessage({file: this.rawFile});
+      worker.postMessage({ file: this.rawFile });
     }).finally(() => {
       this.isParsing = false;
     });
@@ -94,7 +94,7 @@ export class SubmissionFile {
     this.checksum = new Promise((resolve, reject) => {
       const worker = new Worker('/workers/calculate-digest.js');
 
-      worker.addEventListener('message', ({data: [err, digest]}) => {
+      worker.addEventListener('message', ({ data: [err, digest] }) => {
         if (err) {
           console.error(err);
 
@@ -106,7 +106,7 @@ export class SubmissionFile {
         worker.terminate();
       });
 
-      worker.postMessage({file: this.rawFile});
+      worker.postMessage({ file: this.rawFile });
     });
   }
 }
@@ -133,7 +133,7 @@ export class UnsupportedFile extends SubmissionFile {
 
     this.errors = [
       ...this.errors,
-      {id: 'submission-file.unsupported-filetype'}
+      { id: 'submission-file.unsupported-filetype' },
     ];
   }
 

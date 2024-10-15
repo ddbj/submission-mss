@@ -6,14 +6,6 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 module.exports = function (environment) {
-  const {
-    authorization_endpoint,
-    token_endpoint,
-    revocation_endpoint,
-    userinfo_endpoint,
-    end_session_endpoint,
-  } = JSON.parse(fs.readFileSync(path.join(__dirname, '../../config/openid-configuration.json')));
-
   const ENV = {
     modulePrefix: 'mssform',
     environment,
@@ -28,21 +20,12 @@ module.exports = function (environment) {
     },
 
     APP: {
-      enums: yaml.load(fs.readFileSync(path.join(__dirname, '../../config/enums.yml')))
+      // Here you can pass flags/options to your application instance
+      // when it is created
+      enums: yaml.load(fs.readFileSync(path.join(__dirname, '../../config/enums.yml'))),
     },
 
-    appauth: {
-      clientId: process.env.OPENID_CLIENT_ID,
-      redirectPath: '/auth/callback',
-
-      authorizationServiceConfiguration: {
-        authorization_endpoint,
-        token_endpoint,
-        revocation_endpoint,
-        userinfo_endpoint,
-        end_session_endpoint,
-      },
-    }
+    apiURL: process.env.API_URL,
   };
 
   if (environment === 'development') {

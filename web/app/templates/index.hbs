@@ -2,7 +2,7 @@
 
 {{t 'index.instructions-html' htmlSafe=true}}
 
-<a {{on 'click' (prevent-default this.authenticate)}} href class="btn btn-primary btn-lg">{{t 'index.login'}}</a>
+<a href={{this.authorizeUrl}} class="btn btn-primary btn-lg">{{t 'index.login'}}</a>
 
 <ul class="list-unstyled mt-3">
   <li>{{t 'index.reset-password-html' htmlSafe=true}}</li>

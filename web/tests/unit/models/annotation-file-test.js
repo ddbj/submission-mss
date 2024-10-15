@@ -10,7 +10,7 @@ module('Unit | Model | annotation file', function(hooks) {
 
   for (const newline of ['\n', '\r\n', '\r']) {
     test(`parse (newline: ${JSON.stringify(newline)})`, async function(assert) {
-      const file = new File([outdent({newline})`
+      const file = new File([outdent({ newline })`
 COMMON	SUBMITTER		contact	Alice Liddell
 			email	alice@example.com
 			institute	Wonderland Inc.
@@ -23,7 +23,7 @@ COMMON	SUBMITTER		contact	Alice Liddell
           email,
           affiliation,
         },
-        holdDate
+        holdDate,
       } = await new AnnotationFile(file).parse();
 
       assert.strictEqual(fullName,    'Alice Liddell');
@@ -33,18 +33,18 @@ COMMON	SUBMITTER		contact	Alice Liddell
     });
   }
 
-  test('empty' , async function(assert) {
+  test('empty', async function(assert) {
     const raw = new File([''], 'foo.ann');
 
     const file = new AnnotationFile(raw);
     await file.parse();
 
     assert.deepEqual(file.errors, [
-      {id: 'annotation-file-parser.missing-contact-person', value: undefined}
+      { id: 'annotation-file-parser.missing-contact-person', value: undefined },
     ]);
   });
 
-  test('missing contact person' , async function(assert) {
+  test('missing contact person', async function(assert) {
     const raw = new File([outdent`
 COMMON	DATE		hold_date	20231126
     `], 'foo.ann');
@@ -53,7 +53,7 @@ COMMON	DATE		hold_date	20231126
     await file.parse();
 
     assert.deepEqual(file.errors, [
-      {id: 'annotation-file-parser.missing-contact-person', value: undefined}
+      { id: 'annotation-file-parser.missing-contact-person', value: undefined },
     ]);
   });
 
@@ -66,7 +66,7 @@ COMMON	SUBMITTER		contact	Alice Liddell
     await file.parse();
 
     assert.deepEqual(file.errors, [
-      {id: 'annotation-file-parser.invalid-contact-person', value: undefined}
+      { id: 'annotation-file-parser.invalid-contact-person', value: undefined },
     ]);
   });
 
@@ -81,7 +81,7 @@ COMMON	SUBMITTER		contact	Alice Liddell
     await file.parse();
 
     assert.deepEqual(file.errors, [
-      {id: 'annotation-file-parser.invalid-email-address', value: 'foo'}
+      { id: 'annotation-file-parser.invalid-email-address', value: 'foo' },
     ]);
   });
 
@@ -95,7 +95,7 @@ COMMON	SUBMITTER		contact	Alice Liddell
     await file.parse();
 
     assert.deepEqual(file.errors, [
-      {id: 'annotation-file-parser.duplicate-contact-person-information', value: undefined}
+      { id: 'annotation-file-parser.duplicate-contact-person-information', value: undefined },
     ]);
   });
 
@@ -110,7 +110,7 @@ COMMON	SUBMITTER		contact	Alice Liddell
     await file.parse();
 
     assert.deepEqual(file.errors, [
-      {id: 'annotation-file-parser.duplicate-contact-person-information', value: undefined}
+      { id: 'annotation-file-parser.duplicate-contact-person-information', value: undefined },
     ]);
   });
 
@@ -125,7 +125,7 @@ COMMON	SUBMITTER		contact	Alice Liddell
     await file.parse();
 
     assert.deepEqual(file.errors, [
-      {id: 'annotation-file-parser.duplicate-contact-person-information', value: undefined}
+      { id: 'annotation-file-parser.duplicate-contact-person-information', value: undefined },
     ]);
   });
 
@@ -137,14 +137,12 @@ COMMON	DATE		hold_date	foo
     const file = new AnnotationFile(raw);
     await file.parse();
 
-    assert.deepEqual(file.errors, [
-      {id: 'annotation-file-parser.invalid-hold-date', value: 'foo'}
-    ]);
+    assert.deepEqual(file.errors, [{ id: 'annotation-file-parser.invalid-hold-date', value: 'foo' }]);
   });
 
   test('replace whitespace in filename', async function(assert) {
-    const file      = new File([''], 'foo bar baz.ann');
-    const {rawFile} = new AnnotationFile(file);
+    const file        = new File([''], 'foo bar baz.ann');
+    const { rawFile } = new AnnotationFile(file);
 
     assert.strictEqual(rawFile.name, 'foo_bar_baz.ann');
   });
