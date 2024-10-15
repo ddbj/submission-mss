@@ -9,10 +9,10 @@ export default class UploadFormComponent extends Component {
   @service currentUser;
   @service errorModal;
 
-  @tracked uploadVia = null;
-  @tracked extractionId = null;
-  @tracked files = [];
-  @tracked isCompleted = false;
+  @tracked uploadVia       = null;
+  @tracked extractionId    = null;
+  @tracked files           = [];
+  @tracked isCompleted     = false;
   @tracked crossoverErrors = new Map(); // always empty
 
   get isSubmitButtonEnabled() {

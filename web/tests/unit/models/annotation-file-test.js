@@ -125,10 +125,7 @@ COMMON	SUBMITTER		contact	Alice Liddell
     await file.parse();
 
     assert.deepEqual(file.errors, [
-      {
-        id: 'annotation-file-parser.duplicate-contact-person-information',
-        value: undefined,
-      },
+      { id: 'annotation-file-parser.duplicate-contact-person-information', value: undefined },
     ]);
   });
 
@@ -144,7 +141,7 @@ COMMON	DATE		hold_date	foo
   });
 
   test('replace whitespace in filename', async function(assert) {
-    const file = new File([''], 'foo bar baz.ann');
+    const file        = new File([''], 'foo bar baz.ann');
     const { rawFile } = new AnnotationFile(file);
 
     assert.strictEqual(rawFile.name, 'foo_bar_baz.ann');
