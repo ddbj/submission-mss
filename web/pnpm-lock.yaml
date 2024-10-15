@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      js-cookie:
-        specifier: ^3.0.5
-        version: 3.0.5
     devDependencies:
       '@babel/core':
         specifier: ^7.25.8
@@ -273,6 +269,9 @@ importers:
       filesize:
         specifier: ^10.1.6
         version: 10.1.6
+      js-cookie:
+        specifier: ^3.0.5
+        version: 3.0.5
       js-yaml:
         specifier: ^4.1.0
         version: 4.1.0

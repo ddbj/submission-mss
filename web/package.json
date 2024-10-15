@@ -112,6 +112,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-qunit": "^8.1.2",
     "filesize": "^10.1.6",
+    "js-cookie": "^3.0.5",
     "js-yaml": "^4.1.0",
     "jwt-decode": "^4.0.0",
     "loader.js": "^4.7.0",
@@ -133,8 +134,5 @@
   "ember": {
     "edition": "octane"
   },
-  "packageManager": "pnpm@9.11.0",
-  "dependencies": {
-    "js-cookie": "^3.0.5"
-  }
+  "packageManager": "pnpm@9.12.1"
 }
