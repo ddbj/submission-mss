@@ -15,8 +15,11 @@ ENV MASS_DIR_PATH_TEMPLATE=${MASS_DIR_PATH_TEMPLATE:?}
 
 RUN corepack enable pnpm
 
-WORKDIR /app/web/
-COPY ./web/ ./
+WORKDIR /app/config
+COPY config/enums.yml .
+
+WORKDIR /app/web
+COPY web/ ./
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm build
 
