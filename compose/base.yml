@@ -22,6 +22,7 @@ services:
       dockerfile: api/Dockerfile
 
       args:
+        API_URL:
         APP_GID:
         APP_UID:
         MASS_DIR_PATH_TEMPLATE:
