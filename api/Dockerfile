@@ -26,6 +26,9 @@ RUN pnpm build
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
+WORKDIR /app/config
+COPY config/enums.yml .
+
 # Rails app lives here
 WORKDIR /app/api
 
