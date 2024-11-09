@@ -132,8 +132,8 @@ importers:
         specifier: ^4.0.7
         version: 4.0.7(@babel/core@7.26.0)
       '@types/qunit':
-        specifier: ^2.19.10
-        version: 2.19.10
+        specifier: ^2.19.12
+        version: 2.19.12
       '@types/rsvp':
         specifier: ^4.0.9
         version: 4.0.9
@@ -1888,8 +1888,8 @@ packages:
   '@types/qs@6.9.15':
     resolution: {integrity: sha512-uXHQKES6DQKKCLh441Xv/dwxOq1TVS3JPUMlEqoEglvlhR6Mxnlew/Xq/LRVHpLyk7iK3zODe1qYHIMltO7XGg==}
 
-  '@types/qunit@2.19.10':
-    resolution: {integrity: sha512-gVB+rxvxmbyPFWa6yjjKgcumWal3hyqoTXI0Oil161uWfo1OCzWZ/rnEumsx+6uVgrwPrCrhpQbLkzfildkSbg==}
+  '@types/qunit@2.19.12':
+    resolution: {integrity: sha512-II+C1wgzUia0g+tGAH+PBb4XiTm8/C/i6sN23r21NNskBYOYrv+qnW0tFQ/IxZzKVwrK4CTglf8YO3poJUclQA==}
 
   '@types/range-parser@1.2.7':
     resolution: {integrity: sha512-hKormJbkJqzQGhziax5PItDUTMAM9uE2XXQmM37dyd4hVM+5aVl7oVxMVUiVQn2oCQFN/LKCZdvSM0pFRqbSmQ==}
@@ -9459,7 +9459,7 @@ snapshots:
 
   '@types/qs@6.9.15': {}
 
-  '@types/qunit@2.19.10': {}
+  '@types/qunit@2.19.12': {}
 
   '@types/range-parser@1.2.7': {}
 
