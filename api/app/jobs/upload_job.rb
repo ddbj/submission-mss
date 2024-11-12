@@ -1,8 +1,6 @@
 class UploadJob < ApplicationJob
   queue_as :default
 
-  retry_on Google::Apis::ServerError
-
   def perform(upload)
     upload.via.copy_files_to_submissions_dir
 

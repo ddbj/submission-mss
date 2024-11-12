@@ -19,10 +19,12 @@ class WorkingList
       to_row(submission).values
     ])
 
-    @service.append_spreadsheet_value @sheet_id, "#{@sheet_name}!A1", range, **{
-      insert_data_option: "INSERT_ROWS",
-      value_input_option: "RAW"
-    }
+    Retriable.with_context :google do
+      @service.append_spreadsheet_value @sheet_id, "#{@sheet_name}!A1", range, **{
+        insert_data_option: "INSERT_ROWS",
+        value_input_option: "RAW"
+      }
+    end
   end
 
   def update_data_arrival_date(submission)
@@ -34,9 +36,11 @@ class WorkingList
       [ to_row(submission).fetch(:data_arrival_date) ]
     ])
 
-    @service.update_spreadsheet_value @sheet_id, "#{@sheet_name}!L#{row}", range, **{
-      value_input_option: "RAW"
-    }
+    Retriable.with_context :google do
+      @service.update_spreadsheet_value @sheet_id, "#{@sheet_name}!L#{row}", range, **{
+        value_input_option: "RAW"
+      }
+    end
   end
 
   def to_row(submission)
@@ -82,7 +86,9 @@ class WorkingList
       "#{@sheet_name}!D2:D",
       "#{@sheet_name}!U2:U"
     ].map { |range|
-      @service.get_spreadsheet_values(@sheet_id, range).values&.map(&:first) || []
+      Retriable.with_context(:google) {
+        @service.get_spreadsheet_values(@sheet_id, range).values&.map(&:first) || []
+      }
     }
 
     mass_ids.zip(statuses, accessions).filter_map { |mass_id, status, accession|
@@ -97,7 +103,10 @@ class WorkingList
   private
 
   def find_row_number_by_mass_id(target_mass_id, offset: 1, limit: 100)
-    res    = @service.batch_get_spreadsheet_values(@sheet_id, ranges: "#{@sheet_name}!A#{offset}:A#{offset + limit - 1}")
+    res = Retriable.with_context(:google) {
+      @service.batch_get_spreadsheet_values(@sheet_id, ranges: "#{@sheet_name}!A#{offset}:A#{offset + limit - 1}")
+    }
+
     values = res.value_ranges.first.values
 
     values.each_with_index do |(mass_id), i|
