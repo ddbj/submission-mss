@@ -134,5 +134,5 @@
   "ember": {
     "edition": "octane"
   },
-  "packageManager": "pnpm@9.12.1"
+  "packageManager": "pnpm@9.12.3"
 }
