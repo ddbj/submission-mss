@@ -60,6 +60,7 @@ services:
       SMTP_PASSWORD:
       SMTP_PORT:
       SMTP_USERNAME:
+      SOLID_QUEUE_IN_PUMA:         'true'
       STAGE:
       SUBMISSIONS_DIR:             /app/submissions
       WEB_URL:
