@@ -68,7 +68,7 @@
     "@types/ember__utils": "^4.0.7",
     "@types/qunit": "^2.19.12",
     "@types/rsvp": "^4.0.9",
-    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/eslint-plugin": "^8.18.1",
     "@typescript-eslint/parser": "^8.18.1",
     "active-model-adapter": "^4.0.1",
     "bootstrap": "^5.3.3",
