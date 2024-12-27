@@ -94,12 +94,11 @@ Rails.application.configure do
   config.solid_queue.connects_to       = { database: { writing: :queue } }
 
   config.action_mailer.smtp_settings = {
-    address:             ENV.fetch("SMTP_ADDRESS"),
-    port:                ENV.fetch("SMTP_PORT"),
-    domain:              ENV.fetch("SMTP_DOMAIN"),
-    user_name:           ENV.fetch("SMTP_USERNAME"),
-    password:            ENV.fetch("SMTP_PASSWORD"),
-    authentication:      ENV.fetch("SMTP_AUTHENTICATION"),
-    openssl_verify_mode: "none"
+    address:        ENV.fetch("SMTP_ADDRESS"),
+    port:           ENV.fetch("SMTP_PORT"),
+    domain:         ENV.fetch("SMTP_DOMAIN"),
+    user_name:      ENV.fetch("SMTP_USERNAME"),
+    password:       ENV.fetch("SMTP_PASSWORD"),
+    authentication: ENV.fetch("SMTP_AUTHENTICATION")
   }.compact_blank
 end
