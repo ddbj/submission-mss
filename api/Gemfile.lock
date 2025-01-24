@@ -174,7 +174,7 @@ GEM
     google-cloud-env (2.2.1)
       faraday (>= 1.0, < 3.a)
     google-logging-utils (0.1.0)
-    googleauth (1.13.0)
+    googleauth (1.13.1)
       faraday (>= 1.0, < 3.a)
       google-cloud-env (~> 2.2)
       google-logging-utils (~> 0.1)
