@@ -7,11 +7,15 @@ import { tracked } from '@glimmer/tracking';
 import 'bootstrap/js/src/dropdown';
 import { Modal } from 'bootstrap';
 
-export default class ApplicationController extends Controller {
-  @service intl;
+import type IntlService from 'ember-intl/services/intl';
 
-  @tracked error;
-  @tracked locale;
+export default class ApplicationController extends Controller {
+  @service declare intl: IntlService;
+
+  @tracked error?: Error;
+  @tracked locale?: string;
+
+  errorModal?: Modal;
 
   queryParams = ['locale'];
 
@@ -30,26 +34,24 @@ export default class ApplicationController extends Controller {
   });
 
   @action
-  changeLocale(locale) {
+  changeLocale(locale: string) {
     this.locale = locale;
   }
 
   @action
-  showErrorModal(error) {
+  showErrorModal(error: Error) {
     this.error = error;
 
     if (this.errorModal) {
       this.errorModal.show();
     } else {
-      const details = error instanceof Error ? error.stack : JSON.stringify(error, null, 2);
-
       alert(`Error:
 Something went wrong. Please try again later.
 
-${error}
+${error.message}
 
 Details:
-${details}`);
+${error.stack}`);
     }
   }
 }
