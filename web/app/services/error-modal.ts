@@ -4,7 +4,7 @@ import { getOwner } from '@ember/owner';
 import type ApplicationController from 'mssform/controllers/application';
 
 export default class ErrorModalService extends Service {
-  show(error: object) {
+  show(error: Error) {
     const controller = getOwner(this)!.lookup('controller:application') as ApplicationController;
 
     controller.showErrorModal(error);
