@@ -425,9 +425,9 @@ GEM
       faraday (~> 2.0)
       faraday-follow_redirects
     thor (1.3.2)
-    thruster (0.1.10-arm64-darwin)
-    thruster (0.1.10-x86_64-darwin)
-    thruster (0.1.10-x86_64-linux)
+    thruster (0.1.11-arm64-darwin)
+    thruster (0.1.11-x86_64-darwin)
+    thruster (0.1.11-x86_64-linux)
     timeout (0.4.3)
     trailblazer-option (0.1.2)
     tzinfo (2.0.6)
