@@ -33,6 +33,7 @@ env:
 
   clear:
     MAIL_ALLOWED_DOMAINS: ddbj.nig.ac.jp,ursm.jp
+    MASS_DIR_PATH_TEMPLATE: '/submission/{user}/submission/{user}/mass'
     MSSFORM_URL: https://mss-dev.ddbj.nig.ac.jp
     SMTP_ADDRESS: gw1
     SMTP_DOMAIN: ddbj.nig.ac.jp
