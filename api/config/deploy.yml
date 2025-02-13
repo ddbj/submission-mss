@@ -1,0 +1,76 @@
+service: mssform
+image: w3const/mssform
+require_destination: true
+
+registry:
+  username: w3const
+
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  arch: amd64
+  args:
+     APP_GID: 11370
+     APP_UID: 2233
+
+env:
+  secret:
+    - DATABASE_URL
+    - GOOGLE_CLIENT_EMAIL
+    - GOOGLE_CLIENT_ID
+    - GOOGLE_PRIVATE_KEY
+    - MASS_DIR_PATH_TEMPLATE
+    - MINIO_ACCESS_KEY_ID
+    - MINIO_ROOT_PASSWORD
+    - MINIO_ROOT_USER
+    - MINIO_SECRET_ACCESS_KEY
+    - MSS_WORKING_LIST_SHEET_ID
+    - MSS_WORKING_LIST_SHEET_NAME
+    - OIDC_CLIENT_ID
+    - SECRET_KEY_BASE
+    - SENTRY_DSN
+
+  clear:
+    MAIL_ALLOWED_DOMAINS: ddbj.nig.ac.jp,ursm.jp
+    MSSFORM_URL: https://mss-dev.ddbj.nig.ac.jp
+    SMTP_ADDRESS: gw1
+    SMTP_DOMAIN: ddbj.nig.ac.jp
+    SMTP_PORT: 25
+    WEB_URL: https://mss-staging.ddbj.nig.ac.jp
+
+
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole"
+
+asset_path: /app/api/public/assets
+
+ssh:
+  user: w3const
+
+accessories:
+  postgres:
+    image: postgres:16
+    options:
+      user: 2233:11370
+    env:
+      secret:
+        - POSTGRES_PASSWORD
+      clear:
+        POSTGRES_DB: mssform
+        TZ:          Asia/Tokyo
+
+  minio:
+    image: minio/minio:RELEASE.2023-12-07T04-16-00Z
+    cmd: server /data --console-address :9001
+    options:
+      user: 2233:11370
+    env:
+      secret:
+        - MINIO_ROOT_USER
+        - MINIO_ROOT_PASSWORD
+      clear:
+        TZ: Asia/Tokyo

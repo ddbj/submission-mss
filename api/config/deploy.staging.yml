@@ -1,0 +1,29 @@
+servers:
+  web:
+    - mssform-staging
+
+proxy:
+  host: mss-dev.ddbj.nig.ac.jp
+
+env:
+  clear:
+    API_URL: https://mss-dev.ddbj.nig.ac.jp/api
+    MINIO_ENDPOINT: https://mss-storage-dev.ddbj.nig.ac.jp
+    OIDC_ISSUER_URL: https://idp-dev.ddbj.nig.ac.jp/realms/master
+    SENTRY_CURRENT_ENV: staging
+
+volumes:
+  - ./volumes/mssform-staging/storage:/app/api/storage
+
+accessories:
+  postgres:
+    host: mssform-staging
+
+    volumes:
+      - ./volumes/mssform-staging/postgres:/var/lib/postgresql/data
+
+  minio:
+    host: mssform-staging
+
+    volumes:
+      - ./volumes/mssform-staging/minio:/data
