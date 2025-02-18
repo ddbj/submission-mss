@@ -5,9 +5,12 @@ servers:
 proxy:
   host: mss-staging.ddbj.nig.ac.jp
 
+builder:
+  args:
+    API_URL: https://mss-staging.ddbj.nig.ac.jp/api
+
 env:
   clear:
-    API_URL: https://mss-staging.ddbj.nig.ac.jp/api
     MAIL_ALLOWED_DOMAINS: ddbj.nig.ac.jp,ursm.jp
     MINIO_ENDPOINT: https://mss-storage-staging.ddbj.nig.ac.jp
     MSSFORM_URL: https://mss-staging.ddbj.nig.ac.jp
