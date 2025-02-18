@@ -11,8 +11,8 @@ registry:
 builder:
   arch: amd64
   args:
-     APP_GID: 11370
-     APP_UID: 2233
+    APP_GID: 11370
+    APP_UID: 2233
 
 env:
   secret:
@@ -45,8 +45,8 @@ env:
     SMTP_PORT: 25
     SUBMISSIONS_DIR: /app/api/storage/submissions 
 
- volumes:
-   - /mnt/submission:/submission
+volumes:
+  - /mnt/submission:/submission
 
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
