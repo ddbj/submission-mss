@@ -52,10 +52,8 @@ RUN bundle exec bootsnap precompile app/ lib/
 FROM docker.io/library/node:22.11.0 AS web
 
 ARG API_URL
-ARG MASS_DIR_PATH_TEMPLATE
 
 ENV API_URL=${API_URL:?}
-ENV MASS_DIR_PATH_TEMPLATE=${MASS_DIR_PATH_TEMPLATE:?}
 
 RUN corepack enable pnpm
 
