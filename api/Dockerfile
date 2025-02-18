@@ -55,13 +55,13 @@ ARG API_URL
 
 ENV API_URL=${API_URL:?}
 
+RUN npm install --global pnpm@9
 
 WORKDIR /app/config
 COPY config/enums.yml .
 
 WORKDIR /app/web
 COPY web/ ./
-RUN corepack install
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm build
 
