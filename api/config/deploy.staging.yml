@@ -3,14 +3,17 @@ servers:
     - mssform-staging
 
 proxy:
-  host: mss-dev.ddbj.nig.ac.jp
+  host: mss-staging.ddbj.nig.ac.jp
 
 env:
   clear:
-    API_URL: https://mss-dev.ddbj.nig.ac.jp/api
-    MINIO_ENDPOINT: https://mss-storage-dev.ddbj.nig.ac.jp
-    OIDC_ISSUER_URL: https://idp-dev.ddbj.nig.ac.jp/realms/master
+    API_URL: https://mss-staging.ddbj.nig.ac.jp/api
+    MAIL_ALLOWED_DOMAINS: ddbj.nig.ac.jp,ursm.jp
+    MINIO_ENDPOINT: https://mss-storage-staging.ddbj.nig.ac.jp
+    MSSFORM_URL: https://mss-staging.ddbj.nig.ac.jp
+    OIDC_ISSUER_URL: https://idp-staging.ddbj.nig.ac.jp/realms/master
     SENTRY_CURRENT_ENV: staging
+    WEB_URL: https://mss-staging.ddbj.nig.ac.jp
 
 volumes:
   - ./volumes/mssform-staging/storage:/app/api/storage

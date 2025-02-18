@@ -30,16 +30,23 @@ env:
     - OIDC_CLIENT_ID
     - SECRET_KEY_BASE
     - SENTRY_DSN
+    - SMTP_AUTHENTICATION
+    - SMTP_PASSWORD
+    - SMTP_USERNAME
 
   clear:
-    MAIL_ALLOWED_DOMAINS: ddbj.nig.ac.jp,ursm.jp
-    MASS_DIR_PATH_TEMPLATE: '/submission/{user}/submission/{user}/mass'
-    MSSFORM_URL: https://mss-dev.ddbj.nig.ac.jp
+    CURATOR_ML_ADDRESS: '"DDBJ Mass Submission System (MSS)" <mass@ddbj.nig.ac.jp>'
+    EXTRACTION_WORKDIR: /app/api/storage/work
+    GOOGLE_ACCOUNT_TYPE: service_account
+    MASS_DIR_PATH_TEMPLATE: '/app/api/storage/submission/{user}/submission/{user}/mass'
+    MINIO_BUCKET: uploads
     SMTP_ADDRESS: gw1
     SMTP_DOMAIN: ddbj.nig.ac.jp
     SMTP_PORT: 25
-    WEB_URL: https://mss-staging.ddbj.nig.ac.jp
+    SUBMISSIONS_DIR: /app/api/storage/submissions 
 
+ volumes:
+   - /mnt/submission:/submission
 
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
