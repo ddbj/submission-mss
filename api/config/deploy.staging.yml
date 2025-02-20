@@ -31,5 +31,8 @@ accessories:
   minio:
     host: mssform-staging
 
+    proxy:
+      host: mss-storage-staging.ddbj.nig.ac.jp
+
     volumes:
       - ./volumes/mssform-staging/minio:/data
