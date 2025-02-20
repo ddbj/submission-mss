@@ -58,7 +58,7 @@ ssh:
 
 accessories:
   postgres:
-    image: postgres:16
+    image: postgres:17
 
     options:
       user: 2233:11370
