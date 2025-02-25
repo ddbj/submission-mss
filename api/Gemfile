@@ -13,6 +13,7 @@ gem "googleauth"
 gem "http"
 gem "jb"
 gem "json"
+gem "kamal", require: false
 gem "openid_connect"
 gem "pg"
 gem "puma"

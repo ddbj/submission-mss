@@ -34,7 +34,7 @@ FROM base AS build
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config && \
+    apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config libyaml-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
@@ -49,15 +49,13 @@ COPY api/ .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-FROM docker.io/library/node:22.11.0 AS web
+FROM docker.io/library/node:22.14.0 AS web
 
 ARG API_URL
-ARG MASS_DIR_PATH_TEMPLATE
 
 ENV API_URL=${API_URL:?}
-ENV MASS_DIR_PATH_TEMPLATE=${MASS_DIR_PATH_TEMPLATE:?}
 
-RUN corepack enable pnpm
+RUN npm install --global pnpm@9
 
 WORKDIR /app/config
 COPY config/enums.yml .

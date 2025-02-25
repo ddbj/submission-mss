@@ -4,8 +4,8 @@ class ApplicationMailer < ActionMailer::Base
   default from: -> { ENV.fetch("CURATOR_ML_ADDRESS") }
 
   after_action do
-    if stage = ENV["STAGE"] and stage != "production"
-      mail.subject.prepend "[#{stage.titlecase}] "
+    if env = ENV["SENTRY_CURRENT_ENV"] and env != "production"
+      mail.subject.prepend "[#{env.titlecase}] "
     end
   end
 end
