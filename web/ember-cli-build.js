@@ -11,9 +11,7 @@ module.exports = function (defaults) {
     },
 
     babel: {
-      plugins: [
-        require.resolve('ember-concurrency/async-arrow-task-transform'),
-      ],
+      plugins: [require.resolve('ember-concurrency/async-arrow-task-transform')],
     },
 
     svgJar: {
@@ -25,7 +23,7 @@ module.exports = function (defaults) {
   app.import('node_modules/bootstrap/dist/css/bootstrap.css');
 
   const sourcemaps = funnel('node_modules/bootstrap', {
-    srcDir:  'dist/css',
+    srcDir: 'dist/css',
     destDir: 'assets',
     include: ['bootstrap.css.map'],
   });

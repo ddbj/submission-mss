@@ -15,7 +15,7 @@ async function parse(file) {
 
   let done, chunk;
   let entriesCount = 0;
-  let isBOL        = true;
+  let isBOL = true;
 
   while ((({ done, value: chunk } = await reader.read()), !done)) {
     for (const byte of chunk) {

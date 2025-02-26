@@ -42,7 +42,7 @@ export default class RecentSubmissions extends Component {
         </thead>
 
         <tbody>
-          {{#each (sortBy 'id:desc' this.submissions) as |submission|}}
+          {{#each (sortBy "id:desc" this.submissions) as |submission|}}
             <tr>
               <td>
                 <LinkTo @route="submission" @model={{submission}}>{{submission.id}}</LinkTo>
@@ -53,7 +53,7 @@ export default class RecentSubmissions extends Component {
               </td>
 
               <td>
-                {{#let (get submission.uploads '0') as |upload|}}
+                {{#let (get submission.uploads "0") as |upload|}}
                   <ul class="list-unstyled m-0">
                     {{#each (take 3 upload.dfastJobIds) as |jobId|}}
                       <li><code>{{jobId}}</code></li>

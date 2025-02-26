@@ -8,18 +8,22 @@ export default class DfastExtraction {
     const currentUser = owner.lookup('service:current-user');
     const errorModal = owner.lookup('service:error-modal');
 
-    const res = await safeFetchWithModal(`/api/dfast_extractions`, {
-      method: 'POST',
+    const res = await safeFetchWithModal(
+      `/api/dfast_extractions`,
+      {
+        method: 'POST',
 
-      headers: {
-        ...currentUser.authorizationHeader,
-        'Content-Type': 'application/json',
+        headers: {
+          ...currentUser.authorizationHeader,
+          'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify({
+          ids,
+        }),
       },
-
-      body: JSON.stringify({
-        ids,
-      }),
-    }, errorModal);
+      errorModal,
+    );
 
     const { _self: url } = await res.json();
 
@@ -37,9 +41,13 @@ export default class DfastExtraction {
 
   async pollForResult(callback, onError) {
     for (;;) {
-      const res = await safeFetchWithModal(this.url, {
-        headers: this.currentUser.authorizationHeader,
-      }, this.errorModal);
+      const res = await safeFetchWithModal(
+        this.url,
+        {
+          headers: this.currentUser.authorizationHeader,
+        },
+        this.errorModal,
+      );
 
       const payload = await res.json();
 

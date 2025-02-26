@@ -2,10 +2,7 @@ import { tracked } from '@glimmer/tracking';
 
 export class SubmissionFile {
   static get allowedExtensions() {
-    return [
-      ...AnnotationFile.extensions,
-      ...SequenceFile.extensions,
-    ];
+    return [...AnnotationFile.extensions, ...SequenceFile.extensions];
   }
 
   static fromRawFile(file) {
@@ -113,14 +110,14 @@ export class SubmissionFile {
 
 export class AnnotationFile extends SubmissionFile {
   static extensions = ['.ann', '.annt.tsv', '.ann.txt'];
-  static parserURL  = '/workers/annotation-file-parser.js';
+  static parserURL = '/workers/annotation-file-parser.js';
 
   isAnnotation = true;
 }
 
 export class SequenceFile extends SubmissionFile {
   static extensions = ['.fasta', '.seq.fa', '.fa', '.fna', '.seq'];
-  static parserURL  = '/workers/sequence-file-parser.js';
+  static parserURL = '/workers/sequence-file-parser.js';
 
   isSequence = true;
 }
@@ -131,10 +128,7 @@ export class UnsupportedFile extends SubmissionFile {
   constructor() {
     super(...arguments);
 
-    this.errors = [
-      ...this.errors,
-      { id: 'submission-file.unsupported-filetype' },
-    ];
+    this.errors = [...this.errors, { id: 'submission-file.unsupported-filetype' }];
   }
 
   parse() {

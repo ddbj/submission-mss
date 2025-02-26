@@ -6,6 +6,6 @@ export default class SubmissionFormPrerequisiteComponent extends Component {
     const { model, state } = this.args;
 
     state.maybeTpa = val;
-    model.tpa      = val ? null : false;
+    model.tpa = val ? null : false;
   }
 }

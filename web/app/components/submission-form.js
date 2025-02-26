@@ -7,22 +7,16 @@ export default class SubmissionFormComponent extends Component {
   @service router;
 
   state = new State();
-  nav   = new Navigation();
+  nav = new Navigation();
 }
 
 class State {
   @tracked maybeTpa = null;
-  @tracked files    = [];
+  @tracked files = [];
 }
 
 class Navigation {
-  steps = [
-    'prerequisite',
-    'files',
-    'metadata',
-    'confirm',
-    'complete',
-  ];
+  steps = ['prerequisite', 'files', 'metadata', 'confirm', 'complete'];
 
   @tracked stepIndex = 0;
 

@@ -8,10 +8,14 @@ export default class MassDirectoryExtraction {
     const currentUser = owner.lookup('service:current-user');
     const errorModal = owner.lookup('service:error-modal');
 
-    const res = await safeFetchWithModal(`/api/mass_directory_extractions`, {
-      method: 'POST',
-      headers: currentUser.authorizationHeader,
-    }, errorModal);
+    const res = await safeFetchWithModal(
+      `/api/mass_directory_extractions`,
+      {
+        method: 'POST',
+        headers: currentUser.authorizationHeader,
+      },
+      errorModal,
+    );
 
     const { _self: url } = await res.json();
 
@@ -29,9 +33,13 @@ export default class MassDirectoryExtraction {
 
   async pollForResult(callback) {
     for (;;) {
-      const res = await safeFetchWithModal(this.url, {
-        headers: this.currentUser.authorizationHeader,
-      }, this.errorModal);
+      const res = await safeFetchWithModal(
+        this.url,
+        {
+          headers: this.currentUser.authorizationHeader,
+        },
+        this.errorModal,
+      );
 
       const payload = await res.json();
 

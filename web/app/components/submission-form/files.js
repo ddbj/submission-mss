@@ -10,7 +10,7 @@ export default class SubmissionFormFilesComponent extends Component {
 
   get crossoverErrors() {
     const { files } = this.args.state;
-    const errors    = new Map();
+    const errors = new Map();
 
     for (const file of files) {
       errors.set(file, []);
@@ -24,7 +24,7 @@ export default class SubmissionFormFilesComponent extends Component {
 
   get isNextButtonEnabled() {
     const { uploadVia } = this.args.model;
-    const { files }     = this.args.state;
+    const { files } = this.args.state;
 
     if (!uploadVia) return false;
     if (!files.length) return false;
@@ -43,16 +43,16 @@ export default class SubmissionFormFilesComponent extends Component {
   @action setUploadVia(val) {
     const { model, state } = this.args;
 
-    model.uploadVia    = val;
+    model.uploadVia = val;
     model.extractionId = null;
-    state.files        = [];
+    state.files = [];
   }
 
   @action onExtractProgress({ id, files }) {
     const { model, state } = this.args;
 
     model.extractionId = id;
-    state.files        = files;
+    state.files = files;
   }
 
   @action addFile(file) {
@@ -92,15 +92,15 @@ export default class SubmissionFormFilesComponent extends Component {
 
     const { model } = this.args;
 
-    model.contactPerson.email       = last.contactPerson.email;
-    model.contactPerson.fullName    = last.contactPerson.fullName;
+    model.contactPerson.email = last.contactPerson.email;
+    model.contactPerson.fullName = last.contactPerson.fullName;
     model.contactPerson.affiliation = last.contactPerson.affiliation;
 
     if (model.otherPeople.length === 0) {
       for (const person of last.otherPeople.slice()) {
         model.otherPeople.createRecord({
-          email:       person.email,
-          fullName:    person.fullName,
+          email: person.email,
+          fullName: person.fullName,
           affiliation: person.affiliation,
         });
       }
@@ -117,7 +117,7 @@ export default class SubmissionFormFilesComponent extends Component {
 
   fillDataFromSubmissionFiles() {
     const { state, model } = this.args;
-    const { files }        = state;
+    const { files } = state;
 
     const { contactPerson, holdDate } = files.find(({ isAnnotation }) => isAnnotation).parsedData;
 
@@ -125,9 +125,11 @@ export default class SubmissionFormFilesComponent extends Component {
 
     model.holdDate = holdDate;
 
-    model.entriesCount = files.filter(({ isSequence }) => isSequence).reduce((acc, file) => {
-      return acc + file.parsedData.entriesCount;
-    }, 0);
+    model.entriesCount = files
+      .filter(({ isSequence }) => isSequence)
+      .reduce((acc, file) => {
+        return acc + file.parsedData.entriesCount;
+      }, 0);
   }
 }
 
@@ -139,12 +141,12 @@ function validatePair(errors, files) {
   }, new Map());
 
   for (const files of grouped.values()) {
-    const [annotations, sequences] = files.reduce(([ann, seq], file) => {
-      return [
-        file.isAnnotation ? [...ann, file] : ann,
-        file.isSequence   ? [...seq, file] : seq,
-      ];
-    }, [[], []]);
+    const [annotations, sequences] = files.reduce(
+      ([ann, seq], file) => {
+        return [file.isAnnotation ? [...ann, file] : ann, file.isSequence ? [...seq, file] : seq];
+      },
+      [[], []],
+    );
 
     if (!annotations.length) {
       for (const file of sequences) {
@@ -178,7 +180,7 @@ function validateSameness(errors, files) {
   if (!files.length) return [];
 
   const contactPersonSet = new Set();
-  const holdDateSet      = new Set();
+  const holdDateSet = new Set();
 
   for (const file of files) {
     const { contactPerson, holdDate } = file.parsedData;

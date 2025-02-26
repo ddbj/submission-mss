@@ -9,10 +9,10 @@ export default class UploadFormComponent extends Component {
   @service currentUser;
   @service errorModal;
 
-  @tracked uploadVia       = null;
-  @tracked extractionId    = null;
-  @tracked files           = [];
-  @tracked isCompleted     = false;
+  @tracked uploadVia = null;
+  @tracked extractionId = null;
+  @tracked files = [];
+  @tracked isCompleted = false;
   @tracked crossoverErrors = new Map(); // always empty
 
   get isSubmitButtonEnabled() {
@@ -29,14 +29,14 @@ export default class UploadFormComponent extends Component {
   }
 
   @action setUploadVia(val) {
-    this.uploadVia    = val;
-    this.files        = [];
+    this.uploadVia = val;
+    this.files = [];
     this.extractionId = null;
   }
 
   @action onExtractProgress({ id, files }) {
     this.extractionId = id;
-    this.files        = files;
+    this.files = files;
   }
 
   @action addFile(file) {
@@ -60,18 +60,22 @@ export default class UploadFormComponent extends Component {
       attrs.extraction_id = this.extractionId;
     }
 
-    await safeFetchWithModal(`/api/submissions/${this.args.model.id}/uploads`, {
-      method: 'POST',
+    await safeFetchWithModal(
+      `/api/submissions/${this.args.model.id}/uploads`,
+      {
+        method: 'POST',
 
-      headers: {
-        ...this.currentUser.authorizationHeader,
-        'Content-Type': 'application/json',
+        headers: {
+          ...this.currentUser.authorizationHeader,
+          'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify({
+          upload: attrs,
+        }),
       },
-
-      body: JSON.stringify({
-        upload: attrs,
-      }),
-    }, this.errorModal);
+      this.errorModal,
+    );
 
     this.isCompleted = true;
   }
