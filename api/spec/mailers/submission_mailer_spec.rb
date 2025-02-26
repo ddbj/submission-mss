@@ -75,10 +75,6 @@ RSpec.describe SubmissionMailer do
   end
 
   describe "curator_notification" do
-    around do |example|
-      ClimateControl.modify(SUBMISSIONS_DIR: "/path/to/submissions", &example)
-    end
-
     example do
       submission = create(:submission, **{
         mass_id:        "NSUB000042",
@@ -140,8 +136,8 @@ RSpec.describe SubmissionMailer do
         alice@example.com
 
         ## data_arrival_date
-        20200102-123456: /path/to/submissions/NSUB000042/20200102-123456
-        20200103-123456: /path/to/submissions/NSUB000042/20200103-123456
+        20200102-123456: #{Rails.root.join("tmp/storage/submissions/NSUB000042/20200102-123456")}
+        20200103-123456: #{Rails.root.join("tmp/storage/submissions/NSUB000042/20200103-123456")}
 
         ## sequencer
         NGS

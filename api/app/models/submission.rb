@@ -20,7 +20,9 @@ class Submission < ApplicationRecord
   end
 
   def root_dir
-    Pathname.new(ENV.fetch("SUBMISSIONS_DIR")).join(mass_id)
+    base = Rails.env.test? ? "tmp/storage" : "storage"
+
+    Rails.root.join(base, "submissions", mass_id)
   end
 
   def upload_disabled?
