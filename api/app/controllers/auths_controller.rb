@@ -59,7 +59,7 @@ class AuthsController < ApplicationController
 
   def oidc_client
     @oidc_client ||= OpenIDConnect::Client.new(
-      identifier:             ENV.fetch("OIDC_CLIENT_ID"),
+      identifier:             "mssform",
       redirect_uri:           callback_auth_url,
       jwks_uri:               self.class.oidc_config.jwks_uri,
       authorization_endpoint: self.class.oidc_config.authorization_endpoint,
