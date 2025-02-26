@@ -9,8 +9,7 @@ RSpec.describe UploadJob do
     Dir.mktmpdir do |dir|
       env = {
         MSS_WORKING_LIST_SHEET_ID:   "SHEET_ID",
-        MSS_WORKING_LIST_SHEET_NAME: "SHEET_NAME",
-        SUBMISSIONS_DIR:             dir
+        MSS_WORKING_LIST_SHEET_NAME: "SHEET_NAME"
       }
 
       ClimateControl.modify(env, &example)
@@ -74,7 +73,7 @@ RSpec.describe UploadJob do
   end
 
   example do
-    dir = Pathname.new(ENV.fetch("SUBMISSIONS_DIR")).join("NSUB000042/20220102-123456")
+    dir = Rails.root.join("tmp/storage/submissions/NSUB000042/20220102-123456")
 
     expect(dir.ftype).to                     eq("directory")
     expect(dir.join("example.ann").ftype).to eq("file")
