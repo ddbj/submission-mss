@@ -35,7 +35,9 @@ class MassDirectoryExtraction < ApplicationRecord
   end
 
   def working_dir
-    Pathname.new(ENV.fetch("EXTRACTION_WORKDIR")).join("mass-directory-extraction-#{id}")
+    base = Rails.env.test? ? "tmp/storage" : "storage"
+
+    Rails.root.join(base, "extracts/mass-directory-#{id}")
   end
 
   private

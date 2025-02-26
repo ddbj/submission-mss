@@ -22,7 +22,7 @@ RSpec.describe SubmissionMailer do
 
       mail = SubmissionMailer.with(submission:).submitter_confirmation
 
-      expect(mail).to deliver_from("Admin <mssform@example.com>")
+      expect(mail).to deliver_from('"DDBJ Mass Submission System (MSS)" <mass@ddbj.nig.ac.jp>')
       expect(mail).to deliver_to("alice@example.com")
       expect(mail).to cc_to("Alice Liddell <alice+contact@example.com>", "Bob <bob@bar.example.com>", "Carol <carol@baz.example.com>")
 
@@ -67,7 +67,7 @@ RSpec.describe SubmissionMailer do
 
         mail = SubmissionMailer.with(submission:).submitter_confirmation
 
-        expect(mail).to deliver_from("Admin <mssform@example.com>")
+        expect(mail).to deliver_from('"DDBJ Mass Submission System (MSS)" <mass@ddbj.nig.ac.jp>')
         expect(mail).to deliver_to("alice@example.com")
         expect(mail).to cc_to("Alice Liddell <alice+contact@example.com>", "Carol <carol@baz.example.com>")
       end
@@ -106,8 +106,8 @@ RSpec.describe SubmissionMailer do
 
       mail = SubmissionMailer.with(submission:).curator_notification
 
-      expect(mail).to deliver_from("Admin <mssform@example.com>")
-      expect(mail).to deliver_to("Admin <mssform@example.com>")
+      expect(mail).to deliver_from('"DDBJ Mass Submission System (MSS)" <mass@ddbj.nig.ac.jp>')
+      expect(mail).to deliver_to('"DDBJ Mass Submission System (MSS)" <mass@ddbj.nig.ac.jp>')
 
       expect(mail).to have_subject("[DDBJ:NSUB000042] WGS: Whole Genome Shotgun")
 
