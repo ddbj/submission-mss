@@ -5,7 +5,7 @@ import { FetchFailed } from 'mssform/utils/safe-fetch';
 
 export interface Signature {
   Args: {
-    error: Error | object;
+    error: Error;
   };
 }
 
@@ -18,38 +18,32 @@ export default class ErrorMessageComponent extends Component<Signature> {
 
     const { error } = this.args;
 
-    this.setMessage(error);
+    void this.setMessage(error);
     this.setDetails(error);
   }
 
-  async setMessage(error: Signature['Args']['error']) {
+  async setMessage(error: Error) {
     if (error instanceof FetchFailed) {
       const { response } = error;
 
       try {
-        const json = await response.json();
+        const json = (await response.json()) as { error?: string };
 
         this.message = json.error ? json.error : JSON.stringify(json);
       } catch (e) {
         if (e instanceof SyntaxError) {
           this.message = await response.text();
         } else {
-          this.message = error.toString();
+          this.message = error.message;
         }
       }
-    } else if (error instanceof Error) {
-      this.message = error.message;
     } else {
-      this.message = error.toString();
+      this.message = error.message;
     }
   }
 
-  setDetails(error: Signature['Args']['error']) {
-    if (error instanceof Error) {
-      this.details = error.stack;
-    } else {
-      this.details = JSON.stringify(error, null, 2);
-    }
+  setDetails(error: Error) {
+    this.details = error.stack;
   }
 
   <template>
@@ -57,7 +51,7 @@ export default class ErrorMessageComponent extends Component<Signature> {
 
     <details>
       <summary>Details</summary>
-      <pre class='text-bg-dark text-pre-wrap p-3'><code>{{this.details}}</code></pre>
+      <pre class="text-bg-dark text-pre-wrap p-3"><code>{{this.details}}</code></pre>
     </details>
   </template>
 }
