@@ -5,10 +5,10 @@ RSpec.configure do |config|
         env = {
           MAIL_ALLOWED_DOMAINS:        nil,
           MASS_DIR_PATH_TEMPLATE:      mass_dir,
-          MSSFORM_URL:                 "http://mssform.example.com",
           MSS_WORKING_LIST_SHEET_ID:   "SHEET_ID",
           MSS_WORKING_LIST_SHEET_NAME: "SHEET_NAME",
-          SUBMISSIONS_DIR:             submissions_dir
+          SUBMISSIONS_DIR:             submissions_dir,
+          WEB_URL:                     "http://mssform.example.com"
         }
 
         ClimateControl.modify(env, &example)

@@ -34,6 +34,6 @@ Rails.application.routes.draw do
   }
 
   direct :submission_upload do |submission|
-    "#{ENV.fetch('MSSFORM_URL')}/home/submission/#{submission.mass_id}/upload?locale=#{submission.email_language}"
+    "#{ENV.fetch("WEB_URL")}/home/submission/#{submission.mass_id}/upload?locale=#{submission.email_language}"
   end
 end
