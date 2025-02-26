@@ -7,7 +7,7 @@ minio:
   service:           S3
   endpoint:          <%= ENV.fetch('MINIO_ENDPOINT') %>
   force_path_style:  true
-  bucket:            <%= ENV.fetch('MINIO_BUCKET') %>
+  bucket:            uploads
   access_key_id:     <%= ENV.fetch('MINIO_ACCESS_KEY_ID') %>
   secret_access_key: <%= ENV.fetch('MINIO_SECRET_ACCESS_KEY') %>
   region:            not-applicable

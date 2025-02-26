@@ -25,7 +25,9 @@ class DfastExtraction < ApplicationRecord
   end
 
   def working_dir
-    Pathname.new(ENV.fetch("EXTRACTION_WORKDIR")).join("mssform-dfast-uri-extraction-#{id}")
+    base = Rails.env.test? ? "tmp/storage" : "storage"
+
+    Rails.root.join(base, "extracts/dfast-#{id}")
   end
 
   private
