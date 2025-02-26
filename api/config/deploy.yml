@@ -38,7 +38,9 @@ env:
     GOOGLE_ACCOUNT_TYPE:    service_account
     MASS_DIR_PATH_TEMPLATE: '/submission/{user}/submission/{user}/mass'
     MINIO_BUCKET:           uploads
+    SOLID_QUEUE_IN_PUMA:    true
     SUBMISSIONS_DIR:        /app/api/storage/submissions
+    TZ:                     Asia/Tokyo
 
 volumes:
   - /mnt/submission:/submission

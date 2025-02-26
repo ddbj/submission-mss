@@ -92,7 +92,9 @@ Rails.application.configure do
   config.solid_queue.connects_to       = { database: { writing: :queue } }
 
   config.action_mailer.smtp_settings = {
-    address: "172.19.25.230",
-    port:    25
-  }.compact_blank
+    address:             "mail1i",
+    port:                465,
+    tls:                 true,
+    openssl_verify_mode: "none"
+  }
 end
