@@ -7,7 +7,7 @@ import { SubmissionFile } from 'mssform/models/submission-file';
 
 export default class FileListComponent extends Component {
   allowedExtensions = SubmissionFile.allowedExtensions;
-  fileInputElement  = null;
+  fileInputElement = null;
 
   @tracked dragOver = false;
 

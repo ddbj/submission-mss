@@ -11,13 +11,14 @@ addEventListener('message', async ({ data: { file } }) => {
 });
 
 // https://html.spec.whatwg.org/#email-state-(type=email)
-const email_re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+const email_re =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 async function parse(file) {
   const reader = file.stream().getReader();
 
   const contactPerson = new ContactPerson();
-  let holdDate        = null;
+  let holdDate = null;
 
   let inCommon;
 

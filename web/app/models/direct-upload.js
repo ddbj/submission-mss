@@ -3,8 +3,8 @@ import { BlobUpload } from '@rails/activestorage/src/blob_upload';
 
 export class DirectUpload {
   constructor(file, url, delegate, checksum) {
-    this.file     = file;
-    this.url      = url;
+    this.file = file;
+    this.url = url;
     this.delegate = delegate;
     this.checksum = checksum;
   }

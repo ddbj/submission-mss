@@ -33,7 +33,7 @@ export default class UploadFiles {
 
 class UploadFile {
   @tracked file;
-  @tracked isStarted    = false;
+  @tracked isStarted = false;
   @tracked uploadedSize = 0;
 
   constructor(file) {

@@ -6,13 +6,13 @@ export default class Router extends EmberRouter {
   rootURL = config.rootURL;
 }
 
-Router.map(function() {
-  this.route('home', function() {
-    this.route('submissions', { resetNamespace: true }, function() {
+Router.map(function () {
+  this.route('home', function () {
+    this.route('submissions', { resetNamespace: true }, function () {
       this.route('new');
     });
 
-    this.route('submission', { resetNamespace: true, path: 'submission/:id' }, function() {
+    this.route('submission', { resetNamespace: true, path: 'submission/:id' }, function () {
       this.route('upload');
     });
   });

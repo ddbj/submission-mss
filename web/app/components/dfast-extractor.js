@@ -15,24 +15,30 @@ export default class DfastExtractorComponent extends Component {
   @tracked error = null;
 
   get jobIds() {
-    return this.jobIdsText.split('\n').map((line) => line.trim()).filter((line) => line !== '');
+    return this.jobIdsText
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line !== '');
   }
 
   @action
   async extract() {
     this.extracting = true;
-    this.files      = [];
+    this.files = [];
 
     try {
       const extraction = await DfastExtraction.create(getOwner(this), this.jobIds);
 
-      await extraction.pollForResult((payload) => {
-        this.files = payload.files;
+      await extraction.pollForResult(
+        (payload) => {
+          this.files = payload.files;
 
-        this.args?.onPoll(payload);
-      }, (e) => {
-        this.errorModal.show(new Error(`Failed to fetch job (id=${e.job_id}). reason: ${e.reason}`));
-      });
+          this.args?.onPoll(payload);
+        },
+        (e) => {
+          this.errorModal.show(new Error(`Failed to fetch job (id=${e.job_id}). reason: ${e.reason}`));
+        },
+      );
     } finally {
       this.extracting = false;
     }

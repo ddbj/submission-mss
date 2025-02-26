@@ -32,12 +32,7 @@ const parserOptions = {
       ecmaVersion: 'latest',
       requireConfigFile: false,
       babelOptions: {
-        plugins: [
-          [
-            '@babel/plugin-proposal-decorators',
-            { decoratorsBeforeExport: true },
-          ],
-        ],
+        plugins: [['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }]],
       },
     },
     ts: {

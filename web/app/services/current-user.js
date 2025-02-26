@@ -54,9 +54,13 @@ export default class CurrentUserService extends Service {
       return;
     }
 
-    const res = await safeFetchWithModal(`${ENV.apiURL}/me`, {
-      headers: this.authorizationHeader,
-    }, this.errorModal);
+    const res = await safeFetchWithModal(
+      `${ENV.apiURL}/me`,
+      {
+        headers: this.authorizationHeader,
+      },
+      this.errorModal,
+    );
 
     const { uid } = await res.json();
 

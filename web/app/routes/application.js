@@ -11,7 +11,7 @@ export default class ApplicationRoute extends Route {
   queryParams = {
     locale: {
       refreshModel: true,
-      replace:      true,
+      replace: true,
     },
   };
 
@@ -44,7 +44,7 @@ export default class ApplicationRoute extends Route {
 function enumTranslations(locale) {
   const { enums } = ENV.APP;
 
-  const locales    = Object.fromEntries(enums.locales.map(({ key, label }) => [key, label[locale]]));
+  const locales = Object.fromEntries(enums.locales.map(({ key, label }) => [key, label[locale]]));
   const data_types = Object.fromEntries(enums.data_types.map(({ key, label }) => [key, label]));
   const sequencers = Object.fromEntries(enums.sequencers.map(({ key, label }) => [key, label]));
 
