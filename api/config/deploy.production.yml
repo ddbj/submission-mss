@@ -1,0 +1,36 @@
+servers:
+  web:
+    - mssform-production
+
+proxy:
+  host: mss.ddbj.nig.ac.jp
+
+builder:
+  args:
+    API_URL: https://mss.ddbj.nig.ac.jp/api
+
+env:
+  clear:
+    MINIO_ENDPOINT:       https://mss-storage.ddbj.nig.ac.jp
+    OIDC_ISSUER_URL:      https://idp.ddbj.nig.ac.jp/realms/master
+    SENTRY_CURRENT_ENV:   production
+    WEB_URL:              https://mss.ddbj.nig.ac.jp
+
+volumes:
+  - ./volumes/mssform-production/storage:/app/api/storage
+
+accessories:
+  postgres:
+    host: mssform-production
+
+    volumes:
+      - ./volumes/mssform-production/postgres:/var/lib/postgresql/data
+
+  minio:
+    host: mssform-production
+
+    proxy:
+      host: mss-storage.ddbj.nig.ac.jp
+
+    volumes:
+      - ./volumes/mssform-production/minio:/data
