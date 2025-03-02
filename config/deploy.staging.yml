@@ -18,7 +18,7 @@ env:
     WEB_URL:              https://mss-staging.ddbj.nig.ac.jp
 
 volumes:
-  - ./volumes/mssform-staging/storage:/app/api/storage
+  - ./volumes/mssform-staging/storage:/rails/storage
 
 accessories:
   postgres:

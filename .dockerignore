@@ -1,54 +1,46 @@
 # See https://docs.docker.com/engine/reference/builder/#dockerignore-file for more about ignoring files.
 
 # Ignore git directory.
-/api/.git/
-/api/.gitignore
+/.git/
+/.gitignore
 
 # Ignore bundler config.
-/api/.bundle
+/.bundle
 
-# Ignore all environment files (except templates).
-/api/.env*
-!/api/.env*.erb
+# Ignore all environment files.
+/.env*
 
 # Ignore all default key files.
-/api/config/master.key
-/api/config/credentials/*.key
+/config/master.key
+/config/credentials/*.key
 
 # Ignore all logfiles and tempfiles.
-/api/log/*
-/api/tmp/*
-!/api/log/.keep
-!/api/tmp/.keep
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
 
 # Ignore pidfiles, but keep the directory.
-/api/tmp/pids/*
-!/api/tmp/pids/.keep
+/tmp/pids/*
+!/tmp/pids/.keep
 
 # Ignore storage (uploaded files in development and any SQLite databases).
-/api/storage/*
-!/api/storage/.keep
-/api/tmp/storage/*
-!/api/tmp/storage/.keep
+/storage/*
+!/storage/.keep
+/tmp/storage/*
+!/tmp/storage/.keep
 
 # Ignore CI service files.
-/api/.github
+/.github
 
 # Ignore development files
-/api/.devcontainer
+/.devcontainer
 
 # Ignore Docker-related files
-/api/.dockerignore
-/api/Dockerfile*
-
 /.dockerignore
-/.git
-/.github/
-/.gitignore
-/ansible/
-/compose.yml
-/compose/
-/web/.github/
+/Dockerfile*
+
+/web/.github
 /web/.gitignore
-/web/dist/
-/web/node_modules/
+/web/dist
+/web/node_modules

@@ -11,11 +11,8 @@
 ARG RUBY_VERSION=3.4.2
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
-WORKDIR /app/config
-COPY config/enums.yml .
-
 # Rails app lives here
-WORKDIR /app/api
+WORKDIR /rails
 
 # Install base packages
 RUN apt-get update -qq && \
@@ -38,13 +35,13 @@ RUN apt-get update -qq && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
-COPY api/Gemfile api/Gemfile.lock ./
+COPY Gemfile Gemfile.lock ./
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 
 # Copy application code
-COPY api/ .
+COPY . .
 
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
@@ -57,10 +54,10 @@ ENV API_URL=${API_URL:?}
 
 RUN npm install --global pnpm@9
 
-WORKDIR /app/config
+WORKDIR /config
 COPY config/enums.yml .
 
-WORKDIR /app/web
+WORKDIR /web
 COPY web/ ./
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm build
@@ -80,8 +77,8 @@ RUN apt-get update -qq && \
 
 # Copy built artifacts: gems, application
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
-COPY --from=build /app/api /app/api
-COPY --from=web /app/web/dist/ /app/api/public
+COPY --from=build /rails /rails
+COPY --from=web /web/dist/ /rails/public
 
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid ${APP_GID:?} rails && \
@@ -90,7 +87,7 @@ RUN groupadd --system --gid ${APP_GID:?} rails && \
 USER ${APP_UID:?}:${APP_GID:?}
 
 # Entrypoint prepares the database.
-ENTRYPOINT ["/app/api/bin/docker-entrypoint"]
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start server via Thruster by default, this can be overwritten at runtime
 EXPOSE 80

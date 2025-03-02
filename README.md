@@ -1,8 +1,24 @@
-# Application form for Mass Submission System (MSS)
+# README
 
-Announcement: [New application form for Mass Submission System (MSS) is available](https://www.ddbj.nig.ac.jp/news/en/2022-06-15-e.html)
+This README would normally document whatever steps are necessary to get the
+application up and running.
 
-## Internals
+Things you may want to cover:
 
-- `api` - API server, Rails application in API-only mode
-- `web` - Web UI, single-page application with Ember.js
+* Ruby version
+
+* System dependencies
+
+* Configuration
+
+* Database creation
+
+* Database initialization
+
+* How to run the test suite
+
+* Services (job queues, cache servers, search engines, etc.)
+
+* Deployment instructions
+
+* ...

@@ -1,5 +1,5 @@
 Rails.application.config.after_initialize do
-  enums = YAML.load_file(Rails.root.join("../config/enums.yml")).deep_symbolize_keys
+  enums = YAML.load_file(Rails.root.join("config/enums.yml")).deep_symbolize_keys
 
   enums.fetch(:locales).each do |locale|
     key, label = locale.fetch_values(:key, :label)
