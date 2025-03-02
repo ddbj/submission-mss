@@ -46,13 +46,13 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-FROM docker.io/library/node:23.9.0 AS web
+FROM docker.io/library/node:22.14.0 AS web
 
 ARG API_URL
 
 ENV API_URL=${API_URL:?}
 
-RUN npm install --global pnpm@9
+RUN corepack enable pnpm
 
 WORKDIR /config
 COPY config/enums.yml .
