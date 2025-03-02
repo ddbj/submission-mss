@@ -17,7 +17,7 @@ env:
     WEB_URL:              https://mss.ddbj.nig.ac.jp
 
 volumes:
-  - ./volumes/mssform-production/storage:/app/api/storage
+  - ./volumes/mssform-production/storage:/rails/storage
 
 accessories:
   postgres:

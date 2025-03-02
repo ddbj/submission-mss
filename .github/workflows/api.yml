@@ -8,7 +8,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:14
+        image: postgres:17
 
         ports:
           - 5432:5432
@@ -23,10 +23,6 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-    defaults:
-      run:
-        working-directory: api
-
     env:
       PGHOST: localhost
       PGUSER: postgres
@@ -37,8 +33,8 @@ jobs:
 
       - uses: ruby/setup-ruby@v1
         with:
+          ruby-version: .ruby-version
           bundler-cache: true
-          working-directory: api
 
       - run: bin/rails db:test:prepare
       - run: bundle exec rspec
@@ -46,10 +42,6 @@ jobs:
   scan_ruby:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: api
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -59,7 +51,6 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
-          working-directory: api
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
@@ -67,10 +58,6 @@ jobs:
   lint:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: api
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -80,7 +67,6 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
-          working-directory: api
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github

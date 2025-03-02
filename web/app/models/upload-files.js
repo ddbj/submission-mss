@@ -2,6 +2,8 @@ import { tracked } from '@glimmer/tracking';
 
 import { DirectUpload } from 'mssform/models/direct-upload';
 
+import ENV from 'mssform/config/environment';
+
 export default class UploadFiles {
   @tracked uploads;
   @tracked currentUpload = null;
@@ -43,7 +45,7 @@ class UploadFile {
   perform(currentUser) {
     const upload = new DirectUpload(
       this.file.rawFile,
-      '/api/direct_uploads',
+      `${ENV.apiURL}/direct_uploads`,
       {
         directUploadWillCreateBlobWithXHR: (xhr) => {
           xhr.setRequestHeader('Authorization', `Bearer ${currentUser.apiKey}`);
