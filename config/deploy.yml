@@ -52,7 +52,7 @@ ssh:
 
 accessories:
   postgres:
-    image: postgres:17
+    image: postgres:17.4
 
     options:
       user: 2233:11370
@@ -67,7 +67,7 @@ accessories:
 
   minio:
     image: minio/minio:RELEASE.2025-02-28T09-55-16Z
-    cmd: server /data --console-address :9001
+    cmd: server /data
 
     proxy:
       app_port: 9000
