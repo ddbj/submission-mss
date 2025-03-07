@@ -25,7 +25,6 @@ export default class UploadProgressModalComponent extends Component {
     if (!files.length) return [];
 
     this.uploadFiles = new UploadFiles(files);
-
     this.modal.show();
 
     let blobs;

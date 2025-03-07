@@ -1,7 +1,9 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
-import { FetchFailed } from 'mssform/utils/safe-fetch';
+import { FetchError } from 'mssform/services/request';
+
+import type Owner from '@ember/owner';
 
 export interface Signature {
   Args: {
@@ -13,7 +15,7 @@ export default class ErrorMessageComponent extends Component<Signature> {
   @tracked message?: string;
   @tracked details?: string;
 
-  constructor(owner: unknown, args: Signature['Args']) {
+  constructor(owner: Owner, args: Signature['Args']) {
     super(owner, args);
 
     const { error } = this.args;
@@ -23,7 +25,7 @@ export default class ErrorMessageComponent extends Component<Signature> {
   }
 
   async setMessage(error: Error) {
-    if (error instanceof FetchFailed) {
+    if (error instanceof FetchError) {
       const { response } = error;
 
       try {

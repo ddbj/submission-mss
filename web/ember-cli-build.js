@@ -2,8 +2,6 @@
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
-const funnel = require('broccoli-funnel');
-
 module.exports = function (defaults) {
   const app = new EmberApp(defaults, {
     'ember-cli-babel': {
@@ -19,14 +17,16 @@ module.exports = function (defaults) {
     },
   });
 
-  app.import('node_modules/@primer/octicons/build/build.css');
-  app.import('node_modules/bootstrap/dist/css/bootstrap.css');
-
-  const sourcemaps = funnel('node_modules/bootstrap', {
-    srcDir: 'dist/css',
-    destDir: 'assets',
-    include: ['bootstrap.css.map'],
+  const { Webpack } = require('@embroider/webpack');
+  return require('@embroider/compat').compatBuild(app, Webpack, {
+    staticAddonTestSupportTrees: true,
+    staticAddonTrees: true,
+    staticEmberSource: true,
+    staticInvokables: true,
+    skipBabel: [
+      {
+        package: 'qunit',
+      },
+    ],
   });
-
-  return app.toTree([sourcemaps]);
 };

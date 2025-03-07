@@ -12,12 +12,14 @@ import { gt } from 'ember-truth-helpers';
 import { task } from 'ember-concurrency';
 
 export default class RecentSubmissions extends Component {
-  @service store;
+  @service request;
 
   @tracked submissions;
 
   loadSubmissions = task(async () => {
-    this.submissions = await this.store.findAll('submission');
+    const res = await this.request.fetch('/submissions');
+
+    this.submissions = (await res.json()).submissions;
   });
 
   constructor() {
@@ -49,23 +51,23 @@ export default class RecentSubmissions extends Component {
               </td>
 
               <td>
-                {{formatDate submission.createdAt}}
+                {{formatDate submission.created_at}}
               </td>
 
               <td>
                 {{#let (get submission.uploads "0") as |upload|}}
                   <ul class="list-unstyled m-0">
-                    {{#each (take 3 upload.dfastJobIds) as |jobId|}}
+                    {{#each (take 3 upload.dfast_job_ids) as |jobId|}}
                       <li><code>{{jobId}}</code></li>
                     {{/each}}
                   </ul>
 
-                  {{#if (gt submission.dfastJobIds.length 3)}}
+                  {{#if (gt submission.dfast_job_ids.length 3)}}
                     <details>
                       <summary>View all</summary>
 
                       <ul class="list-unstyled m-0">
-                        {{#each (drop 3 upload.dfastJobIds) as |jobId|}}
+                        {{#each (drop 3 upload.dfast_job_ids) as |jobId|}}
                           <li><code>{{jobId}}</code></li>
                         {{/each}}
                       </ul>

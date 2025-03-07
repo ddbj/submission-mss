@@ -1,37 +1,28 @@
 import { service } from '@ember/service';
 import { setOwner } from '@ember/application';
 
-import { safeFetchWithModal } from 'mssform/utils/safe-fetch';
-
 export default class DfastExtraction {
   static async create(owner, ids) {
-    const currentUser = owner.lookup('service:current-user');
-    const errorModal = owner.lookup('service:error-modal');
+    const request = owner.lookup('service:request');
 
-    const res = await safeFetchWithModal(
-      `/api/dfast_extractions`,
-      {
-        method: 'POST',
+    const res = await request.fetchWithModal(`/dfast_extractions`, {
+      method: 'POST',
 
-        headers: {
-          ...currentUser.authorizationHeader,
-          'Content-Type': 'application/json',
-        },
-
-        body: JSON.stringify({
-          ids,
-        }),
+      headers: {
+        'Content-Type': 'application/json',
       },
-      errorModal,
-    );
+
+      body: JSON.stringify({
+        ids,
+      }),
+    });
 
     const { _self: url } = await res.json();
 
     return new DfastExtraction(owner, url);
   }
 
-  @service currentUser;
-  @service errorModal;
+  @service request;
 
   constructor(owner, url) {
     setOwner(this, owner);
@@ -41,14 +32,7 @@ export default class DfastExtraction {
 
   async pollForResult(callback, onError) {
     for (;;) {
-      const res = await safeFetchWithModal(
-        this.url,
-        {
-          headers: this.currentUser.authorizationHeader,
-        },
-        this.errorModal,
-      );
-
+      const res = await this.request.fetchWithModal(this.url);
       const payload = await res.json();
 
       callback(payload);

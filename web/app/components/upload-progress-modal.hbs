@@ -35,7 +35,7 @@
                   <div
                     class="progress-bar"
                     role="progressbar"
-                    {{style (hash width=(concat percentage "%"))}}
+                    style={{html-safe (concat "width: " percentage "%")}}
                     aria-valuenow={{percentage}}
                     aria-valuemin="0"
                     aria-valuemax="100"

@@ -1,12 +1,18 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
+import OtherPerson from 'mssform/models/other-person';
+
 export default class SubmissionFormMetadataComponent extends Component {
   @action addOtherPerson() {
-    this.args.model.otherPeople.createRecord();
+    const { model } = this.args;
+
+    model.otherPeople = [...model.otherPeople, new OtherPerson()];
   }
 
   @action removeOtherPerson(person) {
-    person.destroyRecord();
+    const { model } = this.args;
+
+    model.otherPeople = model.otherPeople.filter((p) => p !== person);
   }
 }

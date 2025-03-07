@@ -1,29 +1,20 @@
 import { service } from '@ember/service';
 import { setOwner } from '@ember/application';
 
-import { safeFetchWithModal } from 'mssform/utils/safe-fetch';
-
 export default class MassDirectoryExtraction {
   static async create(owner) {
-    const currentUser = owner.lookup('service:current-user');
-    const errorModal = owner.lookup('service:error-modal');
+    const request = owner.lookup('service:request');
 
-    const res = await safeFetchWithModal(
-      `/api/mass_directory_extractions`,
-      {
-        method: 'POST',
-        headers: currentUser.authorizationHeader,
-      },
-      errorModal,
-    );
+    const res = await request.fetchWithModal('/mass_directory_extractions', {
+      method: 'POST',
+    });
 
     const { _self: url } = await res.json();
 
     return new MassDirectoryExtraction(owner, url);
   }
 
-  @service currentUser;
-  @service errorModal;
+  @service request;
 
   constructor(owner, url) {
     setOwner(this, owner);
@@ -33,14 +24,7 @@ export default class MassDirectoryExtraction {
 
   async pollForResult(callback) {
     for (;;) {
-      const res = await safeFetchWithModal(
-        this.url,
-        {
-          headers: this.currentUser.authorizationHeader,
-        },
-        this.errorModal,
-      );
-
+      const res = await this.request.fetchWithModal(this.url);
       const payload = await res.json();
 
       callback(payload);

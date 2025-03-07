@@ -1,25 +1,24 @@
-import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import { tracked } from '@glimmer/tracking';
 
-export default class Submission extends Model {
-  @belongsTo('contact-person', { async: false, inverse: null }) contactPerson;
+import ContactPerson from 'mssform/models/contact-person';
 
-  @hasMany('other-person', { async: false, inverse: null }) otherPeople;
-
-  @attr('boolean') tpa;
-  @attr('string') uploadVia;
-  @attr('number') extractionId;
-  @attr files;
-  @attr('number') entriesCount;
-  @attr('string') holdDate;
-  @attr('string') sequencer;
-  @attr('string') dataType;
-  @attr('string') description;
-  @attr('string') emailLanguage;
+export default class Submission {
+  @tracked tpa;
+  @tracked uploadVia;
+  @tracked extractionId;
+  @tracked files = [];
+  @tracked entriesCount;
+  @tracked holdDate;
+  @tracked contactPerson = new ContactPerson();
+  @tracked otherPeople = [];
+  @tracked sequencer;
+  @tracked dataType;
+  @tracked description;
+  @tracked emailLanguage;
 
   // readonly attributes
-  @hasMany('upload', { async: false, inverse: 'submission' }) uploads;
-
-  @attr('string') status;
-  @attr accessions;
-  @attr('date') createdAt;
+  @tracked uploads = [];
+  @tracked status;
+  @tracked accessions = [];
+  @tracked createdAt;
 }
