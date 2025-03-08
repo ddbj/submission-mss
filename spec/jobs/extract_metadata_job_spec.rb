@@ -2,10 +2,17 @@ require "rails_helper"
 
 RSpec.describe ExtractMetadataJob, type: :job do
   def write_file(path, content)
-    File.write File.join(ENV.fetch("MASS_DIR_PATH_TEMPLATE"), path), content
+    dir = Rails.application.config_for(:app).mass_dir_path_template!.gsub("{user}", "alice")
+
+    FileUtils.mkdir_p dir
+    File.write File.join(dir, path), content
   end
 
-  let(:extraction) { create(:mass_directory_extraction) }
+  let(:extraction) {
+    create(:mass_directory_extraction, **{
+      user: build(:user, uid: "alice")
+    })
+  }
 
   describe "ann" do
     example "ok" do

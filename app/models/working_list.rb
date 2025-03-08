@@ -1,17 +1,35 @@
 class WorkingList
   def self.instance
-    new(
-      sheet_id:   ENV.fetch("MSS_WORKING_LIST_SHEET_ID"),
-      sheet_name: ENV.fetch("MSS_WORKING_LIST_SHEET_NAME")
-    )
+    @instance ||= begin
+      config = Rails.application.config_for(:working_list)
+
+      new(
+        sheet_id:   config.sheet_id!,
+        sheet_name: config.sheet_name!
+      )
+    end
   end
 
   def initialize(sheet_id:, sheet_name:)
     @sheet_id   = sheet_id
     @sheet_name = sheet_name
 
-    @service               = Google::Apis::SheetsV4::SheetsService.new
-    @service.authorization = Google::Auth::ServiceAccountCredentials.from_env(scope: "https://www.googleapis.com/auth/spreadsheets")
+    @service = Google::Apis::SheetsV4::SheetsService.new
+
+    unless Rails.env.test?
+      config = Rails.application.config_for(:google)
+
+      @service.authorization = Google::Auth::ServiceAccountCredentials.make_creds(
+        scope: "https://www.googleapis.com/auth/spreadsheets",
+
+        json_key_io: StringIO.new({
+          account_type: "service_account",
+          client_email: config.client_email!,
+          client_id:    config.client_id!,
+          private_key:  config.private_key!
+        }.to_json)
+      )
+    end
   end
 
   def add_new_submission(submission)

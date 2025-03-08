@@ -2,7 +2,11 @@ class AuthsController < ApplicationController
   skip_before_action :authenticate
 
   def self.oidc_config
-    @oidc_config ||= OpenIDConnect::Discovery::Provider::Config.discover!(Rails.configuration.x.oidc_issuer_url)
+    @oidc_config ||= begin
+      issuer_url = Rails.application.config_for(:app).oidc_issuer_url!
+
+      OpenIDConnect::Discovery::Provider::Config.discover!(issuer_url)
+    end
   end
 
   def login
@@ -40,7 +44,7 @@ class AuthsController < ApplicationController
 
     cookies[:api_key] = user.api_key
 
-    redirect_to ENV.fetch("WEB_URL"), allow_other_host: true
+    redirect_to Rails.application.config_for(:app).web_url!, allow_other_host: true
   rescue Rack::OAuth2::Client::Error => e
     render plain: "Error: #{e.message}", status: :bad_request
   end

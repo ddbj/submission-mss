@@ -5,17 +5,6 @@ using TmpUploadedFile
 RSpec.describe UploadJob do
   include ActiveJob::TestHelper
 
-  around do |example|
-    Dir.mktmpdir do |dir|
-      env = {
-        MSS_WORKING_LIST_SHEET_ID:   "SHEET_ID",
-        MSS_WORKING_LIST_SHEET_NAME: "SHEET_NAME"
-      }
-
-      ClimateControl.modify(env, &example)
-    end
-  end
-
   before do
     submission = create(:submission, **{
       mass_id:        "NSUB000042",
@@ -41,7 +30,7 @@ RSpec.describe UploadJob do
       body: "{}"
     )
 
-    stub_request(:get, "https://sheets.googleapis.com/v4/spreadsheets/SHEET_ID/values:batchGet?ranges=SHEET_NAME!A1:A100").to_return(
+    stub_request(:get, "https://sheets.googleapis.com/v4/spreadsheets/WORKING_LIST_SHEET_ID/values:batchGet?ranges=WORKING_LIST_SHEET_NAME!A1:A100").to_return(
       headers: {
         content_type: "application/json"
       },
@@ -53,7 +42,7 @@ RSpec.describe UploadJob do
       )
     )
 
-    stub_request(:get, "https://sheets.googleapis.com/v4/spreadsheets/SHEET_ID/values:batchGet?ranges=SHEET_NAME!A101:A200").to_return(
+    stub_request(:get, "https://sheets.googleapis.com/v4/spreadsheets/WORKING_LIST_SHEET_ID/values:batchGet?ranges=WORKING_LIST_SHEET_NAME!A101:A200").to_return(
       headers: {
         content_type: "application/json"
       },
@@ -67,7 +56,7 @@ RSpec.describe UploadJob do
       )
     )
 
-    stub_request(:put, "https://sheets.googleapis.com/v4/spreadsheets/SHEET_ID/values/SHEET_NAME!L101").with(query: hash_including)
+    stub_request(:put, "https://sheets.googleapis.com/v4/spreadsheets/WORKING_LIST_SHEET_ID/values/WORKING_LIST_SHEET_NAME!L101").with(query: hash_including)
 
     UploadJob.perform_now upload
   end
@@ -78,7 +67,7 @@ RSpec.describe UploadJob do
     expect(dir.ftype).to                     eq("directory")
     expect(dir.join("example.ann").ftype).to eq("file")
 
-    expect(WebMock).to have_requested(:put, "https://sheets.googleapis.com/v4/spreadsheets/SHEET_ID/values/SHEET_NAME!L101").with(
+    expect(WebMock).to have_requested(:put, "https://sheets.googleapis.com/v4/spreadsheets/WORKING_LIST_SHEET_ID/values/WORKING_LIST_SHEET_NAME!L101").with(
       query: {
         valueInputOption: "RAW"
       },

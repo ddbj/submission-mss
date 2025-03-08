@@ -1,0 +1,20 @@
+development:
+  mass_dir_path_template: <%= Rails.root.join("storage/mass/{user}") %>
+  oidc_issuer_url:        http://keycloak.localhost:8080/realms/master
+  web_url:                http://mssform.localhost:4200
+
+test:
+  mass_dir_path_template: <%= Rails.root.join("tmp/storage/mass/{user}") %>
+  oidc_issuer_url:        http://keycloak.example.com/realms/master
+  web_url:                http://mssform.example.com
+
+production: &production
+  mass_dir_path_template: /submission/{user}/submission/{user}/mass
+  oidc_issuer_url:        https://idp.ddbj.nig.ac.jp/realms/master
+  web_url:                https://mss.ddbj.nig.ac.jp
+
+staging:
+  <<: *production
+  mail_allowed_domains: ddbj.nig.ac.jp,ursm.jp
+  oidc_issuer_url:      https://idp-staging.ddbj.nig.ac.jp/realms/master
+  web_url:              https://mss-staging.ddbj.nig.ac.jp

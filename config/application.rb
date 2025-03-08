@@ -43,7 +43,5 @@ module MSSForm
 
     config.active_storage.draw_routes = false
     config.time_zone                  = "Japan"
-
-    config.x.oidc_issuer_url = ENV.fetch("OIDC_ISSUER_URL", "http://localhost:8080/realms/master")
   end
 end

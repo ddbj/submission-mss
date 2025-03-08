@@ -1,0 +1,13 @@
+development:
+  access_key_id:     mssform
+  endpoint:          http://localhost:9000
+  secret_access_key: notasecret
+
+production: &production
+  access_key_id:     <%= Rails.application.credentials.dig(:minio, :access_key_id) %>
+  endpoint:          https://mss-storage.ddbj.nig.ac.jp
+  secret_access_key: <%= Rails.application.credentials.dig(:minio, :secret_access_key) %>
+
+staging:
+  <<: *production
+  endpoint: https://mss-storage-staging.ddbj.nig.ac.jp
