@@ -258,8 +258,8 @@ importers:
         specifier: ^9.19.0
         version: 9.21.0
       eslint-config-prettier:
-        specifier: ^9.1.0
-        version: 9.1.0(eslint@9.21.0)
+        specifier: ^10.1.1
+        version: 10.1.1(eslint@9.21.0)
       eslint-plugin-ember:
         specifier: ^12.5.0
         version: 12.5.0(@babel/core@7.26.9)(@typescript-eslint/parser@8.26.0(eslint@9.21.0)(typescript@5.7.3))(eslint@9.21.0)
@@ -268,7 +268,7 @@ importers:
         version: 17.16.1(eslint@9.21.0)(typescript@5.7.3)
       eslint-plugin-prettier:
         specifier: ^5.2.3
-        version: 5.2.3(@types/eslint@8.56.12)(eslint-config-prettier@9.1.0(eslint@9.21.0))(eslint@9.21.0)(prettier@3.5.3)
+        version: 5.2.3(@types/eslint@8.56.12)(eslint-config-prettier@10.1.1(eslint@9.21.0))(eslint@9.21.0)(prettier@3.5.3)
       eslint-plugin-qunit:
         specifier: ^8.1.2
         version: 8.1.2(eslint@9.21.0)
@@ -3639,8 +3639,8 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
-  eslint-config-prettier@9.1.0:
-    resolution: {integrity: sha512-NSWl5BFQWEPi1j4TjVNItzYV7dZXZ+wP6I6ZhrBGpChQhZRUaElihE9uRRkcbRnNb76UMKDF3r+WTmNcGPKsqw==}
+  eslint-config-prettier@10.1.1:
+    resolution: {integrity: sha512-4EQQr6wXwS+ZJSzaR5ZCrYgLxqvUjdXctaEtBqHcbkW944B1NQyO4qpdHQbXBONfwxXdkAY81HH4+LUfrg+zPw==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -8611,6 +8611,26 @@ snapshots:
       - ember-source
       - supports-color
 
+  '@types/ember@4.0.11':
+    dependencies:
+      '@types/ember__application': 4.0.11(@babel/core@7.26.9)
+      '@types/ember__array': 4.0.10(@babel/core@7.26.9)
+      '@types/ember__component': 4.0.22(@babel/core@7.26.9)
+      '@types/ember__controller': 4.0.12(@babel/core@7.26.9)
+      '@types/ember__debug': 4.0.8(@babel/core@7.26.9)
+      '@types/ember__engine': 4.0.11(@babel/core@7.26.9)
+      '@types/ember__error': 4.0.6
+      '@types/ember__object': 4.0.12(@babel/core@7.26.9)
+      '@types/ember__polyfills': 4.0.6
+      '@types/ember__routing': 4.0.22(@babel/core@7.26.9)
+      '@types/ember__runloop': 4.0.10
+      '@types/ember__service': 4.0.9(@babel/core@7.26.9)
+      '@types/ember__string': 3.0.15
+      '@types/ember__template': 4.0.7
+      '@types/ember__test': 4.0.6(@babel/core@7.26.9)
+      '@types/ember__utils': 4.0.7
+      '@types/rsvp': 4.0.9
+
   '@types/ember@4.0.11(@babel/core@7.26.9)':
     dependencies:
       '@types/ember__application': 4.0.11(@babel/core@7.26.9)
@@ -8637,7 +8657,7 @@ snapshots:
   '@types/ember__application@4.0.11(@babel/core@7.26.9)':
     dependencies:
       '@glimmer/component': 1.1.2(@babel/core@7.26.9)
-      '@types/ember': 4.0.11(@babel/core@7.26.9)
+      '@types/ember': 4.0.11
       '@types/ember__engine': 4.0.11(@babel/core@7.26.9)
       '@types/ember__object': 4.0.12(@babel/core@7.26.9)
       '@types/ember__owner': 4.0.9
@@ -8711,6 +8731,10 @@ snapshots:
       - '@babel/core'
       - supports-color
 
+  '@types/ember__runloop@4.0.10':
+    dependencies:
+      '@types/ember': 4.0.11
+
   '@types/ember__runloop@4.0.10(@babel/core@7.26.9)':
     dependencies:
       '@types/ember': 4.0.11(@babel/core@7.26.9)
@@ -8735,6 +8759,10 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
+
+  '@types/ember__utils@4.0.7':
+    dependencies:
+      '@types/ember': 4.0.11
 
   '@types/ember__utils@4.0.7(@babel/core@7.26.9)':
     dependencies:
@@ -11561,7 +11589,7 @@ snapshots:
       eslint: 9.21.0
       semver: 7.7.1
 
-  eslint-config-prettier@9.1.0(eslint@9.21.0):
+  eslint-config-prettier@10.1.1(eslint@9.21.0):
     dependencies:
       eslint: 9.21.0
 
@@ -11609,7 +11637,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-prettier@5.2.3(@types/eslint@8.56.12)(eslint-config-prettier@9.1.0(eslint@9.21.0))(eslint@9.21.0)(prettier@3.5.3):
+  eslint-plugin-prettier@5.2.3(@types/eslint@8.56.12)(eslint-config-prettier@10.1.1(eslint@9.21.0))(eslint@9.21.0)(prettier@3.5.3):
     dependencies:
       eslint: 9.21.0
       prettier: 3.5.3
@@ -11617,7 +11645,7 @@ snapshots:
       synckit: 0.9.1
     optionalDependencies:
       '@types/eslint': 8.56.12
-      eslint-config-prettier: 9.1.0(eslint@9.21.0)
+      eslint-config-prettier: 10.1.1(eslint@9.21.0)
 
   eslint-plugin-qunit@8.1.2(eslint@9.21.0):
     dependencies:
