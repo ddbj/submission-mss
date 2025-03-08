@@ -20,9 +20,9 @@ class Submission < ApplicationRecord
   end
 
   def root_dir
-    base = Rails.env.test? ? "tmp/storage" : "storage"
+    dir = Rails.application.config_for(:app).submissions_dir!
 
-    Rails.root.join(base, "submissions", mass_id)
+    Pathname.new(dir).join(mass_id)
   end
 
   def upload_disabled?
