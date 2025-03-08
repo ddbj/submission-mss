@@ -16,25 +16,12 @@ builder:
     APP_UID: 2233
 
 env:
-  secret:
-    - DATABASE_URL
-    - GOOGLE_CLIENT_EMAIL
-    - GOOGLE_CLIENT_ID
-    - GOOGLE_PRIVATE_KEY
-    - MINIO_ACCESS_KEY_ID
-    - MINIO_ROOT_PASSWORD
-    - MINIO_ROOT_USER
-    - MINIO_SECRET_ACCESS_KEY
-    - MSS_WORKING_LIST_SHEET_ID
-    - MSS_WORKING_LIST_SHEET_NAME
-    - SECRET_KEY_BASE
-    - SENTRY_DSN
-
   clear:
-    GOOGLE_ACCOUNT_TYPE:    service_account
-    MASS_DIR_PATH_TEMPLATE: '/submission/{user}/submission/{user}/mass'
-    SOLID_QUEUE_IN_PUMA:    true
-    TZ:                     Asia/Tokyo
+    SOLID_QUEUE_IN_PUMA: true
+    TZ:                  Asia/Tokyo
+
+  secret:
+    - RAILS_MASTER_KEY
 
 volumes:
   - /mnt/submission:/submission

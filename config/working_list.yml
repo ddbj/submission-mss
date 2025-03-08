@@ -1,0 +1,14 @@
+development:
+  sheet_id:   <%= ENV['WORKING_LIST_SHEET_ID'] %>
+  sheet_name: <%= ENV['WORKING_LIST_SHEET_NAME'] %>
+
+test:
+  sheet_id:   WORKING_LIST_SHEET_ID
+  sheet_name: WORKING_LIST_SHEET_NAME
+
+production: &production
+  sheet_id:   <%= Rails.application.credentials.dig(:working_list, :sheet_id) %>
+  sheet_name: <%= Rails.application.credentials.dig(:working_list, :sheet_name) %>
+
+staging:
+  <<: *production

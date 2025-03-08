@@ -43,7 +43,7 @@ class MassDirectoryExtraction < ApplicationRecord
   private
 
   def user_mass_dir
-    ENV.fetch("MASS_DIR_PATH_TEMPLATE").gsub("{user}", user.uid).tap { |path|
+    Rails.application.config_for(:app).mass_dir_path_template!.gsub("{user}", user.uid).tap { |path|
       raise "malformed directory path: #{path}" unless path == File.expand_path(path)
     }.then { Pathname.new(_1) }
   end

@@ -34,6 +34,8 @@ Rails.application.routes.draw do
   }
 
   direct :submission_upload do |submission|
-    "#{ENV.fetch("WEB_URL")}/home/submission/#{submission.mass_id}/upload?locale=#{submission.email_language}"
+    web_url = Rails.application.config_for(:app).web_url!
+
+    "#{web_url}/home/submission/#{submission.mass_id}/upload?locale=#{submission.email_language}"
   end
 end

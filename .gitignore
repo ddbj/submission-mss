@@ -29,4 +29,6 @@
 !/tmp/storage/.keep
 
 # Ignore master key for decrypting credentials and more.
+/config/credentials/production.key
+/config/credentials/staging.key
 /config/master.key

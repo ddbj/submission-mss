@@ -44,7 +44,7 @@ RSpec.describe ProcessSubmissionJob do
       body: "{}"
     )
 
-    stub_request(:post, "https://sheets.googleapis.com/v4/spreadsheets/SHEET_ID/values/SHEET_NAME!A1:append").with(query: hash_including)
+    stub_request(:post, "https://sheets.googleapis.com/v4/spreadsheets/WORKING_LIST_SHEET_ID/values/WORKING_LIST_SHEET_NAME!A1:append").with(query: hash_including)
 
     ProcessSubmissionJob.perform_now upload
   end
@@ -56,7 +56,7 @@ RSpec.describe ProcessSubmissionJob do
     expect(dir.join("example.ann").ftype).to   eq("file")
     expect(dir.join("example.fasta").ftype).to eq("file")
 
-    expect(WebMock).to have_requested(:post, "https://sheets.googleapis.com/v4/spreadsheets/SHEET_ID/values/SHEET_NAME!A1:append").with(
+    expect(WebMock).to have_requested(:post, "https://sheets.googleapis.com/v4/spreadsheets/WORKING_LIST_SHEET_ID/values/WORKING_LIST_SHEET_NAME!A1:append").with(
       query: {
         insertDataOption: "INSERT_ROWS",
         valueInputOption: "RAW"

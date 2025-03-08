@@ -1,0 +1,12 @@
+development:
+  client_email: <%= ENV['GOOGLE_CLIENT_EMAIL'] %>
+  client_id:    <%= ENV['GOOGLE_CLIENT_ID'] %>
+  private_key:  "<%= ENV['GOOGLE_PRIVATE_KEY']&.gsub("\n", '\n') %>"
+
+production: &production
+  client_email: <%= Rails.application.credentials.dig(:google, :client_email) %>
+  client_id:    <%= Rails.application.credentials.dig(:google, :client_id) %>
+  private_key:  "<%= Rails.application.credentials.dig(:google, :private_key)&.gsub("\n", '\n') %>"
+
+staging:
+  <<: *production

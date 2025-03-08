@@ -5,10 +5,10 @@ test:
 <% else %>
 minio:
   service:           S3
-  endpoint:          <%= ENV.fetch('MINIO_ENDPOINT') %>
+  endpoint:          <%= Rails.application.config_for(:minio).endpoint %>
   force_path_style:  true
   bucket:            uploads
-  access_key_id:     <%= ENV.fetch('MINIO_ACCESS_KEY_ID') %>
-  secret_access_key: <%= ENV.fetch('MINIO_SECRET_ACCESS_KEY') %>
+  access_key_id:     <%= Rails.application.config_for(:minio).access_key_id %>
+  secret_access_key: <%= Rails.application.config_for(:minio).secret_access_key %>
   region:            not-applicable
 <% end %>

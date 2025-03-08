@@ -62,15 +62,19 @@ RSpec.describe SubmissionMailer do
     end
 
     example "allowed domains" do
-      ClimateControl.modify MAIL_ALLOWED_DOMAINS: "example.com,baz.example.com" do
-        submission = create_submission(email_language: "ja")
+      allow(Rails.application).to receive(:config_for).with(:app).and_wrap_original { |method, *args, &block|
+        method.call(*args, &block).tap {
+          it.mail_allowed_domains = "example.com,baz.example.com"
+        }
+      }
 
-        mail = SubmissionMailer.with(submission:).submitter_confirmation
+      submission = create_submission(email_language: "ja")
 
-        expect(mail).to deliver_from('"DDBJ Mass Submission System (MSS)" <mass@ddbj.nig.ac.jp>')
-        expect(mail).to deliver_to("alice@example.com")
-        expect(mail).to cc_to("Alice Liddell <alice+contact@example.com>", "Carol <carol@baz.example.com>")
-      end
+      mail = SubmissionMailer.with(submission:).submitter_confirmation
+
+      expect(mail).to deliver_from('"DDBJ Mass Submission System (MSS)" <mass@ddbj.nig.ac.jp>')
+      expect(mail).to deliver_to("alice@example.com")
+      expect(mail).to cc_to("Alice Liddell <alice+contact@example.com>", "Carol <carol@baz.example.com>")
     end
   end
 
