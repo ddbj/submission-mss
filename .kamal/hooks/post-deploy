@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+export SENTRY_ORG=national-institute-of-genetics
+export SENTRY_PROJECT=mssform
+
+npx @sentry/cli releases new $KAMAL_VERSION
+npx @sentry/cli releases set-commits --auto $KAMAL_VERSION
+npx @sentry/cli releases finalize $KAMAL_VERSION
+npx @sentry/cli releases deploys $KAMAL_VERSION new --env $KAMAL_DESTINATION
