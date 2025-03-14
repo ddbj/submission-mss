@@ -54,8 +54,8 @@ importers:
         specifier: ^19.15.1
         version: 19.15.1
       '@rails/activestorage':
-        specifier: ^8.0.100
-        version: 8.0.100
+        specifier: ^8.0.200
+        version: 8.0.200
       '@tsconfig/ember':
         specifier: ^3.0.9
         version: 3.0.9
@@ -1997,8 +1997,8 @@ packages:
   '@primer/octicons@19.15.1':
     resolution: {integrity: sha512-2cFLIrfbNvfeAPxmJTr/k7/b5QvIxqM7MeroGrXojDodA2yB1nXyt91Xhu9+2e0CL5ZAe3Vd2/fEf9N9EUiX9A==}
 
-  '@rails/activestorage@8.0.100':
-    resolution: {integrity: sha512-/fIFav9RFFzQKK3a91O2OOdnHxPx+mBIR6wZDxeH9bcbDf2dZqhVcr5DGRJuhkF8U7C3s0tYvYafscmkBNRlHQ==}
+  '@rails/activestorage@8.0.200':
+    resolution: {integrity: sha512-V7GnZXsAMPDWVOBv4/XpHwj5sOw5bWjidWCuUbK3Zx1xt2pOfFaeJDUG7fEWb1MwP4aW1oVVlGkJBdXVyvru0A==}
 
   '@simple-dom/document@1.4.0':
     resolution: {integrity: sha512-/RUeVH4kuD3rzo5/91+h4Z1meLSLP66eXqpVAw/4aZmYozkeqUkMprq0znL4psX/adEed5cBgiNJcfMz/eKZLg==}
@@ -9687,7 +9687,7 @@ snapshots:
     dependencies:
       object-assign: 4.1.1
 
-  '@rails/activestorage@8.0.100':
+  '@rails/activestorage@8.0.200':
     dependencies:
       spark-md5: 3.0.2
 

@@ -39,7 +39,7 @@
     "@glint/template": "^1.5.2",
     "@popperjs/core": "^2.11.8",
     "@primer/octicons": "^19.15.1",
-    "@rails/activestorage": "^8.0.100",
+    "@rails/activestorage": "^8.0.200",
     "@tsconfig/ember": "^3.0.9",
     "@types/bootstrap": "^5.2.10",
     "@types/ember": "^4.0.11",
