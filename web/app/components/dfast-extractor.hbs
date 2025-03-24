@@ -1,17 +1,25 @@
 <div class="card">
-  <form class="card-body" {{on 'submit' (prevent-default this.extract)}}>
+  <form class="card-body" {{on "submit" (prevent-default this.extract)}}>
     <div class="mb-3">
       {{#let (unique-id) as |id|}}
-        <label for={{id}} class="form-label">{{t 'dfast-extractor.ids-label'}}</label>
+        <label for={{id}} class="form-label">{{t "dfast-extractor.ids-label"}}</label>
 
-        <div class="form-text">{{t 'dfast-extractor.ids-help-html' htmlSafe=true}}</div>
+        <div class="form-text">{{t "dfast-extractor.ids-help-html" htmlSafe=true}}</div>
 
-        <textarea rows={{6}} required disabled={{this.extracting}} placeholder="01234567-89ab-cdef-0000-000000000001&#10;01234567-89ab-cdef-0000-000000000002" class="form-control" id={{id}} {{on 'input' (pick 'target.value' (set this 'jobIdsText'))}}>{{this.jobIdsText}}</textarea>
+        <textarea
+          rows={{6}}
+          required
+          disabled={{this.extracting}}
+          placeholder="01234567-89ab-cdef-0000-000000000001&#10;01234567-89ab-cdef-0000-000000000002"
+          class="form-control"
+          id={{id}}
+          {{on "input" (pick "target.value" (set this "jobIdsText"))}}
+        >{{this.jobIdsText}}</textarea>
       {{/let}}
     </div>
 
     <button type="submit" class="btn btn-primary" disabled={{this.extracting}}>
-      {{t 'dfast-extractor.submit'}}
+      {{t "dfast-extractor.submit"}}
     </button>
 
     {{#if this.extracting}}
@@ -22,20 +30,26 @@
 
     {{#if this.error}}
       <div class="text-danger mt-2">
-        Failed to fetch job (id=<code>{{this.error.job_id}}</code>). reason: {{this.error.reason}}
+        Failed to fetch job (id=<code>{{this.error.job_id}}</code>). reason:
+        {{this.error.reason}}
       </div>
     {{/if}}
   </form>
 
   {{#if this.files.length}}
     <ul class="list-group list-group-flush overflow-auto" style="max-height: 550px">
-      {{#each (sort-by 'name' this.files) key='name' as |file|}}
-        <DfastExtractor::Item @file={{file}} @errors={{append file.errors (or (map-get @crossoverErrors file) (array))}} />
+      {{#each (sort-by "name" this.files) key="name" as |file|}}
+        <DfastExtractor::Item
+          @file={{file}}
+          @errors={{append file.errors (or (map-get @crossoverErrors file) (array))}}
+        />
       {{/each}}
     </ul>
 
     <div class="card-footer">
-      {{this.files.length}} files, {{filesize (sum (map-by 'size' this.files))}}
+      {{this.files.length}}
+      files,
+      {{filesize (sum (map-by "size" this.files))}}
     </div>
   {{/if}}
 </div>

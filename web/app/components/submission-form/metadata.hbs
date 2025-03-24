@@ -1,31 +1,43 @@
-{{t 'submission-form.metadata.notice-html' htmlSafe=true}}
+{{t "submission-form.metadata.notice-html" htmlSafe=true}}
 
-<form class="vstack gap-3" {{on 'submit' (prevent-default @nav.goNext)}} {{leaving-confirmation}}>
+<form class="vstack gap-3" {{on "submit" (prevent-default @nav.goNext)}} {{leaving-confirmation}}>
   <div class="card">
     <div class="card-header">
-      {{t 'submission-form.metadata.entries-html' htmlSafe=true}}
+      {{t "submission-form.metadata.entries-html" htmlSafe=true}}
     </div>
 
     <div class="card-body">
       <div class="row row-cols-2">
         <div class="col">
           <label for="entriesCount" class="form-label">
-            {{t 'submission-form.metadata.entries-count'}}
+            {{t "submission-form.metadata.entries-count"}}
           </label>
 
-          <input type="number" value={{@model.entriesCount}} readonly class="form-control-plaintext" id="entriesCount" />
+          <input
+            type="number"
+            value={{@model.entriesCount}}
+            readonly
+            class="form-control-plaintext"
+            id="entriesCount"
+          />
         </div>
 
         <div class="col vstack gap-1">
           <div>
             <label for="holdDate" class="form-label">
-              {{t 'submission-form.metadata.hold-date'}}
+              {{t "submission-form.metadata.hold-date"}}
             </label>
 
             {{#if @model.holdDate}}
               <input type="date" value={{@model.holdDate}} readonly class="form-control-plaintext" id="holdDate" />
             {{else}}
-              <input type="text" value={{t 'submission-form.metadata.release-immediately'}} readonly class="form-control-plaintext" id="holdDate" />
+              <input
+                type="text"
+                value={{t "submission-form.metadata.release-immediately"}}
+                readonly
+                class="form-control-plaintext"
+                id="holdDate"
+              />
             {{/if}}
           </div>
         </div>
@@ -35,7 +47,7 @@
 
   <div class="card">
     <div class="card-header">
-      {{t 'submission-form.metadata.contact-person'}}
+      {{t "submission-form.metadata.contact-person"}}
     </div>
 
     <div class="card-body">
@@ -43,33 +55,51 @@
         {{#let @model.contactPerson as |person|}}
           <div class="col">
             <label for="contactPerson.email" class="form-label">
-              {{t 'submission-form.metadata.email'}}
+              {{t "submission-form.metadata.email"}}
             </label>
 
-            <input type="email" value={{person.email}} readonly class="form-control-plaintext" id="contactPerson.email" />
+            <input
+              type="email"
+              value={{person.email}}
+              readonly
+              class="form-control-plaintext"
+              id="contactPerson.email"
+            />
           </div>
 
           <div class="col">
             <label for="contactPerson.fullName" class="form-label">
-              {{t 'submission-form.metadata.full-name'}}
+              {{t "submission-form.metadata.full-name"}}
             </label>
 
-            <input type="text" value={{person.fullName}} readonly class="form-control-plaintext" id="contactPerson.fullName" />
+            <input
+              type="text"
+              value={{person.fullName}}
+              readonly
+              class="form-control-plaintext"
+              id="contactPerson.fullName"
+            />
           </div>
 
           <div class="col">
             <label for="contactPerson.affiliation" class="form-label">
-              {{t 'submission-form.metadata.affiliation'}}
+              {{t "submission-form.metadata.affiliation"}}
             </label>
 
-            <input type="text" value={{person.affiliation}} readonly class="form-control-plaintext" id="contactPerson.affiliation" />
+            <input
+              type="text"
+              value={{person.affiliation}}
+              readonly
+              class="form-control-plaintext"
+              id="contactPerson.affiliation"
+            />
           </div>
         {{/let}}
       </div>
     </div>
 
     <div class="card-body">
-      {{t 'submission-form.metadata.other-person-html' htmlSafe=true}}
+      {{t "submission-form.metadata.other-person-html" htmlSafe=true}}
 
       <div class="card">
         <ul class="list-group list-group-flush">
@@ -78,39 +108,65 @@
               <div class="row">
                 <div class="col">
                   <label for="otherPerson.{{i}}.email" class="form-label">
-                    {{t 'submission-form.metadata.email'}}
-                    <small class="text-danger">{{t 'submission-form.metadata.required'}}</small>
+                    {{t "submission-form.metadata.email"}}
+                    <small class="text-danger">{{t "submission-form.metadata.required"}}</small>
                   </label>
 
-                  <input type="email" value={{person.email}} required={{true}} class="form-control" id="otherPerson.{{i}}.email" {{on 'change' (pick 'target.value' (set person 'email'))}} />
+                  <input
+                    type="email"
+                    value={{person.email}}
+                    required={{true}}
+                    class="form-control"
+                    id="otherPerson.{{i}}.email"
+                    {{on "change" (pick "target.value" (set person "email"))}}
+                  />
                 </div>
 
                 <div class="col">
                   <label for="otherPerson.{{i}}.fullName" class="form-label">
-                    {{t 'submission-form.metadata.full-name'}}
-                    <small class="text-danger">{{t 'submission-form.metadata.required'}}</small>
+                    {{t "submission-form.metadata.full-name"}}
+                    <small class="text-danger">{{t "submission-form.metadata.required"}}</small>
                   </label>
 
-                  <input type="text" value={{person.fullName}} required={{true}} pattern="[a-zA-Z\.,\-' ]*" maxlength="255" title={{t 'submission-form.metadata.full-name-title'}} class="form-control" id="otherPerson.{{i}}.fullName" {{on 'change' (pick 'target.value' (set person 'fullName'))}} />
+                  <input
+                    type="text"
+                    value={{person.fullName}}
+                    required={{true}}
+                    pattern="[a-zA-Z\.,\-' ]*"
+                    maxlength="255"
+                    title={{t "submission-form.metadata.full-name-title"}}
+                    class="form-control"
+                    id="otherPerson.{{i}}.fullName"
+                    {{on "change" (pick "target.value" (set person "fullName"))}}
+                  />
                 </div>
 
                 <div class="col-auto align-self-center">
-                  <button type="button" class="btn btn-link p-2" {{on 'click' (prevent-default (fn this.removeOtherPerson person))}}>
-                    {{svg-jar 'no-entry-24' class='octicon fill-danger' role='img' desc=(t 'submission-form.metadata.remove')}}
+                  <button
+                    type="button"
+                    class="btn btn-link p-2"
+                    {{on "click" (prevent-default (fn this.removeOtherPerson person))}}
+                  >
+                    {{svg-jar
+                      "no-entry-24"
+                      class="octicon fill-danger"
+                      role="img"
+                      desc=(t "submission-form.metadata.remove")
+                    }}
                   </button>
                 </div>
               </div>
             </li>
           {{else}}
             <li class="list-group-item py-3 text-body-secondary text-center">
-              {{t 'submission-form.metadata.no-other-person'}}
+              {{t "submission-form.metadata.no-other-person"}}
             </li>
           {{/each}}
         </ul>
 
         <div class="card-footer bg-white">
-          <button type="button" class="btn btn-outline-primary" {{on 'click' (prevent-default this.addOtherPerson)}}>
-            {{t 'submission-form.metadata.add'}}
+          <button type="button" class="btn btn-outline-primary" {{on "click" (prevent-default this.addOtherPerson)}}>
+            {{t "submission-form.metadata.add"}}
           </button>
         </div>
       </div>
@@ -119,16 +175,21 @@
 
   <div class="card">
     <div class="card-header">
-      {{t 'submission-form.metadata.sequencer'}}
-      <small class="text-danger">{{t 'submission-form.metadata.required'}}</small>
+      {{t "submission-form.metadata.sequencer"}}
+      <small class="text-danger">{{t "submission-form.metadata.required"}}</small>
     </div>
 
     <div class="card-body">
       <RadioGroup as |group|>
-        {{#each (enum 'sequencers') as |sequencer|}}
+        {{#each (enum "sequencers") as |sequencer|}}
           <div class="form-check">
             <group.radio as |radio|>
-              <radio.input checked={{eq @model.sequencer sequencer.key}} class="form-check-input" required {{on 'change' (set @model 'sequencer' sequencer.key)}} />
+              <radio.input
+                checked={{eq @model.sequencer sequencer.key}}
+                class="form-check-input"
+                required
+                {{on "change" (set @model "sequencer" sequencer.key)}}
+              />
 
               <radio.label class="form-check-label">
                 {{sequencer.label}}
@@ -142,15 +203,15 @@
 
   <div class="card">
     <div class="card-header">
-      {{t 'submission-form.metadata.data-type'}}
-      <small class="text-danger">{{t 'submission-form.metadata.required'}}</small>
+      {{t "submission-form.metadata.data-type"}}
+      <small class="text-danger">{{t "submission-form.metadata.required"}}</small>
     </div>
 
     <div class="card-body">
-      <select required class="form-select" id="dataType" {{on 'change' (pick 'target.value' (set @model 'dataType'))}}>
+      <select required class="form-select" id="dataType" {{on "change" (pick "target.value" (set @model "dataType"))}}>
         <option selected={{is-none @model.dataType}}></option>
 
-        {{#each (enum 'data_types') as |type|}}
+        {{#each (enum "data_types") as |type|}}
           <option value={{type.key}} selected={{eq @model.dataType type.key}}>
             {{type.label}}
           </option>
@@ -158,7 +219,7 @@
       </select>
 
       <div class="form-text">
-        {{t 'submission-form.metadata.data-type-text-html' htmlSafe=true}}
+        {{t "submission-form.metadata.data-type-text-html" htmlSafe=true}}
       </div>
     </div>
   </div>
@@ -166,40 +227,53 @@
   <div class="card">
     <div class="card-header">
       <label for="description">
-        {{t 'submission-form.metadata.description'}}
-        <small class="text-body-secondary">{{t 'submission-form.metadata.optional'}}</small>
+        {{t "submission-form.metadata.description"}}
+        <small class="text-body-secondary">{{t "submission-form.metadata.optional"}}</small>
       </label>
     </div>
 
     <div class="card-body">
       <div class="form-text">
-        {{t 'submission-form.metadata.description-text-html' htmlSafe=true}}
+        {{t "submission-form.metadata.description-text-html" htmlSafe=true}}
       </div>
 
-      <textarea maxlength="1000" rows="8" placeholder={{t 'submission-form.metadata.description-placeholder'}} class="form-control" id="description" {{on 'input' (pick 'target.value' (set @model 'description'))}}>{{@model.description}}</textarea>
+      <textarea
+        maxlength="1000"
+        rows="8"
+        placeholder={{t "submission-form.metadata.description-placeholder"}}
+        class="form-control"
+        id="description"
+        {{on "input" (pick "target.value" (set @model "description"))}}
+      >{{@model.description}}</textarea>
 
       <div class="form-text text-end">
-        {{!-- template-lint-disable no-bare-strings --}}
-        {{or @model.description.length 0}} / 1000
+        {{! template-lint-disable no-bare-strings }}
+        {{or @model.description.length 0}}
+        / 1000
       </div>
     </div>
   </div>
 
   <div class="card">
     <div class="card-header">
-      {{t 'submission-form.metadata.email-language'}}
-      <small class="text-danger">{{t 'submission-form.metadata.required'}}</small>
+      {{t "submission-form.metadata.email-language"}}
+      <small class="text-danger">{{t "submission-form.metadata.required"}}</small>
     </div>
 
     <div class="card-body">
       <RadioGroup as |group|>
-        {{#each (enum 'locales') as |locale|}}
+        {{#each (enum "locales") as |locale|}}
           <div class="form-check">
             <group.radio as |radio|>
-              <radio.input checked={{eq @model.emailLanguage locale.key}} required class="form-check-input" {{on 'change' (set @model 'emailLanguage' locale.key)}} />
+              <radio.input
+                checked={{eq @model.emailLanguage locale.key}}
+                required
+                class="form-check-input"
+                {{on "change" (set @model "emailLanguage" locale.key)}}
+              />
 
               <radio.label class="form-check-label">
-                {{t (concat 'locales.' locale.key)}}
+                {{t (concat "locales." locale.key)}}
               </radio.label>
             </group.radio>
           </div>
@@ -209,7 +283,9 @@
   </div>
 
   <div class="hstack gap-3 justify-content-end">
-    <a href class="btn btn-outline-primary px-4" {{on 'click' (prevent-default @nav.goPrev)}}>{{t 'submission-form.nav.back'}}</a>
-    <button type="submit" class="btn btn-primary px-5">{{t 'submission-form.nav.next'}}</button>
+    <a href class="btn btn-outline-primary px-4" {{on "click" (prevent-default @nav.goPrev)}}>{{t
+        "submission-form.nav.back"
+      }}</a>
+    <button type="submit" class="btn btn-primary px-5">{{t "submission-form.nav.next"}}</button>
   </div>
 </form>

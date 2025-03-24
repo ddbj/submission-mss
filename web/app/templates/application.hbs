@@ -1,20 +1,32 @@
-{{page-title (t 'application.title')}}
+{{page-title (t "application.title")}}
 
 <nav class="navbar navbar-expand navbar-dark bg-dark">
   <div class="container">
-    <LinkTo @route="index" class="navbar-brand">{{t 'application.title'}}</LinkTo>
+    <LinkTo @route="index" class="navbar-brand">{{t "application.title"}}</LinkTo>
 
     <div class="navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarLang" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {{t 'application.language'}}: {{t (concat 'application.locale.' this.locale)}}
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarLang"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {{t "application.language"}}:
+            {{t (concat "application.locale." this.locale)}}
           </a>
 
           <ul class="dropdown-menu" aria-labelledby="navbarLang">
             <li>
-              <a class="dropdown-item" href {{on 'click' (prevent-default (fn this.changeLocale 'ja'))}}>{{t 'application.locale.ja'}}</a>
-              <a class="dropdown-item" href {{on 'click' (prevent-default (fn this.changeLocale 'en'))}}>{{t 'application.locale.en'}}</a>
+              <a class="dropdown-item" href {{on "click" (prevent-default (fn this.changeLocale "ja"))}}>{{t
+                  "application.locale.ja"
+                }}</a>
+              <a class="dropdown-item" href {{on "click" (prevent-default (fn this.changeLocale "en"))}}>{{t
+                  "application.locale.en"
+                }}</a>
             </li>
           </ul>
         </li>
