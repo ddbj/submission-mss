@@ -1,36 +1,46 @@
-{{page-title (t 'upload-form.title')}}
+{{page-title (t "upload-form.title")}}
 
 {{#if this.isCompleted}}
-  {{t 'upload-form.complete-html' htmlSafe=true}}
+  {{t "upload-form.complete-html" htmlSafe=true}}
 
-  <LinkTo @route="home">{{t 'go-to-home'}}</LinkTo>
+  <LinkTo @route="home">{{t "go-to-home"}}</LinkTo>
 {{else}}
-  <h1 class="display-6 my-4">{{t 'upload-form.title'}}</h1>
+  <h1 class="display-6 my-4">{{t "upload-form.title"}}</h1>
 
-  {{t 'upload-form.description-html' massId=@model.id htmlSafe=true}}
+  {{t "upload-form.description-html" massId=@model.id htmlSafe=true}}
 
   <UploadProgressModal as |modal|>
-    <form {{on 'submit' (prevent-default (fn this.submit modal))}} {{leaving-confirmation}}>
+    <form {{on "submit" (prevent-default (fn this.submit modal))}} {{leaving-confirmation}}>
       <div class="vstack gap-3">
         <div class="card">
           <div class="card-body">
             <RadioGroup as |group|>
               <div class="form-check">
                 <group.radio as |radio|>
-                  <radio.input checked={{eq this.uploadVia 'dfast'}} required class="form-check-input" {{on 'change' (fn this.setUploadVia 'dfast')}} />
+                  <radio.input
+                    checked={{eq this.uploadVia "dfast"}}
+                    required
+                    class="form-check-input"
+                    {{on "change" (fn this.setUploadVia "dfast")}}
+                  />
 
                   <radio.label class="form-check-label">
-                    {{t 'submission-form.files.a1'}}
+                    {{t "submission-form.files.a1"}}
                   </radio.label>
                 </group.radio>
               </div>
 
               <div class="form-check">
                 <group.radio as |radio|>
-                  <radio.input checked={{eq this.uploadVia 'webui'}} required class="form-check-input" {{on 'change' (fn this.setUploadVia 'webui')}} />
+                  <radio.input
+                    checked={{eq this.uploadVia "webui"}}
+                    required
+                    class="form-check-input"
+                    {{on "change" (fn this.setUploadVia "webui")}}
+                  />
 
                   <radio.label class="form-check-label">
-                    {{t 'submission-form.files.a2'}}
+                    {{t "submission-form.files.a2"}}
                   </radio.label>
                 </group.radio>
               </div>
@@ -38,19 +48,25 @@
               <div class="hstack gap-3">
                 <div class="form-check">
                   <group.radio as |radio|>
-                    <radio.input checked={{eq this.uploadVia 'mass_directory'}} required class="form-check-input" {{on 'change' (fn this.setUploadVia 'mass_directory')}} />
+                    <radio.input
+                      checked={{eq this.uploadVia "mass_directory"}}
+                      required
+                      class="form-check-input"
+                      {{on "change" (fn this.setUploadVia "mass_directory")}}
+                    />
 
                     <radio.label class="form-check-label">
-                      {{t 'submission-form.files.a3-html' htmlSafe=true userMassDir=(user-mass-dir)}}
+                      {{t "submission-form.files.a3-html" htmlSafe=true userMassDir=(user-mass-dir)}}
                     </radio.label>
 
-                    {{t 'submission-form.files.a3-note-html' htmlSafe=true}}
+                    {{t "submission-form.files.a3-note-html" htmlSafe=true}}
                   </group.radio>
                 </div>
 
                 <small>
-                  <a href={{t 'submission-form.files.a3-help-url'}} target="_blank" rel="noopener noreferrer">
-                    {{svg-jar 'question-16' class='octicon' width='14px' style='margin-top: 2px'}} {{t 'submission-form.files.a3-help-text'}}
+                  <a href={{t "submission-form.files.a3-help-url"}} target="_blank" rel="noopener noreferrer">
+                    {{svg-jar "question-16" class="octicon" width="14px" style="margin-top: 2px"}}
+                    {{t "submission-form.files.a3-help-text"}}
                   </a>
                 </small>
               </div>
@@ -58,19 +74,24 @@
           </div>
         </div>
 
-        {{#if (eq this.uploadVia 'dfast')}}
+        {{#if (eq this.uploadVia "dfast")}}
           <DfastExtractor @onPoll={{this.onExtractProgress}} @crossoverErrors={{this.crossoverErrors}} />
-        {{else if (eq this.uploadVia 'webui')}}
+        {{else if (eq this.uploadVia "webui")}}
           <div class="card">
             <div class="card-body">
-              {{t 'upload-form.instructions-html' htmlSafe=true}}
+              {{t "upload-form.instructions-html" htmlSafe=true}}
 
               <FileList::SupportedFileTypes />
 
-              <FileList @files={{this.files}} @crossoverErrors={{this.crossoverErrors}} @onAdd={{this.addFile}} @onRemove={{this.removeFile}} />
+              <FileList
+                @files={{this.files}}
+                @crossoverErrors={{this.crossoverErrors}}
+                @onAdd={{this.addFile}}
+                @onRemove={{this.removeFile}}
+              />
             </div>
           </div>
-        {{else if (eq this.uploadVia 'mass_directory')}}
+        {{else if (eq this.uploadVia "mass_directory")}}
           <MassDirectoryExtractor @onPoll={{this.onExtractProgress}} @crossoverErrors={{this.crossoverErrors}} />
         {{/if}}
       </div>
@@ -79,7 +100,9 @@
         <hr />
 
         <div class="text-end">
-          <button type="submit" disabled={{not this.isSubmitButtonEnabled}} class="btn btn-primary px-5">{{t 'upload-form.upload'}}</button>
+          <button type="submit" disabled={{not this.isSubmitButtonEnabled}} class="btn btn-primary px-5">{{t
+              "upload-form.upload"
+            }}</button>
         </div>
       {{/if}}
     </form>

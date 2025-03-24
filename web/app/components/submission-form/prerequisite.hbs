@@ -1,18 +1,23 @@
-{{t 'submission-form.prerequisite.instructions-html' htmlSafe=true}}
+{{t "submission-form.prerequisite.instructions-html" htmlSafe=true}}
 
-<form {{on 'submit' (prevent-default @nav.goNext)}} {{leaving-confirmation}}>
+<form {{on "submit" (prevent-default @nav.goNext)}} {{leaving-confirmation}}>
   <div class="vstack gap-3">
     <div class="card">
       <div class="card-body">
-        <p>{{t 'submission-form.prerequisite.q-1'}}</p>
+        <p>{{t "submission-form.prerequisite.q-1"}}</p>
 
         <RadioGroup as |group|>
           <div class="form-check">
             <group.radio as |radio|>
-              <radio.input checked={{eq @state.maybeTpa false}} required class="form-check-input" {{on 'change' (fn this.setMaybeTpa false)}} />
+              <radio.input
+                checked={{eq @state.maybeTpa false}}
+                required
+                class="form-check-input"
+                {{on "change" (fn this.setMaybeTpa false)}}
+              />
 
               <radio.label class="form-check-label">
-                {{t 'submission-form.prerequisite.a1-1'}}
+                {{t "submission-form.prerequisite.a1-1"}}
               </radio.label>
             </group.radio>
           </div>
@@ -20,17 +25,23 @@
           <div class="hstack gap-3">
             <div class="form-check">
               <group.radio as |radio|>
-                <radio.input checked={{eq @state.maybeTpa true}} required class="form-check-input" {{on 'change' (fn this.setMaybeTpa true)}} />
+                <radio.input
+                  checked={{eq @state.maybeTpa true}}
+                  required
+                  class="form-check-input"
+                  {{on "change" (fn this.setMaybeTpa true)}}
+                />
 
                 <radio.label class="form-check-label">
-                  {{t 'submission-form.prerequisite.a1-2'}}
+                  {{t "submission-form.prerequisite.a1-2"}}
                 </radio.label>
               </group.radio>
             </div>
 
             <small>
-              <a href={{t 'submission-form.prerequisite.about-tpa-url'}} target="_blank" rel="noopener noreferrer">
-                {{svg-jar 'question-16' class='octicon' width='14px' style='margin-top: 2px'}} {{t 'submission-form.prerequisite.about-tpa'}}
+              <a href={{t "submission-form.prerequisite.about-tpa-url"}} target="_blank" rel="noopener noreferrer">
+                {{svg-jar "question-16" class="octicon" width="14px" style="margin-top: 2px"}}
+                {{t "submission-form.prerequisite.about-tpa"}}
               </a>
             </small>
           </div>
@@ -41,25 +52,35 @@
     {{#if @state.maybeTpa}}
       <div class="card">
         <div class="card-body">
-          <p>{{t 'submission-form.prerequisite.q-2'}}</p>
+          <p>{{t "submission-form.prerequisite.q-2"}}</p>
 
           <RadioGroup as |group|>
             <div class="form-check">
               <group.radio as |radio|>
-                <radio.input checked={{eq @model.tpa true}} required class="form-check-input" {{on 'change' (set @model 'tpa' true)}} />
+                <radio.input
+                  checked={{eq @model.tpa true}}
+                  required
+                  class="form-check-input"
+                  {{on "change" (set @model "tpa" true)}}
+                />
 
                 <radio.label class="form-check-label">
-                  {{t 'submission-form.prerequisite.a2-1'}}
+                  {{t "submission-form.prerequisite.a2-1"}}
                 </radio.label>
               </group.radio>
             </div>
 
             <div class="form-check">
               <group.radio as |radio|>
-                <radio.input checked={{eq @model.tpa false}} required class="form-check-input" {{on 'change' (set @model 'tpa' false)}} />
+                <radio.input
+                  checked={{eq @model.tpa false}}
+                  required
+                  class="form-check-input"
+                  {{on "change" (set @model "tpa" false)}}
+                />
 
                 <radio.label class="form-check-label">
-                  {{t 'submission-form.prerequisite.a2-2'}}
+                  {{t "submission-form.prerequisite.a2-2"}}
                 </radio.label>
               </group.radio>
             </div>
@@ -72,12 +93,12 @@
   <hr />
 
   {{#if (and @state.maybeTpa (eq @model.tpa false))}}
-    <p>{{t 'submission-form.prerequisite.unacceptable'}}</p>
+    <p>{{t "submission-form.prerequisite.unacceptable"}}</p>
 
-    <LinkTo @route="home">{{t 'go-to-home'}}</LinkTo>
+    <LinkTo @route="home">{{t "go-to-home"}}</LinkTo>
   {{else}}
     <div class="hstack gap-3 justify-content-end">
-      <button type="submit" class="btn btn-primary px-5">{{t 'submission-form.nav.next'}}</button>
+      <button type="submit" class="btn btn-primary px-5">{{t "submission-form.nav.next"}}</button>
     </div>
   {{/if}}
 </form>
