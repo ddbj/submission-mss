@@ -1,29 +1,29 @@
 <UploadProgressModal as |modal|>
-  <form {{on 'submit' (prevent-default (fn this.submit modal))}} {{leaving-confirmation}}>
+  <form {{on "submit" (prevent-default (fn this.submit modal))}} {{leaving-confirmation}}>
     <div class="vstack gap-3">
       <div class="card">
-        <div class="card-header">{{t 'submission-form.confirm.prerequisites'}}</div>
+        <div class="card-header">{{t "submission-form.confirm.prerequisites"}}</div>
 
         <div class="card-body">
           <ul class="mb-0">
             {{#if @state.maybeTpa}}
-              <li>{{t 'submission-form.prerequisite.a1-2'}}</li>
+              <li>{{t "submission-form.prerequisite.a1-2"}}</li>
 
               {{#if @model.tpa}}
-                <li>{{t 'submission-form.prerequisite.a2-1'}}</li>
+                <li>{{t "submission-form.prerequisite.a2-1"}}</li>
               {{else}}
-                <li>{{t 'submission-form.prerequisite.a2-2'}}</li>
+                <li>{{t "submission-form.prerequisite.a2-2"}}</li>
               {{/if}}
             {{else}}
-              <li>{{t 'submission-form.prerequisite.a1-1'}}</li>
+              <li>{{t "submission-form.prerequisite.a1-1"}}</li>
             {{/if}}
 
-            {{#if (eq @model.uploadVia 'dfast')}}
-              <li>{{t 'submission-form.files.a1'}}</li>
-            {{else if (eq @model.uploadVia 'webui')}}
-              <li>{{t 'submission-form.files.a2'}}</li>
-            {{else if (eq @model.uploadVia 'mass_directory')}}
-              <li>{{t 'submission-form.files.a3-html' htmlSafe=true userMassDir=(user-mass-dir)}}</li>
+            {{#if (eq @model.uploadVia "dfast")}}
+              <li>{{t "submission-form.files.a1"}}</li>
+            {{else if (eq @model.uploadVia "webui")}}
+              <li>{{t "submission-form.files.a2"}}</li>
+            {{else if (eq @model.uploadVia "mass_directory")}}
+              <li>{{t "submission-form.files.a3-html" htmlSafe=true userMassDir=(user-mass-dir)}}</li>
             {{/if}}
           </ul>
         </div>
@@ -31,7 +31,7 @@
 
       {{#if @state.files}}
         <div class="card">
-          <div class="card-header">{{t 'submission-form.confirm.files'}}</div>
+          <div class="card-header">{{t "submission-form.confirm.files"}}</div>
 
           <ul class="list-group list-group-flush">
             {{#each @state.files as |file|}}
@@ -42,7 +42,7 @@
       {{/if}}
 
       <div class="card">
-        <div class="card-header">{{t 'submission-form.confirm.entries-count'}}</div>
+        <div class="card-header">{{t "submission-form.confirm.entries-count"}}</div>
 
         <div class="card-body">
           {{@model.entriesCount}}
@@ -50,25 +50,26 @@
       </div>
 
       <div class="card">
-        <div class="card-header">{{t 'submission-form.confirm.hold-date'}}</div>
+        <div class="card-header">{{t "submission-form.confirm.hold-date"}}</div>
 
         <div class="card-body">
-          {{or @model.holdDate (t 'submission-form.confirm.release-immediately')}}
+          {{or @model.holdDate (t "submission-form.confirm.release-immediately")}}
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header">{{t 'submission-form.confirm.contact-person'}}</div>
+        <div class="card-header">{{t "submission-form.confirm.contact-person"}}</div>
 
         <div class="card-body">
           {{#let @model.contactPerson as |person|}}
-            {{person.fullName}} &lt;{{person.email}}&gt; ({{person.affiliation}})
+            {{person.fullName}}
+            &lt;{{person.email}}&gt; ({{person.affiliation}})
           {{/let}}
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header">{{t 'submission-form.confirm.other-people'}}</div>
+        <div class="card-header">{{t "submission-form.confirm.other-people"}}</div>
 
         {{#if @model.otherPeople}}
           <ul class="list-group list-group-flush">
@@ -78,55 +79,57 @@
           </ul>
         {{else}}
           <div class="card-body">
-            {{t 'submission-form.confirm.blank'}}
+            {{t "submission-form.confirm.blank"}}
           </div>
         {{/if}}
       </div>
 
       <div class="card">
-        <div class="card-header">{{t 'submission-form.confirm.sequencer-type'}}</div>
+        <div class="card-header">{{t "submission-form.confirm.sequencer-type"}}</div>
 
         <div class="card-body">
-          {{t (concat 'sequencers.' @model.sequencer)}}
+          {{t (concat "sequencers." @model.sequencer)}}
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header">{{t 'submission-form.confirm.data-type'}}</div>
+        <div class="card-header">{{t "submission-form.confirm.data-type"}}</div>
 
         <div class="card-body">
-          {{t (concat 'data_types.' @model.dataType)}}
+          {{t (concat "data_types." @model.dataType)}}
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header">{{t 'submission-form.confirm.description'}}</div>
+        <div class="card-header">{{t "submission-form.confirm.description"}}</div>
 
         <div class="card-body">
           {{#if @model.description}}
             <div style="white-space: pre-wrap;">{{@model.description}}</div>
           {{else}}
-            {{t 'submission-form.confirm.blank'}}
+            {{t "submission-form.confirm.blank"}}
           {{/if}}
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header">{{t 'submission-form.confirm.email-language'}}</div>
+        <div class="card-header">{{t "submission-form.confirm.email-language"}}</div>
 
         <div class="card-body">
-          {{t (concat 'locales.' @model.emailLanguage)}}
+          {{t (concat "locales." @model.emailLanguage)}}
         </div>
       </div>
 
-      <p>{{t 'submission-form.confirm.confirm-message'}}</p>
+      <p>{{t "submission-form.confirm.confirm-message"}}</p>
     </div>
 
     <hr />
 
     <div class="hstack gap-3 justify-content-end">
-      <a href class="btn btn-outline-primary px-4" {{on 'click' (prevent-default @nav.goPrev)}}>{{t 'submission-form.nav.back'}}</a>
-      <button type="submit" class="btn btn-primary px-5">{{t 'submission-form.confirm.submit'}}</button>
+      <a href class="btn btn-outline-primary px-4" {{on "click" (prevent-default @nav.goPrev)}}>{{t
+          "submission-form.nav.back"
+        }}</a>
+      <button type="submit" class="btn btn-primary px-5">{{t "submission-form.confirm.submit"}}</button>
     </div>
   </form>
 </UploadProgressModal>

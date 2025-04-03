@@ -61,10 +61,10 @@ submission-form:
 
   steps:
     prerequisite: 前提条件の確認
-    files:        登録ファイルの選択
-    metadata:     情報の入力
-    confirm:      申請内容の確認
-    complete:     完了
+    files: 登録ファイルの選択
+    metadata: 情報の入力
+    confirm: 申請内容の確認
+    complete: 完了
 
   nav:
     next: 次へ
@@ -91,7 +91,7 @@ submission-form:
     a2-2: 投稿の予定はない
 
     about-tpa-url: https://www.ddbj.nig.ac.jp/ddbj/tpa.html
-    about-tpa:     TPA とは
+    about-tpa: TPA とは
 
     unacceptable: TPA の場合、論文を準備しないのであれば申し込みできません。
 
@@ -210,9 +210,9 @@ upload-form:
 
 file-list:
   add-files: ファイルの追加
-  stats: '{filesCount} ファイル、{totalFileSize}'
+  stats: "{filesCount} ファイル、{totalFileSize}"
   select-files: ファイルを選択
-  placeholder: '[[[select-files]]]するか、ここにファイルをドロップしてください。'
+  or-drag: するか、ここにファイルをドロップしてください。
 
   supported-file-types:
     annotation-file: アノテーションファイル

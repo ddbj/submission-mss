@@ -61,10 +61,10 @@ submission-form:
 
   steps:
     prerequisite: Requirement
-    files:        Submission file
-    metadata:     Enter the information
-    confirm:      Confirmation of the application
-    complete:     Complete
+    files: Submission file
+    metadata: Enter the information
+    confirm: Confirmation of the application
+    complete: Complete
 
   nav:
     back: Back
@@ -91,7 +91,7 @@ submission-form:
     a2-2: No, I have no plan to submit a paper.
 
     about-tpa-url: https://www.ddbj.nig.ac.jp/ddbj/tpa-e.html
-    about-tpa:     TPA
+    about-tpa: TPA
 
     unacceptable: Regarding TPA, you cannot apply to MSS unless you will prepare a paper.
 
@@ -209,9 +209,9 @@ upload-form:
 
 file-list:
   add-files: Add files
-  stats: '{filesCount, plural, =1 {1 file} other {# files}}, {totalFileSize}'
+  stats: "{filesCount, plural, =1 {1 file} other {# files}}, {totalFileSize}"
   select-files: Select the files
-  placeholder: '[[[select-files]]] or drag them here.'
+  or-drag: or drag them here.
 
   supported-file-types:
     annotation-file: Annotation file

@@ -4,7 +4,6 @@ import { modifier } from 'ember-modifier';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import 'bootstrap/js/src/dropdown';
 import { Modal } from 'bootstrap';
 
 import type IntlService from 'ember-intl/services/intl';
