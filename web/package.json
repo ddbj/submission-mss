@@ -48,7 +48,7 @@
     "@types/qunit": "^2.19.12",
     "@types/rsvp": "^4.0.9",
     "active-model-adapter": "ursm/active-model-adapter#ember-string",
-    "bootstrap": "^5.3.3",
+    "bootstrap": "^5.3.4",
     "broccoli-asset-rev": "^3.0.0",
     "broccoli-funnel": "^3.0.8",
     "concurrently": "^9.1.2",
