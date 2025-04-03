@@ -1,39 +1,57 @@
-<style {{!-- template-lint-disable no-forbidden-elements --}}>
+<style {{! template-lint-disable no-forbidden-elements }}>
   .drag-over * {
     pointer-events: none;
   }
 </style>
 
-<input type="file" multiple accept={{join ', ' this.allowedExtensions}} class="d-none" {{this.setFileInputElement}} {{on 'change' (pipe (pick 'target.files' this.addFiles) (set this 'fileInputElement.value' ''))}} {{!-- template-lint-disable require-input-label --}} />
+<input
+  type="file"
+  multiple
+  accept={{join ", " this.allowedExtensions}}
+  class="d-none"
+  {{this.setFileInputElement}}
+  {{on "change" (pipe (pick "target.files" this.addFiles) (set this "fileInputElement.value" ""))}}
+  {{! template-lint-disable require-input-label }}
+/>
 
 {{#if @files}}
-  <div class="card {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
+  <div
+    class="card {{if this.dragOver 'drag-over opacity-50 border-primary'}}"
+    {{drop-target this.addFiles enter=(set this "dragOver" true) leave=(set this "dragOver" false)}}
+  >
     <ul class="list-group list-group-flush overflow-auto" style="max-height: 550px">
-      {{#each (sort-by 'name' @files) as |file|}}
-        <FileList::Item @file={{file}} @errors={{append file.errors (or (map-get @crossoverErrors file) (array))}} @onRemove={{@onRemove}} />
+      {{#each (sort-by "name" @files) as |file|}}
+        <FileList::Item
+          @file={{file}}
+          @errors={{append file.errors (or (map-get @crossoverErrors file) (array))}}
+          @onRemove={{@onRemove}}
+        />
       {{/each}}
     </ul>
 
     <div class="card-footer d-flex justify-content-between align-items-center bg-white">
       <div>
-        <button type="button" class="btn btn-outline-primary" {{on 'click' (prevent-default this.selectFiles)}}>
-          {{t 'file-list.add-files'}}
+        <button type="button" class="btn btn-outline-primary" {{on "click" (prevent-default this.selectFiles)}}>
+          {{t "file-list.add-files"}}
         </button>
       </div>
 
       <div>
-        {{t 'file-list.stats' filesCount=@files.length totalFileSize=(filesize (sum (map-by 'size' @files)))}}
+        {{t "file-list.stats" filesCount=@files.length totalFileSize=(filesize (sum (map-by "size" @files)))}}
       </div>
     </div>
   </div>
 {{else}}
-  <div class="card border-2 border-dashed {{if this.dragOver 'drag-over opacity-50 border-primary'}}" {{drop-target this.addFiles enter=(set this 'dragOver' true) leave=(set this 'dragOver' false)}}>
+  <div
+    class="card border-2 border-dashed {{if this.dragOver 'drag-over opacity-50 border-primary'}}"
+    {{drop-target this.addFiles enter=(set this "dragOver" true) leave=(set this "dragOver" false)}}
+  >
     <div class="card-body py-5 text-center text-body-secondary">
-      <I18n @i18nid="file-list.placeholder" as |MessageScope|>
-        <MessageScope>
-          <:select-files><a href="#" class="stretched-link" {{on 'click' (prevent-default this.selectFiles)}}>{{t 'file-list.select-files'}}</a></:select-files>
-        </MessageScope>
-      </I18n>
+      <a href="#" class="stretched-link" {{on "click" (prevent-default this.selectFiles)}}>
+        {{t "file-list.select-files"}}
+      </a>
+
+      {{t "file-list.or-drag"}}
     </div>
   </div>
 {{/if}}

@@ -1,13 +1,13 @@
-{{page-title (t 'home.title')}}
+{{page-title (t "home.title")}}
 
-<h1 class="display-6 my-4">{{t 'home.title'}}</h1>
+<h1 class="display-6 my-4">{{t "home.title"}}</h1>
 
 <p>
-  {{t 'home.login-as-html' account=this.currentUser.uid htmlSafe=true}}
-  <small>(<a {{on 'click' (prevent-default this.logout)}} href>{{t 'home.logout'}}</a>)</small>
+  {{t "home.login-as-html" account=this.currentUser.uid htmlSafe=true}}
+  <small>(<a {{on "click" (prevent-default this.logout)}} href>{{t "home.logout"}}</a>)</small>
 </p>
 
-<LinkTo @route="submissions.new" class="btn btn-outline-primary btn-lg">{{t 'home.new-submission'}}</LinkTo>
+<LinkTo @route="submissions.new" class="btn btn-outline-primary btn-lg">{{t "home.new-submission"}}</LinkTo>
 
 <h2 class="mt-5">Recent Submissions</h2>
 

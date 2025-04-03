@@ -2,35 +2,34 @@
   <div class="align-self-start">
     {{#if @file.isParsing}}
       <div class="spinner-border spinner-border-seconcary spinner-border-sm opacity-50" role="status">
-        <span class="visually-hidden">{{t 'file-list.item.loading'}}</span>
+        <span class="visually-hidden">{{t "file-list.item.loading"}}</span>
       </div>
     {{else}}
       {{#if @errors.length}}
-        {{svg-jar 'x-circle-fill-16' class='octicon fill-danger' style='margin-top: 2.5px;'}}
+        {{svg-jar "x-circle-fill-16" class="octicon fill-danger" style="margin-top: 2.5px;"}}
       {{else}}
-        {{svg-jar 'check-circle-fill-16' class='octicon fill-success' style='margin-top: 2.5px;'}}
+        {{svg-jar "check-circle-fill-16" class="octicon fill-success" style="margin-top: 2.5px;"}}
       {{/if}}
     {{/if}}
   </div>
 
-  <div class={{if @file.isParsing 'opacity-50'}}>
+  <div class={{if @file.isParsing "opacity-50"}}>
     <span class="text-muted">{{user-mass-dir}}/</span>{{@file.name}}
     <small class="text-muted">{{filesize @file.size}}</small>
 
     <small class="hstack gap-3 text-muted">
       {{#if @file.isParsing}}
-        {{t 'file-list.item.loading'}}
+        {{t "file-list.item.loading"}}
       {{else}}
         {{#if @file.parsedData}}
           {{#if @file.isAnnotation}}
             <div>
-              <b>{{t 'file-list.item.contact-person'}}</b>
+              <b>{{t "file-list.item.contact-person"}}</b>
 
               {{#let @file.parsedData.contactPerson as |person|}}
                 {{#if person}}
                   {{person.fullName}}
-                  &lt;{{person.email}}&gt;
-                  ({{person.affiliation}})
+                  &lt;{{person.email}}&gt; ({{person.affiliation}})
                 {{else}}
                   -
                 {{/if}}
@@ -38,14 +37,14 @@
             </div>
 
             <div>
-              <b>{{t 'file-list.item.hold-date'}}</b>
-              {{or @file.parsedData.holdDate '-'}}
+              <b>{{t "file-list.item.hold-date"}}</b>
+              {{or @file.parsedData.holdDate "-"}}
             </div>
           {{/if}}
 
           {{#if @file.isSequence}}
             <div>
-              <b>{{t 'file-list.item.entries-count'}}</b>
+              <b>{{t "file-list.item.entries-count"}}</b>
               {{format-number @file.parsedData.entriesCount}}
             </div>
           {{/if}}

@@ -1,11 +1,20 @@
 {{yield this}}
 
 {{#let (unique-id) as |id|}}
-  <div class="modal" tabindex="-1" role="dialog" aria-labelledby={{id}} aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" {{this.setModal}}>
+  <div
+    class="modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby={{id}}
+    aria-hidden="true"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    {{this.setModal}}
+  >
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id={{id}}>{{t 'upload-progress-modal.title'}}</h5>
+          <h5 class="modal-title" id={{id}}>{{t "upload-progress-modal.title"}}</h5>
         </div>
 
         <div class="modal-body vstack gap-2">
@@ -16,26 +25,37 @@
 
                 {{#unless upload.isStarted}}
                   <div class="spinner-border spinner-border-sm text-primary" role="status">
-                    <span class="visually-hidden">{{t 'upload-progress-modal.calculating'}}</span>
+                    <span class="visually-hidden">{{t "upload-progress-modal.calculating"}}</span>
                   </div>
                 {{/unless}}
               </div>
 
               <div class="progress">
                 {{#let (percentage this.uploadFiles.uploadedSize this.uploadFiles.totalSize) as |percentage|}}
-                  <div class="progress-bar" role="progressbar" {{style (hash width=(concat percentage '%'))}} aria-valuenow={{percentage}} aria-valuemin="0" aria-valuemax="100"></div>
+                  <div
+                    class="progress-bar"
+                    role="progressbar"
+                    {{style (hash width=(concat percentage "%"))}}
+                    aria-valuenow={{percentage}}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
                 {{/let}}
               </div>
 
               <div class="text-body-secondary">
-                {{filesize this.uploadFiles.uploadedSize}} / {{filesize this.uploadFiles.totalSize}}
+                {{filesize this.uploadFiles.uploadedSize}}
+                /
+                {{filesize this.uploadFiles.totalSize}}
               </div>
             {{/if}}
           {{/let}}
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" {{on 'click' this.hide}}>{{t 'upload-progress-modal.cancel'}}</button>
+          <button type="button" class="btn btn-secondary" {{on "click" this.hide}}>{{t
+              "upload-progress-modal.cancel"
+            }}</button>
         </div>
       </div>
     </div>

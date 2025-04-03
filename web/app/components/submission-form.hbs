@@ -1,30 +1,34 @@
-{{page-title (t 'submission-form.title')}}
+{{page-title (t "submission-form.title")}}
 
-<style {{!-- template-lint-disable no-forbidden-elements --}}>
+<style {{! template-lint-disable no-forbidden-elements }}>
   body {
     counter-reset: step 0;
   }
 
   nav > .nav-link:before {
     counter-increment: step 1;
-    content: counter(step) '. ';
+    content: counter(step) ". ";
   }
 </style>
 
-<h1 class="display-6 my-4">{{t 'submission-form.title'}}</h1>
+<h1 class="display-6 my-4">{{t "submission-form.title"}}</h1>
 
 <div class="row my-3">
   <div class="col-3">
     <nav class="nav nav-pills flex-column">
       {{#each this.nav.steps as |step|}}
-        <a href class="nav-link {{step-nav-link-class this.nav step}}" {{on 'click' (prevent-default (fn this.nav.gotoStep step))}}>
-          {{t (concat 'submission-form.steps.' step)}}
+        <a
+          href
+          class="nav-link {{step-nav-link-class this.nav step}}"
+          {{on "click" (prevent-default (fn this.nav.gotoStep step))}}
+        >
+          {{t (concat "submission-form.steps." step)}}
         </a>
       {{/each}}
     </nav>
   </div>
 
   <main class="col">
-    {{component (concat 'submission-form/' this.nav.currentStep) model=@model state=this.state nav=this.nav}}
+    {{component (concat "submission-form/" this.nav.currentStep) model=@model state=this.state nav=this.nav}}
   </main>
 </div>
