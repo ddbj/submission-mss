@@ -53,7 +53,7 @@ accessories:
         TZ:          Asia/Tokyo
 
   minio:
-    image: minio/minio:RELEASE.2025-03-12T18-04-18Z
+    image: minio/minio:RELEASE.2025-04-03T14-56-28Z
     cmd: server /data
 
     proxy:
