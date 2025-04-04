@@ -1,12 +1,11 @@
 import Component from '@glimmer/component';
 
-import { NotFoundError } from '@ember-data/adapter/error';
 import { action } from '@ember/object';
 import { dropTask } from 'ember-concurrency';
 import { service } from '@ember/service';
 
 export default class SubmissionFormFilesComponent extends Component {
-  @service store;
+  @service request;
 
   get crossoverErrors() {
     const { files } = this.args.state;
@@ -68,36 +67,33 @@ export default class SubmissionFormFilesComponent extends Component {
   }
 
   @dropTask *goNext() {
-    try {
-      yield this.fillDataFromLastSubmission();
-    } catch (e) {
-      if (e instanceof NotFoundError) {
-        // do nothing
-      } else {
-        throw e;
-      }
-    }
-
+    yield this.fillDataFromLastSubmission();
     this.fillDataFromSubmissionFiles();
 
     this.args.nav.goNext();
   }
 
   async fillDataFromLastSubmission() {
-    const last = await this.store.queryRecord('submission', {
-      lastSubmitted: true,
-    });
+    let last;
+
+    try {
+      const res = await this.request.fetch('/submissions/last_submitted');
+
+      last = (await res.json()).submission;
+    } catch {
+      // do nothing
+    }
 
     if (!last) return;
 
     const { model } = this.args;
 
-    model.contactPerson.email = last.contactPerson.email;
-    model.contactPerson.fullName = last.contactPerson.fullName;
-    model.contactPerson.affiliation = last.contactPerson.affiliation;
+    model.contactPerson.email = last.contact_person.email;
+    model.contactPerson.fullName = last.contact_person.fullName;
+    model.contactPerson.affiliation = last.contact_person.affiliation;
 
     if (model.otherPeople.length === 0) {
-      for (const person of last.otherPeople.slice()) {
+      for (const person of last.other_people.slice()) {
         model.otherPeople.createRecord({
           email: person.email,
           fullName: person.fullName,
@@ -111,7 +107,7 @@ export default class SubmissionFormFilesComponent extends Component {
     }
 
     if (!model.emailLanguage) {
-      model.emailLanguage = last.emailLanguage;
+      model.emailLanguage = last.email_language;
     }
   }
 

@@ -3,27 +3,24 @@ import { tracked } from '@glimmer/tracking';
 
 import Cookies from 'js-cookie';
 
-import ENV from 'mssform/config/environment';
-import { safeFetchWithModal } from 'mssform/utils/safe-fetch';
+import type RequestService from 'mssform/services/request';
+import type RouterService from '@ember/routing/router-service';
+import type Transition from '@ember/routing/transition';
 
 export default class CurrentUserService extends Service {
-  @service errorModal;
-  @service router;
+  @service declare request: RequestService;
+  @service declare router: RouterService;
 
-  @tracked apiKey;
-  @tracked uid;
+  @tracked apiKey?: string;
+  @tracked uid?: string;
+
+  previousTransition?: Transition;
 
   get isLoggedIn() {
     return Boolean(this.apiKey);
   }
 
-  get authorizationHeader() {
-    return {
-      Authorization: `Bearer ${this.apiKey}`,
-    };
-  }
-
-  ensureLogin(transition) {
+  ensureLogin(transition: Transition) {
     if (this.isLoggedIn) return;
 
     this.previousTransition = transition;
@@ -54,15 +51,8 @@ export default class CurrentUserService extends Service {
       return;
     }
 
-    const res = await safeFetchWithModal(
-      `${ENV.apiURL}/me`,
-      {
-        headers: this.authorizationHeader,
-      },
-      this.errorModal,
-    );
-
-    const { uid } = await res.json();
+    const res = await this.request.fetchWithModal('/me');
+    const { uid } = (await res!.json()) as { uid: string };
 
     this.uid = uid;
   }

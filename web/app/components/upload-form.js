@@ -3,11 +3,8 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { safeFetchWithModal } from 'mssform/utils/safe-fetch';
-
 export default class UploadFormComponent extends Component {
-  @service currentUser;
-  @service errorModal;
+  @service request;
 
   @tracked uploadVia = null;
   @tracked extractionId = null;
@@ -60,22 +57,17 @@ export default class UploadFormComponent extends Component {
       attrs.extraction_id = this.extractionId;
     }
 
-    await safeFetchWithModal(
-      `/api/submissions/${this.args.model.id}/uploads`,
-      {
-        method: 'POST',
+    await this.request.fetchWithModal(`/submissions/${this.args.model.id}/uploads`, {
+      method: 'POST',
 
-        headers: {
-          ...this.currentUser.authorizationHeader,
-          'Content-Type': 'application/json',
-        },
-
-        body: JSON.stringify({
-          upload: attrs,
-        }),
+      headers: {
+        'Content-Type': 'application/json',
       },
-      this.errorModal,
-    );
+
+      body: JSON.stringify({
+        upload: attrs,
+      }),
+    });
 
     this.isCompleted = true;
   }

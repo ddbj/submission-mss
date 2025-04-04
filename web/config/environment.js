@@ -25,7 +25,7 @@ module.exports = function (environment) {
       enums: yaml.load(fs.readFileSync(path.join(__dirname, '../../config/enums.yml'))),
     },
 
-    apiURL: process.env.API_URL,
+    apiURL: process.env.API_URL || 'http://localhost:3000/api',
   };
 
   if (environment === 'development') {

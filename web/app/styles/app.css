@@ -7,5 +7,5 @@
 }
 
 .border-dashed {
-  border-style: dashed;
+  border-style: dashed !important;
 }

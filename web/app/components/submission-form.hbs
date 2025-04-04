@@ -29,6 +29,6 @@
   </div>
 
   <main class="col">
-    {{component (concat "submission-form/" this.nav.currentStep) model=@model state=this.state nav=this.nav}}
+    <this.component @model={{@model}} @state={{this.state}} @nav={{this.nav}} />
   </main>
 </div>

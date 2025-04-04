@@ -1,6 +1,6 @@
-import Model, { attr } from '@ember-data/model';
+import { tracked } from '@glimmer/tracking';
 
-export default class OtherPerson extends Model {
-  @attr email;
-  @attr fullName;
+export default class OtherPerson {
+  @tracked email;
+  @tracked fullName;
 }
