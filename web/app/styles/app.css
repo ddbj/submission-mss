@@ -1,11 +1,3 @@
-.fill-success {
-  fill: var(--bs-success);
-}
-
-.fill-danger {
-  fill: var(--bs-danger);
-}
-
 .border-dashed {
   border-style: dashed !important;
 }
