@@ -51,7 +51,7 @@
     "@types/js-cookie": "^3.0.6",
     "@types/qunit": "^2.19.12",
     "@types/rsvp": "^4.0.9",
-    "bootstrap": "^5.3.4",
+    "bootstrap": "^5.3.5",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^9.1.2",
     "ember-auto-import": "^2.10.0",
