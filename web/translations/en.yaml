@@ -251,3 +251,7 @@ dfast-extractor:
     You can specify multiple job IDs by delimiting each ID with the line feed.</p>
 
   submit: Retrieve submission files from DFAST
+
+submission.show:
+  re-upload: Re-upload
+  submission-files: Submission files

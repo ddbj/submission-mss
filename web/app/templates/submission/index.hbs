@@ -1,8 +1,10 @@
 <h1 class="display-6 my-4">{{@model.id}}</h1>
 
-<LinkTo @route="submission.upload" @model={{@model}} class="btn btn-outline-primary">再アップロード</LinkTo>
+<LinkTo @route="submission.upload" @model={{@model}} class="btn btn-outline-primary">
+  {{t "submission.show.re-upload"}}
+</LinkTo>
 
-<h2 class="mt-4">登録ファイル</h2>
+<h2 class="mt-4">{{t "submission.show.submission-files"}}</h2>
 
 <div class="vstack gap-3">
   {{#each (sort-by "id" @model.uploads) as |upload|}}
