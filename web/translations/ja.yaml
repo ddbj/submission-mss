@@ -252,3 +252,7 @@ dfast-extractor:
     複数のjob IDを指定する場合は改行で区切ってください。</p>
 
   submit: Retrieve submission files from DFAST
+
+submission.show:
+  re-upload: 再アップロード
+  submission-files: 登録ファイル
