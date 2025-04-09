@@ -1,15 +1,19 @@
 module Authentication
+  include ActionController::HttpAuthentication::Token::ControllerMethods
+
   def current_user
     return @current_user if defined?(@current_user)
 
     @current_user = authenticate_with_http_token { |token|
-      User.find_by(api_key: token)
+      Rails.error.handle(JWT::DecodeError) {
+        payload, = JWT.decode(token, Rails.application.secret_key_base, true, algorithm: "HS512")
+
+        User.find_by(id: payload.fetch("user_id"))
+      }
     }
   end
 
-  private
-
-  def authenticate
+  def authenticate!
     return if current_user
 
     render json: {

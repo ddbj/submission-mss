@@ -18,10 +18,14 @@ export default class RequestService extends Service {
       ...init,
 
       headers: {
-        Authorization: `Bearer ${this.currentUser.apiKey}`,
+        Authorization: `Bearer ${this.currentUser.token}`,
         ...init?.headers,
       },
     });
+
+    if (res.status === 401) {
+      this.currentUser.logout();
+    }
 
     if (!res.ok) throw new FetchError(res);
 
@@ -33,6 +37,7 @@ export default class RequestService extends Service {
       return await this.fetch(url, init);
     } catch (e) {
       this.errorModal.show(e as Error);
+      throw e;
     }
   }
 }

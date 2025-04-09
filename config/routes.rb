@@ -1,10 +1,8 @@
 Rails.application.routes.draw do
   root to: redirect("/web")
 
-  resource :auth, only: %i[] do
-    get :login
-    get :callback
-  end
+  get "auth/:provider/callback", to: "sessions#create", as: :auth_callback
+  get "auth/failure",            to: "sessions#failure"
 
   scope :api do
     resource :me, only: %i[show]
@@ -25,10 +23,6 @@ Rails.application.routes.draw do
     resources :direct_uploads, only: :create
   end
 
-  namespace "debug" do
-    get :error
-  end
-
   get "*paths", to: "frontends#show", constraints: ->(req) {
     !req.xhr? && req.format.html?
   }
@@ -38,4 +32,6 @@ Rails.application.routes.draw do
 
     "#{web_url}/home/submission/#{submission.mass_id}/upload?locale=#{submission.email_language}"
   end
+
+  get "up" => "rails/health#show", as: :rails_health_check
 end

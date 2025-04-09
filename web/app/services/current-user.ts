@@ -1,8 +1,6 @@
 import Service, { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import Cookies from 'js-cookie';
-
 import type RequestService from 'mssform/services/request';
 import type RouterService from '@ember/routing/router-service';
 import type Transition from '@ember/routing/transition';
@@ -11,13 +9,13 @@ export default class CurrentUserService extends Service {
   @service declare request: RequestService;
   @service declare router: RouterService;
 
-  @tracked apiKey?: string;
+  @tracked token?: string;
   @tracked uid?: string;
 
   previousTransition?: Transition;
 
   get isLoggedIn() {
-    return Boolean(this.apiKey);
+    return Boolean(this.token);
   }
 
   ensureLogin(transition: Transition) {
@@ -34,17 +32,21 @@ export default class CurrentUserService extends Service {
     this.router.transitionTo('home');
   }
 
+  async login(token: string) {
+    this.clear();
+    localStorage.setItem('token', token);
+    await this.restore();
+  }
+
   logout() {
     this.clear();
-    Cookies.remove('api_key');
-
-    this.router.transitionTo('index');
+    localStorage.removeItem('token');
   }
 
   async restore() {
     if (this.isLoggedIn) return;
 
-    this.apiKey = Cookies.get('api_key') || undefined;
+    this.token = localStorage.getItem('token') || undefined;
 
     if (!this.isLoggedIn) {
       this.clear();
@@ -52,12 +54,12 @@ export default class CurrentUserService extends Service {
     }
 
     const res = await this.request.fetchWithModal('/me');
-    const { uid } = (await res!.json()) as { uid: string };
+    const { uid } = (await res.json()) as { uid: string };
 
     this.uid = uid;
   }
 
   clear() {
-    this.apiKey = this.uid = undefined;
+    this.token = this.uid = undefined;
   }
 }

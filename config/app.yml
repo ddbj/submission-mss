@@ -1,26 +1,26 @@
 development:
+  app_url:                http://mssform.localhost:3000
   extracts_dir:           <%= Rails.root.join("storage/extracts") %>
   mass_dir_path_template: <%= Rails.root.join("storage/mass/{user}") %>
-  oidc_issuer_url:        http://keycloak.localhost:8080/realms/master
   submissions_dir:        <%= Rails.root.join("storage/submissions") %>
   web_url:                http://mssform.localhost:4200
 
 test:
+  app_url:                http://mssform.example.com:3000
   extracts_dir:           <%= Rails.root.join("tmp/storage/extracts") %>
   mass_dir_path_template: <%= Rails.root.join("tmp/storage/mass/{user}") %>
-  oidc_issuer_url:        http://keycloak.example.com/realms/master
   submissions_dir:        <%= Rails.root.join("tmp/storage/submissions") %>
-  web_url:                http://mssform.example.com
+  web_url:                http://mssform.example.com:4200
 
 production: &production
+  app_url:                https://mss.ddbj.nig.ac.jp
   extracts_dir:           <%= Rails.root.join("storage/extracts") %>
   mass_dir_path_template: /submission/{user}/submission/{user}/mass
-  oidc_issuer_url:        https://idp.ddbj.nig.ac.jp/realms/master
   submissions_dir:        <%= Rails.root.join("storage/submissions") %>
   web_url:                https://mss.ddbj.nig.ac.jp
 
 staging:
   <<: *production
+  app_url:              https://mss-staging.ddbj.nig.ac.jp
   mail_allowed_domains: ddbj.nig.ac.jp,ursm.jp
-  oidc_issuer_url:      https://idp-staging.ddbj.nig.ac.jp/realms/master
   web_url:              https://mss-staging.ddbj.nig.ac.jp

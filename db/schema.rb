@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_08_012314) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_09_122233) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
@@ -151,8 +151,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_08_012314) do
     t.datetime "updated_at", null: false
     t.string "uid", null: false
     t.string "email", null: false
-    t.string "api_key", null: false
-    t.index ["api_key"], name: "index_users_on_api_key", unique: true
     t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 

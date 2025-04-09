@@ -43,5 +43,8 @@ module MSSForm
 
     config.active_storage.draw_routes = false
     config.time_zone                  = "Japan"
+
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
   end
 end

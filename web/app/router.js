@@ -7,6 +7,8 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
+  this.route('login');
+
   this.route('home', function () {
     this.route('submissions', { resetNamespace: true }, function () {
       this.route('new');
