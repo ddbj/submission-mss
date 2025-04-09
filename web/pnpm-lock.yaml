@@ -71,9 +71,6 @@ importers:
       '@types/bootstrap':
         specifier: ^5.2.10
         version: 5.2.10
-      '@types/js-cookie':
-        specifier: ^3.0.6
-        version: 3.0.6
       '@types/qunit':
         specifier: ^2.19.12
         version: 2.19.12
@@ -188,9 +185,6 @@ importers:
       globals:
         specifier: ^16.0.0
         version: 16.0.0
-      js-cookie:
-        specifier: ^3.0.5
-        version: 3.0.5
       js-yaml:
         specifier: ^4.1.0
         version: 4.1.0
@@ -1381,9 +1375,6 @@ packages:
 
   '@types/http-errors@2.0.4':
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
-
-  '@types/js-cookie@3.0.6':
-    resolution: {integrity: sha512-wkw9yd1kEXOPnvEeEV1Go1MmxtBJL0RR79aOTAApecWFVu7w0NNXNqhcWgvw2YgZDYadliXkl14pa3WXw5jlCQ==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -4185,10 +4176,6 @@ packages:
   jest-worker@27.5.1:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
-
-  js-cookie@3.0.5:
-    resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
-    engines: {node: '>=14'}
 
   js-string-escape@1.0.1:
     resolution: {integrity: sha512-Smw4xcfIQ5LVjAOuJCvN/zIodzA/BBSsluuoSykP+lUvScIi4U6RJLfwHet5cxFnCswUjISV8oAXaqaJDY3chg==}
@@ -7857,7 +7844,7 @@ snapshots:
       '@types/ember__object': 4.0.12(@babel/core@7.26.10)
       '@types/ember__polyfills': 4.0.6
       '@types/ember__routing': 4.0.22(@babel/core@7.26.10)
-      '@types/ember__runloop': 4.0.10
+      '@types/ember__runloop': 4.0.10(@babel/core@7.26.10)
       '@types/ember__service': 4.0.9(@babel/core@7.26.10)
       '@types/ember__string': 3.0.15
       '@types/ember__template': 4.0.7
@@ -7976,11 +7963,6 @@ snapshots:
       - supports-color
     optional: true
 
-  '@types/ember__runloop@4.0.10':
-    dependencies:
-      '@types/ember': 4.0.11
-    optional: true
-
   '@types/ember__runloop@4.0.10(@babel/core@7.26.10)':
     dependencies:
       '@types/ember': 4.0.11(@babel/core@7.26.10)
@@ -8069,8 +8051,6 @@ snapshots:
       '@types/node': 22.14.0
 
   '@types/http-errors@2.0.4': {}
-
-  '@types/js-cookie@3.0.6': {}
 
   '@types/json-schema@7.0.15': {}
 
@@ -11868,8 +11848,6 @@ snapshots:
       '@types/node': 22.14.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
-
-  js-cookie@3.0.5: {}
 
   js-string-escape@1.0.1: {}
 

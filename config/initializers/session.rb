@@ -1,4 +1,1 @@
-Rails.application.configure do
-  config.middleware.use ActionDispatch::Cookies
-  config.middleware.use ActionDispatch::Session::CookieStore, key: "_mssform"
-end
+Rails.application.config.session_store :cookie_store, key: "_mssform"

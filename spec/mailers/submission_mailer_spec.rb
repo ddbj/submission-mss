@@ -38,7 +38,7 @@ RSpec.describe SubmissionMailer do
 
       expect(mail).to have_body_text(<<~BODY)
         Submission file の再提出を求められた際は、次の URL から upload してください。
-        http://mssform.example.com/home/submission/NSUB000042/upload?locale=ja
+        http://mssform.example.com:4200/home/submission/NSUB000042/upload?locale=ja
       BODY
     end
 
@@ -57,7 +57,7 @@ RSpec.describe SubmissionMailer do
 
       expect(mail).to have_body_text(<<~BODY)
         If you are asked for re-submitting the files, upload the submission file(s) from the URL below.
-        http://mssform.example.com/home/submission/NSUB000042/upload?locale=en
+        http://mssform.example.com:4200/home/submission/NSUB000042/upload?locale=en
       BODY
     end
 

@@ -48,7 +48,7 @@ class UploadFile {
       `${ENV.apiURL}/direct_uploads`,
       {
         directUploadWillCreateBlobWithXHR: (xhr) => {
-          xhr.setRequestHeader('Authorization', `Bearer ${currentUser.apiKey}`);
+          xhr.setRequestHeader('Authorization', `Bearer ${currentUser.token}`);
         },
 
         directUploadWillStoreFileWithXHR: (xhr) => {

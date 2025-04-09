@@ -1,0 +1,19 @@
+development:
+  client_id:     mssform
+  client_secret: <%= ENV["KEYCLOAK_CLIENT_SECRET"] %>
+  url:           http://keycloak.localhost:8080
+
+test:
+  client_id:     mssform
+  client_secret: notasecret
+  url:           http://keycloak.example.com
+
+production:
+  client_id:     <%= Rails.application.credentials.dig(:keycloak, :client_id) %>
+  client_secret: <%= Rails.application.credentials.dig(:keycloak, :client_secret) %>
+  url:           https://idp.ddbj.nig.ac.jp
+
+staging:
+  client_id:     <%= Rails.application.credentials.dig(:keycloak, :client_id) %>
+  client_secret: <%= Rails.application.credentials.dig(:keycloak, :client_secret) %>
+  url:           https://idp-staging.ddbj.nig.ac.jp

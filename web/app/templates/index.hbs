@@ -2,7 +2,9 @@
 
 {{t "index.instructions-html" htmlSafe=true}}
 
-<a href={{this.authorizeUrl}} class="btn btn-primary btn-lg">{{t "index.login"}}</a>
+<form action={{this.authorizeUrl}} method="POST">
+  <button type="submit" class="btn btn-primary btn-lg">{{t "index.login"}}</button>
+</form>
 
 <ul class="list-unstyled mt-3">
   <li>{{t "index.reset-password-html" htmlSafe=true}}</li>
