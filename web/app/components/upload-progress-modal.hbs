@@ -31,7 +31,7 @@
               </div>
 
               <div class="progress">
-                {{#let (percentage this.uploadFiles.uploadedSize this.uploadFiles.totalSize) as |percentage|}}
+                {{#let (this.percentage this.uploadFiles.uploadedSize this.uploadFiles.totalSize) as |percentage|}}
                   <div
                     class="progress-bar"
                     role="progressbar"

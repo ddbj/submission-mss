@@ -77,6 +77,9 @@ importers:
       '@types/qunit':
         specifier: ^2.19.12
         version: 2.19.12
+      '@types/rails__activestorage':
+        specifier: ^8.0.0
+        version: 8.0.0
       '@types/rsvp':
         specifier: ^4.0.9
         version: 4.0.9
@@ -1437,6 +1440,9 @@ packages:
 
   '@types/qunit@2.19.12':
     resolution: {integrity: sha512-II+C1wgzUia0g+tGAH+PBb4XiTm8/C/i6sN23r21NNskBYOYrv+qnW0tFQ/IxZzKVwrK4CTglf8YO3poJUclQA==}
+
+  '@types/rails__activestorage@8.0.0':
+    resolution: {integrity: sha512-eq8s/jcmuE2KxDzniQyJrnNUwyh2oiSUWDIfE2JpKGvCKbajT9wmEye8pYmgkKWs7h2BdpNWXgJR7wH5zK5YEw==}
 
   '@types/range-parser@1.2.7':
     resolution: {integrity: sha512-hKormJbkJqzQGhziax5PItDUTMAM9uE2XXQmM37dyd4hVM+5aVl7oVxMVUiVQn2oCQFN/LKCZdvSM0pFRqbSmQ==}
@@ -7941,7 +7947,7 @@ snapshots:
       '@types/ember__string': 3.0.15
       '@types/ember__template': 4.0.7
       '@types/ember__test': 4.0.6(@babel/core@7.26.10)
-      '@types/ember__utils': 4.0.7
+      '@types/ember__utils': 4.0.7(@babel/core@7.26.10)
       '@types/rsvp': 4.0.9
     optional: true
 
@@ -8090,11 +8096,6 @@ snapshots:
       - supports-color
     optional: true
 
-  '@types/ember__utils@4.0.7':
-    dependencies:
-      '@types/ember': 4.0.11
-    optional: true
-
   '@types/ember__utils@4.0.7(@babel/core@7.26.10)':
     dependencies:
       '@types/ember': 4.0.11(@babel/core@7.26.10)
@@ -8166,6 +8167,8 @@ snapshots:
   '@types/qs@6.9.18': {}
 
   '@types/qunit@2.19.12': {}
+
+  '@types/rails__activestorage@8.0.0': {}
 
   '@types/range-parser@1.2.7': {}
 
