@@ -8,7 +8,5 @@ export default class HomeIndexController extends Controller {
   @action
   async logout() {
     this.currentUser.logout();
-
-    location.href = '/';
   }
 }

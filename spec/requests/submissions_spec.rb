@@ -4,12 +4,11 @@ RSpec.describe "submissions", type: :request do
   include RSpec::DefaultHttpHeader
 
   describe "GET /api/submissions/:mass_id" do
-    let(:user)  { create(:user, :alice) }
-    let(:token) { JWT.encode({ user_id: user.id }, Rails.application.secret_key_base, "HS512") }
+    let(:user) { create(:user, :alice) }
 
     let(:default_headers) {
       {
-        Authorization: "Bearer #{token}",
+        Authorization: "Bearer #{user.token}",
         Accept:        "application/json"
       }
     }
