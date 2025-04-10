@@ -35,12 +35,22 @@ export default class CurrentUserService extends Service {
   async login(token: string) {
     this.clear();
     localStorage.setItem('token', token);
+
     await this.restore();
+
+    if (this.previousTransition) {
+      this.previousTransition.retry();
+      this.previousTransition = undefined;
+    } else {
+      this.router.transitionTo('index');
+    }
   }
 
   logout() {
     this.clear();
     localStorage.removeItem('token');
+
+    this.router.transitionTo('index');
   }
 
   async restore() {
