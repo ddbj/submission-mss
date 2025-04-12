@@ -100,7 +100,7 @@ RSpec.describe ProcessSubmissionJob do
       }
     )
 
-    expect(ActionMailer::MailDeliveryJob).to have_been_enqueued.with("SubmissionMailer", "submitter_confirmation", any_args)
-    expect(ActionMailer::MailDeliveryJob).to have_been_enqueued.with("SubmissionMailer", "curator_notification", any_args)
+    expect(MailDeliveryJob).to have_been_enqueued.with("SubmissionMailer", "submitter_confirmation", any_args)
+    expect(MailDeliveryJob).to have_been_enqueued.with("SubmissionMailer", "curator_notification", any_args)
   end
 end

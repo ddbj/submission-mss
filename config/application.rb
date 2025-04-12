@@ -41,6 +41,7 @@ module MSSForm
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
+    config.action_mailer.delivery_job = "MailDeliveryJob"
     config.active_storage.draw_routes = false
     config.time_zone                  = "Japan"
 
