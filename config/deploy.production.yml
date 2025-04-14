@@ -1,6 +1,10 @@
 servers:
   web:
-    - mssform-production
+    hosts:
+      - mssform-production
+
+    options:
+      group-add: 60000 # submitter
 
 proxy:
   host: mss.ddbj.nig.ac.jp
@@ -10,6 +14,7 @@ builder:
     API_URL: https://mss.ddbj.nig.ac.jp/api
 
 volumes:
+  - /mnt/submission:/submission
   - ./volumes/mssform-production/storage:/rails/storage
 
 accessories:

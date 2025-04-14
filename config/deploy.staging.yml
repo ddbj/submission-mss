@@ -1,6 +1,10 @@
 servers:
   web:
-    - mssform-staging
+    hosts:
+      - mssform-staging
+
+    options:
+      group-add: 61000 # ts-submitter
 
 proxy:
   host: mss-staging.ddbj.nig.ac.jp
@@ -14,6 +18,7 @@ env:
     RAILS_ENV: staging
 
 volumes:
+  - /mnt/submission:/submission
   - ./volumes/mssform-staging/storage:/rails/storage
 
 accessories:
