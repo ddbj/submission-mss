@@ -23,9 +23,6 @@ env:
   secret:
     - RAILS_MASTER_KEY
 
-volumes:
-  - /mnt/submission:/submission
-
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
   shell: app exec --interactive --reuse "bash"
