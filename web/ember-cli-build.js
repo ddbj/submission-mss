@@ -25,16 +25,8 @@ module.exports = function (defaults) {
     },
   });
 
-  const { Webpack } = require('@embroider/webpack');
-  return require('@embroider/compat').compatBuild(app, Webpack, {
-    staticAddonTestSupportTrees: true,
-    staticAddonTrees: true,
-    staticEmberSource: true,
-    staticInvokables: true,
-    skipBabel: [
-      {
-        package: 'qunit',
-      },
-    ],
-  });
+  app.import('node_modules/@primer/octicons/build/build.css');
+  app.import('node_modules/bootstrap/dist/css/bootstrap.css');
+
+  return app.toTree();
 };

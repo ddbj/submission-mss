@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { importSync } from '@embroider/macros';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
@@ -9,10 +8,6 @@ export default class SubmissionFormComponent extends Component {
 
   state = new State();
   nav = new Navigation();
-
-  get component() {
-    return importSync(`./submission-form/${this.nav.currentStep}`).default;
-  }
 }
 
 class State {
