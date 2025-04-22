@@ -11,7 +11,7 @@ proxy:
 
 builder:
   args:
-    API_URL: https://mss.ddbj.nig.ac.jp/api
+    RAILS_ENV: production
 
 volumes:
   - /mnt/submission:/submission

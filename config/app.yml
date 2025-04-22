@@ -16,6 +16,7 @@ production: &production
   app_url:                https://mss.ddbj.nig.ac.jp
   extracts_dir:           <%= Rails.root.join("storage/extracts") %>
   mass_dir_path_template: /submission/{user}/submission/{user}/mass
+  sentry_dsn:             https://d0a88749c20cf46d63f4bb1028e427dc@o4506770361024512.ingest.sentry.io/4506770364891136
   submissions_dir:        <%= Rails.root.join("storage/submissions") %>
   web_url:                https://mss.ddbj.nig.ac.jp
 

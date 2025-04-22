@@ -9,7 +9,10 @@ declare const config: {
   locationType: 'history' | 'hash' | 'none' | 'auto';
   rootURL: string;
   APP: Record<string, unknown>;
+  railsEnv: string;
   apiURL: string;
+  sentryDSN: string;
+  enums: Record<string, object[]>;
 };
 
 export default config;
