@@ -495,7 +495,7 @@ GEM
 
 PLATFORMS
   arm64-darwin
-  x86_64-linux-gnu
+  x86_64-linux
 
 DEPENDENCIES
   aws-sdk-s3
