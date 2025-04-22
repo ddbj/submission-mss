@@ -42,7 +42,7 @@ export default class ApplicationRoute extends Route {
 }
 
 function enumTranslations(locale) {
-  const { enums } = ENV.APP;
+  const { enums } = ENV;
 
   const locales = Object.fromEntries(enums.locales.map(({ key, label }) => [key, label[locale]]));
   const data_types = Object.fromEntries(enums.data_types.map(({ key, label }) => [key, label]));

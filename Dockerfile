@@ -48,14 +48,14 @@ RUN bundle exec bootsnap precompile app/ lib/
 
 FROM docker.io/library/node:22.14.0 AS web
 
-ARG API_URL
+ARG RAILS_ENV
 
-ENV API_URL=${API_URL:?}
+ENV RAILS_ENV=${RAILS_ENV:?}
 
 RUN corepack enable pnpm
 
 WORKDIR /config
-COPY config/enums.yml .
+COPY config/app.yml config/enums.yml ./
 
 WORKDIR /web
 COPY web/ ./

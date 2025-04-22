@@ -5,6 +5,10 @@ const path = require('path');
 
 const yaml = require('js-yaml');
 
+const railsEnv = process.env.RAILS_ENV || 'development';
+const app = yaml.load(fs.readFileSync(path.join(__dirname, '../../config/app.yml')))[railsEnv];
+const enums = yaml.load(fs.readFileSync(path.join(__dirname, '../../config/enums.yml')));
+
 module.exports = function (environment) {
   const ENV = {
     modulePrefix: 'mssform',
@@ -22,10 +26,12 @@ module.exports = function (environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-      enums: yaml.load(fs.readFileSync(path.join(__dirname, '../../config/enums.yml'))),
     },
 
-    apiURL: process.env.API_URL || 'http://localhost:3000/api',
+    railsEnv,
+    apiURL: new URL('/api', app.app_url).href,
+    sentryDSN: app.sentry_dsn,
+    enums,
   };
 
   if (environment === 'development') {
