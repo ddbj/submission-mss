@@ -46,7 +46,7 @@
     "@popperjs/core": "^2.11.8",
     "@primer/octicons": "^19.15.1",
     "@rails/activestorage": "^8.0.200",
-    "@sentry/ember": "^9.13.0",
+    "@sentry/ember": "^9.14.0",
     "@tsconfig/ember": "^3.0.10",
     "@types/bootstrap": "^5.2.10",
     "@types/qunit": "^2.19.12",
