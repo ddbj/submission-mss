@@ -4,6 +4,8 @@ import { action } from '@ember/object';
 import { dropTask } from 'ember-concurrency';
 import { service } from '@ember/service';
 
+import OtherPerson from 'mssform/models/other-person';
+
 export default class SubmissionFormFilesComponent extends Component {
   @service request;
 
@@ -92,15 +94,11 @@ export default class SubmissionFormFilesComponent extends Component {
     model.contactPerson.fullName = last.contact_person.fullName;
     model.contactPerson.affiliation = last.contact_person.affiliation;
 
-    if (model.otherPeople.length === 0) {
-      for (const person of last.other_people.slice()) {
-        model.otherPeople.createRecord({
-          email: person.email,
-          fullName: person.fullName,
-          affiliation: person.affiliation,
-        });
-      }
-    }
+    model.otherPeople = last.other_people.map(({ email, full_name }) => {
+      const person = new OtherPerson();
+
+      return Object.assign(person, { email, fullName: full_name });
+    });
 
     if (!model.sequencer) {
       model.sequencer = last.sequencer;
