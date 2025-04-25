@@ -27,14 +27,15 @@ export default class ErrorMessageComponent extends Component<Signature> {
   async setMessage(error: Error) {
     if (error instanceof FetchError) {
       const { response } = error;
+      const text = await response.text();
 
       try {
-        const json = (await response.json()) as { error?: string };
+        const json = JSON.parse(text) as { error?: string };
 
         this.message = json.error ? json.error : JSON.stringify(json);
       } catch (e) {
         if (e instanceof SyntaxError) {
-          this.message = await response.text();
+          this.message = text;
         } else {
           this.message = error.message;
         }
