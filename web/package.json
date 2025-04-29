@@ -50,6 +50,7 @@
     "@tsconfig/ember": "^3.0.10",
     "@types/bootstrap": "^5.2.10",
     "@types/qunit": "^2.19.12",
+    "@types/rails__activestorage": "^8.0.0",
     "@types/rsvp": "^4.0.9",
     "bootstrap": "^5.3.5",
     "broccoli-asset-rev": "^3.0.0",

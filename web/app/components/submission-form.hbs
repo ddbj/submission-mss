@@ -19,7 +19,7 @@
       {{#each this.nav.steps as |step|}}
         <a
           href
-          class="nav-link {{step-nav-link-class this.nav step}}"
+          class="nav-link {{this.stepNavLinkClass step}}"
           {{on "click" (prevent-default (fn this.nav.gotoStep step))}}
         >
           {{t (concat "submission-form.steps." step)}}
