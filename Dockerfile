@@ -46,7 +46,7 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-FROM docker.io/library/node:22.15.0 AS web
+FROM docker.io/library/node:24.0.1 AS web
 
 ARG RAILS_ENV
 
