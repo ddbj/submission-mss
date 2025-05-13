@@ -64,7 +64,6 @@ export default class RecentSubmissions extends Component {
 
                   {{#if (gt submission.dfast_job_ids.length 3)}}
                     <details>
-                      {{! template-lint-disable no-nested-interactive }}
                       <summary>View all</summary>
 
                       <ul class="list-unstyled m-0">
@@ -90,7 +89,6 @@ export default class RecentSubmissions extends Component {
 
                 {{#if (gt submission.accessions.length 3)}}
                   <details>
-                    {{! template-lint-disable no-nested-interactive }}
                     <summary>View all</summary>
 
                     <ul class="list-unstyled m-0">
