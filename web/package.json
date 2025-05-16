@@ -73,7 +73,7 @@
     "ember-modifier": "^4.2.0",
     "ember-page-title": "^9.0.2",
     "ember-qunit": "^9.0.2",
-    "ember-resolver": "^13.1.0",
+    "ember-resolver": "^13.1.1",
     "ember-set-helper": "^3.0.1",
     "ember-source": "~6.4.0",
     "ember-svg-jar": "^2.6.2",
