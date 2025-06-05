@@ -132,8 +132,8 @@ importers:
         specifier: ^0.1.1
         version: 0.1.1
       ember-intl:
-        specifier: 7.1.8
-        version: 7.1.8(@ember/test-helpers@5.2.2(@babel/core@7.27.4)(@glint/template@1.5.2))(@glint/template@1.5.2)(typescript@5.8.3)(webpack@5.99.9)
+        specifier: 7.2.0
+        version: 7.2.0(@ember/test-helpers@5.2.2(@babel/core@7.27.4)(@glint/template@1.5.2))(@glint/template@1.5.2)(typescript@5.8.3)(webpack@5.99.9)
       ember-load-initializers:
         specifier: ^3.0.1
         version: 3.0.1(ember-source@6.4.0(@glimmer/component@2.0.0)(rsvp@4.8.5))
@@ -2989,8 +2989,8 @@ packages:
     peerDependencies:
       ember-source: ^3.25.0 || >=4.0.0
 
-  ember-intl@7.1.8:
-    resolution: {integrity: sha512-yP6Fjx6Ps6kfaNa5B8HkhzDngHoqYXnOnGR+eTyr81tTiPScMjJ1MEjCG+LDbiE5jnW3nszq7h6IVWyJnCvuzA==}
+  ember-intl@7.2.0:
+    resolution: {integrity: sha512-IvyJA53ssAPnJ6gJtRvbidib+oKIZ76HEUAU4+Ybmf3pbENdx7g3+lHvneJvfRICDPs3+V+ligMLweyBRgjIQg==}
     engines: {node: 18.* || >= 20}
     peerDependencies:
       '@ember/test-helpers': ^2.9.4 || ^3.2.0 || ^4.0.0 || ^5.0.0
@@ -7863,7 +7863,7 @@ snapshots:
       '@types/ember__object': 4.0.12(@babel/core@7.27.4)
       '@types/ember__polyfills': 4.0.6
       '@types/ember__routing': 4.0.22(@babel/core@7.27.4)
-      '@types/ember__runloop': 4.0.10
+      '@types/ember__runloop': 4.0.10(@babel/core@7.27.4)
       '@types/ember__service': 4.0.9(@babel/core@7.27.4)
       '@types/ember__string': 3.0.15
       '@types/ember__template': 4.0.7
@@ -7980,11 +7980,6 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
-    optional: true
-
-  '@types/ember__runloop@4.0.10':
-    dependencies:
-      '@types/ember': 4.0.11
     optional: true
 
   '@types/ember__runloop@4.0.10(@babel/core@7.27.4)':
@@ -10229,7 +10224,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ember-intl@7.1.8(@ember/test-helpers@5.2.2(@babel/core@7.27.4)(@glint/template@1.5.2))(@glint/template@1.5.2)(typescript@5.8.3)(webpack@5.99.9):
+  ember-intl@7.2.0(@ember/test-helpers@5.2.2(@babel/core@7.27.4)(@glint/template@1.5.2))(@glint/template@1.5.2)(typescript@5.8.3)(webpack@5.99.9):
     dependencies:
       '@babel/core': 7.27.4(supports-color@8.1.1)
       '@formatjs/icu-messageformat-parser': 2.11.2
@@ -12291,7 +12286,7 @@ snapshots:
     dependencies:
       growly: 1.3.0
       is-wsl: 2.2.0
-      semver: 7.7.2
+      semver: 7.7.1
       shellwords: 0.1.1
       uuid: 8.3.2
       which: 2.0.2
