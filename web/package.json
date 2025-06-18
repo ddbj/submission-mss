@@ -33,7 +33,7 @@
     "@ember/optional-features": "^2.2.0",
     "@ember/test-helpers": "^5.2.1",
     "@embroider/compat": "^3.9.0",
-    "@embroider/core": "^3.5.6",
+    "@embroider/core": "^3.5.7",
     "@embroider/macros": "^1.17.2",
     "@embroider/webpack": "^4.1.0",
     "@eslint/js": "^9.29.0",
