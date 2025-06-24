@@ -148,7 +148,7 @@ GEM
       logger
     faraday-follow_redirects (0.3.0)
       faraday (>= 1, < 3)
-    faraday-net_http (3.4.0)
+    faraday-net_http (3.4.1)
       net-http (>= 0.5.0)
     fetch-api (0.6.0)
       json
@@ -167,7 +167,7 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-apis-core (0.17.0)
+    google-apis-core (0.18.0)
       addressable (~> 2.5, >= 2.5.1)
       googleauth (~> 1.9)
       httpclient (>= 2.8.3, < 3.a)
@@ -175,9 +175,9 @@ GEM
       mutex_m
       representable (~> 3.0)
       retriable (>= 2.0, < 4.a)
-    google-apis-sheets_v4 (0.44.0)
+    google-apis-sheets_v4 (0.45.0)
       google-apis-core (>= 0.15.0, < 2.a)
-    google-cloud-env (2.3.0)
+    google-cloud-env (2.3.1)
       base64 (~> 0.2)
       faraday (>= 1.0, < 3.a)
     google-logging-utils (0.2.0)
