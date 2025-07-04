@@ -108,8 +108,8 @@ importers:
         specifier: ^3.3.3
         version: 3.3.3(ember-cli@6.5.0(handlebars@4.7.8)(underscore@1.13.7))
       ember-cli-deprecation-workflow:
-        specifier: ^3.3.0
-        version: 3.3.0(ember-source@6.5.0(@glimmer/component@2.0.0)(rsvp@4.8.5))
+        specifier: ^3.4.0
+        version: 3.4.0(ember-source@6.5.0(@glimmer/component@2.0.0)(rsvp@4.8.5))
       ember-cli-htmlbars:
         specifier: ^6.3.0
         version: 6.3.0
@@ -2849,11 +2849,11 @@ packages:
     peerDependencies:
       ember-cli: ^3.2.0 || >=4.0.0
 
-  ember-cli-deprecation-workflow@3.3.0:
-    resolution: {integrity: sha512-AZTOv+xftPXNov+X7k/JZFMd5/Suzkuvg5Zc1W3MoJb+kjIwW/3sieBOXEbt7aMq9Px4ixb9FSrFPNlzggV4qA==}
+  ember-cli-deprecation-workflow@3.4.0:
+    resolution: {integrity: sha512-Ksrmib4mjD4xa0dqFgxJLBwkSp9EVYH6jSqe2NpODlBKEAZhsVzQj5wKPnC1dXfK3Erq/r1Fh3q4g46FZiCUiw==}
     engines: {node: '>= 18'}
     peerDependencies:
-      ember-source: '>= 4.0.0'
+      ember-source: '>= 3.28.0'
 
   ember-cli-get-component-path-option@1.0.0:
     resolution: {integrity: sha512-k47TDwcJ2zPideBCZE8sCiShSxQSpebY2BHcX2DdipMmBox5gsfyVrbKJWIHeSTTKyEUgmBIvQkqTOozEziCZA==}
@@ -7817,27 +7817,6 @@ snapshots:
     dependencies:
       '@types/node': 24.0.10
 
-  '@types/ember@4.0.11':
-    dependencies:
-      '@types/ember__application': 4.0.11(@babel/core@7.28.0)
-      '@types/ember__array': 4.0.10(@babel/core@7.28.0)
-      '@types/ember__component': 4.0.22(@babel/core@7.28.0)
-      '@types/ember__controller': 4.0.12(@babel/core@7.28.0)
-      '@types/ember__debug': 4.0.8(@babel/core@7.28.0)
-      '@types/ember__engine': 4.0.11(@babel/core@7.28.0)
-      '@types/ember__error': 4.0.6
-      '@types/ember__object': 4.0.12(@babel/core@7.28.0)
-      '@types/ember__polyfills': 4.0.6
-      '@types/ember__routing': 4.0.22(@babel/core@7.28.0)
-      '@types/ember__runloop': 4.0.10
-      '@types/ember__service': 4.0.9(@babel/core@7.28.0)
-      '@types/ember__string': 3.0.15
-      '@types/ember__template': 4.0.7
-      '@types/ember__test': 4.0.6(@babel/core@7.28.0)
-      '@types/ember__utils': 4.0.7
-      '@types/rsvp': 4.0.9
-    optional: true
-
   '@types/ember@4.0.11(@babel/core@7.28.0)':
     dependencies:
       '@types/ember__application': 4.0.11(@babel/core@7.28.0)
@@ -7865,7 +7844,7 @@ snapshots:
   '@types/ember__application@4.0.11(@babel/core@7.28.0)':
     dependencies:
       '@glimmer/component': 1.1.2(@babel/core@7.28.0)
-      '@types/ember': 4.0.11
+      '@types/ember': 4.0.11(@babel/core@7.28.0)
       '@types/ember__engine': 4.0.11(@babel/core@7.28.0)
       '@types/ember__object': 4.0.12(@babel/core@7.28.0)
       '@types/ember__owner': 4.0.9
@@ -7948,11 +7927,6 @@ snapshots:
       - supports-color
     optional: true
 
-  '@types/ember__runloop@4.0.10':
-    dependencies:
-      '@types/ember': 4.0.11
-    optional: true
-
   '@types/ember__runloop@4.0.10(@babel/core@7.28.0)':
     dependencies:
       '@types/ember': 4.0.11(@babel/core@7.28.0)
@@ -7981,11 +7955,6 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
-    optional: true
-
-  '@types/ember__utils@4.0.7':
-    dependencies:
-      '@types/ember': 4.0.11
     optional: true
 
   '@types/ember__utils@4.0.7(@babel/core@7.28.0)':
@@ -9823,7 +9792,7 @@ snapshots:
       resolve: 1.22.10
       semver: 5.7.2
 
-  ember-cli-deprecation-workflow@3.3.0(ember-source@6.5.0(@glimmer/component@2.0.0)(rsvp@4.8.5)):
+  ember-cli-deprecation-workflow@3.4.0(ember-source@6.5.0(@glimmer/component@2.0.0)(rsvp@4.8.5)):
     dependencies:
       '@babel/core': 7.28.0(supports-color@8.1.1)
       ember-cli-babel: 8.2.0(@babel/core@7.28.0)
