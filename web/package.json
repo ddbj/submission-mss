@@ -85,7 +85,7 @@
     "eslint-plugin-ember": "^12.5.0",
     "eslint-plugin-n": "^17.20.0",
     "eslint-plugin-qunit": "^8.2.2",
-    "filesize": "^10.1.6",
+    "filesize": "^11.0.1",
     "globals": "^16.3.0",
     "js-yaml": "^4.1.0",
     "jwt-decode": "^4.0.0",
