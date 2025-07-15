@@ -84,7 +84,7 @@
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-ember": "^12.5.0",
     "eslint-plugin-n": "^17.21.0",
-    "eslint-plugin-qunit": "^8.2.2",
+    "eslint-plugin-qunit": "^8.2.3",
     "filesize": "^10.1.6",
     "globals": "^16.3.0",
     "js-yaml": "^4.1.0",
