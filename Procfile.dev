@@ -1,4 +1,4 @@
 api: bin/rails server --port 3000
 web: cd web && pnpm start --port 4200
 minio: docker run --rm --name mssform-minio --publish 9000:9000 --publish 9001:9001 --volume mssform_minio:/data minio/minio:RELEASE.2025-04-08T15-41-24Z server /data --console-address ':9001'
-keycloak: docker run --rm --name mssform-keycloak --publish 8080:8080 --env KEYCLOAK_ADMIN=keycloak --env KEYCLOAK_ADMIN_PASSWORD=keycloak --env KC_DB_USERNAME=sa --volume mssform_keycloak:/opt/keycloak/data keycloak/keycloak:26.2.4 start-dev
+keycloak: docker run --rm --name mssform-keycloak --publish 8080:8080 --env KEYCLOAK_ADMIN=keycloak --env KEYCLOAK_ADMIN_PASSWORD=keycloak --env KC_DB_USERNAME=sa --volume mssform_keycloak:/opt/keycloak/data keycloak/keycloak:26.3.1 start-dev
