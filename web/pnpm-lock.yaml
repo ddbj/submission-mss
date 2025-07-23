@@ -171,8 +171,8 @@ importers:
         specifier: ^9.31.0
         version: 9.31.0
       eslint-config-prettier:
-        specifier: ^10.1.5
-        version: 10.1.5(eslint@9.31.0)
+        specifier: ^10.1.8
+        version: 10.1.8(eslint@9.31.0)
       eslint-plugin-ember:
         specifier: ^12.6.0
         version: 12.6.0(@babel/core@7.28.0)(@typescript-eslint/parser@8.38.0(eslint@9.31.0)(typescript@5.8.3))(eslint@9.31.0)
@@ -3143,8 +3143,8 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
-  eslint-config-prettier@10.1.5:
-    resolution: {integrity: sha512-zc1UmCpNltmVY34vuLRV61r1K27sWuX39E+uyUnY8xS2Bex88VV9cugG+UZbRSRGtGyFboj+D8JODyme1plMpw==}
+  eslint-config-prettier@10.1.8:
+    resolution: {integrity: sha512-82GZUjRS0p/jganf6q1rEO25VSoHH0hKPCTrgillPjdI/3bgBhAE1QzHrHTizjpRvy6pGAvKjDJtk2pF9NDq8w==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -7814,27 +7814,6 @@ snapshots:
     dependencies:
       '@types/node': 24.0.10
 
-  '@types/ember@4.0.11':
-    dependencies:
-      '@types/ember__application': 4.0.11(@babel/core@7.28.0)
-      '@types/ember__array': 4.0.10(@babel/core@7.28.0)
-      '@types/ember__component': 4.0.22(@babel/core@7.28.0)
-      '@types/ember__controller': 4.0.12(@babel/core@7.28.0)
-      '@types/ember__debug': 4.0.8(@babel/core@7.28.0)
-      '@types/ember__engine': 4.0.11(@babel/core@7.28.0)
-      '@types/ember__error': 4.0.6
-      '@types/ember__object': 4.0.12(@babel/core@7.28.0)
-      '@types/ember__polyfills': 4.0.6
-      '@types/ember__routing': 4.0.22(@babel/core@7.28.0)
-      '@types/ember__runloop': 4.0.10
-      '@types/ember__service': 4.0.9(@babel/core@7.28.0)
-      '@types/ember__string': 3.0.15
-      '@types/ember__template': 4.0.7
-      '@types/ember__test': 4.0.6(@babel/core@7.28.0)
-      '@types/ember__utils': 4.0.7
-      '@types/rsvp': 4.0.9
-    optional: true
-
   '@types/ember@4.0.11(@babel/core@7.28.0)':
     dependencies:
       '@types/ember__application': 4.0.11(@babel/core@7.28.0)
@@ -7862,7 +7841,7 @@ snapshots:
   '@types/ember__application@4.0.11(@babel/core@7.28.0)':
     dependencies:
       '@glimmer/component': 1.1.2(@babel/core@7.28.0)
-      '@types/ember': 4.0.11
+      '@types/ember': 4.0.11(@babel/core@7.28.0)
       '@types/ember__engine': 4.0.11(@babel/core@7.28.0)
       '@types/ember__object': 4.0.12(@babel/core@7.28.0)
       '@types/ember__owner': 4.0.9
@@ -7945,11 +7924,6 @@ snapshots:
       - supports-color
     optional: true
 
-  '@types/ember__runloop@4.0.10':
-    dependencies:
-      '@types/ember': 4.0.11
-    optional: true
-
   '@types/ember__runloop@4.0.10(@babel/core@7.28.0)':
     dependencies:
       '@types/ember': 4.0.11(@babel/core@7.28.0)
@@ -7978,11 +7952,6 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
-    optional: true
-
-  '@types/ember__utils@4.0.7':
-    dependencies:
-      '@types/ember': 4.0.11
     optional: true
 
   '@types/ember__utils@4.0.7(@babel/core@7.28.0)':
@@ -10505,7 +10474,7 @@ snapshots:
       eslint: 9.31.0
       semver: 7.7.2
 
-  eslint-config-prettier@10.1.5(eslint@9.31.0):
+  eslint-config-prettier@10.1.8(eslint@9.31.0):
     dependencies:
       eslint: 9.31.0
 
