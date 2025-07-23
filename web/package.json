@@ -44,7 +44,7 @@
     "@glint/environment-ember-template-imports": "^1.5.2",
     "@glint/template": "^1.5.2",
     "@popperjs/core": "^2.11.8",
-    "@primer/octicons": "^19.15.3",
+    "@primer/octicons": "^19.15.4",
     "@rails/activestorage": "^8.0.200",
     "@sentry/ember": "^9.38.0",
     "@tsconfig/ember": "^3.0.10",
