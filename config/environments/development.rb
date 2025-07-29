@@ -66,4 +66,5 @@ Rails.application.configure do
   # config.generators.apply_rubocop_autocorrect_after_generate!
 
   config.active_storage.service = :minio
+  config.generators.apply_rubocop_autocorrect_after_generate!
 end
