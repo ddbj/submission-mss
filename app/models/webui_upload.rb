@@ -16,7 +16,7 @@ class WebuiUpload < ApplicationRecord
     work.mkpath
 
     files.each do |attachment|
-      work.join(attachment.filename.to_s).open "wb" do |f|
+      work.join(attachment.filename.to_s).open 'wb' do |f|
         attachment.download do |chunk|
           f.write chunk
         end

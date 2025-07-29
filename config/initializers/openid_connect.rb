@@ -5,4 +5,4 @@ SWD.logger           = Rails.logger
 
 url = Rails.application.config_for(:keycloak).url!
 
-SWD.url_builder = URI::HTTP if URI.parse(url).scheme == "http"
+SWD.url_builder = URI::HTTP if URI.parse(url).scheme == 'http'

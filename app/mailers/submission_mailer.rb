@@ -29,10 +29,10 @@ class SubmissionMailer < ApplicationMailer
       *submission.other_people.order(:position)
     ]
 
-    return recipients unless allowed_domains = Rails.application.config_for(:app).mail_allowed_domains&.split(",")
+    return recipients unless allowed_domains = Rails.application.config_for(:app).mail_allowed_domains&.split(',')
 
-    recipients.select { |recipient|
-      allowed_domains.any? { |domain| recipient.email.end_with?("@#{domain}") }
+    recipients.select {|recipient|
+      allowed_domains.any? {|domain| recipient.email.end_with?("@#{domain}") }
     }
   end
 end

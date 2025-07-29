@@ -1,1 +1,1 @@
-require "email_spec/rspec"
+require 'email_spec/rspec'

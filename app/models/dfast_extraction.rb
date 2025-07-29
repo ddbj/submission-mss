@@ -10,7 +10,7 @@ class DfastExtraction < ApplicationRecord
 
   belongs_to :user
 
-  has_many :files, dependent: :destroy, class_name: "DfastExtractionFile", foreign_key: :extraction_id
+  has_many :files, dependent: :destroy, class_name: 'DfastExtractionFile', foreign_key: :extraction_id
 
   validates :dfast_job_ids, presence: true
 
@@ -40,11 +40,11 @@ class DfastExtraction < ApplicationRecord
     zip = Zip::InputStream.new(StringIO.new(res.body))
 
     while entry = zip.get_next_entry
-      next unless entry.name.end_with?(".ann", ".fasta")
+      next unless entry.name.end_with?('.ann', '.fasta')
 
       dest_name = normalize_path(entry.name)
 
-      working_dir.join(dest_name).open "w" do |dest|
+      working_dir.join(dest_name).open 'w' do |dest|
         IO.copy_stream entry.get_input_stream, dest
 
         files.create!(
@@ -57,6 +57,6 @@ class DfastExtraction < ApplicationRecord
   end
 
   def normalize_path(path)
-    path.to_s.gsub(%r{[/ ]}, "/" => "__", " " => "_")
+    path.to_s.gsub(%r{[/ ]}, '/' => '__', ' ' => '_')
   end
 end

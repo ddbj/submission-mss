@@ -1,7 +1,7 @@
 class DfastUpload < ApplicationRecord
   include UploadVia
 
-  belongs_to :extraction, class_name: "DfastExtraction"
+  belongs_to :extraction, class_name: 'DfastExtraction'
 
   delegate :dfast_job_ids, to: :extraction
 

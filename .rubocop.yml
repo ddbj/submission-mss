@@ -10,3 +10,23 @@ inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 AllCops:
   Exclude:
     - web/**/*
+
+Layout/SpaceInsideArrayLiteralBrackets:
+  EnforcedStyle: no_space
+
+Layout/SpaceInsideBlockBraces:
+  EnforcedStyle: space
+  SpaceBeforeBlockParameters: false
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+  inherit_mode:
+    merge:
+      - Include
+
+  Include:
+    - spec/**/*

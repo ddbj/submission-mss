@@ -1,7 +1,7 @@
 class MassDirectoryUpload < ApplicationRecord
   include UploadVia
 
-  belongs_to :extraction, class_name: "MassDirectoryExtraction"
+  belongs_to :extraction, class_name: 'MassDirectoryExtraction'
 
   def self.from_params(extraction_id:, **)
     new(extraction_id:)

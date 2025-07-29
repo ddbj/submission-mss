@@ -26,7 +26,7 @@ class MassDirectoryExtraction < ApplicationRecord
 
   belongs_to :user
 
-  has_many :files, dependent: :destroy, class_name: "MassDirectoryExtractionFile", foreign_key: :extraction_id
+  has_many :files, dependent: :destroy, class_name: 'MassDirectoryExtractionFile', foreign_key: :extraction_id
 
   def prepare_files
     ActiveRecord::Base.transaction do
@@ -43,13 +43,13 @@ class MassDirectoryExtraction < ApplicationRecord
   private
 
   def user_mass_dir
-    Rails.application.config_for(:app).mass_dir_path_template!.gsub("{user}", user.uid).tap { |path|
+    Rails.application.config_for(:app).mass_dir_path_template!.gsub('{user}', user.uid).tap {|path|
       raise "malformed directory path: #{path}" unless path == File.expand_path(path)
     }.then { Pathname.new(_1) }
   end
 
   def unarchive_and_copy_files(dir)
-    paths = Pathname.glob("**/*.{#{[ *ExtractionFile::FILE_EXT, *ARCHIVE_EXT, *COMPRESS_EXT ].join(',')}}", base: dir)
+    paths = Pathname.glob("**/*.{#{[*ExtractionFile::FILE_EXT, *ARCHIVE_EXT, *COMPRESS_EXT].join(',')}}", base: dir)
 
     return if paths.empty?
 
@@ -63,16 +63,16 @@ class MassDirectoryExtraction < ApplicationRecord
           tmp  = Pathname.new(tmp)
           dest = tmp.join(src.to_s.delete_suffix(".#{ext}")).tap(&:mkpath)
 
-          if src.to_s.end_with?(".zip")
-            system "unzip", dir.join(src).to_s, "-d", dest.to_s, exception: true
+          if src.to_s.end_with?('.zip')
+            system 'unzip', dir.join(src).to_s, '-d', dest.to_s, exception: true
           else
-            system "tar", "--extract", "--file", dir.join(src).to_s, "--directory", dest.to_s, exception: true
+            system 'tar', '--extract', '--file', dir.join(src).to_s, '--directory', dest.to_s, exception: true
           end
 
           unarchive_and_copy_files tmp
         end
       elsif ext = src.match_ext?(COMPRESS_EXT)
-        comp_ext = ext.split(".").last
+        comp_ext = ext.split('.').last
 
         Dir.mktmpdir do |tmp|
           tmp  = Pathname.new(tmp)
@@ -99,6 +99,6 @@ class MassDirectoryExtraction < ApplicationRecord
   end
 
   def normalize_path(path)
-    path.to_s.gsub(%r{[/ ]}, "/" => "__", " " => "_")
+    path.to_s.gsub(%r{[/ ]}, '/' => '__', ' ' => '_')
   end
 end
