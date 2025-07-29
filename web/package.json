@@ -51,11 +51,12 @@
     "@types/bootstrap": "^5.2.10",
     "@types/qunit": "^2.19.12",
     "@types/rsvp": "^4.0.9",
+    "@warp-drive/ember": "~5.6.0",
     "bootstrap": "^5.3.7",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^9.2.0",
     "ember-auto-import": "^2.10.0",
-    "ember-cli": "~6.5.0",
+    "ember-cli": "~6.6.0",
     "ember-cli-app-version": "^7.0.0",
     "ember-cli-babel": "^8.2.0",
     "ember-cli-clean-css": "^3.0.0",
@@ -75,16 +76,16 @@
     "ember-qunit": "^9.0.3",
     "ember-resolver": "^13.1.1",
     "ember-set-helper": "^3.0.1",
-    "ember-source": "~6.5.0",
+    "ember-source": "~6.6.0",
     "ember-svg-jar": "^2.6.3",
     "ember-template-imports": "^4.3.0",
     "ember-template-lint": "^7.9.1",
     "ember-truth-helpers": "^4.0.3",
-    "eslint": "^9.31.0",
+    "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-ember": "^12.7.0",
-    "eslint-plugin-n": "^17.21.0",
-    "eslint-plugin-qunit": "^8.2.3",
+    "eslint-plugin-n": "^17.21.3",
+    "eslint-plugin-qunit": "^8.2.5",
     "filesize": "^11.0.2",
     "globals": "^16.3.0",
     "js-yaml": "^4.1.0",
@@ -95,18 +96,18 @@
     "prettier-plugin-ember-template-tag": "^2.1.0",
     "qunit": "^2.24.1",
     "qunit-dom": "^3.4.0",
-    "stylelint": "^16.21.1",
-    "stylelint-config-standard": "^38.0.0",
+    "stylelint": "^16.23.0",
+    "stylelint-config-standard": "^39.0.0",
     "tracked-built-ins": "^4.0.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
-    "webpack": "^5.100.1"
+    "webpack": "^5.101.0"
   },
   "engines": {
-    "node": ">= 18"
+    "node": ">= 20.11"
   },
   "ember": {
     "edition": "octane"
   },
-  "packageManager": "pnpm@10.12.4+sha512.5ea8b0deed94ed68691c9bad4c955492705c5eeb8a87ef86bc62c74a26b037b08ff9570f108b2e4dbd1dd1a9186fea925e527f141c648e85af45631074680184"
+  "packageManager": "pnpm@10.14.0-0+sha512.2cd47a0cbf5f1d1de7693a88307a0ede5be94e0d3b34853d800ee775efbea0650cb562b77605ec80bc8d925f5cd27c4dfe8bb04d3a0b76090784c664450d32d6"
 }
