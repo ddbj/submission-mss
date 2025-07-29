@@ -1,16 +1,16 @@
-require_relative "boot"
+require_relative 'boot'
 
-require "rails"
+require 'rails'
 # Pick the frameworks you want:
-require "active_model/railtie"
-require "active_job/railtie"
-require "active_record/railtie"
-require "active_storage/engine"
-require "action_controller/railtie"
-require "action_mailer/railtie"
+require 'active_model/railtie'
+require 'active_job/railtie'
+require 'active_record/railtie'
+require 'active_storage/engine'
+require 'action_controller/railtie'
+require 'action_mailer/railtie'
 # require "action_mailbox/engine"
 # require "action_text/engine"
-require "action_view/railtie"
+require 'action_view/railtie'
 # require "action_cable/engine"
 # require "rails/test_unit/railtie"
 
@@ -41,9 +41,9 @@ module MSSForm
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    config.action_mailer.delivery_job = "MailDeliveryJob"
+    config.action_mailer.delivery_job = 'MailDeliveryJob'
     config.active_storage.draw_routes = false
-    config.time_zone                  = "Japan"
+    config.time_zone                  = 'Japan'
 
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore

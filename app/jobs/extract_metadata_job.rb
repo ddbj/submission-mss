@@ -4,7 +4,7 @@ class ExtractMetadataJob < ApplicationJob
       begin
         extraction.prepare_files
       rescue DfastExtraction::ExtractionError => e
-        extraction.update! state: "rejected", error: { id: e.id, **e.data }
+        extraction.update! state: 'rejected', error: {id: e.id, **e.data}
         return
       end
 
@@ -20,12 +20,12 @@ class ExtractMetadataJob < ApplicationJob
           parsed_data: nil,
 
           _errors: [
-            { id: e.id, value: e.value }
+            {id: e.id, value: e.value}
           ]
         )
       end
 
-      extraction.update! state: "fulfilled"
+      extraction.update! state: 'fulfilled'
     end
   end
 end

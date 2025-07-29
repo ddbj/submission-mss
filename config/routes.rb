@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
-  root to: redirect("/web")
+  root to: redirect('/web')
 
-  get "auth/:provider/callback", to: "sessions#create"
-  get "auth/failure",            to: "sessions#failure"
+  get 'auth/:provider/callback', to: 'sessions#create'
+  get 'auth/failure',            to: 'sessions#failure'
 
-  scope :api, defaults: { format: :json } do
+  scope :api, defaults: {format: :json} do
     resource :me, only: %i[show]
 
     resources :submissions, only: %i[index show create], param: :mass_id do
@@ -29,9 +29,9 @@ Rails.application.routes.draw do
     "#{web_url}/home/submission/#{submission.mass_id}/upload?locale=#{submission.email_language}"
   end
 
-  get "*paths", to: "frontends#show", constraints: ->(req) {
+  get '*paths', to: 'frontends#show', constraints: ->(req) {
     !req.xhr? && req.format.html?
   }
 
-  get "up" => "rails/health#show", as: :rails_health_check
+  get 'up' => 'rails/health#show', as: :rails_health_check
 end

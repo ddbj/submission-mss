@@ -20,10 +20,10 @@ class WorkingList
       config = Rails.application.config_for(:google)
 
       @service.authorization = Google::Auth::ServiceAccountCredentials.make_creds(
-        scope: "https://www.googleapis.com/auth/spreadsheets",
+        scope: 'https://www.googleapis.com/auth/spreadsheets',
 
         json_key_io: StringIO.new({
-          account_type: "service_account",
+          account_type: 'service_account',
           client_email: config.client_email!,
           client_id:    config.client_id!,
           private_key:  config.private_key!
@@ -39,8 +39,8 @@ class WorkingList
 
     Retriable.with_context :google do
       @service.append_spreadsheet_value @sheet_id, "#{@sheet_name}!A1", range, **{
-        insert_data_option: "INSERT_ROWS",
-        value_input_option: "RAW"
+        insert_data_option: 'INSERT_ROWS',
+        value_input_option: 'RAW'
       }
     end
   end
@@ -51,12 +51,12 @@ class WorkingList
     raise submission.mass_id unless row
 
     range = Google::Apis::SheetsV4::ValueRange.new(values: [
-      [ to_row(submission).fetch(:data_arrival_date) ]
+      [to_row(submission).fetch(:data_arrival_date)]
     ])
 
     Retriable.with_context :google do
       @service.update_spreadsheet_value @sheet_id, "#{@sheet_name}!L#{row}", range, **{
-        value_input_option: "RAW"
+        value_input_option: 'RAW'
       }
     end
   end
@@ -71,15 +71,15 @@ class WorkingList
       contact_person_email:       submission.contact_person.email,
       contact_person_full_name:   submission.contact_person.full_name,
       contact_person_affiliation: submission.contact_person.affiliation,
-      other_person:               submission.other_people.order(:position).map(&:email_address_with_name).join("; "),
+      other_person:               submission.other_people.order(:position).map(&:email_address_with_name).join('; '),
       dway_account:               submission.user.uid,
       dway_account_email:         submission.user.email,
-      data_arrival_date:          submission.uploads.map(&:timestamp).join("; "),
+      data_arrival_date:          submission.uploads.map(&:timestamp).join('; '),
       check_start_date:           nil,
       finish_date:                nil,
       sequencer:                  submission.sequencer_text,
       upload_via:                 submission.uploads.first.via_ident,
-      hup:                        submission.hold_date || "non-HUP",
+      hup:                        submission.hold_date || 'non-HUP',
       tpa:                        submission.tpa?,
       data_type:                  submission.data_type.upcase,
       total_entry:                submission.entries_count,
@@ -103,18 +103,18 @@ class WorkingList
       "#{@sheet_name}!A2:A",
       "#{@sheet_name}!D2:D",
       "#{@sheet_name}!U2:U"
-    ].map { |range|
+    ].map {|range|
       Retriable.with_context(:google) {
         @service.get_spreadsheet_values(@sheet_id, range).values&.map(&:first) || []
       }
     }
 
-    mass_ids.zip(statuses, accessions).filter_map { |mass_id, status, accession|
+    mass_ids.zip(statuses, accessions).filter_map {|mass_id, status, accession|
       next false unless target_mass_ids.include?(mass_id)
 
-      state = WorkingListState.new(status:, accessions: accession&.split(",") || [])
+      state = WorkingListState.new(status:, accessions: accession&.split(',') || [])
 
-      [ mass_id, state ]
+      [mass_id, state]
     }.to_h
   end
 

@@ -5,7 +5,7 @@ FactoryBot.define do
     email { "#{uid}@example.com" }
 
     trait :alice do
-      uid { "alice" }
+      uid { 'alice' }
     end
   end
 end

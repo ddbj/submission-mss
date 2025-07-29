@@ -12,7 +12,7 @@ class CreateExtractionsAndUploads < ActiveRecord::Migration[7.0]
     end
 
     create_table :dfast_extraction_files do |t|
-      t.references :extraction, null: false, foreign_key: { to_table: :dfast_extractions }
+      t.references :extraction, null: false, foreign_key: {to_table: :dfast_extractions}
 
       t.string  :name,         null: false
       t.string  :dfast_job_id, null: false
@@ -33,7 +33,7 @@ class CreateExtractionsAndUploads < ActiveRecord::Migration[7.0]
     end
 
     create_table :mass_directory_extraction_files do |t|
-      t.references :extraction, null: false, foreign_key: { to_table: :mass_directory_extractions }
+      t.references :extraction, null: false, foreign_key: {to_table: :mass_directory_extractions}
 
       t.string  :name,    null: false
 
@@ -60,13 +60,13 @@ class CreateExtractionsAndUploads < ActiveRecord::Migration[7.0]
     end
 
     create_table :dfast_uploads do |t|
-      t.references :extraction, foreign_key: { to_table: :dfast_extractions }
+      t.references :extraction, foreign_key: {to_table: :dfast_extractions}
 
       t.timestamps
     end
 
     create_table :mass_directory_uploads do |t|
-      t.references :extraction, foreign_key: { to_table: :mass_directory_extractions }
+      t.references :extraction, foreign_key: {to_table: :mass_directory_extractions}
 
       t.timestamps
     end

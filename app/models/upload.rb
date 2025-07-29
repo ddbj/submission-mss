@@ -1,8 +1,8 @@
 class Upload < ApplicationRecord
   VIA = {
-    webui:          "WebuiUpload",
-    dfast:          "DfastUpload",
-    mass_directory: "MassDirectoryUpload"
+    webui:          'WebuiUpload',
+    dfast:          'DfastUpload',
+    mass_directory: 'MassDirectoryUpload'
   }
 
   def self.find_via(ident)
@@ -18,7 +18,7 @@ class Upload < ApplicationRecord
   end
 
   def timestamp
-    created_at.strftime("%Y%m%d-%H%M%S")
+    created_at.strftime('%Y%m%d-%H%M%S')
   end
 
   def via_ident

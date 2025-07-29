@@ -1,7 +1,7 @@
 class Scaffold < ActiveRecord::Migration[7.0]
   def change
     create_table :users do |t|
-      t.string :openid_sub, null: false, index: { unique: true }
+      t.string :openid_sub, null: false, index: {unique: true}
       t.jsonb  :id_token,   null: false
 
       t.timestamps
