@@ -96,7 +96,7 @@
     "prettier-plugin-ember-template-tag": "^2.1.0",
     "qunit": "^2.24.1",
     "qunit-dom": "^3.4.0",
-    "stylelint": "^16.23.0",
+    "stylelint": "^16.23.1",
     "stylelint-config-standard": "^39.0.0",
     "tracked-built-ins": "^4.0.0",
     "typescript": "^5.9.2",

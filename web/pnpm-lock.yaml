@@ -216,11 +216,11 @@ importers:
         specifier: ^3.4.0
         version: 3.4.0
       stylelint:
-        specifier: ^16.23.0
-        version: 16.23.0(typescript@5.9.2)
+        specifier: ^16.23.1
+        version: 16.23.1(typescript@5.9.2)
       stylelint-config-standard:
         specifier: ^39.0.0
-        version: 39.0.0(stylelint@16.23.0(typescript@5.9.2))
+        version: 39.0.0(stylelint@16.23.1(typescript@5.9.2))
       tracked-built-ins:
         specifier: ^4.0.0
         version: 4.0.0(@babel/core@7.28.0)
@@ -4256,8 +4256,8 @@ packages:
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
-  keyv@5.4.0:
-    resolution: {integrity: sha512-TMckyVjEoacG5IteUpUrOBsFORtheqziVyyY2dLUwg1jwTb8u48LX4TgmtogkNl9Y9unaEJ1luj10fGyjMGFOQ==}
+  keyv@5.5.0:
+    resolution: {integrity: sha512-QG7qR2tijh1ftOvClut4YKKg1iW6cx3GZsKoGyJPxHkGWK9oJhG9P3j5deP0QQOGDowBMVQFaP+Vm4NpGYvmIQ==}
 
   kind-of@3.2.2:
     resolution: {integrity: sha512-NOW9QQXMoZGg/oqnVNoNTTIFEIid1627WCffUBJEdMxYApq7mNE7CpzucIPc+ZQg25Phej7IJSmX3hO+oblOtQ==}
@@ -5691,8 +5691,8 @@ packages:
     peerDependencies:
       stylelint: ^16.23.0
 
-  stylelint@16.23.0:
-    resolution: {integrity: sha512-69T5aS2LUY306ekt1Q1oaSPwz/jaG9HjyMix3UMrai1iEbuOafBe2Dh8xlyczrxFAy89qcKyZWWtc42XLx3Bbw==}
+  stylelint@16.23.1:
+    resolution: {integrity: sha512-dNvDTsKV1U2YtiUDfe9d2gp902veFeo3ecCWdGlmLm2WFrAV0+L5LoOj/qHSBABQwMsZPJwfC4bf39mQm1S5zw==}
     engines: {node: '>=18.12.0'}
     hasBin: true
 
@@ -7807,8 +7807,8 @@ snapshots:
       '@types/ember__array': 4.0.10(@babel/core@7.28.0)
       '@types/ember__component': 4.0.22(@babel/core@7.28.0)
       '@types/ember__controller': 4.0.12(@babel/core@7.28.0)
-      '@types/ember__debug': 4.0.8
-      '@types/ember__engine': 4.0.11
+      '@types/ember__debug': 4.0.8(@babel/core@7.28.0)
+      '@types/ember__engine': 4.0.11(@babel/core@7.28.0)
       '@types/ember__error': 4.0.6
       '@types/ember__object': 4.0.12(@babel/core@7.28.0)
       '@types/ember__polyfills': 4.0.6
@@ -7828,8 +7828,8 @@ snapshots:
       '@types/ember__array': 4.0.10(@babel/core@7.28.0)
       '@types/ember__component': 4.0.22(@babel/core@7.28.0)
       '@types/ember__controller': 4.0.12(@babel/core@7.28.0)
-      '@types/ember__debug': 4.0.8
-      '@types/ember__engine': 4.0.11
+      '@types/ember__debug': 4.0.8(@babel/core@7.28.0)
+      '@types/ember__engine': 4.0.11(@babel/core@7.28.0)
       '@types/ember__error': 4.0.6
       '@types/ember__object': 4.0.12(@babel/core@7.28.0)
       '@types/ember__polyfills': 4.0.6
@@ -7850,7 +7850,7 @@ snapshots:
     dependencies:
       '@glimmer/component': 1.1.2(@babel/core@7.28.0)
       '@types/ember': 4.0.11
-      '@types/ember__engine': 4.0.11
+      '@types/ember__engine': 4.0.11(@babel/core@7.28.0)
       '@types/ember__object': 4.0.12(@babel/core@7.28.0)
       '@types/ember__owner': 4.0.9
       '@types/ember__routing': 4.0.22(@babel/core@7.28.0)
@@ -7885,16 +7885,22 @@ snapshots:
       - supports-color
     optional: true
 
-  '@types/ember__debug@4.0.8':
+  '@types/ember__debug@4.0.8(@babel/core@7.28.0)':
     dependencies:
       '@types/ember__object': 4.0.12(@babel/core@7.28.0)
       '@types/ember__owner': 4.0.9
+    transitivePeerDependencies:
+      - '@babel/core'
+      - supports-color
     optional: true
 
-  '@types/ember__engine@4.0.11':
+  '@types/ember__engine@4.0.11(@babel/core@7.28.0)':
     dependencies:
       '@types/ember__object': 4.0.12(@babel/core@7.28.0)
       '@types/ember__owner': 4.0.9
+    transitivePeerDependencies:
+      - '@babel/core'
+      - supports-color
     optional: true
 
   '@types/ember__error@4.0.6':
@@ -9133,7 +9139,7 @@ snapshots:
   cacheable@1.10.3:
     dependencies:
       hookified: 1.11.0
-      keyv: 5.4.0
+      keyv: 5.5.0
 
   calculate-cache-key-for-tree@2.0.0:
     dependencies:
@@ -11876,7 +11882,7 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  keyv@5.4.0:
+  keyv@5.5.0:
     dependencies:
       '@keyv/serialize': 1.1.0
 
@@ -13353,16 +13359,16 @@ snapshots:
 
   styled_string@0.0.1: {}
 
-  stylelint-config-recommended@17.0.0(stylelint@16.23.0(typescript@5.9.2)):
+  stylelint-config-recommended@17.0.0(stylelint@16.23.1(typescript@5.9.2)):
     dependencies:
-      stylelint: 16.23.0(typescript@5.9.2)
+      stylelint: 16.23.1(typescript@5.9.2)
 
-  stylelint-config-standard@39.0.0(stylelint@16.23.0(typescript@5.9.2)):
+  stylelint-config-standard@39.0.0(stylelint@16.23.1(typescript@5.9.2)):
     dependencies:
-      stylelint: 16.23.0(typescript@5.9.2)
-      stylelint-config-recommended: 17.0.0(stylelint@16.23.0(typescript@5.9.2))
+      stylelint: 16.23.1(typescript@5.9.2)
+      stylelint-config-recommended: 17.0.0(stylelint@16.23.1(typescript@5.9.2))
 
-  stylelint@16.23.0(typescript@5.9.2):
+  stylelint@16.23.1(typescript@5.9.2):
     dependencies:
       '@csstools/css-parser-algorithms': 3.0.5(@csstools/css-tokenizer@3.0.4)
       '@csstools/css-tokenizer': 3.0.4
