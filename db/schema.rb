@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_09_122233) do
+ActiveRecord::Schema[8.1].define(version: 2025_04_09_122233) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -19,24 +19,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_09_122233) do
   create_enum "extraction_state", ["pending", "fulfilled", "rejected"]
 
   create_table "active_storage_attachments", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
-    t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum"
+    t.string "content_type"
     t.datetime "created_at", null: false
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.text "metadata"
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -47,110 +47,110 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_09_122233) do
   end
 
   create_table "contact_people", force: :cascade do |t|
-    t.bigint "submission_id", null: false
-    t.string "email", null: false
-    t.string "full_name", null: false
     t.string "affiliation", null: false
     t.datetime "created_at", null: false
+    t.string "email", null: false
+    t.string "full_name", null: false
+    t.bigint "submission_id", null: false
     t.datetime "updated_at", null: false
     t.index ["submission_id"], name: "index_contact_people_on_submission_id"
   end
 
   create_table "dfast_extraction_files", force: :cascade do |t|
+    t.jsonb "_errors"
+    t.string "dfast_job_id", null: false
     t.bigint "extraction_id", null: false
     t.string "name", null: false
-    t.string "dfast_job_id", null: false
-    t.boolean "parsing", null: false
     t.jsonb "parsed_data"
-    t.jsonb "_errors"
+    t.boolean "parsing", null: false
     t.index ["extraction_id", "name"], name: "index_dfast_extraction_files_on_extraction_id_and_name", unique: true
     t.index ["extraction_id"], name: "index_dfast_extraction_files_on_extraction_id"
   end
 
   create_table "dfast_extractions", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.enum "state", default: "pending", null: false, enum_type: "extraction_state"
-    t.string "dfast_job_ids", null: false, array: true
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "dfast_job_ids", null: false, array: true
     t.jsonb "error"
+    t.enum "state", default: "pending", null: false, enum_type: "extraction_state"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_dfast_extractions_on_user_id"
   end
 
   create_table "dfast_uploads", force: :cascade do |t|
-    t.bigint "extraction_id"
     t.datetime "created_at", null: false
+    t.bigint "extraction_id"
     t.datetime "updated_at", null: false
     t.index ["extraction_id"], name: "index_dfast_uploads_on_extraction_id"
   end
 
   create_table "mass_directory_extraction_files", force: :cascade do |t|
+    t.jsonb "_errors"
     t.bigint "extraction_id", null: false
     t.string "name", null: false
-    t.boolean "parsing", null: false
     t.jsonb "parsed_data"
-    t.jsonb "_errors"
+    t.boolean "parsing", null: false
     t.index ["extraction_id", "name"], name: "index_mass_directory_extraction_files_on_extraction_id_and_name", unique: true
     t.index ["extraction_id"], name: "index_mass_directory_extraction_files_on_extraction_id"
   end
 
   create_table "mass_directory_extractions", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.enum "state", default: "pending", null: false, enum_type: "extraction_state"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.jsonb "error"
+    t.enum "state", default: "pending", null: false, enum_type: "extraction_state"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_mass_directory_extractions_on_user_id"
   end
 
   create_table "mass_directory_uploads", force: :cascade do |t|
-    t.bigint "extraction_id"
     t.datetime "created_at", null: false
+    t.bigint "extraction_id"
     t.datetime "updated_at", null: false
     t.index ["extraction_id"], name: "index_mass_directory_uploads_on_extraction_id"
   end
 
   create_table "other_people", force: :cascade do |t|
-    t.bigint "submission_id", null: false
+    t.datetime "created_at", null: false
     t.string "email", null: false
     t.string "full_name", null: false
     t.integer "position", null: false
-    t.datetime "created_at", null: false
+    t.bigint "submission_id", null: false
     t.datetime "updated_at", null: false
     t.index ["position"], name: "index_other_people_on_position"
     t.index ["submission_id"], name: "index_other_people_on_submission_id"
   end
 
   create_table "submissions", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.boolean "tpa", null: false
-    t.integer "entries_count", null: false
-    t.date "hold_date"
-    t.string "sequencer", null: false
+    t.datetime "created_at", null: false
     t.string "data_type", null: false
     t.string "description"
     t.string "email_language", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "entries_count", null: false
+    t.date "hold_date"
     t.string "mass_id", null: false
+    t.string "sequencer", null: false
+    t.boolean "tpa", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["mass_id"], name: "index_submissions_on_mass_id", unique: true
     t.index ["user_id"], name: "index_submissions_on_user_id"
   end
 
   create_table "uploads", force: :cascade do |t|
-    t.bigint "submission_id", null: false
     t.datetime "created_at", null: false
+    t.bigint "submission_id", null: false
     t.datetime "updated_at", null: false
-    t.string "via_type", null: false
     t.bigint "via_id", null: false
+    t.string "via_type", null: false
     t.index ["submission_id"], name: "index_uploads_on_submission_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "uid", null: false
     t.string "email", null: false
+    t.string "uid", null: false
+    t.datetime "updated_at", null: false
     t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 
