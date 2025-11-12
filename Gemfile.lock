@@ -448,7 +448,7 @@ GEM
       jwt (>= 1.5, < 4.0)
       multi_json (~> 1.10)
     singleton (0.3.0)
-    solid_cache (1.0.8)
+    solid_cache (1.0.10)
       activejob (>= 7.2)
       activerecord (>= 7.2)
       railties (>= 7.2)
