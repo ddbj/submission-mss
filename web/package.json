@@ -88,7 +88,7 @@
     "eslint-plugin-qunit": "^8.2.5",
     "filesize": "^11.0.2",
     "globals": "^16.4.0",
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^4.1.1",
     "jwt-decode": "^4.0.0",
     "loader.js": "^4.7.0",
     "outdent": "^0.8.0",
