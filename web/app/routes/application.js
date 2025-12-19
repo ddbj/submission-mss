@@ -1,6 +1,9 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
+import translationsForEn from 'virtual:ember-intl/translations/en';
+import translationsForJa from 'virtual:ember-intl/translations/ja';
+
 import ENV from 'mssform/config/environment';
 
 export default class ApplicationRoute extends Route {
@@ -20,9 +23,11 @@ export default class ApplicationRoute extends Route {
 
     const { queryParams } = transition.to;
 
-    for (const locale of this.intl.locales) {
-      this.intl.addTranslations(locale, enumTranslations(locale));
-    }
+    this.intl.addTranslations('en', translationsForEn);
+    this.intl.addTranslations('ja', translationsForJa);
+
+    this.intl.addTranslations('en', enumTranslations('en'));
+    this.intl.addTranslations('ja', enumTranslations('ja'));
 
     const locale = [queryParams.locale, ...navigator.languages].find((l) => this.intl.locales.includes(l));
 

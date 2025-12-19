@@ -1,8 +1,21 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { importSync } from '@embroider/macros';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+
+import Complete from './submission-form/complete';
+import Confirm from './submission-form/confirm';
+import Files from './submission-form/files';
+import Metadata from './submission-form/metadata';
+import Prerequisite from './submission-form/prerequisite';
+
+const COMPONENTS = {
+  prerequisite: Prerequisite,
+  files: Files,
+  metadata: Metadata,
+  confirm: Confirm,
+  complete: Complete,
+};
 
 export default class SubmissionFormComponent extends Component {
   @service router;
@@ -11,7 +24,7 @@ export default class SubmissionFormComponent extends Component {
   nav = new Navigation();
 
   get component() {
-    return importSync(`./submission-form/${this.nav.currentStep}`).default;
+    return COMPONENTS[this.nav.currentStep];
   }
 }
 

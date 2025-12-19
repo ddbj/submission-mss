@@ -1,8 +1,11 @@
 'use strict';
-
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
-module.exports = function (defaults) {
+const { compatBuild } = require('@embroider/compat');
+
+module.exports = async function (defaults) {
+  const { buildOnce } = await import('@embroider/vite');
+
   const app = new EmberApp(defaults, {
     emberData: {
       deprecations: {
@@ -24,22 +27,5 @@ module.exports = function (defaults) {
       sourceDirs: ['node_modules/@primer/octicons/build/svg'],
     },
   });
-
-  const { Webpack } = require('@embroider/webpack');
-  return require('@embroider/compat').compatBuild(app, Webpack, {
-    staticAddonTestSupportTrees: true,
-    staticAddonTrees: true,
-    staticEmberSource: true,
-    staticInvokables: true,
-    skipBabel: [
-      {
-        package: 'qunit',
-      },
-    ],
-    packagerOptions: {
-      webpackConfig: {
-        devtool: 'source-map',
-      },
-    },
-  });
+  return compatBuild(app, buildOnce);
 };
