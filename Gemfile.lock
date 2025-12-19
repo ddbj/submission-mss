@@ -111,14 +111,14 @@ GEM
     builder (3.3.0)
     childprocess (5.1.0)
       logger (~> 1.5)
-    concurrent-ruby (1.3.5)
-    connection_pool (2.5.4)
+    concurrent-ruby (1.3.6)
+    connection_pool (3.0.2)
     crack (1.0.1)
       bigdecimal
       rexml
     crass (1.0.6)
     dalli (3.2.8)
-    date (3.5.0)
+    date (3.5.1)
     debug (1.11.0)
       irb (~> 1.10)
       reline (>= 0.3.8)
@@ -136,7 +136,7 @@ GEM
       activemodel
     enumerize (2.8.1)
       activesupport (>= 3.2)
-    erb (5.1.3)
+    erb (6.0.1)
     erubi (1.13.1)
     et-orbi (1.4.0)
       tzinfo
@@ -205,8 +205,8 @@ GEM
     http-form_data (2.3.0)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
-    io-console (0.8.1)
-    irb (1.15.3)
+    io-console (0.8.2)
+    irb (1.16.0)
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
@@ -243,7 +243,7 @@ GEM
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
     logger (1.7.0)
-    loofah (2.24.1)
+    loofah (2.25.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     mail (2.9.0)
@@ -254,7 +254,8 @@ GEM
       net-smtp
     marcel (1.1.0)
     mini_mime (1.1.5)
-    minitest (5.26.1)
+    minitest (6.0.0)
+      prism (~> 1.5)
     msgpack (1.8.0)
     multi_json (1.18.0)
     net-http (0.9.1)
@@ -309,7 +310,8 @@ GEM
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
-    psych (5.2.6)
+    prism (1.7.0)
+    psych (5.3.1)
       date
       stringio
     public_suffix (7.0.0)
@@ -337,7 +339,7 @@ GEM
       rack (>= 3.0.0)
     rack-test (2.2.0)
       rack (>= 1.3)
-    rackup (2.2.1)
+    rackup (2.3.1)
       rack (>= 3)
     rails (8.1.1)
       actioncable (= 8.1.1)
@@ -371,7 +373,7 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.3.1)
-    rdoc (6.15.1)
+    rdoc (7.0.1)
       erb
       psych (>= 4.0.0)
       tsort
@@ -433,10 +435,10 @@ GEM
     ruby-progressbar (1.13.0)
     rubyzip (3.2.2)
     securerandom (0.4.1)
-    sentry-rails (6.1.0)
+    sentry-rails (6.2.0)
       railties (>= 5.2.0)
-      sentry-ruby (~> 6.1.0)
-    sentry-ruby (6.1.0)
+      sentry-ruby (~> 6.2.0)
+    sentry-ruby (6.2.0)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
     signet (0.21.0)
@@ -463,7 +465,7 @@ GEM
       net-sftp (>= 2.1.2)
       net-ssh (>= 2.8.0)
       ostruct
-    stringio (3.1.8)
+    stringio (3.2.0)
     swd (2.0.3)
       activesupport (>= 3)
       attr_required (>= 0.0.5)
@@ -498,7 +500,7 @@ GEM
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.7.3)
+    zeitwerk (2.7.4)
 
 PLATFORMS
   arm64-darwin
