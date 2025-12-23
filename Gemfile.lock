@@ -104,7 +104,7 @@ GEM
     bcrypt_pbkdf (1.1.2)
     bigdecimal (4.0.1)
     bindata (2.5.0)
-    bootsnap (1.19.0)
+    bootsnap (1.20.0)
       msgpack (~> 1.2)
     brakeman (7.1.1)
       racc
