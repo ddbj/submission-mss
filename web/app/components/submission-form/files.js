@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
-
 import { action } from '@ember/object';
-import { dropTask } from 'ember-concurrency';
 import { service } from '@ember/service';
+
+import { task } from 'ember-concurrency';
 
 import OtherPerson from 'mssform/models/other-person';
 
@@ -68,12 +68,12 @@ export default class SubmissionFormFilesComponent extends Component {
     state.files = state.files.filter((f) => f !== file);
   }
 
-  @dropTask *goNext() {
-    yield this.fillDataFromLastSubmission();
+  goNext = task({ drop: true }, async () => {
+    await this.fillDataFromLastSubmission();
     this.fillDataFromSubmissionFiles();
 
     this.args.nav.goNext();
-  }
+  });
 
   async fillDataFromLastSubmission() {
     let last;
