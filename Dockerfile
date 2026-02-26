@@ -52,7 +52,7 @@ ARG RAILS_ENV
 
 ENV RAILS_ENV=${RAILS_ENV:?}
 
-RUN corepack enable pnpm
+RUN npm install --global pnpm
 
 WORKDIR /config
 COPY config/app.yml config/enums.yml ./
