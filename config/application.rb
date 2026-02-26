@@ -43,7 +43,7 @@ module MSSForm
 
     config.action_mailer.delivery_job = 'MailDeliveryJob'
     config.active_storage.draw_routes = false
-    config.time_zone                  = 'Japan'
+    config.time_zone                  = 'Asia/Tokyo'
 
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
