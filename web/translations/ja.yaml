@@ -55,6 +55,9 @@ home:
     <strong>{account}</strong> としてログインしています
   logout: ログアウト
   new-submission: 新規登録を開始する
+  help: ヘルプ
+  change-email: ContactおよびOtherPersonのメールアドレスを変更したい
+  change-email-url: https://www.ddbj.nig.ac.jp/faq/ja/mss-submission-change-email.html
 
 submission-form:
   title: 新規登録申請
@@ -116,14 +119,14 @@ submission-form:
     a3-help-url: https://www.ddbj.nig.ac.jp/upload.html#upload
 
     instructions-html: |
-      <p>アノテーションファイルと塩基配列ファイルでペアになるようにアップロードしてください。複数ペアをアップロード可能です。ファイル名から拡張子を除いた名称が同一なファイルがペアになります。読み込めるファイル名拡張子は次の通りです。圧縮ファイルをアップロードしないでください。</p>
+      <p>アノテーションファイルと塩基配列ファイルでペアになるようにアップロードしてください。複数のペアをアップロード可能です（例えば10個の微生物完全ゲノム配列を登録する場合には、合計20個のファイルを1回のアップロードで登録申請できます）。ファイル名から拡張子を除いた名称が同一なファイルがペアになります。読み込めるファイル名拡張子は次の通りです。圧縮ファイルをアップロードしないでください。</p>
 
     errors:
       no-annotation: 対応するアノテーションファイルがありません。
       duplicate-annotations: 同名のアノテーションファイルが複数あります。
       no-sequence: 対応する配列ファイルがありません。
       duplicate-sequences: 同名の配列ファイルが複数あります。
-      different-contact-person: コンタクトパーソンはすべてのアノテーションファイルで同一でなければなりません。
+      different-contact-person: アップロードしたアノテーションファイルのコンタクトパーソンの項目（contact, email, institute）の値が同一でありません。これらの値は１回の登録申請内で同じ値である必要があります。記載内容の確認をお願いいたします。
       different-hold-date: 公開予定日はすべてのアノテーションファイルで同一でなければなりません。
 
   metadata:
