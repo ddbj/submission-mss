@@ -5,7 +5,6 @@ import { on } from '@ember/modifier';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { t } from 'ember-intl';
-import preventDefault from 'ember-event-helpers/helpers/prevent-default';
 import pageTitle from 'ember-page-title/helpers/page-title';
 
 import Complete from './submission-form/complete';
@@ -66,13 +65,13 @@ export default class SubmissionFormComponent extends Component<Signature> {
       <div class="col-3">
         <nav class="nav nav-pills flex-column">
           {{#each this.nav.steps as |step|}}
-            <a
-              href
-              class="nav-link {{stepNavLinkClass this.nav step}}"
-              {{on "click" (preventDefault (fn this.nav.gotoStep step))}}
+            <button
+              type="button"
+              class="nav-link text-start {{stepNavLinkClass this.nav step}}"
+              {{on "click" (fn this.nav.gotoStep step)}}
             >
               {{t (concat "submission-form.steps." step)}}
-            </a>
+            </button>
           {{/each}}
         </nav>
       </div>

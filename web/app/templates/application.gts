@@ -2,7 +2,6 @@ import { fn, concat } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
 import { t } from 'ember-intl';
-import preventDefault from 'ember-event-helpers/helpers/prevent-default';
 import pageTitle from 'ember-page-title/helpers/page-title';
 
 import ErrorMessage from 'mssform/components/error-message';
@@ -40,12 +39,12 @@ interface Signature {
 
             <ul class="dropdown-menu" aria-labelledby="navbarLang">
               <li>
-                <a class="dropdown-item" href {{on "click" (preventDefault (fn @controller.changeLocale "ja"))}}>{{t
+                <button type="button" class="dropdown-item" {{on "click" (fn @controller.changeLocale "ja")}}>{{t
                     "application.locale.ja"
-                  }}</a>
-                <a class="dropdown-item" href {{on "click" (preventDefault (fn @controller.changeLocale "en"))}}>{{t
+                  }}</button>
+                <button type="button" class="dropdown-item" {{on "click" (fn @controller.changeLocale "en")}}>{{t
                     "application.locale.en"
-                  }}</a>
+                  }}</button>
               </li>
             </ul>
           </li>

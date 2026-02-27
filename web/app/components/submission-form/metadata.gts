@@ -3,9 +3,6 @@ import { fn, concat } from '@ember/helper';
 import { action } from '@ember/object';
 import { on } from '@ember/modifier';
 import { t } from 'ember-intl';
-import preventDefault from 'ember-event-helpers/helpers/prevent-default';
-import set from 'ember-set-helper/helpers/set';
-import pick from '@nullvoxpopuli/ember-composable-helpers/helpers/pick';
 import { eq, or } from 'ember-truth-helpers';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
@@ -34,10 +31,27 @@ export default class SubmissionFormMetadataComponent extends Component<Signature
     this.args.model.otherPeople = this.args.model.otherPeople.filter((p) => p !== person);
   }
 
+  @action handleOtherPersonInput(person: OtherPerson, field: 'email' | 'fullName', event: Event) {
+    person[field] = (event.target as HTMLInputElement).value;
+  }
+
+  @action handleInput(field: 'dataType' | 'description', event: Event) {
+    this.args.model[field] = (event.target as HTMLInputElement).value;
+  }
+
+  @action setField(field: 'sequencer' | 'emailLanguage', value: string) {
+    this.args.model[field] = value;
+  }
+
+  @action handleSubmit(event: Event) {
+    event.preventDefault();
+    this.args.nav.goNext();
+  }
+
   <template>
     {{t "submission-form.metadata.notice-html" htmlSafe=true}}
 
-    <form class="vstack gap-3" {{on "submit" (preventDefault @nav.goNext)}} {{leavingConfirmation}}>
+    <form class="vstack gap-3" {{on "submit" this.handleSubmit}} {{leavingConfirmation}}>
       <div class="card">
         <div class="card-header">
           {{t "submission-form.metadata.entries-html" htmlSafe=true}}
@@ -155,7 +169,7 @@ export default class SubmissionFormMetadataComponent extends Component<Signature
                         required={{true}}
                         class="form-control"
                         id="otherPerson.{{i}}.email"
-                        {{on "change" (pick "target.value" (set person "email"))}}
+                        {{on "change" (fn this.handleOtherPersonInput person "email")}}
                       />
                     </div>
 
@@ -174,16 +188,12 @@ export default class SubmissionFormMetadataComponent extends Component<Signature
                         title={{t "submission-form.metadata.full-name-title"}}
                         class="form-control"
                         id="otherPerson.{{i}}.fullName"
-                        {{on "change" (pick "target.value" (set person "fullName"))}}
+                        {{on "change" (fn this.handleOtherPersonInput person "fullName")}}
                       />
                     </div>
 
                     <div class="col-auto align-self-center">
-                      <button
-                        type="button"
-                        class="btn btn-link p-2"
-                        {{on "click" (preventDefault (fn this.removeOtherPerson person))}}
-                      >
+                      <button type="button" class="btn btn-link p-2" {{on "click" (fn this.removeOtherPerson person)}}>
                         {{svgJar
                           "no-entry-24"
                           class="octicon fill-danger"
@@ -202,7 +212,7 @@ export default class SubmissionFormMetadataComponent extends Component<Signature
             </ul>
 
             <div class="card-footer bg-white">
-              <button type="button" class="btn btn-outline-primary" {{on "click" (preventDefault this.addOtherPerson)}}>
+              <button type="button" class="btn btn-outline-primary" {{on "click" this.addOtherPerson}}>
                 {{t "submission-form.metadata.add"}}
               </button>
             </div>
@@ -225,7 +235,7 @@ export default class SubmissionFormMetadataComponent extends Component<Signature
                     checked={{eq @model.sequencer sequencer.key}}
                     class="form-check-input"
                     required
-                    {{on "change" (set @model "sequencer" sequencer.key)}}
+                    {{on "change" (fn this.setField "sequencer" sequencer.key)}}
                   />
 
                   <radio.label class="form-check-label">
@@ -245,12 +255,7 @@ export default class SubmissionFormMetadataComponent extends Component<Signature
         </div>
 
         <div class="card-body">
-          <select
-            required
-            class="form-select"
-            id="dataType"
-            {{on "change" (pick "target.value" (set @model "dataType"))}}
-          >
+          <select required class="form-select" id="dataType" {{on "change" (fn this.handleInput "dataType")}}>
             <option selected={{isNone @model.dataType}}></option>
 
             {{#each (enumHelper "data_types") as |type|}}
@@ -285,7 +290,7 @@ export default class SubmissionFormMetadataComponent extends Component<Signature
             placeholder={{t "submission-form.metadata.description-placeholder"}}
             class="form-control"
             id="description"
-            {{on "input" (pick "target.value" (set @model "description"))}}
+            {{on "input" (fn this.handleInput "description")}}
           >{{@model.description}}</textarea>
 
           <div class="form-text text-end">
@@ -311,7 +316,7 @@ export default class SubmissionFormMetadataComponent extends Component<Signature
                     checked={{eq @model.emailLanguage locale.key}}
                     required
                     class="form-check-input"
-                    {{on "change" (set @model "emailLanguage" locale.key)}}
+                    {{on "change" (fn this.setField "emailLanguage" locale.key)}}
                   />
 
                   <radio.label class="form-check-label">
@@ -325,9 +330,9 @@ export default class SubmissionFormMetadataComponent extends Component<Signature
       </div>
 
       <div class="hstack gap-3 justify-content-end">
-        <a href class="btn btn-outline-primary px-4" {{on "click" (preventDefault @nav.goPrev)}}>{{t
+        <button type="button" class="btn btn-outline-primary px-4" {{on "click" @nav.goPrev}}>{{t
             "submission-form.nav.back"
-          }}</a>
+          }}</button>
         <button type="submit" class="btn btn-primary px-5">{{t "submission-form.nav.next"}}</button>
       </div>
     </form>
