@@ -1,0 +1,1 @@
+<template><input type="radio" name={{@name}} id={{@id}} ...attributes /></template>
