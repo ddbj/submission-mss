@@ -22,11 +22,7 @@ import OtherPerson from 'mssform/models/other-person';
 import type Submission from 'mssform/models/submission';
 import type { Navigation, State } from 'mssform/components/submission-form';
 import type RequestService from 'mssform/services/request';
-import type { SubmissionFile } from 'mssform/models/submission-file';
-
-interface CrossoverError {
-  id: string;
-}
+import type { SubmissionFile, SubmissionError } from 'mssform/models/submission-file';
 
 export interface Signature {
   Args: {
@@ -41,7 +37,7 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
 
   get crossoverErrors() {
     const { files } = this.args.state;
-    const errors = new Map<SubmissionFile, CrossoverError[]>();
+    const errors = new Map<SubmissionFile, SubmissionError[]>();
 
     for (const file of files) {
       errors.set(file, []);
@@ -266,7 +262,7 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
   </template>
 }
 
-function validatePair(errors: Map<SubmissionFile, CrossoverError[]>, files: SubmissionFile[]) {
+function validatePair(errors: Map<SubmissionFile, SubmissionError[]>, files: SubmissionFile[]) {
   const grouped = files.reduce((map, file) => {
     const val = map.has(file.basename) ? [...map.get(file.basename)!, file] : [file];
 
@@ -310,7 +306,7 @@ function validatePair(errors: Map<SubmissionFile, CrossoverError[]>, files: Subm
   }
 }
 
-function validateSameness(errors: Map<SubmissionFile, CrossoverError[]>, files: SubmissionFile[]) {
+function validateSameness(errors: Map<SubmissionFile, SubmissionError[]>, files: SubmissionFile[]) {
   const filtered = files.filter((file) => 'isAnnotation' in file && file.isAnnotation && file.isParseSucceeded);
 
   if (!filtered.length) return;

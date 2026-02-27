@@ -7,12 +7,12 @@ import filesize from 'mssform/helpers/filesize';
 import userMassDir from 'mssform/helpers/user-mass-dir';
 
 import type { TOC } from '@ember/component/template-only';
-import type { SubmissionFile, ParseError } from 'mssform/models/submission-file';
+import type { SubmissionFile, SubmissionError } from 'mssform/models/submission-file';
 
 interface Signature {
   Args: {
     file: SubmissionFile;
-    errors: (ParseError | string)[];
+    errors: SubmissionError[];
   };
 }
 
@@ -75,13 +75,10 @@ interface Signature {
         <ul class="list-unstyled text-danger">
           {{#each @errors as |error|}}
             <li>
-              {{! @glint-expect-error: error is ParseError | string }}
               {{#if error.id}}
-                {{! @glint-expect-error: error narrowed to ParseError }}
                 {{t error.id}}
               {{else}}
-                {{! @glint-expect-error: error narrowed to string }}
-                {{error}}
+                {{error.message}}
               {{/if}}
             </li>
           {{/each}}

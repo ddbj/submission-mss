@@ -1,7 +1,8 @@
 import { tracked } from '@glimmer/tracking';
 
-export interface ParseError {
-  id: string;
+export interface SubmissionError {
+  id?: string;
+  message?: string;
   value?: unknown;
 }
 
@@ -37,7 +38,7 @@ export class SubmissionFile {
 
   @tracked isParsing = false;
   @tracked parsedData?: ParsedData;
-  @tracked errors: (ParseError | string)[] = [];
+  @tracked errors: SubmissionError[] = [];
 
   isAnnotation?: boolean;
   isSequence?: boolean;
@@ -87,7 +88,7 @@ export class SubmissionFile {
       worker.addEventListener('message', ({ data: [err, payload] }: MessageEvent<[string | null, unknown]>) => {
         if (err) {
           try {
-            const { id, value } = JSON.parse(err) as ParseError;
+            const { id, value } = JSON.parse(err) as SubmissionError;
 
             this.errors = [...this.errors, { id, value }];
 
@@ -95,7 +96,7 @@ export class SubmissionFile {
           } catch (e) {
             console.error(e);
 
-            this.errors = [...this.errors, err];
+            this.errors = [...this.errors, { message: err }];
 
             reject(new Error(err));
           }

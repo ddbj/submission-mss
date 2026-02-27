@@ -21,7 +21,7 @@ import userMassDir from 'mssform/helpers/user-mass-dir';
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
 
 import type RequestService from 'mssform/services/request';
-import type { SubmissionFile } from 'mssform/models/submission-file';
+import type { SubmissionFile, SubmissionError } from 'mssform/models/submission-file';
 import type UploadProgressModalComponent from 'mssform/components/upload-progress-modal';
 
 interface SubmissionModel {
@@ -41,7 +41,7 @@ export default class UploadFormComponent extends Component<Signature> {
   @tracked extractionId: string | null = null;
   @tracked files: SubmissionFile[] = [];
   @tracked isCompleted = false;
-  @tracked crossoverErrors = new Map(); // always empty
+  @tracked crossoverErrors = new Map<SubmissionFile, SubmissionError[]>();
 
   get isSubmitButtonEnabled() {
     const { uploadVia, files } = this;

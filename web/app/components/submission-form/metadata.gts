@@ -218,7 +218,6 @@ export default class SubmissionFormMetadataComponent extends Component<Signature
 
         <div class="card-body">
           <RadioGroup as |group|>
-            {{! @glint-expect-error: enumHelper returns unknown }}
             {{#each (enumHelper "sequencers") as |sequencer|}}
               <div class="form-check">
                 <group.radio as |radio|>
@@ -254,7 +253,6 @@ export default class SubmissionFormMetadataComponent extends Component<Signature
           >
             <option selected={{isNone @model.dataType}}></option>
 
-            {{! @glint-expect-error: enumHelper returns unknown }}
             {{#each (enumHelper "data_types") as |type|}}
               <option value={{type.key}} selected={{eq @model.dataType type.key}}>
                 {{type.label}}
@@ -306,7 +304,6 @@ export default class SubmissionFormMetadataComponent extends Component<Signature
 
         <div class="card-body">
           <RadioGroup as |group|>
-            {{! @glint-expect-error: enumHelper returns unknown }}
             {{#each (enumHelper "locales") as |locale|}}
               <div class="form-check">
                 <group.radio as |radio|>

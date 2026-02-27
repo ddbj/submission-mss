@@ -1,7 +1,10 @@
-import { helper } from '@ember/component/helper';
-
 import ENV from 'mssform/config/environment';
 
-export default helper(function _enum([key]: [string]) {
-  return (ENV['enums'] as Record<string, unknown>)[key];
-});
+export interface EnumEntry {
+  key: string;
+  label: string;
+}
+
+export default function enumEntries(key: string): EnumEntry[] {
+  return ((ENV['enums'] as Record<string, unknown>)[key] as EnumEntry[] | undefined) ?? [];
+}
