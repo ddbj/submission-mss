@@ -2,16 +2,21 @@ import Application from '@ember/application';
 import Resolver from 'ember-resolver';
 import loadInitializers from 'ember-load-initializers';
 import config from './config/environment';
-import { importSync, isDevelopingApp, macroCondition } from '@embroider/macros';
+import { importSync, isDevelopingApp, isTesting, macroCondition } from '@embroider/macros';
 
-import * as Sentry from '@sentry/ember';
+if (macroCondition(isTesting())) {
+  // Don't import @sentry/ember in test environment to avoid
+  // "Cannot call .lookup('router:main') after the owner has been destroyed" errors
+} else {
+  const Sentry = importSync('@sentry/ember') as typeof import('@sentry/ember');
 
-if (config.sentryDSN) {
-  Sentry.init({
-    dsn: config.sentryDSN,
-    environment: config.railsEnv,
-    sendDefaultPii: true,
-  });
+  if (config.sentryDSN) {
+    Sentry.init({
+      dsn: config.sentryDSN,
+      environment: config.railsEnv as string,
+      sendDefaultPii: true,
+    });
+  }
 }
 
 if (macroCondition(isDevelopingApp())) {
