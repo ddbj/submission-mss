@@ -4,9 +4,9 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { get } from '@ember/helper';
 
-import drop from 'ember-composable-helpers/helpers/drop';
-import sortBy from 'ember-composable-helpers/helpers/sort-by';
-import take from 'ember-composable-helpers/helpers/take';
+import drop from '@nullvoxpopuli/ember-composable-helpers/helpers/drop';
+import sortBy from '@nullvoxpopuli/ember-composable-helpers/helpers/sort-by';
+import take from '@nullvoxpopuli/ember-composable-helpers/helpers/take';
 import { formatDate } from 'ember-intl';
 import { gt } from 'ember-truth-helpers';
 import { task } from 'ember-concurrency';
