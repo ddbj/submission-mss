@@ -1,0 +1,78 @@
+import { t } from 'ember-intl';
+import { formatNumber } from 'ember-intl';
+import { or } from 'ember-truth-helpers';
+import svgJar from 'ember-svg-jar/helpers/svg-jar';
+
+import filesize from 'mssform/helpers/filesize';
+
+<template>
+  <li class="list-group-item hstack gap-2 align-items-center">
+    <div class="align-self-start">
+      {{#if @file.isParsing}}
+        <div class="spinner-border spinner-border-seconcary spinner-border-sm opacity-50" role="status">
+          <span class="visually-hidden">{{t "file-list.item.loading"}}</span>
+        </div>
+      {{else}}
+        {{#if @errors.length}}
+          {{svgJar "x-circle-fill-16" class="octicon text-danger" style="margin-top: 2.5px;"}}
+        {{else}}
+          {{svgJar "check-circle-fill-16" class="octicon text-success" style="margin-top: 2.5px;"}}
+        {{/if}}
+      {{/if}}
+    </div>
+
+    <div class={{if @file.isParsing "opacity-50"}}>
+      <span class="text-muted">{{@file.jobId}}/</span>{{@file.name}}
+      <small class="text-muted">{{filesize @file.size}}</small>
+
+      <small class="hstack gap-3 text-muted">
+        {{#if @file.isParsing}}
+          {{t "file-list.item.loading"}}
+        {{else}}
+          {{#if @file.parsedData}}
+            {{#if @file.isAnnotation}}
+              <div>
+                <b>{{t "file-list.item.contact-person"}}</b>
+
+                {{#let @file.parsedData.contactPerson as |person|}}
+                  {{#if person}}
+                    {{person.fullName}}
+                    &lt;{{person.email}}&gt; ({{person.affiliation}})
+                  {{else}}
+                    -
+                  {{/if}}
+                {{/let}}
+              </div>
+
+              <div>
+                <b>{{t "file-list.item.hold-date"}}</b>
+                {{or @file.parsedData.holdDate "-"}}
+              </div>
+            {{/if}}
+
+            {{#if @file.isSequence}}
+              <div>
+                <b>{{t "file-list.item.entries-count"}}</b>
+                {{formatNumber @file.parsedData.entriesCount}}
+              </div>
+            {{/if}}
+          {{/if}}
+        {{/if}}
+      </small>
+
+      {{#if @errors}}
+        <ul class="list-unstyled text-danger">
+          {{#each @errors as |error|}}
+            <li>
+              {{#if error.id}}
+                {{t error.id}}
+              {{else}}
+                {{error}}
+              {{/if}}
+            </li>
+          {{/each}}
+        </ul>
+      {{/if}}
+    </div>
+  </li>
+</template>

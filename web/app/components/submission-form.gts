@@ -1,13 +1,19 @@
 import Component from '@glimmer/component';
+import { fn, concat } from '@ember/helper';
 import { action } from '@ember/object';
+import { on } from '@ember/modifier';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { t } from 'ember-intl';
+import preventDefault from 'ember-event-helpers/helpers/prevent-default';
+import pageTitle from 'ember-page-title/helpers/page-title';
 
 import Complete from './submission-form/complete';
 import Confirm from './submission-form/confirm';
 import Files from './submission-form/files';
 import Metadata from './submission-form/metadata';
 import Prerequisite from './submission-form/prerequisite';
+import stepNavLinkClass from 'mssform/helpers/step-nav-link-class';
 
 import type RouterService from '@ember/routing/router-service';
 import type Submission from 'mssform/models/submission';
@@ -36,6 +42,43 @@ export default class SubmissionFormComponent extends Component<Signature> {
   get component() {
     return COMPONENTS[this.nav.currentStep] as typeof Component;
   }
+
+  <template>
+    {{pageTitle (t "submission-form.title")}}
+
+    <style {{! template-lint-disable no-forbidden-elements }}>
+      body {
+        counter-reset: step 0;
+      }
+
+      nav > .nav-link:before {
+        counter-increment: step 1;
+        content: counter(step) ". ";
+      }
+    </style>
+
+    <h1 class="display-6 my-4">{{t "submission-form.title"}}</h1>
+
+    <div class="row my-3">
+      <div class="col-3">
+        <nav class="nav nav-pills flex-column">
+          {{#each this.nav.steps as |step|}}
+            <a
+              href
+              class="nav-link {{stepNavLinkClass this.nav step}}"
+              {{on "click" (preventDefault (fn this.nav.gotoStep step))}}
+            >
+              {{t (concat "submission-form.steps." step)}}
+            </a>
+          {{/each}}
+        </nav>
+      </div>
+
+      <main class="col">
+        <this.component @model={{@model}} @state={{this.state}} @nav={{this.nav}} />
+      </main>
+    </div>
+  </template>
 }
 
 export class State {

@@ -1,9 +1,22 @@
 import Component from '@glimmer/component';
+import { fn } from '@ember/helper';
 import { action } from '@ember/object';
+import { on } from '@ember/modifier';
 import { service } from '@ember/service';
-
+import { t } from 'ember-intl';
 import { task } from 'ember-concurrency';
+import perform from 'ember-concurrency/helpers/perform';
+import preventDefault from 'ember-event-helpers/helpers/prevent-default';
+import { eq, and, not } from 'ember-truth-helpers';
+import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
+import DfastExtractor from 'mssform/components/dfast-extractor';
+import FileList from 'mssform/components/file-list';
+import SupportedFileTypes from 'mssform/components/file-list/supported-file-types';
+import MassDirectoryExtractor from 'mssform/components/mass-directory-extractor';
+import RadioGroup from 'mssform/components/radio-group';
+import userMassDir from 'mssform/helpers/user-mass-dir';
+import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
 import OtherPerson from 'mssform/models/other-person';
 
 import type Submission from 'mssform/models/submission';
@@ -146,6 +159,111 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
         return acc + ((file.parsedData as { entriesCount: number } | undefined)?.entriesCount ?? 0);
       }, 0);
   }
+
+  <template>
+    <form {{on "submit" (preventDefault (perform this.goNext))}} {{leavingConfirmation}}>
+      <div class="vstack gap-3">
+        <div class="card">
+          <div class="card-body">
+            {{t "submission-form.files.q-html" htmlSafe=true}}
+
+            <RadioGroup as |group|>
+              <div class="form-check">
+                <group.radio as |radio|>
+                  <radio.input
+                    checked={{eq @model.uploadVia "dfast"}}
+                    required
+                    class="form-check-input"
+                    {{on "change" (fn this.setUploadVia "dfast")}}
+                  />
+
+                  <radio.label class="form-check-label">
+                    {{t "submission-form.files.a1"}}
+                  </radio.label>
+                </group.radio>
+              </div>
+
+              <div class="form-check">
+                <group.radio as |radio|>
+                  <radio.input
+                    checked={{eq @model.uploadVia "webui"}}
+                    required
+                    class="form-check-input"
+                    {{on "change" (fn this.setUploadVia "webui")}}
+                  />
+
+                  <radio.label class="form-check-label">
+                    {{t "submission-form.files.a2"}}
+                  </radio.label>
+                </group.radio>
+              </div>
+
+              <div class="hstack gap-3">
+                <div class="form-check">
+                  <group.radio as |radio|>
+                    <radio.input
+                      checked={{eq @model.uploadVia "mass_directory"}}
+                      required
+                      class="form-check-input"
+                      {{on "change" (fn this.setUploadVia "mass_directory")}}
+                    />
+
+                    <radio.label class="form-check-label">
+                      {{t "submission-form.files.a3-html" htmlSafe=true userMassDir=(userMassDir)}}
+                    </radio.label>
+
+                    {{t "submission-form.files.a3-note-html" htmlSafe=true}}
+                  </group.radio>
+                </div>
+
+                <small>
+                  <a href={{t "submission-form.files.a3-help-url"}} target="_blank" rel="noopener noreferrer">
+                    {{svgJar "question-16" class="octicon" width="14px" style="margin-top: 2px"}}
+                    {{t "submission-form.files.a3-help-text"}}
+                  </a>
+                </small>
+              </div>
+            </RadioGroup>
+          </div>
+        </div>
+
+        {{#if (eq @model.uploadVia "dfast")}}
+          <DfastExtractor @onPoll={{this.onExtractProgress}} @crossoverErrors={{this.crossoverErrors}} />
+        {{else if (eq @model.uploadVia "webui")}}
+          <div class="card">
+            <div class="card-body">
+              {{t "submission-form.files.instructions-html" htmlSafe=true}}
+
+              <SupportedFileTypes />
+
+              <FileList
+                @files={{@state.files}}
+                @crossoverErrors={{this.crossoverErrors}}
+                @onAdd={{this.addFile}}
+                @onRemove={{this.removeFile}}
+              />
+            </div>
+          </div>
+        {{else if (eq @model.uploadVia "mass_directory")}}
+          <MassDirectoryExtractor @onPoll={{this.onExtractProgress}} @crossoverErrors={{this.crossoverErrors}} />
+        {{/if}}
+      </div>
+
+      <hr />
+
+      <div class="hstack gap-3 justify-content-end">
+        <a href class="btn btn-outline-primary px-4" {{on "click" (preventDefault @nav.goPrev)}}>
+          {{t "submission-form.nav.back"}}
+        </a>
+
+        <button
+          type="submit"
+          class="btn btn-primary px-5"
+          disabled={{not (and this.isNextButtonEnabled this.goNext.isIdle)}}
+        >{{t "submission-form.nav.next"}}</button>
+      </div>
+    </form>
+  </template>
 }
 
 function validatePair(errors: Map<SubmissionFile, CrossoverError[]>, files: SubmissionFile[]) {
