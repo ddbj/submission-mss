@@ -1,8 +1,18 @@
 import { tracked } from '@glimmer/tracking';
 
-interface ParseError {
+export interface ParseError {
   id: string;
   value?: unknown;
+}
+
+export interface ParsedData {
+  contactPerson?: {
+    fullName: string;
+    email: string;
+    affiliation: string;
+  };
+  holdDate?: string;
+  entriesCount?: number;
 }
 
 type SubmissionFileSubclass = typeof AnnotationFile | typeof SequenceFile | typeof UnsupportedFile;
@@ -26,8 +36,12 @@ export class SubmissionFile {
   }
 
   @tracked isParsing = false;
-  @tracked parsedData?: unknown;
+  @tracked parsedData?: ParsedData;
   @tracked errors: (ParseError | string)[] = [];
+
+  isAnnotation?: boolean;
+  isSequence?: boolean;
+  jobId?: string;
 
   rawFile: File;
   checksum?: Promise<string>;
@@ -67,7 +81,7 @@ export class SubmissionFile {
   parse() {
     this.isParsing = true;
 
-    return new Promise<unknown>((resolve, reject) => {
+    return new Promise<ParsedData | undefined>((resolve, reject) => {
       const worker = new Worker((this.constructor as SubmissionFileSubclass).parserURL);
 
       worker.addEventListener('message', ({ data: [err, payload] }: MessageEvent<[string | null, unknown]>) => {
@@ -86,9 +100,9 @@ export class SubmissionFile {
             reject(new Error(err));
           }
         } else {
-          this.parsedData = payload;
+          this.parsedData = payload as ParsedData;
 
-          resolve(payload);
+          resolve(this.parsedData);
         }
 
         worker.terminate();
@@ -147,6 +161,6 @@ export class UnsupportedFile extends SubmissionFile {
   parse() {
     this.isParsing = false;
 
-    return Promise.resolve();
+    return Promise.resolve(undefined);
   }
 }

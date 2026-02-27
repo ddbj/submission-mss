@@ -8,12 +8,10 @@ import { t } from 'ember-intl';
 import preventDefault from 'ember-event-helpers/helpers/prevent-default';
 import { or } from 'ember-truth-helpers';
 import set from 'ember-set-helper/helpers/set';
-import pick from '@nullvoxpopuli/ember-composable-helpers/helpers/pick';
 import sortBy from '@nullvoxpopuli/ember-composable-helpers/helpers/sort-by';
 import mapBy from '@nullvoxpopuli/ember-composable-helpers/helpers/map-by';
 import append from '@nullvoxpopuli/ember-composable-helpers/helpers/append';
 import join from '@nullvoxpopuli/ember-composable-helpers/helpers/join';
-import pipe from '@nullvoxpopuli/ember-composable-helpers/helpers/pipe';
 
 import filesize from 'mssform/helpers/filesize';
 import mapGet from 'mssform/helpers/map-get';
@@ -63,6 +61,16 @@ export default class FileListComponent extends Component<Signature> {
     }
   }
 
+  @action handleFileInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files) {
+      this.addFiles(input.files);
+    }
+
+    input.value = '';
+  }
+
   <template>
     <style {{! template-lint-disable no-forbidden-elements }}>
       .drag-over * {
@@ -76,7 +84,7 @@ export default class FileListComponent extends Component<Signature> {
       accept={{join ", " this.allowedExtensions}}
       class="d-none"
       {{this.setFileInputElement}}
-      {{on "change" (pipe (pick "target.files" this.addFiles) (set this "fileInputElement.value" ""))}}
+      {{on "change" this.handleFileInput}}
       {{! template-lint-disable require-input-label }}
     />
 
@@ -89,6 +97,7 @@ export default class FileListComponent extends Component<Signature> {
           {{#each (sortBy "name" @files) as |file|}}
             <FileListItem
               @file={{file}}
+              {{! @glint-expect-error: mapGet returns unknown }}
               @errors={{append file.errors (or (mapGet @crossoverErrors file) (array))}}
               @onRemove={{@onRemove}}
             />

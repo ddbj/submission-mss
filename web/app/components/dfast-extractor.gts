@@ -121,6 +121,7 @@ export default class DfastExtractorComponent extends Component<Signature> {
           {{#each (sortBy "name" this.files) key="name" as |file|}}
             <DfastExtractorItem
               @file={{file}}
+              {{! @glint-expect-error: mapGet returns unknown }}
               @errors={{append file.errors (or (mapGet @crossoverErrors file) (array))}}
             />
           {{/each}}

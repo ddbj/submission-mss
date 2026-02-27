@@ -3,6 +3,23 @@ import { t } from 'ember-intl';
 import { formatTime } from 'ember-intl';
 import sortBy from '@nullvoxpopuli/ember-composable-helpers/helpers/sort-by';
 
+import type { TOC } from '@ember/component/template-only';
+
+interface Upload {
+  id: string;
+  created_at: string;
+  files: string[];
+}
+
+interface Signature {
+  Args: {
+    model: {
+      id: string;
+      uploads: Upload[];
+    };
+  };
+}
+
 <template>
   <h1 class="display-6 my-4">{{@model.id}}</h1>
 
@@ -35,4 +52,4 @@ import sortBy from '@nullvoxpopuli/ember-composable-helpers/helpers/sort-by';
       </div>
     {{/each}}
   </div>
-</template>
+</template> satisfies TOC<Signature>;

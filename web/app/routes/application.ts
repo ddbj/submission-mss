@@ -52,13 +52,13 @@ export default class ApplicationRoute extends Route {
 }
 
 interface Enums {
-  locales: { key: string; label: Record<string, string> }[];
+  locales: { key: string; label: Record<'en' | 'ja', string> }[];
   data_types: { key: string; label: string }[];
   sequencers: { key: string; label: string }[];
 }
 
 function enumTranslations(locale: 'en' | 'ja') {
-  const { locales, data_types, sequencers } = ENV.enums as Enums;
+  const { locales, data_types, sequencers } = ENV['enums'] as Enums;
 
   return {
     locales: Object.fromEntries(locales.map(({ key, label }) => [key, label[locale]])),

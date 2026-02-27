@@ -35,14 +35,16 @@ export interface Signature {
 export default class MassDirectoryExtractorComponent extends Component<Signature> {
   @tracked files: SubmissionFile[] = [];
 
-  fetchFiles = modifier(async () => {
-    const extraction = await MassDirectoryExtraction.create(getOwner(this)!);
+  fetchFiles = modifier(() => {
+    void (async () => {
+      const extraction = await MassDirectoryExtraction.create(getOwner(this)!);
 
-    await extraction.pollForResult((payload) => {
-      this.files = (payload as unknown as ExtractionPayload).files;
+      await extraction.pollForResult((payload) => {
+        this.files = (payload as unknown as ExtractionPayload).files;
 
-      this.args.onPoll(payload as unknown as ExtractionPayload);
-    });
+        this.args.onPoll(payload as unknown as ExtractionPayload);
+      });
+    })();
   });
 
   <template>
@@ -51,6 +53,7 @@ export default class MassDirectoryExtractorComponent extends Component<Signature
         {{#each (sortBy "name" this.files) key="name" as |file|}}
           <MassDirectoryExtractorItem
             @file={{file}}
+            {{! @glint-expect-error: mapGet returns unknown }}
             @errors={{append file.errors (or (mapGet @crossoverErrors file) (array))}}
           />
         {{/each}}

@@ -8,6 +8,17 @@ import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
 import filesize from 'mssform/helpers/filesize';
 
+import type { TOC } from '@ember/component/template-only';
+import type { SubmissionFile, ParseError } from 'mssform/models/submission-file';
+
+interface Signature {
+  Args: {
+    file: SubmissionFile;
+    errors: (ParseError | string)[];
+    onRemove: (file: SubmissionFile) => void;
+  };
+}
+
 <template>
   <li class="list-group-item hstack gap-2 align-items-center">
     <div class="align-self-start">
@@ -67,9 +78,12 @@ import filesize from 'mssform/helpers/filesize';
         <ul class="list-unstyled text-danger">
           {{#each @errors as |error|}}
             <li>
+              {{! @glint-expect-error: error is ParseError | string }}
               {{#if error.id}}
+                {{! @glint-expect-error: error narrowed to ParseError }}
                 {{t error.id}}
               {{else}}
+                {{! @glint-expect-error: error narrowed to string }}
                 {{error}}
               {{/if}}
             </li>
@@ -84,4 +98,4 @@ import filesize from 'mssform/helpers/filesize';
       </button>
     </div>
   </li>
-</template>
+</template> satisfies TOC<Signature>;

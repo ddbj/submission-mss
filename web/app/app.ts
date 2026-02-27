@@ -10,10 +10,10 @@ if (macroCondition(isTesting())) {
 } else {
   const Sentry = importSync('@sentry/ember') as typeof import('@sentry/ember');
 
-  if (config.sentryDSN) {
+  if (config['sentryDSN']) {
     Sentry.init({
-      dsn: config.sentryDSN,
-      environment: config.railsEnv as string,
+      dsn: config['sentryDSN'] as string,
+      environment: config['railsEnv'] as string,
       sendDefaultPii: true,
     });
   }

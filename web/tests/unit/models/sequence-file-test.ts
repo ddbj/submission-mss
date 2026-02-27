@@ -29,7 +29,7 @@ module('Unit | Model | sequence file', function (hooks) {
       );
 
       const file = new SequenceFile(raw);
-      const { entriesCount } = await file.parse();
+      const { entriesCount } = (await file.parse()) as { entriesCount: number };
 
       assert.strictEqual(entriesCount, 2);
     });

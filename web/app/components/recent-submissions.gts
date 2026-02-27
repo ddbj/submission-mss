@@ -72,7 +72,9 @@ export default class RecentSubmissions extends Component {
               <td>
                 {{#let (get submission.uploads "0") as |upload|}}
                   <ul class="list-unstyled m-0">
+                    {{! @glint-expect-error: get helper returns unknown }}
                     {{#each (take 3 upload.dfast_job_ids) as |jobId|}}
+                      {{! @glint-expect-error: jobId is unknown }}
                       <li><code>{{jobId}}</code></li>
                     {{/each}}
                   </ul>
@@ -82,7 +84,9 @@ export default class RecentSubmissions extends Component {
                       <summary>View all</summary>
 
                       <ul class="list-unstyled m-0">
+                        {{! @glint-expect-error: get helper returns unknown }}
                         {{#each (drop 3 upload.dfast_job_ids) as |jobId|}}
+                          {{! @glint-expect-error: jobId is unknown }}
                           <li><code>{{jobId}}</code></li>
                         {{/each}}
                       </ul>

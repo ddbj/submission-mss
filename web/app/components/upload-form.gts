@@ -25,7 +25,7 @@ import type { SubmissionFile } from 'mssform/models/submission-file';
 import type UploadProgressModalComponent from 'mssform/components/upload-progress-modal';
 
 interface SubmissionModel {
-  id: string;
+  id?: string;
 }
 
 export interface Signature {
@@ -83,9 +83,9 @@ export default class UploadFormComponent extends Component<Signature> {
     if (this.uploadVia == 'webui') {
       const blobs = await uploadProgressModal.performUpload(this.files);
 
-      attrs.files = blobs.map((blob: { signed_id: string }) => blob.signed_id);
+      attrs['files'] = blobs.map((blob) => (blob as { signed_id: string }).signed_id);
     } else {
-      attrs.extraction_id = this.extractionId;
+      attrs['extraction_id'] = this.extractionId;
     }
 
     await this.request.fetchWithModal(`/submissions/${this.args.model.id}/uploads`, {

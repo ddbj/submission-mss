@@ -17,7 +17,13 @@ import UploadFiles from 'mssform/models/upload-files';
 import type CurrentUserService from 'mssform/services/current-user';
 import type { SubmissionFile } from 'mssform/models/submission-file';
 
-export default class UploadProgressModalComponent extends Component {
+interface Signature {
+  Blocks: {
+    default: [UploadProgressModalComponent];
+  };
+}
+
+export default class UploadProgressModalComponent extends Component<Signature> {
   @service declare currentUser: CurrentUserService;
 
   @tracked uploadFiles?: UploadFiles;
@@ -70,38 +76,40 @@ export default class UploadProgressModalComponent extends Component {
             </div>
 
             <div class="modal-body vstack gap-2">
-              {{#let this.uploadFiles.currentUpload as |upload|}}
-                {{#if upload}}
-                  <div class="d-flex gap-2 align-items-center">
-                    <b>{{upload.file.name}}</b>
+              {{#if this.uploadFiles}}
+                {{#let this.uploadFiles.currentUpload as |upload|}}
+                  {{#if upload}}
+                    <div class="d-flex gap-2 align-items-center">
+                      <b>{{upload.file.name}}</b>
 
-                    {{#unless upload.isStarted}}
-                      <div class="spinner-border spinner-border-sm text-primary" role="status">
-                        <span class="visually-hidden">{{t "upload-progress-modal.calculating"}}</span>
-                      </div>
-                    {{/unless}}
-                  </div>
+                      {{#unless upload.isStarted}}
+                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                          <span class="visually-hidden">{{t "upload-progress-modal.calculating"}}</span>
+                        </div>
+                      {{/unless}}
+                    </div>
 
-                  <div class="progress">
-                    {{#let (percentage this.uploadFiles.uploadedSize this.uploadFiles.totalSize) as |percentage|}}
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        style={{htmlSafe (concat "width: " percentage "%")}}
-                        aria-valuenow={{percentage}}
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    {{/let}}
-                  </div>
+                    <div class="progress">
+                      {{#let (percentage this.uploadFiles.uploadedSize this.uploadFiles.totalSize) as |percentage|}}
+                        <div
+                          class="progress-bar"
+                          role="progressbar"
+                          style={{htmlSafe (concat "width: " percentage "%")}}
+                          aria-valuenow={{percentage}}
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        ></div>
+                      {{/let}}
+                    </div>
 
-                  <div class="text-body-secondary">
-                    {{filesize this.uploadFiles.uploadedSize}}
-                    /
-                    {{filesize this.uploadFiles.totalSize}}
-                  </div>
-                {{/if}}
-              {{/let}}
+                    <div class="text-body-secondary">
+                      {{filesize this.uploadFiles.uploadedSize}}
+                      /
+                      {{filesize this.uploadFiles.totalSize}}
+                    </div>
+                  {{/if}}
+                {{/let}}
+              {{/if}}
             </div>
 
             <div class="modal-footer">

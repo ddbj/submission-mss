@@ -7,6 +7,15 @@ import pageTitle from 'ember-page-title/helpers/page-title';
 
 import ErrorMessage from 'mssform/components/error-message';
 
+import type { TOC } from '@ember/component/template-only';
+import type ApplicationController from 'mssform/controllers/application';
+
+interface Signature {
+  Args: {
+    controller: ApplicationController;
+  };
+}
+
 <template>
   {{pageTitle (t "application.title")}}
 
@@ -65,4 +74,4 @@ import ErrorMessage from 'mssform/components/error-message';
       </div>
     </div>
   </div>
-</template>
+</template> satisfies TOC<Signature>;

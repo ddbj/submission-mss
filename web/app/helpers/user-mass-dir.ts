@@ -3,7 +3,11 @@ import { service } from '@ember/service';
 
 import type CurrentUserService from 'mssform/services/current-user';
 
-export default class UserMassDir extends Helper {
+interface Signature {
+  Return: string;
+}
+
+export default class UserMassDir extends Helper<Signature> {
   @service declare currentUser: CurrentUserService;
 
   compute() {
