@@ -15,16 +15,17 @@ import Metadata from './submission-form/metadata';
 import Prerequisite from './submission-form/prerequisite';
 import stepNavLinkClass from 'mssform/helpers/step-nav-link-class';
 
+import type { ComponentLike } from '@glint/template';
 import type RouterService from '@ember/routing/router-service';
 import type Submission from 'mssform/models/submission';
 import type { SubmissionFile } from 'mssform/models/submission-file';
 
-const COMPONENTS = {
+const COMPONENTS: Record<string, unknown> = {
   prerequisite: Prerequisite,
   files: Files,
   metadata: Metadata,
   confirm: Confirm,
-  complete: Complete as unknown as typeof Component,
+  complete: Complete,
 };
 
 export interface Signature {
@@ -40,7 +41,9 @@ export default class SubmissionFormComponent extends Component<Signature> {
   nav = new Navigation();
 
   get component() {
-    return COMPONENTS[this.nav.currentStep] as typeof Component;
+    return COMPONENTS[this.nav.currentStep] as ComponentLike<{
+      Args: { model: Submission; state: State; nav: Navigation };
+    }>;
   }
 
   <template>
@@ -91,20 +94,20 @@ export class Navigation {
 
   @tracked stepIndex = 0;
 
-  get currentStep() {
-    return this.steps[this.stepIndex];
+  get currentStep(): string {
+    return this.steps[this.stepIndex]!;
   }
 
-  get prevStep() {
+  get prevStep(): string {
     const i = Math.max(0, this.stepIndex - 1);
 
-    return this.steps[i];
+    return this.steps[i]!;
   }
 
-  get nextStep() {
-    const i = Math.min(this.stepIndex + 1, this.steps.length);
+  get nextStep(): string {
+    const i = Math.min(this.stepIndex + 1, this.steps.length - 1);
 
-    return this.steps[i];
+    return this.steps[i]!;
   }
 
   @action goNext() {

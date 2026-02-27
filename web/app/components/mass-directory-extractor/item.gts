@@ -6,6 +6,16 @@ import svgJar from 'ember-svg-jar/helpers/svg-jar';
 import filesize from 'mssform/helpers/filesize';
 import userMassDir from 'mssform/helpers/user-mass-dir';
 
+import type { TOC } from '@ember/component/template-only';
+import type { SubmissionFile, SubmissionError } from 'mssform/models/submission-file';
+
+interface Signature {
+  Args: {
+    file: SubmissionFile;
+    errors: SubmissionError[];
+  };
+}
+
 <template>
   <li class="list-group-item hstack gap-2 align-items-center">
     <div class="align-self-start">
@@ -68,7 +78,7 @@ import userMassDir from 'mssform/helpers/user-mass-dir';
               {{#if error.id}}
                 {{t error.id}}
               {{else}}
-                {{error}}
+                {{error.message}}
               {{/if}}
             </li>
           {{/each}}
@@ -76,4 +86,4 @@ import userMassDir from 'mssform/helpers/user-mass-dir';
       {{/if}}
     </div>
   </li>
-</template>
+</template> satisfies TOC<Signature>;

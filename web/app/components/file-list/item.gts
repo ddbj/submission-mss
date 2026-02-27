@@ -8,6 +8,17 @@ import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
 import filesize from 'mssform/helpers/filesize';
 
+import type { TOC } from '@ember/component/template-only';
+import type { SubmissionFile, SubmissionError } from 'mssform/models/submission-file';
+
+interface Signature {
+  Args: {
+    file: SubmissionFile;
+    errors: SubmissionError[];
+    onRemove: (file: SubmissionFile) => void;
+  };
+}
+
 <template>
   <li class="list-group-item hstack gap-2 align-items-center">
     <div class="align-self-start">
@@ -70,7 +81,7 @@ import filesize from 'mssform/helpers/filesize';
               {{#if error.id}}
                 {{t error.id}}
               {{else}}
-                {{error}}
+                {{error.message}}
               {{/if}}
             </li>
           {{/each}}
@@ -84,4 +95,4 @@ import filesize from 'mssform/helpers/filesize';
       </button>
     </div>
   </li>
-</template>
+</template> satisfies TOC<Signature>;

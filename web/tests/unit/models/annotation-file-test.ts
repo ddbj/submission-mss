@@ -25,7 +25,10 @@ COMMON	SUBMITTER		contact	Alice Liddell
       const {
         contactPerson: { fullName, email, affiliation },
         holdDate,
-      } = await new AnnotationFile(file).parse();
+      } = (await new AnnotationFile(file).parse()) as {
+        contactPerson: { fullName: string; email: string; affiliation: string };
+        holdDate: string;
+      };
 
       assert.strictEqual(fullName, 'Alice Liddell');
       assert.strictEqual(email, 'alice@example.com');

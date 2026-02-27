@@ -1,8 +1,19 @@
 import { tracked } from '@glimmer/tracking';
 
-interface ParseError {
-  id: string;
+export interface SubmissionError {
+  id?: string;
+  message?: string;
   value?: unknown;
+}
+
+export interface ParsedData {
+  contactPerson?: {
+    fullName: string;
+    email: string;
+    affiliation: string;
+  };
+  holdDate?: string;
+  entriesCount?: number;
 }
 
 type SubmissionFileSubclass = typeof AnnotationFile | typeof SequenceFile | typeof UnsupportedFile;
@@ -26,8 +37,12 @@ export class SubmissionFile {
   }
 
   @tracked isParsing = false;
-  @tracked parsedData?: unknown;
-  @tracked errors: (ParseError | string)[] = [];
+  @tracked parsedData?: ParsedData;
+  @tracked errors: SubmissionError[] = [];
+
+  isAnnotation?: boolean;
+  isSequence?: boolean;
+  jobId?: string;
 
   rawFile: File;
   checksum?: Promise<string>;
@@ -67,13 +82,13 @@ export class SubmissionFile {
   parse() {
     this.isParsing = true;
 
-    return new Promise<unknown>((resolve, reject) => {
+    return new Promise<ParsedData | undefined>((resolve, reject) => {
       const worker = new Worker((this.constructor as SubmissionFileSubclass).parserURL);
 
       worker.addEventListener('message', ({ data: [err, payload] }: MessageEvent<[string | null, unknown]>) => {
         if (err) {
           try {
-            const { id, value } = JSON.parse(err) as ParseError;
+            const { id, value } = JSON.parse(err) as SubmissionError;
 
             this.errors = [...this.errors, { id, value }];
 
@@ -81,14 +96,14 @@ export class SubmissionFile {
           } catch (e) {
             console.error(e);
 
-            this.errors = [...this.errors, err];
+            this.errors = [...this.errors, { message: err }];
 
             reject(new Error(err));
           }
         } else {
-          this.parsedData = payload;
+          this.parsedData = payload as ParsedData;
 
-          resolve(payload);
+          resolve(this.parsedData);
         }
 
         worker.terminate();
@@ -147,6 +162,6 @@ export class UnsupportedFile extends SubmissionFile {
   parse() {
     this.isParsing = false;
 
-    return Promise.resolve();
+    return Promise.resolve(undefined);
   }
 }

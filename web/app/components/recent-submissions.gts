@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { get } from '@ember/helper';
 
 import drop from '@nullvoxpopuli/ember-composable-helpers/helpers/drop';
 import sortBy from '@nullvoxpopuli/ember-composable-helpers/helpers/sort-by';
@@ -24,6 +23,10 @@ interface SubmissionRecord {
   uploads: {
     dfast_job_ids: string[];
   }[];
+}
+
+function dfastJobIds(submission: SubmissionRecord): string[] {
+  return submission.uploads[0]?.dfast_job_ids ?? [];
 }
 
 export default class RecentSubmissions extends Component {
@@ -70,19 +73,19 @@ export default class RecentSubmissions extends Component {
               </td>
 
               <td>
-                {{#let (get submission.uploads "0") as |upload|}}
+                {{#let (dfastJobIds submission) as |jobIds|}}
                   <ul class="list-unstyled m-0">
-                    {{#each (take 3 upload.dfast_job_ids) as |jobId|}}
+                    {{#each (take 3 jobIds) as |jobId|}}
                       <li><code>{{jobId}}</code></li>
                     {{/each}}
                   </ul>
 
-                  {{#if (gt submission.dfast_job_ids.length 3)}}
+                  {{#if (gt jobIds.length 3)}}
                     <details>
                       <summary>View all</summary>
 
                       <ul class="list-unstyled m-0">
-                        {{#each (drop 3 upload.dfast_job_ids) as |jobId|}}
+                        {{#each (drop 3 jobIds) as |jobId|}}
                           <li><code>{{jobId}}</code></li>
                         {{/each}}
                       </ul>

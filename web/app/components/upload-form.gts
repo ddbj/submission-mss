@@ -21,11 +21,11 @@ import userMassDir from 'mssform/helpers/user-mass-dir';
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
 
 import type RequestService from 'mssform/services/request';
-import type { SubmissionFile } from 'mssform/models/submission-file';
+import type { SubmissionFile, SubmissionError } from 'mssform/models/submission-file';
 import type UploadProgressModalComponent from 'mssform/components/upload-progress-modal';
 
 interface SubmissionModel {
-  id: string;
+  id?: string;
 }
 
 export interface Signature {
@@ -41,7 +41,7 @@ export default class UploadFormComponent extends Component<Signature> {
   @tracked extractionId: string | null = null;
   @tracked files: SubmissionFile[] = [];
   @tracked isCompleted = false;
-  @tracked crossoverErrors = new Map(); // always empty
+  @tracked crossoverErrors = new Map<SubmissionFile, SubmissionError[]>();
 
   get isSubmitButtonEnabled() {
     const { uploadVia, files } = this;
@@ -83,9 +83,9 @@ export default class UploadFormComponent extends Component<Signature> {
     if (this.uploadVia == 'webui') {
       const blobs = await uploadProgressModal.performUpload(this.files);
 
-      attrs.files = blobs.map((blob: { signed_id: string }) => blob.signed_id);
+      attrs['files'] = blobs.map((blob) => (blob as { signed_id: string }).signed_id);
     } else {
-      attrs.extraction_id = this.extractionId;
+      attrs['extraction_id'] = this.extractionId;
     }
 
     await this.request.fetchWithModal(`/submissions/${this.args.model.id}/uploads`, {

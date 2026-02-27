@@ -1,3 +1,12 @@
 import SubmissionForm from 'mssform/components/submission-form';
 
-<template><SubmissionForm @model={{@model}} /></template>
+import type { TOC } from '@ember/component/template-only';
+import type Submission from 'mssform/models/submission';
+
+interface Signature {
+  Args: {
+    model: Submission;
+  };
+}
+
+<template><SubmissionForm @model={{@model}} /></template> satisfies TOC<Signature>;

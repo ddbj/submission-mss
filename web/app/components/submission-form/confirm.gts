@@ -12,6 +12,7 @@ import userMassDir from 'mssform/helpers/user-mass-dir';
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
 
 import type Submission from 'mssform/models/submission';
+import type { SubmissionFile } from 'mssform/models/submission-file';
 import type { Navigation, State } from 'mssform/components/submission-form';
 import type RequestService from 'mssform/services/request';
 import type UploadProgressModalComponent from 'mssform/components/upload-progress-modal';
@@ -34,7 +35,7 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
     if (uploadVia === 'webui') {
       const blobs = await uploadProgressModal.performUpload(state.files);
 
-      model.files = blobs.map(({ signed_id }: { signed_id: string }) => signed_id);
+      model.files = blobs.map((blob) => (blob as { signed_id: string }).signed_id) as unknown as SubmissionFile[];
     }
 
     const res = await this.request.fetch('/submissions', {

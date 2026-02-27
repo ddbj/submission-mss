@@ -23,18 +23,18 @@ export class DirectUpload {
     this.delegate.directUploadWillCreateBlobWithXHR!(blob.xhr);
 
     return new Promise<Record<string, unknown>>((resolve, reject) => {
-      blob.create((error: Error | null) => {
+      blob.create((error: string | null) => {
         if (error) {
-          reject(error);
+          reject(new Error(error));
         } else {
           const upload = new BlobUpload(blob);
           upload.requestDidError = (event: ProgressEvent) => upload.callback(event.target as XMLHttpRequest);
 
           this.delegate.directUploadWillStoreFileWithXHR!(upload.xhr);
 
-          upload.create((error: Error | null) => {
+          upload.create((error: string | null) => {
             if (error) {
-              reject(error);
+              reject(new Error(error));
             } else {
               resolve(blob.toJSON());
             }
