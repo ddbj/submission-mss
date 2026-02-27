@@ -1,7 +1,6 @@
 import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
 import { t } from 'ember-intl';
-import preventDefault from 'ember-event-helpers/helpers/prevent-default';
 import pageTitle from 'ember-page-title/helpers/page-title';
 
 import RecentSubmissions from 'mssform/components/recent-submissions';
@@ -22,7 +21,9 @@ interface Signature {
 
   <p>
     {{t "home.login-as-html" account=@controller.currentUser.uid htmlSafe=true}}
-    <small>(<a {{on "click" (preventDefault @controller.logout)}} href>{{t "home.logout"}}</a>)</small>
+    <small>(<button type="button" class="btn btn-link p-0 align-baseline" {{on "click" @controller.logout}}>{{t
+          "home.logout"
+        }}</button>)</small>
   </p>
 
   <LinkTo @route="submissions.new" class="btn btn-outline-primary btn-lg">{{t "home.new-submission"}}</LinkTo>

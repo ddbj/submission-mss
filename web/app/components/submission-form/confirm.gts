@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { on } from '@ember/modifier';
 import { service } from '@ember/service';
 import { t } from 'ember-intl';
-import preventDefault from 'ember-event-helpers/helpers/prevent-default';
 import { eq, or } from 'ember-truth-helpers';
 
 import UploadProgressModal from 'mssform/components/upload-progress-modal';
@@ -28,7 +27,8 @@ export interface Signature {
 export default class SubmissionFormConfirmComponent extends Component<Signature> {
   @service declare request: RequestService;
 
-  @action async submit(uploadProgressModal: UploadProgressModalComponent) {
+  @action async submit(uploadProgressModal: UploadProgressModalComponent, event: Event) {
+    event.preventDefault();
     const { state, model, nav } = this.args;
     const { uploadVia } = model;
 
@@ -83,7 +83,7 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
 
   <template>
     <UploadProgressModal as |modal|>
-      <form {{on "submit" (preventDefault (fn this.submit modal))}} {{leavingConfirmation}}>
+      <form {{on "submit" (fn this.submit modal)}} {{leavingConfirmation}}>
         <div class="vstack gap-3">
           <div class="card">
             <div class="card-header">{{t "submission-form.confirm.prerequisites"}}</div>
@@ -210,9 +210,9 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
         <hr />
 
         <div class="hstack gap-3 justify-content-end">
-          <a href class="btn btn-outline-primary px-4" {{on "click" (preventDefault @nav.goPrev)}}>{{t
+          <button type="button" class="btn btn-outline-primary px-4" {{on "click" @nav.goPrev}}>{{t
               "submission-form.nav.back"
-            }}</a>
+            }}</button>
           <button type="submit" class="btn btn-primary px-5">{{t "submission-form.confirm.submit"}}</button>
         </div>
       </form>

@@ -1,14 +1,16 @@
 import { LinkTo } from '@ember/routing';
 import { t } from 'ember-intl';
 import { formatTime } from 'ember-intl';
-import sortBy from '@nullvoxpopuli/ember-composable-helpers/helpers/sort-by';
-
 import type { TOC } from '@ember/component/template-only';
 
 interface Upload {
   id: string;
   created_at: string;
   files: string[];
+}
+
+function sortById(uploads: Upload[]) {
+  return [...uploads].sort((a, b) => a.id.localeCompare(b.id));
 }
 
 interface Signature {
@@ -30,7 +32,7 @@ interface Signature {
   <h2 class="mt-4">{{t "submission.show.submission-files"}}</h2>
 
   <div class="vstack gap-3">
-    {{#each (sortBy "id" @model.uploads) as |upload|}}
+    {{#each (sortById @model.uploads) as |upload|}}
       <div class="card">
         <div class="card-header">
           {{formatTime

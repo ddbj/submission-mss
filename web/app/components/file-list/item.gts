@@ -2,7 +2,6 @@ import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { t } from 'ember-intl';
 import { formatNumber } from 'ember-intl';
-import preventDefault from 'ember-event-helpers/helpers/prevent-default';
 import { or } from 'ember-truth-helpers';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
@@ -90,7 +89,7 @@ interface Signature {
     </div>
 
     <div class="ms-auto">
-      <button type="button" class="btn btn-link p-2" {{on "click" (preventDefault (fn @onRemove @file))}}>
+      <button type="button" class="btn btn-link p-2" {{on "click" (fn @onRemove @file)}}>
         {{svgJar "no-entry-24" class="octicon fill-danger" role="img" desc=(t "file-list.item.remove")}}
       </button>
     </div>

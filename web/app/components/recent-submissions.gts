@@ -3,9 +3,6 @@ import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import drop from '@nullvoxpopuli/ember-composable-helpers/helpers/drop';
-import sortBy from '@nullvoxpopuli/ember-composable-helpers/helpers/sort-by';
-import take from '@nullvoxpopuli/ember-composable-helpers/helpers/take';
 import { formatDate } from 'ember-intl';
 import { gt } from 'ember-truth-helpers';
 import { task } from 'ember-concurrency';
@@ -29,10 +26,22 @@ function dfastJobIds(submission: SubmissionRecord): string[] {
   return submission.uploads[0]?.dfast_job_ids ?? [];
 }
 
+function take<T>(n: number, arr: T[]): T[] {
+  return arr.slice(0, n);
+}
+
+function drop<T>(n: number, arr: T[]): T[] {
+  return arr.slice(n);
+}
+
 export default class RecentSubmissions extends Component {
   @service declare request: RequestService;
 
   @tracked submissions: SubmissionRecord[] = [];
+
+  get sortedSubmissions() {
+    return [...this.submissions].sort((a, b) => b.id.localeCompare(a.id));
+  }
 
   loadSubmissions = task(async () => {
     const res = await this.request.fetch('/submissions');
@@ -62,7 +71,7 @@ export default class RecentSubmissions extends Component {
         </thead>
 
         <tbody>
-          {{#each (sortBy "id:desc" this.submissions) as |submission|}}
+          {{#each this.sortedSubmissions as |submission|}}
             <tr>
               <td>
                 <LinkTo @route="submission" @model={{submission}}>{{submission.id}}</LinkTo>

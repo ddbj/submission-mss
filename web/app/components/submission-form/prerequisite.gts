@@ -4,8 +4,6 @@ import { action } from '@ember/object';
 import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
 import { t } from 'ember-intl';
-import preventDefault from 'ember-event-helpers/helpers/prevent-default';
-import set from 'ember-set-helper/helpers/set';
 import { eq, and } from 'ember-truth-helpers';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
@@ -29,10 +27,19 @@ export default class SubmissionFormPrerequisiteComponent extends Component<Signa
     this.args.model.tpa = val ? null : false;
   }
 
+  @action setTpa(value: boolean) {
+    this.args.model.tpa = value;
+  }
+
+  @action handleSubmit(event: Event) {
+    event.preventDefault();
+    this.args.nav.goNext();
+  }
+
   <template>
     {{t "submission-form.prerequisite.instructions-html" htmlSafe=true}}
 
-    <form {{on "submit" (preventDefault @nav.goNext)}} {{leavingConfirmation}}>
+    <form {{on "submit" this.handleSubmit}} {{leavingConfirmation}}>
       <div class="vstack gap-3">
         <div class="card">
           <div class="card-body">
@@ -93,7 +100,7 @@ export default class SubmissionFormPrerequisiteComponent extends Component<Signa
                       checked={{eq @model.tpa true}}
                       required
                       class="form-check-input"
-                      {{on "change" (set @model "tpa" true)}}
+                      {{on "change" (fn this.setTpa true)}}
                     />
 
                     <radio.label class="form-check-label">
@@ -108,7 +115,7 @@ export default class SubmissionFormPrerequisiteComponent extends Component<Signa
                       checked={{eq @model.tpa false}}
                       required
                       class="form-check-input"
-                      {{on "change" (set @model "tpa" false)}}
+                      {{on "change" (fn this.setTpa false)}}
                     />
 
                     <radio.label class="form-check-label">

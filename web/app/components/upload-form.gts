@@ -6,7 +6,6 @@ import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { t } from 'ember-intl';
-import preventDefault from 'ember-event-helpers/helpers/prevent-default';
 import { eq, not } from 'ember-truth-helpers';
 import pageTitle from 'ember-page-title/helpers/page-title';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
@@ -75,7 +74,8 @@ export default class UploadFormComponent extends Component<Signature> {
     this.files = this.files.filter((f) => f !== file);
   }
 
-  @action async submit(uploadProgressModal: UploadProgressModalComponent) {
+  @action async submit(uploadProgressModal: UploadProgressModalComponent, event: Event) {
+    event.preventDefault();
     const attrs: Record<string, unknown> = {
       via: this.uploadVia,
     };
@@ -116,7 +116,7 @@ export default class UploadFormComponent extends Component<Signature> {
       {{t "upload-form.description-html" massId=@model.id htmlSafe=true}}
 
       <UploadProgressModal as |modal|>
-        <form {{on "submit" (preventDefault (fn this.submit modal))}} {{leavingConfirmation}}>
+        <form {{on "submit" (fn this.submit modal)}} {{leavingConfirmation}}>
           <div class="vstack gap-3">
             <div class="card">
               <div class="card-body">

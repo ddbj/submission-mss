@@ -4,15 +4,9 @@ import { on } from '@ember/modifier';
 import { modifier } from 'ember-modifier';
 import { tracked } from '@glimmer/tracking';
 import { t } from 'ember-intl';
-import preventDefault from 'ember-event-helpers/helpers/prevent-default';
-import set from 'ember-set-helper/helpers/set';
-import sortBy from '@nullvoxpopuli/ember-composable-helpers/helpers/sort-by';
-import mapBy from '@nullvoxpopuli/ember-composable-helpers/helpers/map-by';
-import join from '@nullvoxpopuli/ember-composable-helpers/helpers/join';
 
 import errorsFor from 'mssform/helpers/errors-for';
-import filesize from 'mssform/helpers/filesize';
-import sum from 'mssform/helpers/sum';
+import totalFileSize from 'mssform/helpers/total-file-size';
 import dropTarget from 'mssform/modifiers/drop-target';
 import FileListItem from 'mssform/components/file-list/item';
 import { SubmissionFile } from 'mssform/models/submission-file';
@@ -29,10 +23,25 @@ export interface Signature {
 }
 
 export default class FileListComponent extends Component<Signature> {
-  allowedExtensions = SubmissionFile.allowedExtensions;
   fileInputElement: HTMLInputElement | null = null;
 
   @tracked dragOver = false;
+
+  get acceptExtensions() {
+    return SubmissionFile.allowedExtensions.join(', ');
+  }
+
+  get sortedFiles() {
+    return [...this.args.files].sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  enterDragOver = () => {
+    this.dragOver = true;
+  };
+
+  leaveDragOver = () => {
+    this.dragOver = false;
+  };
 
   setFileInputElement = modifier((element: HTMLInputElement) => {
     this.fileInputElement = element;
@@ -76,7 +85,7 @@ export default class FileListComponent extends Component<Signature> {
     <input
       type="file"
       multiple
-      accept={{join ", " this.allowedExtensions}}
+      accept={{this.acceptExtensions}}
       class="d-none"
       {{this.setFileInputElement}}
       {{on "change" this.handleFileInput}}
@@ -86,35 +95,39 @@ export default class FileListComponent extends Component<Signature> {
     {{#if @files}}
       <div
         class="card {{if this.dragOver 'drag-over opacity-50 border-primary'}}"
-        {{dropTarget this.addFiles enter=(set this "dragOver" true) leave=(set this "dragOver" false)}}
+        {{dropTarget this.addFiles enter=this.enterDragOver leave=this.leaveDragOver}}
       >
         <ul class="list-group list-group-flush overflow-auto" style="max-height: 550px">
-          {{#each (sortBy "name" @files) as |file|}}
+          {{#each this.sortedFiles as |file|}}
             <FileListItem @file={{file}} @errors={{errorsFor file @crossoverErrors}} @onRemove={{@onRemove}} />
           {{/each}}
         </ul>
 
         <div class="card-footer d-flex justify-content-between align-items-center bg-white">
           <div>
-            <button type="button" class="btn btn-outline-primary" {{on "click" (preventDefault this.selectFiles)}}>
+            <button type="button" class="btn btn-outline-primary" {{on "click" this.selectFiles}}>
               {{t "file-list.add-files"}}
             </button>
           </div>
 
           <div>
-            {{t "file-list.stats" filesCount=@files.length totalFileSize=(filesize (sum (mapBy "size" @files)))}}
+            {{t "file-list.stats" filesCount=@files.length totalFileSize=(totalFileSize @files)}}
           </div>
         </div>
       </div>
     {{else}}
       <div
         class="card border-2 border-dashed {{if this.dragOver 'drag-over opacity-50 border-primary'}}"
-        {{dropTarget this.addFiles enter=(set this "dragOver" true) leave=(set this "dragOver" false)}}
+        {{dropTarget this.addFiles enter=this.enterDragOver leave=this.leaveDragOver}}
       >
         <div class="card-body py-5 text-center text-body-secondary">
-          <a href="#" class="stretched-link" {{on "click" (preventDefault this.selectFiles)}}>
+          <button
+            type="button"
+            class="stretched-link btn btn-link p-0 border-0 align-baseline"
+            {{on "click" this.selectFiles}}
+          >
             {{t "file-list.select-files"}}
-          </a>
+          </button>
 
           {{t "file-list.or-drag"}}
         </div>

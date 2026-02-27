@@ -5,8 +5,6 @@ import { on } from '@ember/modifier';
 import { service } from '@ember/service';
 import { t } from 'ember-intl';
 import { task } from 'ember-concurrency';
-import perform from 'ember-concurrency/helpers/perform';
-import preventDefault from 'ember-event-helpers/helpers/prevent-default';
 import { eq, and, not } from 'ember-truth-helpers';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
@@ -86,6 +84,11 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
     this.args.state.files = this.args.state.files.filter((f) => f !== file);
   }
 
+  @action handleSubmit(event: Event) {
+    event.preventDefault();
+    void this.goNext.perform();
+  }
+
   goNext = task({ drop: true }, async () => {
     await this.fillDataFromLastSubmission();
     this.fillDataFromSubmissionFiles();
@@ -157,7 +160,7 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
   }
 
   <template>
-    <form {{on "submit" (preventDefault (perform this.goNext))}} {{leavingConfirmation}}>
+    <form {{on "submit" this.handleSubmit}} {{leavingConfirmation}}>
       <div class="vstack gap-3">
         <div class="card">
           <div class="card-body">
@@ -248,9 +251,9 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
       <hr />
 
       <div class="hstack gap-3 justify-content-end">
-        <a href class="btn btn-outline-primary px-4" {{on "click" (preventDefault @nav.goPrev)}}>
+        <button type="button" class="btn btn-outline-primary px-4" {{on "click" @nav.goPrev}}>
           {{t "submission-form.nav.back"}}
-        </a>
+        </button>
 
         <button
           type="submit"
