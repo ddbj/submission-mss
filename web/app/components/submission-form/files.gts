@@ -20,7 +20,7 @@ import OtherPerson from 'mssform/models/other-person';
 import type { paths } from 'schema/openapi';
 import type Submission from 'mssform/models/submission';
 import type { Navigation, State } from 'mssform/components/submission-form';
-import type RequestService from 'mssform/services/request';
+import type RequestManager from '@ember-data/request';
 import type { SubmissionFile, SubmissionError, ParsedData } from 'mssform/models/submission-file';
 
 export interface Signature {
@@ -32,7 +32,7 @@ export interface Signature {
 }
 
 export default class SubmissionFormFilesComponent extends Component<Signature> {
-  @service declare request: RequestService;
+  @service declare requestManager: RequestManager;
 
   get crossoverErrors() {
     const { files } = this.args.state;
@@ -103,9 +103,11 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
     let last: LastSubmitted['submission'] | undefined;
 
     try {
-      const res = await this.request.fetch('/submissions/last_submitted');
+      const { content } = await this.requestManager.request<LastSubmitted>({
+        url: '/submissions/last_submitted',
+      });
 
-      last = ((await res.json()) as LastSubmitted).submission;
+      last = content.submission;
     } catch {
       // do nothing
     }

@@ -1,14 +1,19 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
-import type RequestService from 'mssform/services/request';
+import type { paths } from 'schema/openapi';
+import type RequestManager from '@ember-data/request';
+
+type ShowSubmission = paths['/submissions/{mass_id}']['get']['responses']['200']['content']['application/json'];
 
 export default class SubmissionRoute extends Route {
-  @service declare request: RequestService;
+  @service declare requestManager: RequestManager;
 
   async model({ id }: { id: string }) {
-    const json = (await this.request.fetch(`/submissions/${id}`).then((res) => res.json())) as { submission: unknown };
+    const { content } = await this.requestManager.request<ShowSubmission>({
+      url: `/submissions/${id}`,
+    });
 
-    return json.submission;
+    return content.submission;
   }
 }

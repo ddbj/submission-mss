@@ -1,12 +1,13 @@
 import Service, { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import type RequestService from 'mssform/services/request';
+import type { paths } from 'schema/openapi';
+import type RequestManager from '@ember-data/request';
 import type RouterService from '@ember/routing/router-service';
 import type Transition from '@ember/routing/transition';
 
 export default class CurrentUserService extends Service {
-  @service declare request: RequestService;
+  @service declare requestManager: RequestManager;
   @service declare router: RouterService;
 
   @tracked token?: string;
@@ -63,10 +64,13 @@ export default class CurrentUserService extends Service {
       return;
     }
 
-    const res = await this.request.fetchWithModal('/me');
-    const { uid } = (await res.json()) as { uid: string };
+    type Me = paths['/me']['get']['responses']['200']['content']['application/json'];
 
-    this.uid = uid;
+    const { content } = await this.requestManager.request<Me>({
+      url: '/me',
+    });
+
+    this.uid = content.uid;
   }
 
   clear() {

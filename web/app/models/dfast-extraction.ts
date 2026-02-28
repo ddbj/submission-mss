@@ -3,32 +3,24 @@ import { setOwner } from '@ember/owner';
 
 import type { components } from 'schema/openapi';
 import type Owner from '@ember/owner';
-import type RequestService from 'mssform/services/request';
+import type RequestManager from '@ember-data/request';
 
 type DfastExtractionPayload = components['schemas']['DfastExtraction'];
 
 export default class DfastExtraction {
   static async create(owner: Owner, ids: string[]) {
-    const request = owner.lookup('service:request') as RequestService;
+    const requestManager = owner.lookup('service:request-manager') as RequestManager;
 
-    const res = await request.fetchWithModal('/dfast_extractions', {
+    const { content } = await requestManager.request<DfastExtractionPayload>({
+      url: '/dfast_extractions',
       method: 'POST',
-
-      headers: {
-        'Content-Type': 'application/json',
-      },
-
-      body: JSON.stringify({
-        ids,
-      }),
+      data: { ids },
     });
 
-    const { _self: url } = (await res.json()) as DfastExtractionPayload;
-
-    return new DfastExtraction(owner, url);
+    return new DfastExtraction(owner, content._self);
   }
 
-  @service declare request: RequestService;
+  @service declare requestManager: RequestManager;
 
   url: string;
 
@@ -43,8 +35,9 @@ export default class DfastExtraction {
     onError: (error: NonNullable<DfastExtractionPayload['error']>) => void,
   ) {
     for (;;) {
-      const res = await this.request.fetchWithModal(this.url);
-      const payload = (await res.json()) as DfastExtractionPayload;
+      const { content: payload } = await this.requestManager.request<DfastExtractionPayload>({
+        url: this.url,
+      });
 
       callback(payload);
 
