@@ -10,6 +10,7 @@ import UploadProgressModal from 'mssform/components/upload-progress-modal';
 import userMassDir from 'mssform/helpers/user-mass-dir';
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
 
+import type { paths } from 'schema/openapi';
 import type Submission from 'mssform/models/submission';
 import type { SubmissionFile } from 'mssform/models/submission-file';
 import type { Navigation, State } from 'mssform/components/submission-form';
@@ -74,7 +75,9 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
       }),
     });
 
-    const { id } = ((await res.json()) as { submission: { id: string } }).submission;
+    const { id } = (
+      (await res.json()) as paths['/submissions']['post']['responses']['200']['content']['application/json']
+    ).submission;
 
     model.id = id;
 

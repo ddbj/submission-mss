@@ -7,22 +7,13 @@ import { formatDate } from 'ember-intl';
 import { gt } from 'ember-truth-helpers';
 import { task } from 'ember-concurrency';
 
+import type { components, paths } from 'schema/openapi';
 import type Owner from '@ember/owner';
 import type RequestService from 'mssform/services/request';
 
-interface SubmissionRecord {
-  id: string;
-  created_at: string;
-  status: string;
-  accessions: string[];
-  dfast_job_ids: string[];
+type Submission = components['schemas']['Submission'];
 
-  uploads: {
-    dfast_job_ids: string[];
-  }[];
-}
-
-function dfastJobIds(submission: SubmissionRecord): string[] {
+function dfastJobIds(submission: Submission): string[] {
   return submission.uploads[0]?.dfast_job_ids ?? [];
 }
 
@@ -37,7 +28,7 @@ function drop<T>(n: number, arr: T[]): T[] {
 export default class RecentSubmissions extends Component {
   @service declare request: RequestService;
 
-  @tracked submissions: SubmissionRecord[] = [];
+  @tracked submissions: Submission[] = [];
 
   get sortedSubmissions() {
     return [...this.submissions].sort((a, b) => b.id.localeCompare(a.id));
@@ -46,7 +37,9 @@ export default class RecentSubmissions extends Component {
   loadSubmissions = task(async () => {
     const res = await this.request.fetch('/submissions');
 
-    this.submissions = ((await res.json()) as { submissions: SubmissionRecord[] }).submissions;
+    this.submissions = (
+      (await res.json()) as paths['/submissions']['get']['responses']['200']['content']['application/json']
+    ).submissions;
   });
 
   constructor(owner: Owner, args: Record<string, never>) {
