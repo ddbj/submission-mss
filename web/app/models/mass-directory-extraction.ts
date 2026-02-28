@@ -1,13 +1,11 @@
 import { service } from '@ember/service';
 import { setOwner } from '@ember/owner';
 
+import type { components } from 'schema/openapi';
 import type Owner from '@ember/owner';
 import type RequestService from 'mssform/services/request';
 
-interface MassDirectoryExtractionPayload {
-  _self: string;
-  state: 'pending' | 'fulfilled' | 'rejected';
-}
+type MassDirectoryExtractionPayload = components['schemas']['MassDirectoryExtraction'];
 
 export default class MassDirectoryExtraction {
   static async create(owner: Owner) {
@@ -17,7 +15,7 @@ export default class MassDirectoryExtraction {
       method: 'POST',
     });
 
-    const { _self: url } = (await res.json()) as { _self: string };
+    const { _self: url } = (await res.json()) as MassDirectoryExtractionPayload;
 
     return new MassDirectoryExtraction(owner, url);
   }

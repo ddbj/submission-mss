@@ -35,7 +35,7 @@
     <script type="module">
       import { start } from './test-helper';
       import.meta.glob("./**/*.{js,ts,gjs,gts}", { eager: true });
-      start();
+      await start();
     </script>
 
     {{content-for "body-footer"}}

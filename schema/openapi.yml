@@ -1,0 +1,823 @@
+openapi: 3.1.0
+
+info:
+  title: DDBJ MSS Submission API
+  version: 1.0.0
+
+servers:
+  - url: https://mss.ddbj.nig.ac.jp/api
+  - url: https://mss-staging.ddbj.nig.ac.jp/api
+
+security:
+  - BearerAuth: []
+
+paths:
+  /me:
+    get:
+      description: Get current user information.
+
+      tags:
+        - Authentication
+
+      responses:
+        '200':
+          description: Returns the current user.
+
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [uid]
+
+                properties:
+                  uid:
+                    type: string
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /submissions:
+    get:
+      description: Get a list of submissions.
+
+      tags:
+        - Submissions
+
+      responses:
+        '200':
+          description: Returns the list of submissions.
+
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [submissions]
+
+                properties:
+                  submissions:
+                    type: array
+
+                    items:
+                      $ref: '#/components/schemas/Submission'
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      description: Create a new submission.
+
+      tags:
+        - Submissions
+
+      requestBody:
+        required: true
+
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [submission]
+
+              properties:
+                submission:
+                  type: object
+                  additionalProperties: false
+
+                  required:
+                    - tpa
+                    - upload_via
+                    - entries_count
+                    - sequencer
+                    - data_type
+                    - email_language
+                    - contact_person
+                    - other_people
+
+                  properties:
+                    tpa:
+                      type: boolean
+
+                    upload_via:
+                      type: string
+                      enum: [webui, dfast, mass_directory]
+
+                    files:
+                      type: array
+
+                      items:
+                        type: string
+                        description: signed_id from DirectUpload (for webui upload)
+
+                    extraction_id:
+                      type: integer
+                      description: Extraction ID (for dfast or mass_directory upload)
+
+                    entries_count:
+                      type: integer
+
+                    hold_date:
+                      type:
+                        - string
+                        - 'null'
+                      format: date
+
+                    sequencer:
+                      type: string
+
+                    data_type:
+                      type: string
+
+                    description:
+                      type:
+                        - string
+                        - 'null'
+
+                    email_language:
+                      type: string
+
+                    contact_person:
+                      type: object
+                      additionalProperties: false
+                      required: [email, full_name, affiliation]
+
+                      properties:
+                        email:
+                          type: string
+
+                        full_name:
+                          type: string
+
+                        affiliation:
+                          type: string
+
+                    other_people:
+                      type: array
+
+                      items:
+                        type: object
+                        additionalProperties: false
+                        required: [email, full_name]
+
+                        properties:
+                          email:
+                            type: string
+
+                          full_name:
+                            type: string
+
+      responses:
+        '200':
+          description: Returns the created submission.
+
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [submission]
+
+                properties:
+                  submission:
+                    type: object
+                    additionalProperties: false
+                    required: [id]
+
+                    properties:
+                      id:
+                        type: string
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+        '422':
+          $ref: '#/components/responses/UnprocessableContent'
+
+  /submissions/last_submitted:
+    get:
+      description: Get the last submitted submission for pre-filling form fields.
+
+      tags:
+        - Submissions
+
+      responses:
+        '200':
+          description: Returns the last submitted submission.
+
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [submission]
+
+                properties:
+                  submission:
+                    type: object
+                    additionalProperties: false
+
+                    required:
+                      - id
+                      - contact_person
+                      - other_people
+                      - sequencer
+                      - email_language
+
+                    properties:
+                      id:
+                        type: string
+
+                      contact_person:
+                        type: object
+                        additionalProperties: false
+                        required: [id, email, full_name, affiliation]
+
+                        properties:
+                          id:
+                            type: integer
+
+                          email:
+                            type: string
+
+                          full_name:
+                            type: string
+
+                          affiliation:
+                            type: string
+
+                      other_people:
+                        type: array
+
+                        items:
+                          type: object
+                          additionalProperties: false
+                          required: [id, email, full_name]
+
+                          properties:
+                            id:
+                              type: integer
+
+                            email:
+                              type: string
+
+                            full_name:
+                              type: string
+
+                      sequencer:
+                        type: string
+
+                      email_language:
+                        type: string
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /submissions/{mass_id}:
+    get:
+      description: Get a submission.
+
+      tags:
+        - Submissions
+
+      parameters:
+        - name: mass_id
+          in: path
+          required: true
+
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Returns the requested submission.
+
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [submission]
+
+                properties:
+                  submission:
+                    $ref: '#/components/schemas/Submission'
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /submissions/{mass_id}/uploads:
+    post:
+      description: Add an upload to an existing submission.
+
+      tags:
+        - Submissions
+
+      parameters:
+        - name: mass_id
+          in: path
+          required: true
+
+          schema:
+            type: string
+
+      requestBody:
+        required: true
+
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [upload]
+
+              properties:
+                upload:
+                  type: object
+                  additionalProperties: false
+                  required: [via]
+
+                  properties:
+                    via:
+                      type: string
+                      enum: [webui, dfast, mass_directory]
+
+                    files:
+                      type: array
+
+                      items:
+                        type: string
+                        description: signed_id from DirectUpload (for webui upload)
+
+                    extraction_id:
+                      type: integer
+                      description: Extraction ID (for dfast or mass_directory upload)
+
+      responses:
+        '200':
+          description: Upload accepted.
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /dfast_extractions:
+    post:
+      description: Create a DFAST extraction.
+
+      tags:
+        - Extractions
+
+      requestBody:
+        required: true
+
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [ids]
+
+              properties:
+                ids:
+                  type: array
+
+                  items:
+                    type: string
+                    description: DFAST job ID
+
+      responses:
+        '201':
+          description: Returns the created extraction.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DfastExtraction'
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+        '422':
+          $ref: '#/components/responses/UnprocessableContent'
+
+  /dfast_extractions/{id}:
+    get:
+      description: Get a DFAST extraction.
+
+      tags:
+        - Extractions
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: Returns the requested extraction.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DfastExtraction'
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /mass_directory_extractions:
+    post:
+      description: Create a mass directory extraction.
+
+      tags:
+        - Extractions
+
+      responses:
+        '201':
+          description: Returns the created extraction.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MassDirectoryExtraction'
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /mass_directory_extractions/{id}:
+    get:
+      description: Get a mass directory extraction.
+
+      tags:
+        - Extractions
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: Returns the requested extraction.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MassDirectoryExtraction'
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  schemas:
+    Submission:
+      type: object
+      additionalProperties: false
+
+      required:
+        - id
+        - created_at
+        - status
+        - accessions
+        - uploads
+
+      properties:
+        id:
+          type: string
+
+        created_at:
+          type: string
+          format: date-time
+
+        status:
+          type:
+            - string
+            - 'null'
+
+        accessions:
+          type: array
+
+          items:
+            type: string
+
+        uploads:
+          type: array
+
+          items:
+            $ref: '#/components/schemas/Upload'
+
+    Upload:
+      type: object
+      additionalProperties: false
+
+      required:
+        - id
+        - created_at
+        - files
+        - dfast_job_ids
+
+      properties:
+        id:
+          type: integer
+
+        created_at:
+          type: string
+          format: date-time
+
+        files:
+          type: array
+
+          items:
+            type: string
+
+        dfast_job_ids:
+          type: array
+
+          items:
+            type: string
+
+    DfastExtraction:
+      type: object
+      additionalProperties: false
+
+      required:
+        - _self
+        - id
+        - state
+        - error
+        - files
+
+      properties:
+        _self:
+          type: string
+          format: uri
+
+        id:
+          type: integer
+
+        state:
+          $ref: '#/components/schemas/ExtractionState'
+
+        error:
+          type:
+            - object
+            - 'null'
+
+          additionalProperties: false
+          required: [id]
+
+          properties:
+            id:
+              type: string
+
+            job_id:
+              type: string
+
+            reason:
+              type: string
+
+        files:
+          type: array
+
+          items:
+            $ref: '#/components/schemas/DfastExtractionFile'
+
+    MassDirectoryExtraction:
+      type: object
+      additionalProperties: false
+
+      required:
+        - _self
+        - id
+        - state
+        - error
+        - files
+
+      properties:
+        _self:
+          type: string
+          format: uri
+
+        id:
+          type: integer
+
+        state:
+          $ref: '#/components/schemas/ExtractionState'
+
+        error:
+          type:
+            - object
+            - 'null'
+
+          additionalProperties: false
+          required: [id]
+
+          properties:
+            id:
+              type: string
+
+            job_id:
+              type: string
+
+            reason:
+              type: string
+
+        files:
+          type: array
+
+          items:
+            $ref: '#/components/schemas/MassDirectoryExtractionFile'
+
+    ExtractionState:
+      type: string
+      enum: [pending, fulfilled, rejected]
+
+    DfastExtractionFile:
+      type: object
+      additionalProperties: false
+
+      required:
+        - name
+        - basename
+        - size
+        - isParsing
+        - parsedData
+        - isParseSucceeded
+        - errors
+        - isAnnotation
+        - isSequence
+        - jobId
+
+      properties:
+        name:
+          type: string
+
+        basename:
+          type: string
+
+        size:
+          type: integer
+
+        isParsing:
+          type: boolean
+
+        parsedData:
+          anyOf:
+            - $ref: '#/components/schemas/ParsedData'
+            - type: 'null'
+
+        isParseSucceeded:
+          type: boolean
+
+        errors:
+          type:
+            - array
+            - 'null'
+
+          items:
+            $ref: '#/components/schemas/ExtractionFileError'
+
+        isAnnotation:
+          type: boolean
+
+        isSequence:
+          type: boolean
+
+        jobId:
+          type: string
+
+    MassDirectoryExtractionFile:
+      type: object
+      additionalProperties: false
+
+      required:
+        - name
+        - basename
+        - size
+        - isParsing
+        - parsedData
+        - isParseSucceeded
+        - errors
+        - isAnnotation
+        - isSequence
+
+      properties:
+        name:
+          type: string
+
+        basename:
+          type: string
+
+        size:
+          type: integer
+
+        isParsing:
+          type: boolean
+
+        parsedData:
+          anyOf:
+            - $ref: '#/components/schemas/ParsedData'
+            - type: 'null'
+
+        isParseSucceeded:
+          type: boolean
+
+        errors:
+          type:
+            - array
+            - 'null'
+
+          items:
+            $ref: '#/components/schemas/ExtractionFileError'
+
+        isAnnotation:
+          type: boolean
+
+        isSequence:
+          type: boolean
+
+    ParsedData:
+      type: object
+
+      properties:
+        contactPerson:
+          type: object
+          additionalProperties: false
+          required: [fullName, email, affiliation]
+
+          properties:
+            fullName:
+              type: string
+
+            email:
+              type: string
+
+            affiliation:
+              type: string
+
+        holdDate:
+          type:
+            - string
+            - 'null'
+
+        entriesCount:
+          type: integer
+
+    ExtractionFileError:
+      type: object
+      additionalProperties: false
+      required: [id]
+
+      properties:
+        id:
+          type: string
+
+        value:
+          type:
+            - string
+            - 'null'
+
+  responses:
+    Unauthorized:
+      description: Not authenticated.
+
+    Forbidden:
+      description: Does not have access rights to the resource.
+
+    NotFound:
+      description: The requested resource could not be found.
+
+    UnprocessableContent:
+      description: Invalid parameter or payload was specified.
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

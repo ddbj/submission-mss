@@ -65,8 +65,8 @@ export default class DfastExtractorComponent extends Component<Signature> {
 
           this.args.onPoll(payload as unknown as ExtractionPayload);
         },
-        (errorStr: string) => {
-          this.errorModal.show(new Error(errorStr));
+        (error) => {
+          this.errorModal.show(new Error(error.reason ?? error.id));
         },
       );
     } finally {

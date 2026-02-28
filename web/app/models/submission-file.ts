@@ -1,20 +1,14 @@
 import { tracked } from '@glimmer/tracking';
 
+import type { components } from 'schema/openapi';
+
 export interface SubmissionError {
   id?: string;
   message?: string;
   value?: unknown;
 }
 
-export interface ParsedData {
-  contactPerson?: {
-    fullName: string;
-    email: string;
-    affiliation: string;
-  };
-  holdDate?: string;
-  entriesCount?: number;
-}
+export type ParsedData = components['schemas']['ParsedData'];
 
 type SubmissionFileSubclass = typeof AnnotationFile | typeof SequenceFile | typeof UnsupportedFile;
 

@@ -1,14 +1,11 @@
 import { service } from '@ember/service';
 import { setOwner } from '@ember/owner';
 
+import type { components } from 'schema/openapi';
 import type Owner from '@ember/owner';
 import type RequestService from 'mssform/services/request';
 
-interface DfastExtractionPayload {
-  _self: string;
-  state: 'pending' | 'fulfilled' | 'rejected';
-  error?: string;
-}
+type DfastExtractionPayload = components['schemas']['DfastExtraction'];
 
 export default class DfastExtraction {
   static async create(owner: Owner, ids: string[]) {
@@ -26,7 +23,7 @@ export default class DfastExtraction {
       }),
     });
 
-    const { _self: url } = (await res.json()) as { _self: string };
+    const { _self: url } = (await res.json()) as DfastExtractionPayload;
 
     return new DfastExtraction(owner, url);
   }
@@ -41,7 +38,10 @@ export default class DfastExtraction {
     this.url = url;
   }
 
-  async pollForResult(callback: (payload: DfastExtractionPayload) => void, onError: (error: string) => void) {
+  async pollForResult(
+    callback: (payload: DfastExtractionPayload) => void,
+    onError: (error: NonNullable<DfastExtractionPayload['error']>) => void,
+  ) {
     for (;;) {
       const res = await this.request.fetchWithModal(this.url);
       const payload = (await res.json()) as DfastExtractionPayload;

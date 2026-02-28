@@ -17,10 +17,11 @@ import userMassDir from 'mssform/helpers/user-mass-dir';
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
 import OtherPerson from 'mssform/models/other-person';
 
+import type { paths } from 'schema/openapi';
 import type Submission from 'mssform/models/submission';
 import type { Navigation, State } from 'mssform/components/submission-form';
 import type RequestService from 'mssform/services/request';
-import type { SubmissionFile, SubmissionError } from 'mssform/models/submission-file';
+import type { SubmissionFile, SubmissionError, ParsedData } from 'mssform/models/submission-file';
 
 export interface Signature {
   Args: {
@@ -97,19 +98,14 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
   });
 
   async fillDataFromLastSubmission() {
-    let last:
-      | {
-          contact_person: { email: string; fullName: string; affiliation: string };
-          other_people: { email: string; full_name: string }[];
-          sequencer: string;
-          email_language: string;
-        }
-      | undefined;
+    type LastSubmitted = paths['/submissions/last_submitted']['get']['responses']['200']['content']['application/json'];
+
+    let last: LastSubmitted['submission'] | undefined;
 
     try {
       const res = await this.request.fetch('/submissions/last_submitted');
 
-      last = ((await res.json()) as { submission: typeof last }).submission;
+      last = ((await res.json()) as LastSubmitted).submission;
     } catch {
       // do nothing
     }
@@ -119,7 +115,7 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
     const { model } = this.args;
 
     model.contactPerson.email = last.contact_person.email;
-    model.contactPerson.fullName = last.contact_person.fullName;
+    model.contactPerson.fullName = last.contact_person.full_name;
     model.contactPerson.affiliation = last.contact_person.affiliation;
 
     model.otherPeople = last.other_people.map(({ email, full_name }) => {
@@ -143,19 +139,16 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
 
     const annotationFile = files.find((file) => 'isAnnotation' in file && file.isAnnotation);
 
-    const { contactPerson, holdDate } = (annotationFile?.parsedData ?? {}) as {
-      contactPerson?: Record<string, string>;
-      holdDate?: string;
-    };
+    const { contactPerson, holdDate } = annotationFile?.parsedData ?? {};
 
     Object.assign(model.contactPerson, contactPerson ?? {});
 
-    model.holdDate = holdDate;
+    model.holdDate = holdDate ?? undefined;
 
     model.entriesCount = files
       .filter((file) => 'isSequence' in file && file.isSequence)
       .reduce((acc, file) => {
-        return acc + ((file.parsedData as { entriesCount: number } | undefined)?.entriesCount ?? 0);
+        return acc + (file.parsedData?.entriesCount ?? 0);
       }, 0);
   }
 
@@ -318,10 +311,10 @@ function validateSameness(errors: Map<SubmissionFile, SubmissionError[]>, files:
   const holdDateSet = new Set<string>();
 
   for (const file of filtered) {
-    const { contactPerson, holdDate } = file.parsedData as { contactPerson: unknown; holdDate: string };
+    const { contactPerson, holdDate } = file.parsedData as ParsedData;
 
     contactPersonSet.add(JSON.stringify(contactPerson));
-    holdDateSet.add(holdDate);
+    holdDateSet.add(holdDate ?? '');
   }
 
   if (contactPersonSet.size > 1) {

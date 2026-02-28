@@ -8,6 +8,7 @@
     "paths": {
       "mssform/tests/*": ["tests/*"],
       "mssform/*": ["app/*"],
+      "schema/*": ["../schema/*"],
       "*": ["types/*"]
     },
     "types": ["ember-source/types", "@embroider/core/virtual", "vite/client", "@ember-intl/vite/virtual"]
