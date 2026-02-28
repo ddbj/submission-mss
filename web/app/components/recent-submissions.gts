@@ -9,7 +9,7 @@ import { task } from 'ember-concurrency';
 
 import type { components, paths } from 'schema/openapi';
 import type Owner from '@ember/owner';
-import type RequestService from 'mssform/services/request';
+import type RequestManager from '@ember-data/request';
 
 type Submission = components['schemas']['Submission'];
 
@@ -26,7 +26,7 @@ function drop<T>(n: number, arr: T[]): T[] {
 }
 
 export default class RecentSubmissions extends Component {
-  @service declare request: RequestService;
+  @service declare requestManager: RequestManager;
 
   @tracked submissions: Submission[] = [];
 
@@ -35,11 +35,13 @@ export default class RecentSubmissions extends Component {
   }
 
   loadSubmissions = task(async () => {
-    const res = await this.request.fetch('/submissions');
+    type SubmissionIndex = paths['/submissions']['get']['responses']['200']['content']['application/json'];
 
-    this.submissions = (
-      (await res.json()) as paths['/submissions']['get']['responses']['200']['content']['application/json']
-    ).submissions;
+    const { content } = await this.requestManager.request<SubmissionIndex>({
+      url: '/submissions',
+    });
+
+    this.submissions = content.submissions;
   });
 
   constructor(owner: Owner, args: Record<string, never>) {

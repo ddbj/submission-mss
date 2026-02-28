@@ -19,7 +19,7 @@ import UploadProgressModal from 'mssform/components/upload-progress-modal';
 import userMassDir from 'mssform/helpers/user-mass-dir';
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
 
-import type RequestService from 'mssform/services/request';
+import type RequestManager from '@ember-data/request';
 import type { SubmissionFile, SubmissionError } from 'mssform/models/submission-file';
 import type UploadProgressModalComponent from 'mssform/components/upload-progress-modal';
 
@@ -34,7 +34,7 @@ export interface Signature {
 }
 
 export default class UploadFormComponent extends Component<Signature> {
-  @service declare request: RequestService;
+  @service declare requestManager: RequestManager;
 
   @tracked uploadVia: string | null = null;
   @tracked extractionId: string | null = null;
@@ -88,16 +88,13 @@ export default class UploadFormComponent extends Component<Signature> {
       attrs['extraction_id'] = this.extractionId;
     }
 
-    await this.request.fetchWithModal(`/submissions/${this.args.model.id}/uploads`, {
+    await this.requestManager.request({
+      url: `/submissions/${this.args.model.id}/uploads`,
       method: 'POST',
 
-      headers: {
-        'Content-Type': 'application/json',
-      },
-
-      body: JSON.stringify({
+      data: {
         upload: attrs,
-      }),
+      },
     });
 
     this.isCompleted = true;

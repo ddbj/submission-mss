@@ -14,7 +14,7 @@ import type { paths } from 'schema/openapi';
 import type Submission from 'mssform/models/submission';
 import type { SubmissionFile } from 'mssform/models/submission-file';
 import type { Navigation, State } from 'mssform/components/submission-form';
-import type RequestService from 'mssform/services/request';
+import type RequestManager from '@ember-data/request';
 import type UploadProgressModalComponent from 'mssform/components/upload-progress-modal';
 
 export interface Signature {
@@ -26,7 +26,7 @@ export interface Signature {
 }
 
 export default class SubmissionFormConfirmComponent extends Component<Signature> {
-  @service declare request: RequestService;
+  @service declare requestManager: RequestManager;
 
   @action async submit(uploadProgressModal: UploadProgressModalComponent, event: Event) {
     event.preventDefault();
@@ -39,18 +39,17 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
       model.files = blobs.map((blob) => (blob as { signed_id: string }).signed_id) as unknown as SubmissionFile[];
     }
 
-    const res = await this.request.fetch('/submissions', {
+    type CreateSubmission = paths['/submissions']['post']['responses']['200']['content']['application/json'];
+
+    const { content } = await this.requestManager.request<CreateSubmission>({
+      url: '/submissions',
       method: 'POST',
 
-      headers: {
-        'Content-Type': 'application/json',
-      },
-
-      body: JSON.stringify({
+      data: {
         submission: {
           tpa: model.tpa,
           upload_via: model.uploadVia,
-          files: model.files,
+          files: model.files as unknown as Record<string, unknown>[],
           extraction_id: model.extractionId,
           entries_count: model.entriesCount,
           hold_date: model.holdDate,
@@ -72,12 +71,10 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
             };
           }),
         },
-      }),
+      },
     });
 
-    const { id } = (
-      (await res.json()) as paths['/submissions']['post']['responses']['200']['content']['application/json']
-    ).submission;
+    const { id } = content.submission;
 
     model.id = id;
 

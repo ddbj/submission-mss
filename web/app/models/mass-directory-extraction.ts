@@ -3,24 +3,23 @@ import { setOwner } from '@ember/owner';
 
 import type { components } from 'schema/openapi';
 import type Owner from '@ember/owner';
-import type RequestService from 'mssform/services/request';
+import type RequestManager from '@ember-data/request';
 
 type MassDirectoryExtractionPayload = components['schemas']['MassDirectoryExtraction'];
 
 export default class MassDirectoryExtraction {
   static async create(owner: Owner) {
-    const request = owner.lookup('service:request') as RequestService;
+    const requestManager = owner.lookup('service:request-manager') as RequestManager;
 
-    const res = await request.fetchWithModal('/mass_directory_extractions', {
+    const { content } = await requestManager.request<MassDirectoryExtractionPayload>({
+      url: '/mass_directory_extractions',
       method: 'POST',
     });
 
-    const { _self: url } = (await res.json()) as MassDirectoryExtractionPayload;
-
-    return new MassDirectoryExtraction(owner, url);
+    return new MassDirectoryExtraction(owner, content._self);
   }
 
-  @service declare request: RequestService;
+  @service declare requestManager: RequestManager;
 
   url: string;
 
@@ -32,8 +31,9 @@ export default class MassDirectoryExtraction {
 
   async pollForResult(callback: (payload: MassDirectoryExtractionPayload) => void) {
     for (;;) {
-      const res = await this.request.fetchWithModal(this.url);
-      const payload = (await res.json()) as MassDirectoryExtractionPayload;
+      const { content: payload } = await this.requestManager.request<MassDirectoryExtractionPayload>({
+        url: this.url,
+      });
 
       callback(payload);
 
