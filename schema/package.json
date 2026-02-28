@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "generate": "openapi-typescript openapi.yml --output openapi.d.ts"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.13.0"
+  }
+}
