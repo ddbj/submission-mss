@@ -105,6 +105,7 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
     try {
       const { content } = await this.requestManager.request<LastSubmitted>({
         url: '/submissions/last_submitted',
+        suppressErrorModal: true,
       });
 
       last = content.submission;

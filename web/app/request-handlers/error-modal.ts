@@ -10,7 +10,9 @@ export default class ErrorModalHandler {
     try {
       return await next(context.request);
     } catch (e) {
-      this.errorModal.show(e as Error);
+      if (!context.request.suppressErrorModal) {
+        this.errorModal.show(e as Error);
+      }
 
       throw e;
     }
