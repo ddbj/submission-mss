@@ -30,10 +30,6 @@ export default class RecentSubmissions extends Component {
 
   @tracked submissions: Submission[] = [];
 
-  get sortedSubmissions() {
-    return [...this.submissions].sort((a, b) => b.id.localeCompare(a.id));
-  }
-
   loadSubmissions = task(async () => {
     type SubmissionIndex = paths['/submissions']['get']['responses']['200']['content']['application/json'];
 
@@ -66,7 +62,7 @@ export default class RecentSubmissions extends Component {
         </thead>
 
         <tbody>
-          {{#each this.sortedSubmissions as |submission|}}
+          {{#each this.submissions as |submission|}}
             <tr>
               <td>
                 <LinkTo @route="submission" @model={{submission}}>{{submission.id}}</LinkTo>
