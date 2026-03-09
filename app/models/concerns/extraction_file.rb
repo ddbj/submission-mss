@@ -61,16 +61,18 @@ module ExtractionFile
       when 'contact'
         raise ParseError.new('annotation-file-parser.duplicate-contact-person-information') if full_name
 
-        full_name = value
+        full_name = value&.strip
       when 'email'
-        raise ParseError.new('annotation-file-parser.invalid-email-address', value) unless value&.match?(URI::MailTo::EMAIL_REGEXP)
+        trimmed_email = value&.strip
+
+        raise ParseError.new('annotation-file-parser.invalid-email-address', value) unless trimmed_email&.match?(URI::MailTo::EMAIL_REGEXP)
         raise ParseError.new('annotation-file-parser.duplicate-contact-person-information') if email
 
-        email = value
+        email = trimmed_email
       when 'institute'
         raise ParseError.new('annotation-file-parser.duplicate-contact-person-information') if affiliation
 
-        affiliation = value
+        affiliation = value&.strip
       when 'hold_date'
         begin
           hold_date = Date.strptime(value, '%Y%m%d').strftime('%Y-%m-%d')

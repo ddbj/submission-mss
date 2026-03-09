@@ -26,6 +26,8 @@ class WebuiUpload < ApplicationRecord
     upload.files_dir.dirname.mkpath
     work.rename upload.files_dir
 
+    trim_annotation_fields!
+
     update! copied: true, files: []
   end
 

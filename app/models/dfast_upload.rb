@@ -15,5 +15,7 @@ class DfastUpload < ApplicationRecord
     extraction.files.find_each do |file|
       FileUtils.cp file.fullpath, upload.files_dir
     end
+
+    trim_annotation_fields!
   end
 end

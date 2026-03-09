@@ -6,6 +6,12 @@ RSpec.describe ProcessSubmissionJob do
   include ActiveJob::TestHelper
 
   before do
+    stub_request(:post, 'https://www.googleapis.com/oauth2/v4/token').to_return_json(body: {})
+
+    stub_request(:post, 'https://sheets.googleapis.com/v4/spreadsheets/WORKING_LIST_SHEET_ID/values/WORKING_LIST_SHEET_NAME!A1:append').with(query: hash_including)
+  end
+
+  example do
     submission = create(:submission, **{
       mass_id:        'NSUB000042',
       user:           build(:user, :alice),
@@ -37,19 +43,8 @@ RSpec.describe ProcessSubmissionJob do
       })
     })
 
-    stub_request(:post, 'https://www.googleapis.com/oauth2/v4/token').to_return(
-      headers: {
-        content_type: 'application/json'
-      },
-      body: '{}'
-    )
-
-    stub_request(:post, 'https://sheets.googleapis.com/v4/spreadsheets/WORKING_LIST_SHEET_ID/values/WORKING_LIST_SHEET_NAME!A1:append').with(query: hash_including)
-
     ProcessSubmissionJob.perform_now upload
-  end
 
-  example do
     dir = Rails.root.join('tmp/storage/submissions/NSUB000042/20220102-123456')
 
     expect(dir.ftype).to                       eq('directory')
@@ -102,5 +97,44 @@ RSpec.describe ProcessSubmissionJob do
 
     expect(MailDeliveryJob).to have_been_enqueued.with('SubmissionMailer', 'submitter_confirmation', any_args)
     expect(MailDeliveryJob).to have_been_enqueued.with('SubmissionMailer', 'curator_notification', any_args)
+  end
+
+  example 'trim whitespace from contact fields in annotation files' do
+    ann_content = <<~TSV
+      COMMON\tSUBMITTER\t\tcontact\t Alice Liddell
+      \t\t\temail\t alice@example.com
+      \t\t\tinstitute\t Wonderland Inc.
+      ENTRY\ttest
+    TSV
+
+    submission = create(:submission, **{
+      mass_id:        'NSUB000099',
+      user:           build(:user, :alice),
+      contact_person: build(:contact_person, :alice),
+      created_at:     '2022-01-01'
+    })
+
+    upload = create(:upload, **{
+      submission:,
+      created_at: '2022-01-02 12:34:56',
+
+      via: build(:webui_upload, **{
+        files: [
+          Rack::Test::UploadedFile.tmp('example.ann', content: ann_content),
+          Rack::Test::UploadedFile.tmp('example.fasta')
+        ]
+      })
+    })
+
+    ProcessSubmissionJob.perform_now upload
+
+    result = Rails.root.join('tmp/storage/submissions/NSUB000099/20220102-123456/example.ann').read
+
+    expect(result).to eq(<<~TSV)
+      COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
+      \t\t\temail\talice@example.com
+      \t\t\tinstitute\tWonderland Inc.
+      ENTRY\ttest
+    TSV
   end
 end

@@ -39,10 +39,12 @@ async function parse(file) {
           throw new Error(JSON.stringify({ id: 'annotation-file-parser.duplicate-contact-person-information' }));
         }
 
-        contactPerson.fullName = value;
+        contactPerson.fullName = value?.trim();
         break;
-      case 'email':
-        if (!email_re.test(value)) {
+      case 'email': {
+        const trimmedEmail = value?.trim();
+
+        if (!email_re.test(trimmedEmail)) {
           throw new Error(JSON.stringify({ id: 'annotation-file-parser.invalid-email-address', value }));
         }
 
@@ -50,14 +52,15 @@ async function parse(file) {
           throw new Error(JSON.stringify({ id: 'annotation-file-parser.duplicate-contact-person-information' }));
         }
 
-        contactPerson.email = value;
+        contactPerson.email = trimmedEmail;
         break;
+      }
       case 'institute':
         if (contactPerson.affiliation) {
           throw new Error(JSON.stringify({ id: 'annotation-file-parser.duplicate-contact-person-information' }));
         }
 
-        contactPerson.affiliation = value;
+        contactPerson.affiliation = value?.trim();
         break;
       case 'hold_date': {
         const m = value.match(/^(\d{4})(\d{2})(\d{2})$/);

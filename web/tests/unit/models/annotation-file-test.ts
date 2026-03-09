@@ -13,10 +13,10 @@ module('Unit | Model | annotation file', function (hooks) {
       const file = new File(
         [
           outdent({ newline })`
-COMMON	SUBMITTER		contact	Alice Liddell
-			email	alice@example.com
-			institute	Wonderland Inc.
-	DATE		hold_date	20200102
+COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
+\t\t\temail\talice@example.com
+\t\t\tinstitute\tWonderland Inc.
+\tDATE\t\thold_date\t20200102
       `,
         ],
         'foo.ann',
@@ -50,7 +50,7 @@ COMMON	SUBMITTER		contact	Alice Liddell
     const raw = new File(
       [
         outdent`
-COMMON	DATE		hold_date	20231126
+COMMON\tDATE\t\thold_date\t20231126
     `,
       ],
       'foo.ann',
@@ -66,7 +66,7 @@ COMMON	DATE		hold_date	20231126
     const raw = new File(
       [
         outdent`
-COMMON	SUBMITTER		contact	Alice Liddell
+COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
     `,
       ],
       'foo.ann',
@@ -82,9 +82,9 @@ COMMON	SUBMITTER		contact	Alice Liddell
     const raw = new File(
       [
         outdent`
-COMMON	SUBMITTER		contact	Alice Liddell
-			email	foo
-			institute	Wonderland Inc.
+COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
+\t\t\temail\tfoo
+\t\t\tinstitute\tWonderland Inc.
     `,
       ],
       'foo.ann',
@@ -100,8 +100,8 @@ COMMON	SUBMITTER		contact	Alice Liddell
     const raw = new File(
       [
         outdent`
-COMMON	SUBMITTER		contact	Alice Liddell
-			contact	Alice Liddell
+COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
+\t\t\tcontact\tAlice Liddell
     `,
       ],
       'foo.ann',
@@ -119,9 +119,9 @@ COMMON	SUBMITTER		contact	Alice Liddell
     const raw = new File(
       [
         outdent`
-COMMON	SUBMITTER		contact	Alice Liddell
-			email	alice@example.com
-			email	alice@example.com
+COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
+\t\t\temail\talice@example.com
+\t\t\temail\talice@example.com
     `,
       ],
       'foo.ann',
@@ -139,9 +139,9 @@ COMMON	SUBMITTER		contact	Alice Liddell
     const raw = new File(
       [
         outdent`
-COMMON	SUBMITTER		contact	Alice Liddell
-			institute	Wonderland Inc.
-			institute	Wonderland Inc.
+COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
+\t\t\tinstitute\tWonderland Inc.
+\t\t\tinstitute\tWonderland Inc.
     `,
       ],
       'foo.ann',
@@ -159,7 +159,7 @@ COMMON	SUBMITTER		contact	Alice Liddell
     const raw = new File(
       [
         outdent`
-COMMON	DATE		hold_date	foo
+COMMON\tDATE\t\thold_date\tfoo
     `,
       ],
       'foo.ann',
@@ -169,6 +169,29 @@ COMMON	DATE		hold_date	foo
     await file.parse();
 
     assert.deepEqual(file.errors, [{ id: 'annotation-file-parser.invalid-hold-date', value: 'foo' }]);
+  });
+
+  test('trim whitespace from contact fields', async function (assert) {
+    const file = new File(
+      [
+        outdent`
+COMMON\tSUBMITTER\t\tcontact\t Alice Liddell
+\t\t\temail\t alice@example.com
+\t\t\tinstitute\t Wonderland Inc.
+    `,
+      ],
+      'foo.ann',
+    );
+
+    const {
+      contactPerson: { fullName, email, affiliation },
+    } = (await new AnnotationFile(file).parse()) as {
+      contactPerson: { fullName: string; email: string; affiliation: string };
+    };
+
+    assert.strictEqual(fullName, 'Alice Liddell');
+    assert.strictEqual(email, 'alice@example.com');
+    assert.strictEqual(affiliation, 'Wonderland Inc.');
   });
 
   test('replace whitespace in filename', function (assert) {
