@@ -26,8 +26,10 @@ interface Signature {
           <span class="visually-hidden">{{t "file-list.item.loading"}}</span>
         </div>
       {{else}}
-        {{#if @errors.length}}
+        {{#if (hasError @errors)}}
           {{svgJar "x-circle-fill-16" class="octicon text-danger" style="margin-top: 2.5px;"}}
+        {{else if @errors.length}}
+          {{svgJar "alert-fill-16" class="octicon text-warning" style="margin-top: 2.5px;"}}
         {{else}}
           {{svgJar "check-circle-fill-16" class="octicon text-success" style="margin-top: 2.5px;"}}
         {{/if}}
@@ -74,11 +76,11 @@ interface Signature {
       </small>
 
       {{#if @errors}}
-        <ul class="list-unstyled text-danger">
+        <ul class="list-unstyled">
           {{#each @errors as |error|}}
-            <li>
+            <li class={{if (isWarning error) "text-warning" "text-danger"}}>
               {{#if error.id}}
-                {{t error.id}}
+                {{t error.id value=error.value htmlSafe=true}}
               {{else}}
                 {{error.message}}
               {{/if}}
@@ -95,3 +97,11 @@ interface Signature {
     </div>
   </li>
 </template> satisfies TOC<Signature>;
+
+function hasError(errors: SubmissionError[]) {
+  return errors.some((e) => e.severity === 'error');
+}
+
+function isWarning(error: SubmissionError) {
+  return error.severity === 'warning';
+}

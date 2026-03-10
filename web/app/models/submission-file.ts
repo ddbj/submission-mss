@@ -2,13 +2,22 @@ import { tracked } from '@glimmer/tracking';
 
 import type { components } from 'schema/openapi';
 
-export interface SubmissionError {
-  id?: string;
-  message?: string;
-  value?: unknown;
+export type ParsedData = components['schemas']['ParsedData'];
+
+interface StructuredError {
+  severity: 'error' | 'warning';
+  id: string;
+  value?: string;
+  message?: never;
 }
 
-export type ParsedData = components['schemas']['ParsedData'];
+interface UnstructuredError {
+  severity: 'error' | 'warning';
+  message: string;
+  id?: never;
+}
+
+export type SubmissionError = StructuredError | UnstructuredError;
 
 type SubmissionFileSubclass = typeof AnnotationFile | typeof SequenceFile | typeof UnsupportedFile;
 
@@ -47,7 +56,13 @@ export class SubmissionFile {
     this.rawFile = new File([file], name.replaceAll(/\s/g, '_'), { type, lastModified });
 
     if (!/^((?![\\/:*?"<>|. ]])[ -~])*$/.test(this.basename)) {
-      this.errors = [...this.errors, { id: 'submission-file.invalid-filename' }];
+      this.errors = [
+        ...this.errors,
+        {
+          severity: 'error',
+          id: 'submission-file.invalid-filename',
+        },
+      ];
     }
   }
 
@@ -79,29 +94,30 @@ export class SubmissionFile {
     return new Promise<ParsedData | undefined>((resolve, reject) => {
       const worker = new Worker((this.constructor as SubmissionFileSubclass).parserURL);
 
-      worker.addEventListener('message', ({ data: [err, payload] }: MessageEvent<[string | null, unknown]>) => {
-        if (err) {
-          try {
-            const { id, value } = JSON.parse(err) as SubmissionError;
+      worker.addEventListener(
+        'message',
+        ({ data: [errs, payload] }: MessageEvent<[StructuredError[] | string | null, unknown]>) => {
+          if (typeof errs === 'string') {
+            console.error(errs);
 
-            this.errors = [...this.errors, { id, value }];
+            this.errors = [...this.errors, { severity: 'error', message: errs }];
 
-            resolve(undefined);
-          } catch (e) {
-            console.error(e);
+            reject(new Error(errs));
+          } else {
+            if (errs) {
+              this.errors = [...this.errors, ...errs];
+            }
 
-            this.errors = [...this.errors, { message: err }];
+            if (payload) {
+              this.parsedData = payload as ParsedData;
+            }
 
-            reject(new Error(err));
+            resolve(this.parsedData);
           }
-        } else {
-          this.parsedData = payload as ParsedData;
 
-          resolve(this.parsedData);
-        }
-
-        worker.terminate();
-      });
+          worker.terminate();
+        },
+      );
 
       worker.postMessage({ file: this.rawFile });
     }).finally(() => {
@@ -150,7 +166,13 @@ export class UnsupportedFile extends SubmissionFile {
   constructor(file: File) {
     super(file);
 
-    this.errors = [...this.errors, { id: 'submission-file.unsupported-filetype' }];
+    this.errors = [
+      ...this.errors,
+      {
+        severity: 'error',
+        id: 'submission-file.unsupported-filetype',
+      },
+    ];
   }
 
   parse() {

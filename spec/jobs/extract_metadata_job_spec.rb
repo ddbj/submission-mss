@@ -47,11 +47,15 @@ RSpec.describe ExtractMetadataJob, type: :job do
       ExtractMetadataJob.perform_now extraction
 
       expect(extraction.files.first).to have_attributes(
-        parsing: false,
+        parsing:     false,
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'annotation-file-parser.missing-contact-person', 'value' => nil}
+          {
+            'severity' => 'error',
+            'id'       => 'annotation-file-parser.missing-contact-person',
+            'value'    => nil
+          }
         ]
       )
     end
@@ -64,11 +68,15 @@ RSpec.describe ExtractMetadataJob, type: :job do
       ExtractMetadataJob.perform_now extraction
 
       expect(extraction.files.first).to have_attributes(
-        parsing: false,
+        parsing:     false,
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'annotation-file-parser.missing-contact-person', 'value' => nil}
+          {
+            'severity' => 'error',
+            'id'       => 'annotation-file-parser.missing-contact-person',
+            'value'    => nil
+          }
         ]
       )
     end
@@ -81,11 +89,15 @@ RSpec.describe ExtractMetadataJob, type: :job do
       ExtractMetadataJob.perform_now extraction
 
       expect(extraction.files.first).to have_attributes(
-        parsing: false,
+        parsing:     false,
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'annotation-file-parser.invalid-contact-person', 'value' => nil}
+          {
+            'severity' => 'error',
+            'id'       => 'annotation-file-parser.invalid-contact-person',
+            'value'    => nil
+          }
         ]
       )
     end
@@ -101,11 +113,15 @@ RSpec.describe ExtractMetadataJob, type: :job do
       ExtractMetadataJob.perform_now extraction
 
       expect(extraction.files.first).to have_attributes(
-        parsing: false,
+        parsing:     false,
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'annotation-file-parser.invalid-email-address', 'value' => 'foo'}
+          {
+            'severity' => 'error',
+            'id'       => 'annotation-file-parser.invalid-email-address',
+            'value'    => 'foo'
+          }
         ]
       )
     end
@@ -119,11 +135,15 @@ RSpec.describe ExtractMetadataJob, type: :job do
       ExtractMetadataJob.perform_now extraction
 
       expect(extraction.files.first).to have_attributes(
-        parsing: false,
+        parsing:     false,
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'annotation-file-parser.duplicate-contact-person-information', 'value' => nil}
+          {
+            'severity' => 'error',
+            'id'       => 'annotation-file-parser.duplicate-contact-person-information',
+            'value'    => nil
+          }
         ]
       )
     end
@@ -138,11 +158,15 @@ RSpec.describe ExtractMetadataJob, type: :job do
       ExtractMetadataJob.perform_now extraction
 
       expect(extraction.files.first).to have_attributes(
-        parsing: false,
+        parsing:     false,
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'annotation-file-parser.duplicate-contact-person-information', 'value' => nil}
+          {
+            'severity' => 'error',
+            'id'       => 'annotation-file-parser.duplicate-contact-person-information',
+            'value'    => nil
+          }
         ]
       )
     end
@@ -157,11 +181,15 @@ RSpec.describe ExtractMetadataJob, type: :job do
       ExtractMetadataJob.perform_now extraction
 
       expect(extraction.files.first).to have_attributes(
-        parsing: false,
+        parsing:     false,
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'annotation-file-parser.duplicate-contact-person-information', 'value' => nil}
+          {
+            'severity' => 'error',
+            'id'       => 'annotation-file-parser.duplicate-contact-person-information',
+            'value'    => nil
+          }
         ]
       )
     end
@@ -174,11 +202,49 @@ RSpec.describe ExtractMetadataJob, type: :job do
       ExtractMetadataJob.perform_now extraction
 
       expect(extraction.files.first).to have_attributes(
-        parsing: false,
+        parsing:     false,
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'annotation-file-parser.invalid-hold-date', 'value' => 'foo'}
+          {
+            'severity' => 'error',
+            'id'       => 'annotation-file-parser.invalid-hold-date',
+            'value'    => 'foo'
+          }
+        ]
+      )
+    end
+
+    example 'temporary locus_tag' do
+      write_file 'foo.ann', <<~ANN
+        COMMON	SUBMITTER		contact	Alice Liddell
+        			email	alice@example.com
+        			institute	Wonderland Inc.
+        CLN01	gene	1..100	locus_tag	locus_0001
+      ANN
+
+      ExtractMetadataJob.perform_now extraction
+
+      file = extraction.files.first
+
+      expect(file).to have_attributes(
+        parsing: false,
+
+        parsed_data: {
+          'contactPerson' => {
+            'fullName'    => 'Alice Liddell',
+            'email'       => 'alice@example.com',
+            'affiliation' => 'Wonderland Inc.'
+          },
+          'holdDate' => nil
+        },
+
+        _errors: [
+          {
+            'severity' => 'warning',
+            'id'       => 'annotation-file-parser.temporary-locus-tag',
+            'value'    => 'locus_0001'
+          }
         ]
       )
     end
@@ -222,7 +288,11 @@ RSpec.describe ExtractMetadataJob, type: :job do
         parsed_data: nil,
 
         _errors: [
-          {'id' => 'sequence-file-parser.no-entries', 'value' => nil}
+          {
+            'severity' => 'error',
+            'id'       => 'sequence-file-parser.no-entries',
+            'value'    => nil
+          }
         ]
       )
     end
