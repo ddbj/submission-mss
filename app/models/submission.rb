@@ -14,6 +14,8 @@ class Submission < ApplicationRecord
   end
 
   def self.last_mass_id_seq
+    connection.execute "SELECT pg_advisory_xact_lock(hashtext('submissions.mass_id'))"
+
     last = Submission.select(:mass_id).order(mass_id: :desc).first
 
     last ? last.mass_id.delete_prefix('NSUB').to_i : 0

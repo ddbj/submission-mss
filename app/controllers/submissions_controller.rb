@@ -13,7 +13,7 @@ class SubmissionsController < ApplicationController
   end
 
   def create
-    upload = ActiveRecord::Base.transaction(isolation: :serializable) {
+    upload = ActiveRecord::Base.transaction {
       upload_via, contact_person, other_people = submission_params.values_at(:upload_via, :contact_person, :other_people)
 
       @submission = current_user.submissions.create!(submission_params.except(:upload_via, :contact_person, :other_people, :extraction_id, :files)) {|submission|
