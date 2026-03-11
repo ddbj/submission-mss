@@ -27,7 +27,7 @@ interface Signature {
         {{#if (hasError @errors)}}
           {{svgJar "x-circle-fill-16" class="octicon text-danger" style="margin-top: 2.5px;"}}
         {{else if @errors.length}}
-          {{svgJar "alert-fill-16" class="octicon text-warning" style="margin-top: 2.5px;"}}
+          {{svgJar "alert-fill-16" class="octicon text-warning-emphasis" style="margin-top: 2.5px;"}}
         {{else}}
           {{svgJar "check-circle-fill-16" class="octicon text-success" style="margin-top: 2.5px;"}}
         {{/if}}
@@ -76,7 +76,7 @@ interface Signature {
       {{#if @errors}}
         <ul class="list-unstyled">
           {{#each @errors as |error|}}
-            <li class={{if (isWarning error) "text-warning" "text-danger"}}>
+            <li class={{if (isWarning error) "text-warning-emphasis" "text-danger"}}>
               {{#if error.id}}
                 {{t error.id value=error.value htmlSafe=true}}
               {{else}}
