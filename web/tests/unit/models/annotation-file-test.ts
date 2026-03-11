@@ -43,7 +43,13 @@ COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
     const file = new AnnotationFile(raw);
     await file.parse();
 
-    assert.deepEqual(file.errors, [{ id: 'annotation-file-parser.missing-contact-person', value: undefined }]);
+    assert.deepEqual(file.errors, [
+      {
+        severity: 'error',
+        id: 'annotation-file-parser.missing-contact-person',
+        value: undefined,
+      },
+    ]);
   });
 
   test('missing contact person', async function (assert) {
@@ -59,7 +65,13 @@ COMMON\tDATE\t\thold_date\t20231126
     const file = new AnnotationFile(raw);
     await file.parse();
 
-    assert.deepEqual(file.errors, [{ id: 'annotation-file-parser.missing-contact-person', value: undefined }]);
+    assert.deepEqual(file.errors, [
+      {
+        severity: 'error',
+        id: 'annotation-file-parser.missing-contact-person',
+        value: undefined,
+      },
+    ]);
   });
 
   test('invalid contact person', async function (assert) {
@@ -75,7 +87,13 @@ COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
     const file = new AnnotationFile(raw);
     await file.parse();
 
-    assert.deepEqual(file.errors, [{ id: 'annotation-file-parser.invalid-contact-person', value: undefined }]);
+    assert.deepEqual(file.errors, [
+      {
+        severity: 'error',
+        id: 'annotation-file-parser.invalid-contact-person',
+        value: undefined,
+      },
+    ]);
   });
 
   test('invalid email address', async function (assert) {
@@ -93,7 +111,13 @@ COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
     const file = new AnnotationFile(raw);
     await file.parse();
 
-    assert.deepEqual(file.errors, [{ id: 'annotation-file-parser.invalid-email-address', value: 'foo' }]);
+    assert.deepEqual(file.errors, [
+      {
+        severity: 'error',
+        id: 'annotation-file-parser.invalid-email-address',
+        value: 'foo',
+      },
+    ]);
   });
 
   test('duplicate contact person information (contact)', async function (assert) {
@@ -111,7 +135,11 @@ COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
     await file.parse();
 
     assert.deepEqual(file.errors, [
-      { id: 'annotation-file-parser.duplicate-contact-person-information', value: undefined },
+      {
+        severity: 'error',
+        id: 'annotation-file-parser.duplicate-contact-person-information',
+        value: undefined,
+      },
     ]);
   });
 
@@ -131,7 +159,11 @@ COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
     await file.parse();
 
     assert.deepEqual(file.errors, [
-      { id: 'annotation-file-parser.duplicate-contact-person-information', value: undefined },
+      {
+        severity: 'error',
+        id: 'annotation-file-parser.duplicate-contact-person-information',
+        value: undefined,
+      },
     ]);
   });
 
@@ -151,7 +183,11 @@ COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
     await file.parse();
 
     assert.deepEqual(file.errors, [
-      { id: 'annotation-file-parser.duplicate-contact-person-information', value: undefined },
+      {
+        severity: 'error',
+        id: 'annotation-file-parser.duplicate-contact-person-information',
+        value: undefined,
+      },
     ]);
   });
 
@@ -168,7 +204,41 @@ COMMON\tDATE\t\thold_date\tfoo
     const file = new AnnotationFile(raw);
     await file.parse();
 
-    assert.deepEqual(file.errors, [{ id: 'annotation-file-parser.invalid-hold-date', value: 'foo' }]);
+    assert.deepEqual(file.errors, [
+      {
+        severity: 'error',
+        id: 'annotation-file-parser.invalid-hold-date',
+        value: 'foo',
+      },
+    ]);
+  });
+
+  test('temporary locus_tag', async function (assert) {
+    const raw = new File(
+      [
+        outdent`
+COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
+\t\t\temail\talice@example.com
+\t\t\tinstitute\tWonderland Inc.
+CLN01\tgene\t1..100\tlocus_tag\tlocus_0001
+    `,
+      ],
+      'foo.ann',
+    );
+
+    const file = new AnnotationFile(raw);
+    const parsedData = await file.parse();
+
+    assert.deepEqual(file.errors, [
+      {
+        severity: 'warning',
+        id: 'annotation-file-parser.temporary-locus-tag',
+        value: 'locus_0001',
+      },
+    ]);
+
+    assert.ok(parsedData, 'parsedData should still be set');
+    assert.strictEqual(file.parsedData?.contactPerson?.fullName, 'Alice Liddell');
   });
 
   test('trim whitespace from contact fields', async function (assert) {

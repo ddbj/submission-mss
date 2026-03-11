@@ -1,8 +1,8 @@
 addEventListener('message', async ({ data: { file } }) => {
   try {
-    const payload = await parse(file);
+    const [errors, payload] = await parse(file);
 
-    postMessage([null, payload]);
+    postMessage([errors.length ? errors : null, payload]);
   } catch (err) {
     console.error(err);
 
@@ -14,9 +14,18 @@ addEventListener('message', async ({ data: { file } }) => {
 const email_re =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
+class ParseError {
+  constructor(severity, id, value) {
+    this.severity = severity;
+    this.id = id;
+    this.value = value;
+  }
+}
+
 async function parse(file) {
   const reader = file.stream().getReader();
 
+  const errors = [];
   const contactPerson = new ContactPerson();
   let holdDate = null;
 
@@ -25,68 +34,76 @@ async function parse(file) {
   for await (const line of makeLineIterator(reader)) {
     const [entry, , , qualifier, value] = line.replace(/\r\n|\n|\r$/, '').split('\t');
 
-    if (inCommon && entry) break;
-
     if (entry) {
       inCommon = entry === 'COMMON';
     }
 
-    if (!inCommon) continue;
+    if (inCommon) {
+      switch (qualifier) {
+        case 'contact':
+          if (contactPerson.fullName) {
+            errors.push(new ParseError('error', 'annotation-file-parser.duplicate-contact-person-information'));
+            break;
+          }
 
-    switch (qualifier) {
-      case 'contact':
-        if (contactPerson.fullName) {
-          throw new Error(JSON.stringify({ id: 'annotation-file-parser.duplicate-contact-person-information' }));
+          contactPerson.fullName = value?.trim();
+          break;
+        case 'email': {
+          const trimmedEmail = value?.trim();
+
+          if (!email_re.test(trimmedEmail)) {
+            errors.push(new ParseError('error', 'annotation-file-parser.invalid-email-address', value));
+            break;
+          }
+
+          if (contactPerson.email) {
+            errors.push(new ParseError('error', 'annotation-file-parser.duplicate-contact-person-information'));
+            break;
+          }
+
+          contactPerson.email = trimmedEmail;
+          break;
         }
+        case 'institute':
+          if (contactPerson.affiliation) {
+            errors.push(new ParseError('error', 'annotation-file-parser.duplicate-contact-person-information'));
+            break;
+          }
 
-        contactPerson.fullName = value?.trim();
-        break;
-      case 'email': {
-        const trimmedEmail = value?.trim();
+          contactPerson.affiliation = value?.trim();
+          break;
+        case 'hold_date': {
+          const m = value.match(/^(\d{4})(\d{2})(\d{2})$/);
 
-        if (!email_re.test(trimmedEmail)) {
-          throw new Error(JSON.stringify({ id: 'annotation-file-parser.invalid-email-address', value }));
+          if (!m) {
+            errors.push(new ParseError('error', 'annotation-file-parser.invalid-hold-date', value));
+            break;
+          }
+
+          holdDate = m.slice(1).join('-');
+          break;
         }
-
-        if (contactPerson.email) {
-          throw new Error(JSON.stringify({ id: 'annotation-file-parser.duplicate-contact-person-information' }));
-        }
-
-        contactPerson.email = trimmedEmail;
-        break;
+        default:
+        // do nothing
       }
-      case 'institute':
-        if (contactPerson.affiliation) {
-          throw new Error(JSON.stringify({ id: 'annotation-file-parser.duplicate-contact-person-information' }));
-        }
-
-        contactPerson.affiliation = value?.trim();
-        break;
-      case 'hold_date': {
-        const m = value.match(/^(\d{4})(\d{2})(\d{2})$/);
-
-        if (!m) {
-          throw new Error(JSON.stringify({ id: 'annotation-file-parser.invalid-hold-date', value }));
-        }
-
-        holdDate = m.slice(1).join('-');
-        break;
+    } else {
+      if (qualifier === 'locus_tag' && /^locus_/i.test(value)) {
+        errors.push(new ParseError('warning', 'annotation-file-parser.temporary-locus-tag', value));
       }
-      default:
-      // do nothing
     }
   }
 
-  if (contactPerson.isBlank) {
-    throw new Error(JSON.stringify({ id: 'annotation-file-parser.missing-contact-person' }));
-  } else if (!contactPerson.isFulfilled) {
-    throw new Error(JSON.stringify({ id: 'annotation-file-parser.invalid-contact-person' }));
+  const hasErrors = errors.some((e) => e.severity === 'error');
+
+  if (!hasErrors) {
+    if (contactPerson.isBlank) {
+      errors.push(new ParseError('error', 'annotation-file-parser.missing-contact-person'));
+    } else if (!contactPerson.isFulfilled) {
+      errors.push(new ParseError('error', 'annotation-file-parser.invalid-contact-person'));
+    }
   }
 
-  return {
-    contactPerson,
-    holdDate,
-  };
+  return [errors, hasErrors ? null : { contactPerson, holdDate }];
 }
 
 async function* makeLineIterator(reader) {

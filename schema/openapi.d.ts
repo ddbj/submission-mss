@@ -525,6 +525,8 @@ export interface components {
             entriesCount?: number;
         };
         ExtractionFileError: {
+            /** @enum {string} */
+            severity: "error" | "warning";
             id: string;
             value?: string | null;
         };

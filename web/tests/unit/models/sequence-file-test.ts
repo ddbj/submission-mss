@@ -41,6 +41,11 @@ module('Unit | Model | sequence file', function (hooks) {
     const file = new SequenceFile(raw);
     await file.parse();
 
-    assert.deepEqual(file.errors, [{ id: 'sequence-file-parser.no-entries', value: undefined }]);
+    assert.deepEqual(file.errors, [
+      {
+        severity: 'error',
+        id: 'sequence-file-parser.no-entries',
+      },
+    ]);
   });
 });

@@ -9,10 +9,12 @@ class ExtractMetadataJob < ApplicationJob
       end
 
       extraction.files.find_each do |file|
+        warnings, parsed_data = file.parse
+
         file.update!(
           parsing:     false,
-          parsed_data: file.parse,
-          _errors:     []
+          parsed_data:,
+          _errors:     warnings
         )
       rescue ExtractionFile::ParseError => e
         file.update!(
@@ -20,7 +22,7 @@ class ExtractMetadataJob < ApplicationJob
           parsed_data: nil,
 
           _errors: [
-            {id: e.id, value: e.value}
+            {severity: e.severity, id: e.id, value: e.value}
           ]
         )
       end

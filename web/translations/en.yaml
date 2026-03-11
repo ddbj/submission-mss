@@ -243,6 +243,13 @@ annotation-file-parser:
   invalid-email-address: Invalid email address for contact in annotation file. Check the contact line in your upload files.
   duplicate-contact-person-information: An annotation file cannot contain more than one primary contact information (contact, email, and institute values) for submission. Please list only one of each.
 
+  temporary-locus-tag: |
+    The annotation file includes the locus_tag qualifier, but the value "LOCUS_" is a temporary value.
+
+    <pre class="my-2"><code>      locus_tag  {value}</code></pre>
+
+    In case of you applied for the locus tag prefix of the BioSample submission, there is no problem. If not, please apply for the locus_tag prefix using the "Application Form for BioProject/BioSample/DRA Update" in <a href="https://www.ddbj.nig.ac.jp/contact-ddbj-e.html" target="_blank">our contact page</a>. Please note that the locus_tag prefix is required for issuing Accession numbers.
+
 sequence-file-parser:
   no-entries: No entries found.
 

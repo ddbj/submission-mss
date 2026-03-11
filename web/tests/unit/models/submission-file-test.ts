@@ -10,13 +10,23 @@ module('Unit | Model | submission file', function (hooks) {
     const file = new File([''], 'こんにちは.ann');
     const { errors } = SubmissionFile.fromRawFile(file);
 
-    assert.deepEqual(errors, [{ id: 'submission-file.invalid-filename' }]);
+    assert.deepEqual(errors, [
+      {
+        severity: 'error',
+        id: 'submission-file.invalid-filename',
+      },
+    ]);
   });
 
   test('unsupported filetype', function (assert) {
     const file = new File([''], 'foo.txt');
     const { errors } = SubmissionFile.fromRawFile(file);
 
-    assert.deepEqual(errors, [{ id: 'submission-file.unsupported-filetype' }]);
+    assert.deepEqual(errors, [
+      {
+        severity: 'error',
+        id: 'submission-file.unsupported-filetype',
+      },
+    ]);
   });
 });

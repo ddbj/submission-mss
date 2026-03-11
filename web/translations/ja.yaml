@@ -244,6 +244,13 @@ annotation-file-parser:
   invalid-email-address: アノテーションファイルのcontactのメールアドレスが不正です。アップロードするファイルのcontact行を確認してください。
   duplicate-contact-person-information: アノテーションファイルには、登録作業に関する代表連絡先（contact、email、instituteの値）は複数個は記載できません。それぞれ１つ（各1行）のみ記載してください。
 
+  temporary-locus-tag: |
+    アノテーションファイルにlocus_tagが記載されていますが、仮の値である「LOCUS_」が記載されています。
+
+    <pre class="my-2"><code>      locus_tag  {value}</code></pre>
+
+    BioSample申請時にlocus_tag prefixを申請している場合には問題ありませんが、未申請の場合は、<a href="https://www.ddbj.nig.ac.jp/contact-ddbj.html" target="_blank">お問い合わせページ</a>の「BioProject/BioSample/DRA 更新依頼フォーム」より、locus_tag prefixの申請取得をお願いします。locus_tag prefixはAccession番号発行に必須となりますので、ご留意ください。
+
 sequence-file-parser:
   no-entries: エントリが1つも含まれていません。
 

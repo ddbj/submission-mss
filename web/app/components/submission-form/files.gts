@@ -56,11 +56,11 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
     if (!files.length) return false;
 
     for (const file of files) {
-      if (file.isParsing || file.errors.length) return false;
+      if (file.isParsing || file.errors.some((e) => e.severity === 'error')) return false;
     }
 
     for (const errs of this.crossoverErrors.values()) {
-      if (errs.length) return false;
+      if (errs.some((e) => e.severity === 'error')) return false;
     }
 
     return true;
@@ -281,25 +281,37 @@ function validatePair(errors: Map<SubmissionFile, SubmissionError[]>, files: Sub
 
     if (!annotations.length) {
       for (const file of sequences) {
-        errors.get(file)!.push({ id: 'submission-form.files.errors.no-annotation' });
+        errors.get(file)!.push({
+          severity: 'error',
+          id: 'submission-form.files.errors.no-annotation',
+        });
       }
     }
 
     if (annotations.length > 1) {
       for (const file of annotations) {
-        errors.get(file)!.push({ id: 'submission-form.files.errors.duplicate-annotations' });
+        errors.get(file)!.push({
+          severity: 'error',
+          id: 'submission-form.files.errors.duplicate-annotations',
+        });
       }
     }
 
     if (!sequences.length) {
       for (const file of annotations) {
-        errors.get(file)!.push({ id: 'submission-form.files.errors.no-sequence' });
+        errors.get(file)!.push({
+          severity: 'error',
+          id: 'submission-form.files.errors.no-sequence',
+        });
       }
     }
 
     if (sequences.length > 1) {
       for (const file of sequences) {
-        errors.get(file)!.push({ id: 'submission-form.files.errors.duplicate-sequences' });
+        errors.get(file)!.push({
+          severity: 'error',
+          id: 'submission-form.files.errors.duplicate-sequences',
+        });
       }
     }
   }
@@ -322,13 +334,19 @@ function validateSameness(errors: Map<SubmissionFile, SubmissionError[]>, files:
 
   if (contactPersonSet.size > 1) {
     for (const file of filtered) {
-      errors.get(file)!.push({ id: 'submission-form.files.errors.different-contact-person' });
+      errors.get(file)!.push({
+        severity: 'error',
+        id: 'submission-form.files.errors.different-contact-person',
+      });
     }
   }
 
   if (holdDateSet.size > 1) {
     for (const file of filtered) {
-      errors.get(file)!.push({ id: 'submission-form.files.errors.different-hold-date' });
+      errors.get(file)!.push({
+        severity: 'error',
+        id: 'submission-form.files.errors.different-hold-date',
+      });
     }
   }
 }

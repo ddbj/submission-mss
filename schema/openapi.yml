@@ -793,9 +793,13 @@ components:
     ExtractionFileError:
       type: object
       additionalProperties: false
-      required: [id]
+      required: [severity, id]
 
       properties:
+        severity:
+          type: string
+          enum: [error, warning]
+
         id:
           type: string
 

@@ -1,11 +1,12 @@
 module ExtractionFile
   class ParseError < StandardError
-    def initialize(id, value = nil)
-      @id    = id
-      @value = value
+    def initialize(severity:, id:, value: nil)
+      @severity = severity
+      @id       = id
+      @value    = value
     end
 
-    attr_reader :id, :value
+    attr_reader :severity, :id, :value
   end
 
   ANN_EXT  = %w[ann annt.tsv ann.txt]
@@ -47,47 +48,75 @@ module ExtractionFile
     email       = nil
     affiliation = nil
     hold_date   = nil
+    warnings    = []
 
     fullpath.each_line chomp: true do |line|
       entry, _feature, _location, qualifier, value = line.split("\t")
 
-      break if in_common && entry.present?
+      in_common = entry == 'COMMON' unless entry.empty?
 
-      in_common = entry == 'COMMON' if entry.present?
+      if in_common
+        case qualifier
+        when 'contact'
+          raise ParseError.new(
+            severity: :error,
+            id:       'annotation-file-parser.duplicate-contact-person-information'
+          ) if full_name
 
-      next unless in_common
+          full_name = value&.strip
+        when 'email'
+          trimmed_email = value&.strip
 
-      case qualifier
-      when 'contact'
-        raise ParseError.new('annotation-file-parser.duplicate-contact-person-information') if full_name
+          raise ParseError.new(
+            severity: :error,
+            id:       'annotation-file-parser.invalid-email-address',
+            value:
+          ) unless trimmed_email&.match?(URI::MailTo::EMAIL_REGEXP)
 
-        full_name = value&.strip
-      when 'email'
-        trimmed_email = value&.strip
+          raise ParseError.new(
+            severity: :error,
+            id:       'annotation-file-parser.duplicate-contact-person-information'
+          ) if email
 
-        raise ParseError.new('annotation-file-parser.invalid-email-address', value) unless trimmed_email&.match?(URI::MailTo::EMAIL_REGEXP)
-        raise ParseError.new('annotation-file-parser.duplicate-contact-person-information') if email
+          email = trimmed_email
+        when 'institute'
+          raise ParseError.new(
+            severity: :error,
+            id:       'annotation-file-parser.duplicate-contact-person-information'
+          ) if affiliation
 
-        email = trimmed_email
-      when 'institute'
-        raise ParseError.new('annotation-file-parser.duplicate-contact-person-information') if affiliation
-
-        affiliation = value&.strip
-      when 'hold_date'
-        begin
-          hold_date = Date.strptime(value, '%Y%m%d').strftime('%Y-%m-%d')
-        rescue Date::Error
-          raise ParseError.new('annotation-file-parser.invalid-hold-date', value)
+          affiliation = value&.strip
+        when 'hold_date'
+          begin
+            hold_date = Date.strptime(value, '%Y%m%d').strftime('%Y-%m-%d')
+          rescue Date::Error
+            raise ParseError.new(
+              severity: :error,
+              id:       'annotation-file-parser.invalid-hold-date',
+              value:
+            )
+          end
+        else
+          # do nothing
         end
       else
-        # do nothing
+        if qualifier == 'locus_tag' && value&.start_with?('locus_', 'LOCUS_')
+          warnings << {severity: :warning, id: 'annotation-file-parser.temporary-locus-tag', value:}
+        end
       end
     end
 
-    raise ParseError.new('annotation-file-parser.missing-contact-person') if !full_name && !email && !affiliation
-    raise ParseError.new('annotation-file-parser.invalid-contact-person') if !full_name || !email || !affiliation
+    raise ParseError.new(
+      severity: :error,
+      id:       'annotation-file-parser.missing-contact-person'
+    ) if !full_name && !email && !affiliation
 
-    {
+    raise ParseError.new(
+      severity: :error,
+      id:       'annotation-file-parser.invalid-contact-person'
+    ) if !full_name || !email || !affiliation
+
+    data = {
       contactPerson: {
         fullName: full_name,
         email:,
@@ -96,6 +125,8 @@ module ExtractionFile
 
       holdDate: hold_date
     }
+
+    [warnings, data]
   end
 
   def parse_seq
@@ -114,10 +145,11 @@ module ExtractionFile
       # done
     end
 
-    raise ParseError.new('sequence-file-parser.no-entries') if count.zero?
+    raise ParseError.new(
+      severity: :error,
+      id:       'sequence-file-parser.no-entries'
+    ) if count.zero?
 
-    {
-      entriesCount: count
-    }
+    [[], {entriesCount: count}]
   end
 end

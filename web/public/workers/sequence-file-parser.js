@@ -1,8 +1,8 @@
 addEventListener('message', async ({ data: { file } }) => {
   try {
-    const payload = await parse(file);
+    const [errors, payload] = await parse(file);
 
-    postMessage([null, payload]);
+    postMessage([errors.length ? errors : null, payload]);
   } catch (err) {
     console.error(err);
 
@@ -28,9 +28,11 @@ async function parse(file) {
     }
   }
 
-  if (!entriesCount) throw new Error(JSON.stringify({ id: 'sequence-file-parser.no-entries' }));
+  if (!entriesCount) {
+    return [[{ severity: 'error', id: 'sequence-file-parser.no-entries' }], null];
+  }
 
-  return { entriesCount };
+  return [[], { entriesCount }];
 }
 
 const lf = '\n'.codePointAt(0);
