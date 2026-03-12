@@ -8,7 +8,7 @@ import { t } from 'ember-intl';
 import errorsFor from 'mssform/helpers/errors-for';
 import totalFileSize from 'mssform/helpers/total-file-size';
 import dropTarget from 'mssform/modifiers/drop-target';
-import FileListItem from 'mssform/components/file-list/item';
+import SubmissionFileItem from 'mssform/components/submission-file-item';
 import { SubmissionFile } from 'mssform/models/submission-file';
 
 import type { SubmissionError } from 'mssform/models/submission-file';
@@ -99,7 +99,7 @@ export default class FileListComponent extends Component<Signature> {
       >
         <ul class="list-group list-group-flush overflow-auto" style="max-height: 550px">
           {{#each this.sortedFiles as |file|}}
-            <FileListItem @file={{file}} @errors={{errorsFor file @crossoverErrors}} @onRemove={{@onRemove}} />
+            <SubmissionFileItem @file={{file}} @errors={{errorsFor file @crossoverErrors}} @onRemove={{@onRemove}} />
           {{/each}}
         </ul>
 

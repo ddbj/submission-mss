@@ -14,7 +14,11 @@ interface Signature {
   Args: {
     file: SubmissionFile;
     errors: SubmissionError[];
-    onRemove: (file: SubmissionFile) => void;
+    onRemove?: (file: SubmissionFile) => void;
+  };
+
+  Blocks: {
+    prefix?: [];
   };
 }
 
@@ -37,7 +41,7 @@ interface Signature {
     </div>
 
     <div class={{if @file.isParsing "opacity-50"}}>
-      {{@file.name}}
+      {{#if (has-block "prefix")}}<span class="text-body-secondary">{{yield to="prefix"}}</span>{{/if}}{{@file.name}}
       <small class="text-body-secondary">{{filesize @file.size}}</small>
 
       <small class="hstack gap-3 text-body-secondary">
@@ -90,11 +94,13 @@ interface Signature {
       {{/if}}
     </div>
 
-    <div class="ms-auto">
-      <button type="button" class="btn btn-link p-2" {{on "click" (fn @onRemove @file)}}>
-        {{svgJar "no-entry-24" class="octicon fill-danger" role="img" desc=(t "file-list.item.remove")}}
-      </button>
-    </div>
+    {{#if @onRemove}}
+      <div class="ms-auto">
+        <button type="button" class="btn btn-link p-2" {{on "click" (fn @onRemove @file)}}>
+          {{svgJar "no-entry-24" class="octicon fill-danger" role="img" desc=(t "file-list.item.remove")}}
+        </button>
+      </div>
+    {{/if}}
   </li>
 </template> satisfies TOC<Signature>;
 
