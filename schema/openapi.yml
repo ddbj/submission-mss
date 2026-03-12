@@ -671,8 +671,7 @@ components:
         - parsedData
         - isParseSucceeded
         - errors
-        - isAnnotation
-        - isSequence
+        - fileType
         - jobId
 
       properties:
@@ -704,11 +703,9 @@ components:
           items:
             $ref: '#/components/schemas/ExtractionFileError'
 
-        isAnnotation:
-          type: boolean
-
-        isSequence:
-          type: boolean
+        fileType:
+          type: string
+          enum: [annotation, sequence]
 
         jobId:
           type: string
@@ -725,8 +722,7 @@ components:
         - parsedData
         - isParseSucceeded
         - errors
-        - isAnnotation
-        - isSequence
+        - fileType
 
       properties:
         name:
@@ -757,11 +753,9 @@ components:
           items:
             $ref: '#/components/schemas/ExtractionFileError'
 
-        isAnnotation:
-          type: boolean
-
-        isSequence:
-          type: boolean
+        fileType:
+          type: string
+          enum: [annotation, sequence]
 
     ParsedData:
       type: object

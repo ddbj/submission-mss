@@ -2,7 +2,7 @@ import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { t } from 'ember-intl';
 import { formatNumber } from 'ember-intl';
-import { or } from 'ember-truth-helpers';
+import { eq, or } from 'ember-truth-helpers';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
 import filesize from 'mssform/helpers/filesize';
@@ -45,7 +45,7 @@ interface Signature {
           {{t "file-list.item.loading"}}
         {{else}}
           {{#if @file.parsedData}}
-            {{#if @file.isAnnotation}}
+            {{#if (eq @file.fileType "annotation")}}
               <div>
                 <b>{{t "file-list.item.contact-person"}}</b>
 
@@ -65,7 +65,7 @@ interface Signature {
               </div>
             {{/if}}
 
-            {{#if @file.isSequence}}
+            {{#if (eq @file.fileType "sequence")}}
               <div>
                 <b>{{t "file-list.item.entries-count"}}</b>
                 {{formatNumber @file.parsedData.entriesCount}}

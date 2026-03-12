@@ -6,7 +6,6 @@
   parsedData:       file.parsed_data,
   isParseSucceeded: !!file.parsed_data,
   errors:           file._errors,
-  isAnnotation:     file.annotation?,
-  isSequence:       file.sequence?,
+  fileType:         file.file_type,
   jobId:            file.dfast_job_id
 }

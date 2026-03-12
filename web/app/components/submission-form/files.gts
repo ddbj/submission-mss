@@ -140,7 +140,7 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
     const { state, model } = this.args;
     const { files } = state;
 
-    const annotationFile = files.find((file) => 'isAnnotation' in file && file.isAnnotation);
+    const annotationFile = files.find((file) => file.fileType === 'annotation');
 
     const { contactPerson, holdDate } = annotationFile?.parsedData ?? {};
 
@@ -149,7 +149,7 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
     model.holdDate = holdDate ?? undefined;
 
     model.entriesCount = files
-      .filter((file) => 'isSequence' in file && file.isSequence)
+      .filter((file) => file.fileType === 'sequence')
       .reduce((acc, file) => {
         return acc + (file.parsedData?.entriesCount ?? 0);
       }, 0);
@@ -271,10 +271,10 @@ function validatePair(errors: Map<SubmissionFile, SubmissionError[]>, files: Sub
   for (const files of grouped.values()) {
     const [annotations, sequences] = files.reduce(
       ([ann, seq], file) => {
-        const isAnnotation = 'isAnnotation' in file && file.isAnnotation;
-        const isSequence = 'isSequence' in file && file.isSequence;
-
-        return [isAnnotation ? [...ann, file] : ann, isSequence ? [...seq, file] : seq];
+        return [
+          file.fileType === 'annotation' ? [...ann, file] : ann,
+          file.fileType === 'sequence' ? [...seq, file] : seq,
+        ];
       },
       [[], []] as [SubmissionFile[], SubmissionFile[]],
     );
@@ -318,7 +318,7 @@ function validatePair(errors: Map<SubmissionFile, SubmissionError[]>, files: Sub
 }
 
 function validateSameness(errors: Map<SubmissionFile, SubmissionError[]>, files: SubmissionFile[]) {
-  const filtered = files.filter((file) => 'isAnnotation' in file && file.isAnnotation && file.isParseSucceeded);
+  const filtered = files.filter((file) => file.fileType === 'annotation' && file.isParseSucceeded);
 
   if (!filtered.length) return;
 

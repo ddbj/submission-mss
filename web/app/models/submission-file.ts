@@ -43,8 +43,7 @@ export class SubmissionFile {
   @tracked parsedData?: ParsedData;
   @tracked errors: SubmissionError[] = [];
 
-  isAnnotation?: boolean;
-  isSequence?: boolean;
+  fileType?: 'annotation' | 'sequence';
   jobId?: string;
 
   rawFile: File;
@@ -150,14 +149,14 @@ export class AnnotationFile extends SubmissionFile {
   static extensions = ['.ann', '.annt.tsv', '.ann.txt'];
   static parserURL = '/workers/annotation-file-parser.js';
 
-  isAnnotation = true;
+  fileType = 'annotation' as const;
 }
 
 export class SequenceFile extends SubmissionFile {
   static extensions = ['.fasta', '.seq.fa', '.fa', '.fna', '.seq'];
   static parserURL = '/workers/sequence-file-parser.js';
 
-  isSequence = true;
+  fileType = 'sequence' as const;
 }
 
 export class UnsupportedFile extends SubmissionFile {

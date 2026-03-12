@@ -500,8 +500,8 @@ export interface components {
             parsedData: components["schemas"]["ParsedData"] | null;
             isParseSucceeded: boolean;
             errors: components["schemas"]["ExtractionFileError"][] | null;
-            isAnnotation: boolean;
-            isSequence: boolean;
+            /** @enum {string} */
+            fileType: "annotation" | "sequence";
             jobId: string;
         };
         MassDirectoryExtractionFile: {
@@ -512,8 +512,8 @@ export interface components {
             parsedData: components["schemas"]["ParsedData"] | null;
             isParseSucceeded: boolean;
             errors: components["schemas"]["ExtractionFileError"][] | null;
-            isAnnotation: boolean;
-            isSequence: boolean;
+            /** @enum {string} */
+            fileType: "annotation" | "sequence";
         };
         ParsedData: {
             contactPerson?: {

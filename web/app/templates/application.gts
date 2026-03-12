@@ -25,16 +25,16 @@ interface Signature {
       <div class="navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <div class="btn-group btn-group-sm my-1" role="group" aria-label="{{t "application.language"}}">
+            <div class="btn-group btn-group-sm my-1" role="group" aria-label="{{t 'application.language'}}">
               <button
                 type="button"
-                class="btn {{if (isLocale @controller "ja") "btn-light" "btn-outline-light"}}"
+                class="btn {{if (isLocale @controller 'ja') 'btn-light' 'btn-outline-light'}}"
                 {{on "click" (fn @controller.changeLocale "ja")}}
               >{{t "application.locale.ja"}}</button>
 
               <button
                 type="button"
-                class="btn {{if (isLocale @controller "en") "btn-light" "btn-outline-light"}}"
+                class="btn {{if (isLocale @controller 'en') 'btn-light' 'btn-outline-light'}}"
                 {{on "click" (fn @controller.changeLocale "en")}}
               >{{t "application.locale.en"}}</button>
             </div>

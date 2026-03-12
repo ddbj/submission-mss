@@ -26,13 +26,16 @@ module ExtractionFile
     end
   end
 
-  def annotation?
-    ANN_EXT.any? { name.end_with?(".#{_1}") }
+  def file_type
+    if ANN_EXT.any? { name.end_with?(".#{_1}") }
+      'annotation'
+    elsif SEQ_EXT.any? { name.end_with?(".#{_1}") }
+      'sequence'
+    end
   end
 
-  def sequence?
-    SEQ_EXT.any? { name.end_with?(".#{_1}") }
-  end
+  def annotation? = file_type == 'annotation'
+  def sequence?   = file_type == 'sequence'
 
   def basename
     ext = FILE_EXT.find { name.end_with?(".#{_1}") } || '*'

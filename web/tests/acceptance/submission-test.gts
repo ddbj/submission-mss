@@ -122,8 +122,7 @@ module('Acceptance | submission', function (hooks) {
         },
         isParseSucceeded: true,
         errors: [],
-        isAnnotation: true,
-        isSequence: false,
+        fileType: 'annotation' as const,
         jobId: '01234567-89ab-cdef-0000-000000000001',
       },
       {
@@ -134,8 +133,7 @@ module('Acceptance | submission', function (hooks) {
         parsedData: { entriesCount: 1 },
         isParseSucceeded: true,
         errors: [],
-        isAnnotation: false,
-        isSequence: true,
+        fileType: 'sequence' as const,
         jobId: '01234567-89ab-cdef-0000-000000000001',
       },
     ];
@@ -248,8 +246,7 @@ module('Acceptance | submission', function (hooks) {
         },
         isParseSucceeded: true,
         errors: [],
-        isAnnotation: true,
-        isSequence: false,
+        fileType: 'annotation' as const,
       },
       {
         name: 'test.fasta',
@@ -259,8 +256,7 @@ module('Acceptance | submission', function (hooks) {
         parsedData: { entriesCount: 1 },
         isParseSucceeded: true,
         errors: [],
-        isAnnotation: false,
-        isSequence: true,
+        fileType: 'sequence' as const,
       },
     ];
 
