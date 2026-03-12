@@ -6,7 +6,7 @@ application:
   language: Language
 
   locale:
-    ja: Japanese
+    ja: 日本語
     en: English
 
 index:

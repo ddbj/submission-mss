@@ -1,4 +1,4 @@
-import { fn, concat } from '@ember/helper';
+import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
 import { t } from 'ember-intl';
@@ -24,29 +24,20 @@ interface Signature {
 
       <div class="navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              id="navbarLang"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              {{t "application.language"}}:
-              {{t (concat "application.locale." @controller.locale)}}
-            </a>
+          <li class="nav-item">
+            <div class="btn-group btn-group-sm my-1" role="group" aria-label="{{t "application.language"}}">
+              <button
+                type="button"
+                class="btn {{if (isLocale @controller "ja") "btn-light" "btn-outline-light"}}"
+                {{on "click" (fn @controller.changeLocale "ja")}}
+              >{{t "application.locale.ja"}}</button>
 
-            <ul class="dropdown-menu" aria-labelledby="navbarLang">
-              <li>
-                <button type="button" class="dropdown-item" {{on "click" (fn @controller.changeLocale "ja")}}>{{t
-                    "application.locale.ja"
-                  }}</button>
-                <button type="button" class="dropdown-item" {{on "click" (fn @controller.changeLocale "en")}}>{{t
-                    "application.locale.en"
-                  }}</button>
-              </li>
-            </ul>
+              <button
+                type="button"
+                class="btn {{if (isLocale @controller "en") "btn-light" "btn-outline-light"}}"
+                {{on "click" (fn @controller.changeLocale "en")}}
+              >{{t "application.locale.en"}}</button>
+            </div>
           </li>
         </ul>
       </div>
@@ -74,3 +65,7 @@ interface Signature {
     </div>
   </div>
 </template> satisfies TOC<Signature>;
+
+function isLocale(controller: ApplicationController, locale: string) {
+  return controller.locale === locale;
+}
