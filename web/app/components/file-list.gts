@@ -11,14 +11,14 @@ import dropTarget from 'mssform/modifiers/drop-target';
 import SubmissionFileItem from 'mssform/components/submission-file-item';
 import { SubmissionFile } from 'mssform/models/submission-file';
 
-import type { SubmissionError } from 'mssform/models/submission-file';
+import type { SubmissionFileData, SubmissionError } from 'mssform/models/submission-file';
 
 export interface Signature {
   Args: {
-    files: SubmissionFile[];
-    crossoverErrors: Map<SubmissionFile, SubmissionError[]>;
-    onAdd: (file: SubmissionFile) => void;
-    onRemove: (file: SubmissionFile) => void;
+    files: SubmissionFileData[];
+    crossoverErrors: Map<SubmissionFileData, SubmissionError[]>;
+    onAdd: (file: SubmissionFileData) => void;
+    onRemove: (file: SubmissionFileData) => void;
   };
 }
 

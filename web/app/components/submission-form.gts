@@ -17,7 +17,7 @@ import stepNavLinkClass from 'mssform/helpers/step-nav-link-class';
 import type { ComponentLike } from '@glint/template';
 import type RouterService from '@ember/routing/router-service';
 import type Submission from 'mssform/models/submission';
-import type { SubmissionFile } from 'mssform/models/submission-file';
+import type { SubmissionFileData } from 'mssform/models/submission-file';
 
 const COMPONENTS: Record<string, unknown> = {
   prerequisite: Prerequisite,
@@ -85,7 +85,7 @@ export default class SubmissionFormComponent extends Component<Signature> {
 
 export class State {
   @tracked maybeTpa: boolean | null = null;
-  @tracked files: SubmissionFile[] = [];
+  @tracked files: SubmissionFileData[] = [];
 }
 
 export class Navigation {

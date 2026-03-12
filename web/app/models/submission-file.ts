@@ -7,7 +7,7 @@ export type ParsedData = components['schemas']['ParsedData'];
 interface StructuredError {
   severity: 'error' | 'warning';
   id: string;
-  value?: string;
+  value?: string | null;
   message?: never;
 }
 
@@ -19,9 +19,21 @@ interface UnstructuredError {
 
 export type SubmissionError = StructuredError | UnstructuredError;
 
+export interface SubmissionFileData {
+  name: string;
+  size: number;
+  basename: string;
+  fileType?: 'annotation' | 'sequence';
+  isParsing: boolean;
+  parsedData?: ParsedData | null;
+  isParseSucceeded: boolean;
+  errors: SubmissionError[] | null;
+  jobId?: string;
+}
+
 type SubmissionFileSubclass = typeof AnnotationFile | typeof SequenceFile | typeof UnsupportedFile;
 
-export class SubmissionFile {
+export class SubmissionFile implements SubmissionFileData {
   static get allowedExtensions() {
     return [...AnnotationFile.extensions, ...SequenceFile.extensions];
   }

@@ -17,6 +17,10 @@ import type { Navigation, State } from 'mssform/components/submission-form';
 import type RequestManager from '@ember-data/request';
 import type UploadProgressModalComponent from 'mssform/components/upload-progress-modal';
 
+interface DirectUploadBlob {
+  signed_id: string;
+}
+
 export interface Signature {
   Args: {
     model: Submission;
@@ -34,9 +38,11 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
     const { uploadVia } = model;
 
     if (uploadVia === 'webui') {
-      const blobs = await uploadProgressModal.performUpload(state.files);
+      const blobs = (await uploadProgressModal.performUpload(
+        state.files as SubmissionFile[],
+      )) as unknown as DirectUploadBlob[];
 
-      model.files = blobs.map((blob) => (blob as { signed_id: string }).signed_id) as unknown as SubmissionFile[];
+      model.files = blobs.map((blob) => blob.signed_id);
     }
 
     type CreateSubmission = paths['/submissions']['post']['responses']['200']['content']['application/json'];
@@ -49,7 +55,7 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
         submission: {
           tpa: model.tpa,
           upload_via: model.uploadVia,
-          files: model.files as unknown as Record<string, unknown>[],
+          files: model.files,
           extraction_id: model.extractionId,
           entries_count: model.entriesCount,
           hold_date: model.holdDate,

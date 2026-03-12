@@ -8,22 +8,20 @@ import errorsFor from 'mssform/helpers/errors-for';
 import totalFileSize from 'mssform/helpers/total-file-size';
 import MassDirectoryExtraction from 'mssform/models/mass-directory-extraction';
 
-import type { SubmissionFile, SubmissionError } from 'mssform/models/submission-file';
+import type { components } from 'schema/openapi';
+import type { SubmissionFileData, SubmissionError } from 'mssform/models/submission-file';
 
-interface ExtractionPayload {
-  id: string;
-  files: SubmissionFile[];
-}
+type MassDirectoryExtractionPayload = components['schemas']['MassDirectoryExtraction'];
 
 export interface Signature {
   Args: {
-    onPoll: (payload: ExtractionPayload) => void;
-    crossoverErrors: Map<SubmissionFile, SubmissionError[]>;
+    onPoll: (payload: MassDirectoryExtractionPayload) => void;
+    crossoverErrors: Map<SubmissionFileData, SubmissionError[]>;
   };
 }
 
 export default class MassDirectoryExtractorComponent extends Component<Signature> {
-  @tracked files: SubmissionFile[] = [];
+  @tracked files: SubmissionFileData[] = [];
 
   get sortedFiles() {
     return [...this.files].sort((a, b) => a.name.localeCompare(b.name));
@@ -34,9 +32,9 @@ export default class MassDirectoryExtractorComponent extends Component<Signature
       const extraction = await MassDirectoryExtraction.create(getOwner(this)!);
 
       await extraction.pollForResult((payload) => {
-        this.files = (payload as unknown as ExtractionPayload).files;
+        this.files = payload.files;
 
-        this.args.onPoll(payload as unknown as ExtractionPayload);
+        this.args.onPoll(payload);
       });
     })();
   });

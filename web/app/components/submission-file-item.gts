@@ -8,13 +8,13 @@ import svgJar from 'ember-svg-jar/helpers/svg-jar';
 import filesize from 'mssform/helpers/filesize';
 
 import type { TOC } from '@ember/component/template-only';
-import type { SubmissionFile, SubmissionError } from 'mssform/models/submission-file';
+import type { SubmissionFileData, SubmissionError } from 'mssform/models/submission-file';
 
 interface Signature {
   Args: {
-    file: SubmissionFile;
+    file: SubmissionFileData;
     errors: SubmissionError[];
-    onRemove?: (file: SubmissionFile) => void;
+    onRemove?: (file: SubmissionFileData) => void;
   };
 
   Blocks: {

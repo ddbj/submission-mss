@@ -21,7 +21,7 @@ import type { paths } from 'schema/openapi';
 import type Submission from 'mssform/models/submission';
 import type { Navigation, State } from 'mssform/components/submission-form';
 import type RequestManager from '@ember-data/request';
-import type { SubmissionFile, SubmissionError, ParsedData } from 'mssform/models/submission-file';
+import type { SubmissionFileData, SubmissionError, ParsedData } from 'mssform/models/submission-file';
 
 export interface Signature {
   Args: {
@@ -36,7 +36,7 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
 
   get crossoverErrors() {
     const { files } = this.args.state;
-    const errors = new Map<SubmissionFile, SubmissionError[]>();
+    const errors = new Map<SubmissionFileData, SubmissionError[]>();
 
     for (const file of files) {
       errors.set(file, []);
@@ -56,7 +56,7 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
     if (!files.length) return false;
 
     for (const file of files) {
-      if (file.isParsing || file.errors.some((e) => e.severity === 'error')) return false;
+      if (file.isParsing || file.errors?.some((e) => e.severity === 'error')) return false;
     }
 
     for (const errs of this.crossoverErrors.values()) {
@@ -72,16 +72,16 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
     this.args.state.files = [];
   }
 
-  @action onExtractProgress({ id, files }: { id: string; files: SubmissionFile[] }) {
+  @action onExtractProgress({ id, files }: { id: number; files: SubmissionFileData[] }) {
     this.args.model.extractionId = id;
     this.args.state.files = files;
   }
 
-  @action addFile(file: SubmissionFile) {
+  @action addFile(file: SubmissionFileData) {
     this.args.state.files = [...this.args.state.files, file];
   }
 
-  @action removeFile(file: SubmissionFile) {
+  @action removeFile(file: SubmissionFileData) {
     this.args.state.files = this.args.state.files.filter((f) => f !== file);
   }
 
@@ -261,12 +261,12 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
   </template>
 }
 
-function validatePair(errors: Map<SubmissionFile, SubmissionError[]>, files: SubmissionFile[]) {
+function validatePair(errors: Map<SubmissionFileData, SubmissionError[]>, files: SubmissionFileData[]) {
   const grouped = files.reduce((map, file) => {
     const val = map.has(file.basename) ? [...map.get(file.basename)!, file] : [file];
 
     return map.set(file.basename, val);
-  }, new Map<string, SubmissionFile[]>());
+  }, new Map<string, SubmissionFileData[]>());
 
   for (const files of grouped.values()) {
     const [annotations, sequences] = files.reduce(
@@ -276,7 +276,7 @@ function validatePair(errors: Map<SubmissionFile, SubmissionError[]>, files: Sub
           file.fileType === 'sequence' ? [...seq, file] : seq,
         ];
       },
-      [[], []] as [SubmissionFile[], SubmissionFile[]],
+      [[], []] as [SubmissionFileData[], SubmissionFileData[]],
     );
 
     if (!annotations.length) {
@@ -317,7 +317,7 @@ function validatePair(errors: Map<SubmissionFile, SubmissionError[]>, files: Sub
   }
 }
 
-function validateSameness(errors: Map<SubmissionFile, SubmissionError[]>, files: SubmissionFile[]) {
+function validateSameness(errors: Map<SubmissionFileData, SubmissionError[]>, files: SubmissionFileData[]) {
   const filtered = files.filter((file) => file.fileType === 'annotation' && file.isParseSucceeded);
 
   if (!filtered.length) return;

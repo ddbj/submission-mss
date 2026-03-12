@@ -12,18 +12,16 @@ import errorsFor from 'mssform/helpers/errors-for';
 import totalFileSize from 'mssform/helpers/total-file-size';
 import DfastExtraction from 'mssform/models/dfast-extraction';
 
+import type { components } from 'schema/openapi';
 import type ErrorModalService from 'mssform/services/error-modal';
-import type { SubmissionFile, SubmissionError } from 'mssform/models/submission-file';
+import type { SubmissionFileData, SubmissionError } from 'mssform/models/submission-file';
 
-interface ExtractionPayload {
-  id: string;
-  files: SubmissionFile[];
-}
+type DfastExtractionPayload = components['schemas']['DfastExtraction'];
 
 export interface Signature {
   Args: {
-    onPoll: (payload: ExtractionPayload) => void;
-    crossoverErrors: Map<SubmissionFile, SubmissionError[]>;
+    onPoll: (payload: DfastExtractionPayload) => void;
+    crossoverErrors: Map<SubmissionFileData, SubmissionError[]>;
   };
 }
 
@@ -32,7 +30,7 @@ export default class DfastExtractorComponent extends Component<Signature> {
 
   @tracked jobIdsText = '';
   @tracked extracting = false;
-  @tracked files: SubmissionFile[] = [];
+  @tracked files: SubmissionFileData[] = [];
   @tracked error: { job_id: string; reason: string } | null = null;
 
   get sortedFiles() {
@@ -61,9 +59,9 @@ export default class DfastExtractorComponent extends Component<Signature> {
 
       await extraction.pollForResult(
         (payload) => {
-          this.files = (payload as unknown as ExtractionPayload).files;
+          this.files = payload.files;
 
-          this.args.onPoll(payload as unknown as ExtractionPayload);
+          this.args.onPoll(payload);
         },
         (error) => {
           this.errorModal.show(new Error(error.reason ?? error.id));

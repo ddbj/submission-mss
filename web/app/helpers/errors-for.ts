@@ -1,8 +1,8 @@
-import type { SubmissionFile, SubmissionError } from 'mssform/models/submission-file';
+import type { SubmissionFileData, SubmissionError } from 'mssform/models/submission-file';
 
 export default function errorsFor(
-  file: SubmissionFile,
-  crossoverErrors: Map<SubmissionFile, SubmissionError[]>,
+  file: SubmissionFileData,
+  crossoverErrors: Map<SubmissionFileData, SubmissionError[]>,
 ): SubmissionError[] {
-  return [...file.errors, ...(crossoverErrors.get(file) ?? [])];
+  return [...(file.errors ?? []), ...(crossoverErrors.get(file) ?? [])];
 }

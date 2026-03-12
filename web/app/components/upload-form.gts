@@ -20,8 +20,12 @@ import userMassDir from 'mssform/helpers/user-mass-dir';
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
 
 import type RequestManager from '@ember-data/request';
-import type { SubmissionFile, SubmissionError } from 'mssform/models/submission-file';
+import type { SubmissionFile, SubmissionFileData, SubmissionError } from 'mssform/models/submission-file';
 import type UploadProgressModalComponent from 'mssform/components/upload-progress-modal';
+
+interface DirectUploadBlob {
+  signed_id: string;
+}
 
 interface SubmissionModel {
   id?: string;
@@ -37,10 +41,10 @@ export default class UploadFormComponent extends Component<Signature> {
   @service declare requestManager: RequestManager;
 
   @tracked uploadVia: string | null = null;
-  @tracked extractionId: string | null = null;
-  @tracked files: SubmissionFile[] = [];
+  @tracked extractionId: number | null = null;
+  @tracked files: SubmissionFileData[] = [];
   @tracked isCompleted = false;
-  @tracked crossoverErrors = new Map<SubmissionFile, SubmissionError[]>();
+  @tracked crossoverErrors = new Map<SubmissionFileData, SubmissionError[]>();
 
   get isSubmitButtonEnabled() {
     const { uploadVia, files } = this;
@@ -49,7 +53,7 @@ export default class UploadFormComponent extends Component<Signature> {
     if (!files.length) return false;
 
     for (const file of files) {
-      if (file.isParsing || file.errors.length) return false;
+      if (file.isParsing || file.errors?.length) return false;
     }
 
     return true;
@@ -61,16 +65,16 @@ export default class UploadFormComponent extends Component<Signature> {
     this.extractionId = null;
   }
 
-  @action onExtractProgress({ id, files }: { id: string; files: SubmissionFile[] }) {
+  @action onExtractProgress({ id, files }: { id: number; files: SubmissionFileData[] }) {
     this.extractionId = id;
     this.files = files;
   }
 
-  @action addFile(file: SubmissionFile) {
+  @action addFile(file: SubmissionFileData) {
     this.files = [...this.files, file];
   }
 
-  @action removeFile(file: SubmissionFile) {
+  @action removeFile(file: SubmissionFileData) {
     this.files = this.files.filter((f) => f !== file);
   }
 
@@ -81,9 +85,11 @@ export default class UploadFormComponent extends Component<Signature> {
     };
 
     if (this.uploadVia == 'webui') {
-      const blobs = await uploadProgressModal.performUpload(this.files);
+      const blobs = (await uploadProgressModal.performUpload(
+        this.files as SubmissionFile[],
+      )) as unknown as DirectUploadBlob[];
 
-      attrs['files'] = blobs.map((blob) => (blob as { signed_id: string }).signed_id);
+      attrs['files'] = blobs.map((blob) => blob.signed_id);
     } else {
       attrs['extraction_id'] = this.extractionId;
     }
