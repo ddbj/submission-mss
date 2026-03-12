@@ -35,6 +35,8 @@ export default class ApplicationController extends Controller {
   @action
   changeLocale(locale: string) {
     this.locale = locale;
+
+    this.intl.setLocale(locale);
   }
 
   @action
