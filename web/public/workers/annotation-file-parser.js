@@ -23,16 +23,14 @@ class ParseError {
 }
 
 async function parse(file) {
-  const reader = file.stream().getReader();
-
   const errors = [];
   const contactPerson = new ContactPerson();
   let holdDate = null;
 
   let inCommon;
 
-  for await (const line of makeLineIterator(reader)) {
-    const [entry, , , qualifier, value] = line.replace(/\r\n|\n|\r$/, '').split('\t');
+  for await (const line of lines(file)) {
+    const [entry, , , qualifier, value] = line.split('\t');
 
     if (entry) {
       inCommon = entry === 'COMMON';
@@ -106,35 +104,20 @@ async function parse(file) {
   return [errors, hasErrors ? null : { contactPerson, holdDate }];
 }
 
-async function* makeLineIterator(reader) {
-  const decoder = new TextDecoder();
+async function* lines(file) {
+  const reader = file.stream().pipeThrough(new TextDecoderStream()).getReader();
 
-  let done, chunk;
   let pending = '';
 
-  while ((({ done, value: chunk } = await reader.read()), !done)) {
-    let buffer = pending + decoder.decode(chunk, { stream: true });
+  for (let { value, done } = await reader.read(); !done; { value, done } = await reader.read()) {
+    const parts = (pending + value).split(/\r\n|\n|\r/);
 
-    for (;;) {
-      let line = null;
+    pending = parts.pop();
 
-      buffer = buffer.replace(/[^\n\r]*(?:\r\n|\n|\r)/, (matched) => {
-        line = matched;
-
-        return '';
-      });
-
-      if (line) {
-        yield line;
-      } else {
-        break;
-      }
-    }
-
-    pending = buffer;
+    yield* parts;
   }
 
-  if (pending !== '') {
+  if (pending) {
     yield pending;
   }
 }
