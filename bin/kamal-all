@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+config      = YAML.load_file('config/deploy.yml', symbolize_names: true)
+accessories = config.fetch(:accessories).keys
+
+action, destination = ARGV
+
+case action
+when 'stop'
+  system 'bin/kamal', 'app', 'stop', '-d', destination, exception: true
+
+  accessories.each do |acc|
+    system 'bin/kamal', 'accessory', 'stop', acc, '-d', destination, exception: true
+  end
+when 'start'
+  accessories.reverse_each do |acc|
+    system 'bin/kamal', 'accessory', 'start', acc, '-d', destination, exception: true
+  end
+
+  system 'bin/kamal', 'app', 'start', '-d', destination, exception: true
+end
