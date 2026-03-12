@@ -34,7 +34,7 @@ export default class DfastExtractorComponent extends Component<Signature> {
   @tracked error: { job_id: string; reason: string } | null = null;
 
   get sortedFiles() {
-    return [...this.files].sort((a, b) => a.name.localeCompare(b.name));
+    return this.files.toSorted((a, b) => a.name.localeCompare(b.name));
   }
 
   @action handleJobIdsInput(event: Event) {

@@ -24,7 +24,7 @@ export default class MassDirectoryExtractorComponent extends Component<Signature
   @tracked files: SubmissionFileData[] = [];
 
   get sortedFiles() {
-    return [...this.files].sort((a, b) => a.name.localeCompare(b.name));
+    return this.files.toSorted((a, b) => a.name.localeCompare(b.name));
   }
 
   fetchFiles = modifier(() => {
