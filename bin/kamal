@@ -24,4 +24,31 @@ end
 require "rubygems"
 require "bundler/setup"
 
-load Gem.bin_path("kamal", "kamal")
+Thread.report_on_exception = false
+
+require "kamal"
+
+# Monkey-patch: add proxy healthcheck.port support
+# kamal-proxy supports --health-check-port but Kamal does not yet expose it.
+# See https://github.com/basecamp/kamal/pull/1750
+Kamal::Configuration::Proxy.prepend Module.new {
+  def deploy_options
+    super.merge("health-check-port": proxy_config.dig('healthcheck', 'port')).compact
+  end
+
+  def validation_yml
+    super.tap { _1.dig('proxy', 'healthcheck')&.[]=('port', 3903) }
+  end
+}
+
+begin
+  Kamal::Cli::Main.start(ARGV)
+rescue SSHKit::Runner::ExecuteError => e
+  puts "  \e[31mERROR (#{e.cause.class}): #{e.message}\e[0m"
+  puts e.cause.backtrace if ENV["VERBOSE"]
+  exit 1
+rescue => e
+  puts "  \e[31mERROR (#{e.class}): #{e.message}\e[0m"
+  puts e.backtrace if ENV["VERBOSE"]
+  exit 1
+end
