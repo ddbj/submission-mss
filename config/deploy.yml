@@ -56,11 +56,6 @@ accessories:
     proxy:
       app_port: 3900
 
-      healthcheck:
-        interval: 3
-        path: /health
-        port: 3903
-
     options:
       user: 2233:11370
 
