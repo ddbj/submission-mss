@@ -10,7 +10,6 @@ rpc_secret = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
 [s3_api]
 api_bind_addr = "[::]:3900"
 s3_region     = "garage"
-root_domain   = ".s3.garage.localhost"
 
 [admin]
 api_bind_addr = "[::]:3903"
