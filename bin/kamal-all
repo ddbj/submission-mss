@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby
 
+require 'yaml'
+
 config      = YAML.load_file('config/deploy.yml', symbolize_names: true)
-accessories = config.fetch(:accessories).keys
+accessories = config.fetch(:accessories).keys.map(&:to_s)
 
 action, destination = ARGV
 
