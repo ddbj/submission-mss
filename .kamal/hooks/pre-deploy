@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -e
+
+image=w3const/mssform-garage
+
+docker build -t "$image" docker/garage/
+docker push "$image"

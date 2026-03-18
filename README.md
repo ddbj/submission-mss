@@ -34,12 +34,7 @@ bin/dev
 
 ### Deployment
 
-Build and push the Garage image before deploying:
-
-```sh
-docker build -t w3const/mssform-garage docker/garage/
-docker push w3const/mssform-garage
-```
+The Garage image is automatically built and pushed by the pre-deploy hook.
 
 ```sh
 bin/kamal deploy -d staging
