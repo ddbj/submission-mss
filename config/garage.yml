@@ -1,0 +1,13 @@
+development:
+  api_key:    GK000000000000000000000000
+  endpoint:   http://localhost:3900
+  secret_key: '0000000000000000000000000000000000000000000000000000000000000000'
+
+production: &production
+  api_key:    <%= Rails.application.credentials.dig(:garage, :api_key) %>
+  endpoint:   https://mss-storage.ddbj.nig.ac.jp
+  secret_key: <%= Rails.application.credentials.dig(:garage, :secret_key) %>
+
+staging:
+  <<: *production
+  endpoint: https://mss-storage-staging.ddbj.nig.ac.jp

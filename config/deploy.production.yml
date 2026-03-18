@@ -24,11 +24,11 @@ accessories:
     volumes:
       - ./volumes/mssform-production/postgres:/var/lib/postgresql/data
 
-  minio:
+  garage:
     host: mssform-production
 
     proxy:
       host: mss-storage.ddbj.nig.ac.jp
 
     volumes:
-      - ./volumes/mssform-production/minio:/data
+      - ./volumes/mssform-production/garage:/var/lib/garage

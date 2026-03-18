@@ -49,23 +49,30 @@ accessories:
         POSTGRES_DB: mssform
         TZ:          Asia/Tokyo
 
-  minio:
-    image: minio/minio:RELEASE.2025-04-08T15-41-24Z
-    cmd: server /data
+  garage:
+    image: w3const/mssform-garage
+    cmd: /entrypoint.sh
 
     proxy:
-      app_port: 9000
+      app_port: 3900
 
       healthcheck:
-        path: /minio/health/live
+        interval: 3
+        path: /health
+        port: 3903
 
     options:
       user: 2233:11370
 
+    files:
+      - docker/garage/garage.production.toml.erb:/etc/garage.toml
+
     env:
       secret:
-        - MINIO_ROOT_USER
-        - MINIO_ROOT_PASSWORD
+        - GARAGE_API_KEY
+        - GARAGE_SECRET_KEY
 
       clear:
-        TZ: Asia/Tokyo
+        GARAGE_BUCKET_NAME: uploads
+        GARAGE_KEY_NAME:    mssform
+        TZ:                 Asia/Tokyo
