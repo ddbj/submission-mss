@@ -51,7 +51,6 @@ accessories:
 
   garage:
     image: w3const/mssform-garage
-    cmd: /entrypoint.sh
 
     proxy:
       app_port: 3900
