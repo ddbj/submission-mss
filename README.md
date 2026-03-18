@@ -1,24 +1,47 @@
-# README
+# MSS Form
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A submission management system for [DDBJ Mass Submission System (MSS)](https://www.ddbj.nig.ac.jp/ddbj/mss.html).
 
-Things you may want to cover:
+## Tech Stack
 
-* Ruby version
+- **Backend:** Ruby on Rails, Puma, Solid Queue
+- **Frontend:** Ember.js, TypeScript, Vite
+- **Database:** PostgreSQL
+- **Object Storage:** Garage (S3-compatible)
+- **Deployment:** Kamal
 
-* System dependencies
+## Development
 
-* Configuration
+### Prerequisites
 
-* Database creation
+- Ruby (see `.ruby-version`)
+- Node.js + pnpm
+- PostgreSQL
+- Docker
 
-* Database initialization
+### Setup
 
-* How to run the test suite
+```sh
+bin/setup
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+### Running
 
-* Deployment instructions
+```sh
+docker build -t mssform-garage docker/garage/
+bin/dev
+```
 
-* ...
+### Deployment
+
+Build and push the Garage image before deploying:
+
+```sh
+docker build -t w3const/mssform-garage docker/garage/
+docker push w3const/mssform-garage
+```
+
+```sh
+bin/kamal deploy -d staging
+bin/kamal deploy -d production
+```
