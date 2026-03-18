@@ -2,6 +2,10 @@ service: mssform
 image: w3const/mssform
 require_destination: true
 
+proxy:
+  run:
+    version: v0.9.2
+
 registry:
   username: w3const
 
