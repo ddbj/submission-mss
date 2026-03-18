@@ -28,4 +28,23 @@ if ! garage key info "$GARAGE_KEY_NAME" >/dev/null 2>&1; then
   garage bucket allow --read --write --owner "$GARAGE_BUCKET_NAME" --key "$GARAGE_KEY_NAME"
 fi
 
+# Configure CORS
+cors_xml='<CORSConfiguration>
+  <CORSRule>
+    <AllowedOrigin>*</AllowedOrigin>
+    <AllowedMethod>GET</AllowedMethod>
+    <AllowedMethod>PUT</AllowedMethod>
+    <AllowedMethod>POST</AllowedMethod>
+    <AllowedHeader>*</AllowedHeader>
+    <ExposeHeader>ETag</ExposeHeader>
+    <MaxAgeSeconds>3600</MaxAgeSeconds>
+  </CORSRule>
+</CORSConfiguration>'
+
+curl --fail --silent --aws-sigv4 "aws:amz:garage:s3" \
+  --user "${GARAGE_API_KEY}:${GARAGE_SECRET_KEY}" \
+  -X PUT -H 'Content-Type: application/xml' \
+  -d "$cors_xml" \
+  "http://localhost:3900/${GARAGE_BUCKET_NAME}?cors"
+
 wait $pid
