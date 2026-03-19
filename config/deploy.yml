@@ -49,23 +49,29 @@ accessories:
         POSTGRES_DB: mssform
         TZ:          Asia/Tokyo
 
-  minio:
-    image: minio/minio:RELEASE.2025-04-08T15-41-24Z
-    cmd: server /data
+  seaweedfs:
+    image: chrislusf/seaweedfs
+
+    cmd: /entrypoint.sh
 
     proxy:
-      app_port: 9000
+      app_port: 8333
 
       healthcheck:
-        path: /minio/health/live
+        interval: 3
+        path: /status
 
     options:
       user: 2233:11370
 
+    files:
+      - docker/seaweedfs/entrypoint.sh:/entrypoint.sh
+      - docker/seaweedfs/s3.production.json.erb:/etc/seaweedfs/s3.json
+
     env:
       secret:
-        - MINIO_ROOT_USER
-        - MINIO_ROOT_PASSWORD
+        - SEAWEEDFS_ACCESS_KEY
+        - SEAWEEDFS_SECRET_KEY
 
       clear:
         TZ: Asia/Tokyo

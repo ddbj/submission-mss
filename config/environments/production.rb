@@ -86,7 +86,7 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.active_job.queue_adapter      = :solid_queue
-  config.active_storage.service        = :minio
+  config.active_storage.service        = :seaweedfs
   config.cache_store                   = :solid_cache_store
   config.solid_queue.connects_to       = {database: {writing: :queue}}
 
