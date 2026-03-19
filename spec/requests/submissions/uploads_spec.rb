@@ -21,6 +21,6 @@ RSpec.describe '/api/submissions/:mass_id/uploads', type: :request do
       }
     }, as: :json
 
-    expect(response).to conform_schema(200)
+    expect(response).to conform_schema(204)
   end
 end
