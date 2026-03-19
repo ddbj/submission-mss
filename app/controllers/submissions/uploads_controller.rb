@@ -13,7 +13,7 @@ class Submissions::UploadsController < ApplicationController
 
     UploadJob.perform_later upload
 
-    head :ok
+    head :no_content
   end
 
   private
