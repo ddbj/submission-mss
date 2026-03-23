@@ -128,8 +128,8 @@ GEM
     dotenv (3.2.0)
     drb (2.2.3)
     ed25519 (1.4.0)
-    email_spec (2.3.0)
-      htmlentities (~> 4.3.3)
+    email_spec (2.3.1)
+      htmlentities (~> 4.3)
       launchy (>= 2.1, < 4.0)
       mail (~> 2.7)
     email_validator (2.2.4)
@@ -191,7 +191,7 @@ GEM
     hashdiff (1.2.1)
     hashie (5.1.0)
       logger
-    htmlentities (4.3.4)
+    htmlentities (4.4.2)
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
     io-console (0.8.2)
@@ -254,7 +254,7 @@ GEM
     multi_json (1.19.1)
     net-http (0.9.1)
       uri (>= 0.11.1)
-    net-imap (0.6.2)
+    net-imap (0.6.3)
       date
       net-protocol
     net-pop (0.1.2)
