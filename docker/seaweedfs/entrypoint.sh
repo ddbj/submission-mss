@@ -5,6 +5,7 @@ weed server -s3 \
   -s3.port=8333 \
   -s3.config=/etc/seaweedfs/s3.json \
   -s3.allowedOrigins='*' \
+  -dir=/data \
   -volume.max=0 &
 pid=$!
 
