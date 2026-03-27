@@ -4,13 +4,13 @@ import { formatTime } from 'ember-intl';
 import type { TOC } from '@ember/component/template-only';
 
 interface Upload {
-  id: string;
+  id: number;
   created_at: string;
   files: string[];
 }
 
 function sortById(uploads: Upload[]) {
-  return [...uploads].sort((a, b) => a.id.localeCompare(b.id));
+  return [...uploads].sort((a, b) => a.id - b.id);
 }
 
 interface Signature {
