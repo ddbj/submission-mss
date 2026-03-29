@@ -1,4 +1,5 @@
 import { tracked } from '@glimmer/tracking';
+import { trackedArray } from '@ember/reactive/collections';
 
 import type { components } from 'schema/openapi';
 
@@ -53,7 +54,7 @@ export class SubmissionFile implements SubmissionFileData {
 
   @tracked isParsing = false;
   @tracked parsedData?: ParsedData;
-  @tracked errors: SubmissionError[] = [];
+  errors: SubmissionError[] = trackedArray();
 
   fileType?: 'annotation' | 'sequence';
   jobId?: string;
@@ -67,13 +68,10 @@ export class SubmissionFile implements SubmissionFileData {
     this.rawFile = new File([file], name.replaceAll(/\s/g, '_'), { type, lastModified });
 
     if (!/^((?![\\/:*?"<>|. ]])[ -~])*$/.test(this.basename)) {
-      this.errors = [
-        ...this.errors,
-        {
-          severity: 'error',
-          id: 'submission-file.invalid-filename',
-        },
-      ];
+      this.errors.push({
+        severity: 'error',
+        id: 'submission-file.invalid-filename',
+      });
     }
   }
 
@@ -111,12 +109,12 @@ export class SubmissionFile implements SubmissionFileData {
           if (typeof errs === 'string') {
             console.error(errs);
 
-            this.errors = [...this.errors, { severity: 'error', message: errs }];
+            this.errors.push({ severity: 'error', message: errs });
 
             reject(new Error(errs));
           } else {
             if (errs) {
-              this.errors = [...this.errors, ...errs];
+              this.errors.push(...errs);
             }
 
             if (payload) {
@@ -177,13 +175,10 @@ export class UnsupportedFile extends SubmissionFile {
   constructor(file: File) {
     super(file);
 
-    this.errors = [
-      ...this.errors,
-      {
-        severity: 'error',
-        id: 'submission-file.unsupported-filetype',
-      },
-    ];
+    this.errors.push({
+      severity: 'error',
+      id: 'submission-file.unsupported-filetype',
+    });
   }
 
   parse() {

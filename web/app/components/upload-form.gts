@@ -1,10 +1,12 @@
 import Component from '@glimmer/component';
-import { fn } from '@ember/helper';
-import { action } from '@ember/object';
-import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
+import { action } from '@ember/object';
+import { fn } from '@ember/helper';
+import { on } from '@ember/modifier';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { trackedArray } from '@ember/reactive/collections';
+
 import { t } from 'ember-intl';
 import { eq, not } from 'ember-truth-helpers';
 import pageTitle from 'ember-page-title/helpers/page-title';
@@ -42,7 +44,7 @@ export default class UploadFormComponent extends Component<Signature> {
 
   @tracked uploadVia: string | null = null;
   @tracked extractionId: number | null = null;
-  @tracked files: SubmissionFileData[] = [];
+  files: SubmissionFileData[] = trackedArray();
   @tracked isCompleted = false;
   @tracked crossoverErrors = new Map<SubmissionFileData, SubmissionError[]>();
 
@@ -61,21 +63,22 @@ export default class UploadFormComponent extends Component<Signature> {
 
   @action setUploadVia(val: string) {
     this.uploadVia = val;
-    this.files = [];
+    this.files.length = 0;
     this.extractionId = null;
   }
 
   @action onExtractProgress({ id, files }: { id: number; files: SubmissionFileData[] }) {
     this.extractionId = id;
-    this.files = files;
+    this.files.length = 0;
+    this.files.push(...files);
   }
 
   @action addFile(file: SubmissionFileData) {
-    this.files = [...this.files, file];
+    this.files.push(file);
   }
 
   @action removeFile(file: SubmissionFileData) {
-    this.files = this.files.filter((f) => f !== file);
+    this.files.splice(this.files.indexOf(file), 1);
   }
 
   @action async submit(uploadProgressModal: UploadProgressModalComponent, event: Event) {
