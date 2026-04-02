@@ -33,6 +33,13 @@ export default class DfastExtractorComponent extends Component<Signature> {
   @tracked files: SubmissionFileData[] = [];
   @tracked error: { job_id: string; reason: string } | null = null;
 
+  #abort = new AbortController();
+
+  willDestroy() {
+    super.willDestroy();
+    this.#abort.abort();
+  }
+
   get sortedFiles() {
     return this.files.toSorted((a, b) => a.name.localeCompare(b.name));
   }
@@ -66,7 +73,11 @@ export default class DfastExtractorComponent extends Component<Signature> {
         (error) => {
           this.errorModal.show(new Error(error.reason ?? error.id));
         },
+        this.#abort.signal,
       );
+    } catch (e) {
+      if (e instanceof DOMException && e.name === 'AbortError') return;
+      throw e;
     } finally {
       this.extracting = false;
     }

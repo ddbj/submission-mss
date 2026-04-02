@@ -33,11 +33,16 @@ export default class DfastExtraction {
   async pollForResult(
     callback: (payload: DfastExtractionPayload) => void,
     onError: (error: NonNullable<DfastExtractionPayload['error']>) => void,
+    signal?: AbortSignal,
   ) {
     for (;;) {
+      signal?.throwIfAborted();
+
       const { content: payload } = await this.requestManager.request<DfastExtractionPayload>({
         url: this.url,
       });
+
+      signal?.throwIfAborted();
 
       callback(payload);
 

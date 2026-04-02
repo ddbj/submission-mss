@@ -29,11 +29,15 @@ export default class MassDirectoryExtraction {
     this.url = url;
   }
 
-  async pollForResult(callback: (payload: MassDirectoryExtractionPayload) => void) {
+  async pollForResult(callback: (payload: MassDirectoryExtractionPayload) => void, signal?: AbortSignal) {
     for (;;) {
+      signal?.throwIfAborted();
+
       const { content: payload } = await this.requestManager.request<MassDirectoryExtractionPayload>({
         url: this.url,
       });
+
+      signal?.throwIfAborted();
 
       callback(payload);
 

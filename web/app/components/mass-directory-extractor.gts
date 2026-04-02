@@ -28,6 +28,8 @@ export default class MassDirectoryExtractorComponent extends Component<Signature
   }
 
   fetchFiles = modifier(() => {
+    const abort = new AbortController();
+
     void (async () => {
       const extraction = await MassDirectoryExtraction.create(getOwner(this)!);
 
@@ -35,8 +37,13 @@ export default class MassDirectoryExtractorComponent extends Component<Signature
         this.files = payload.files;
 
         this.args.onPoll(payload);
-      });
-    })();
+      }, abort.signal);
+    })().catch((e) => {
+      if (e instanceof DOMException && e.name === 'AbortError') return;
+      throw e;
+    });
+
+    return () => abort.abort();
   });
 
   <template>
