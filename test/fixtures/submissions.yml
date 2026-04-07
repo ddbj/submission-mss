@@ -1,0 +1,9 @@
+alice_submission:
+  mass_id:        NSUB000001
+  user:           alice
+  tpa:            false
+  entries_count:  1
+  sequencer:      ngs
+  data_type:      wgs
+  description:    some description
+  email_language: en

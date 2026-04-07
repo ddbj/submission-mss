@@ -1,0 +1,5 @@
+alice_contact:
+  submission:  alice_submission
+  email:       alice+contact@example.com
+  full_name:   Alice Liddell
+  affiliation: Wonderland Inc.

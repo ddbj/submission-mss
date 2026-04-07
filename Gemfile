@@ -31,10 +31,9 @@ group :development do
 end
 
 group :test do
-  gem 'email_spec'
-  gem 'factory_bot_rails', group: :development
-  gem 'rspec-default_http_header'
-  gem 'rspec-rails', group: :development
+  gem 'minitest'
+  gem 'minitest-default_http_header'
+  gem 'minitest-mock'
   gem 'skooma'
   gem 'webmock'
 end

@@ -1,0 +1,3 @@
+alice_mass_directory_extraction:
+  user:  alice
+  state: pending

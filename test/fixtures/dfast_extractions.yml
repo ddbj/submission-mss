@@ -1,0 +1,4 @@
+alice_dfast_extraction:
+  user:          alice
+  dfast_job_ids: '{job-1}'
+  state:         pending

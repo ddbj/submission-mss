@@ -1,0 +1,11 @@
+bob:
+  submission: alice_submission
+  position:   0
+  email:      bob@bar.example.com
+  full_name:  Bob
+
+carol:
+  submission: alice_submission
+  position:   1
+  email:      carol@baz.example.com
+  full_name:  Carol

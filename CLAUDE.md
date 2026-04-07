@@ -17,8 +17,8 @@ DDBJ MSS (Mass Submission System) — monorepo with a Rails API and an Ember.js 
 bin/dev
 
 # Rails tests
-bundle exec rspec
-bundle exec rspec spec/requests/submissions_spec.rb
+bin/rails test
+bin/rails test test/integration/submissions_test.rb
 
 # Ember tests (build + test)
 cd web && pnpm test:ember
@@ -39,9 +39,9 @@ cd web && pnpm lint:fix           # JS/TS/CSS/HBS + Prettier
 ├── config/app.yml         App-specific config (URLs, paths)
 ├── config/enums.yml       Enumerize enum definitions
 ├── config/deploy*.yml     Kamal deployment config
-├── spec/                  RSpec tests
-│   ├── requests/          Request specs (OpenAPI validation via skooma)
-│   └── factories/         FactoryBot factories
+├── test/                  Minitest tests
+│   ├── integration/       Integration tests (OpenAPI validation via skooma)
+│   └── fixtures/          Test fixtures
 ├── schema/openapi.yml     OpenAPI schema
 │
 web/                       Ember.js frontend
@@ -55,16 +55,16 @@ web/                       Ember.js frontend
 
 ## Conventions
 
-### RSpec
+### Rails Tests
 
-- `describe` takes a resource path, `example` takes an action name
-- Validate OpenAPI conformance with `conform_schema(status_code)`
+- Integration tests validate OpenAPI conformance with `assert_conform_schema(status_code)`
+- Fixtures for shared test data, inline `create!` for test-specific data
 
 ```ruby
-RSpec.describe '/api/submissions', type: :request do
-  example 'index' do
-    get '/api/submissions', headers: default_headers
-    expect(response).to conform_schema(200)
+class SubmissionsTest < ActionDispatch::IntegrationTest
+  test 'index' do
+    get '/api/submissions'
+    assert_conform_schema 200
   end
 end
 ```

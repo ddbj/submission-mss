@@ -44,8 +44,8 @@ bin/dev
 
 ```bash
 # Rails
-bundle exec rspec
-bundle exec rspec spec/requests/submissions_spec.rb  # single file
+bin/rails test
+bin/rails test test/integration/submissions_test.rb  # single file
 
 # Ember
 cd web && pnpm test:ember
@@ -68,7 +68,7 @@ cd web && pnpm lint:fix # JS/TS/CSS/HBS + Prettier
 ├── app/views/             jb templates (JSON responses)
 ├── config/app.yml         App-specific config (URLs, paths)
 ├── config/enums.yml       Enumerize enum definitions
-├── spec/                  RSpec tests
+├── test/                  Minitest tests
 ├── schema/openapi.yml     OpenAPI schema
 │
 web/                       Ember.js frontend
