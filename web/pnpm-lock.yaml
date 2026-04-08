@@ -24,8 +24,8 @@ importers:
         specifier: ~5.8.1
         version: 5.8.1(@babel/core@7.29.0)(@glint/template@1.7.4)
       '@ember-intl/vite':
-        specifier: ^0.5.4
-        version: 0.5.4
+        specifier: ^0.5.6
+        version: 0.5.6
       '@ember/optional-features':
         specifier: ^3.0.0
         version: 3.0.0(@types/node@25.5.2)
@@ -817,8 +817,8 @@ packages:
     engines: {node: '>=0.1.95'}
     hasBin: true
 
-  '@codemod-utils/files@4.0.0':
-    resolution: {integrity: sha512-0sOt/kUY8fvEE+R6Mons6SSRrj926SUBt9Np1C3b3FU9+QmjO8obC+AEZ9vnLVqdchduKc/ytTDOQFGGstDfkQ==}
+  '@codemod-utils/files@4.0.1':
+    resolution: {integrity: sha512-zIj3UC3kY0JAyPkkQXwuAiX7bz7+HU/PK9XqytWeaN262JSK858nfFyja0wGqou4rO3O3a3yw1HY7TTEuJZivQ==}
     engines: {node: 22.* || >= 24}
 
   '@csstools/color-helpers@5.1.0':
@@ -874,8 +874,8 @@ packages:
   '@ember-data/rfc395-data@0.0.4':
     resolution: {integrity: sha512-tGRdvgC9/QMQSuSuJV45xoyhI0Pzjm7A9o/MVVA3HakXIImJbbzx/k/6dO9CUEQXIyS2y0fW6C1XaYOG7rY0FQ==}
 
-  '@ember-intl/vite@0.5.4':
-    resolution: {integrity: sha512-i4479EjfM448rhwp+ioLUNZ9hO8nGSV5qt+xhK11hRewCVgEuCp8gYvLy5ViqV3Y3QXRQcDgcEQGji19puUdIg==}
+  '@ember-intl/vite@0.5.6':
+    resolution: {integrity: sha512-uHoaxZkGZ1mXdHL0Tn7yBEaOjsB2R0GBN8cdPpkyPT6WyTVJJKNGVh7EzZGCA0HvInwo0p2PrKMGiQ2DleDC5g==}
     engines: {node: 20.* || >= 22}
 
   '@ember-tooling/blueprint-blueprint@0.2.1':
@@ -3199,8 +3199,8 @@ packages:
   electron-to-chromium@1.5.302:
     resolution: {integrity: sha512-sM6HAN2LyK82IyPBpznDRqlTQAtuSaO+ShzFiWTvoMJLHyZ+Y39r8VMfHzwbU8MVBzQ4Wdn85+wlZl2TLGIlwg==}
 
-  electron-to-chromium@1.5.332:
-    resolution: {integrity: sha512-7OOtytmh/rINMLwaFTbcMVvYXO3AUm029X0LcyfYk0B557RlPkdpTpnH9+htMlfu5dKwOmT0+Zs2Aw+lnn6TeQ==}
+  electron-to-chromium@1.5.334:
+    resolution: {integrity: sha512-mgjZAz7Jyx1SRCwEpy9wefDS7GvNPazLthHg8eQMJ76wBdGQQDW33TCrUTvQ4wzpmOrv2zrFoD3oNufMdyMpog==}
 
   ember-auto-import@2.12.1:
     resolution: {integrity: sha512-wyvl+aJJKOKbRSLqq6CyMsNrvurmX4SIWHHqZdC5giZ7P8ECGmcn9W9HFoVLpwXkFJoXhNV4L7mqqcU6881t0w==}
@@ -7433,7 +7433,7 @@ snapshots:
       exec-sh: 0.3.6
       minimist: 1.2.8
 
-  '@codemod-utils/files@4.0.0':
+  '@codemod-utils/files@4.0.1':
     dependencies:
       glob: 13.0.6
 
@@ -7481,9 +7481,9 @@ snapshots:
 
   '@ember-data/rfc395-data@0.0.4': {}
 
-  '@ember-intl/vite@0.5.4':
+  '@ember-intl/vite@0.5.6':
     dependencies:
-      '@codemod-utils/files': 4.0.0
+      '@codemod-utils/files': 4.0.1
       js-yaml: 4.1.1
 
   '@ember-tooling/blueprint-blueprint@0.2.1': {}
@@ -9571,7 +9571,7 @@ snapshots:
     dependencies:
       baseline-browser-mapping: 2.10.16
       caniuse-lite: 1.0.30001787
-      electron-to-chromium: 1.5.332
+      electron-to-chromium: 1.5.334
       node-releases: 2.0.37
       update-browserslist-db: 1.2.3(browserslist@4.28.2)
 
@@ -10116,7 +10116,7 @@ snapshots:
 
   electron-to-chromium@1.5.302: {}
 
-  electron-to-chromium@1.5.332: {}
+  electron-to-chromium@1.5.334: {}
 
   ember-auto-import@2.12.1(@glint/template@1.7.4)(webpack@5.104.1):
     dependencies:
