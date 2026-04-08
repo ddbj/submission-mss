@@ -5,7 +5,7 @@ import RadioInput from './radio/input';
 import RadioLabel from './radio/label';
 
 import type { TOC } from '@ember/component/template-only';
-import type { ComponentLike } from '@glint/template';
+import type { WithBoundArgs } from '@glint/template';
 
 interface Signature {
   Args: {
@@ -14,8 +14,8 @@ interface Signature {
   Blocks: {
     default: [
       {
-        input: ComponentLike<{ Element: HTMLInputElement }>;
-        label: ComponentLike<{ Element: HTMLLabelElement; Blocks: { default: [] } }>;
+        input: WithBoundArgs<typeof RadioInput, 'name' | 'id'>;
+        label: WithBoundArgs<typeof RadioLabel, 'for'>;
       },
     ];
   };
