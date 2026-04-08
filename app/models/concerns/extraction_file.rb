@@ -56,6 +56,8 @@ module ExtractionFile
     fullpath.each_line chomp: true do |line|
       entry, _feature, _location, qualifier, value = line.split("\t")
 
+      next if entry.nil?
+
       in_common = entry == 'COMMON' unless entry.empty?
 
       if in_common

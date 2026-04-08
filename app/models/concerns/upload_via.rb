@@ -22,6 +22,8 @@ module UploadVia
         cols = line.chomp("\r\n").chomp("\r").chomp("\n").split("\t", -1)
         entry, qualifier, value = cols.values_at(0, 3, 4)
 
+        next line if entry.nil?
+
         in_common = entry == 'COMMON' unless entry.empty?
 
         if in_common && value && TRIM_QUALIFIERS.include?(qualifier)
