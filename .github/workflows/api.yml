@@ -37,7 +37,7 @@ jobs:
           bundler-cache: true
 
       - run: bin/rails db:test:prepare
-      - run: bundle exec rspec
+      - run: bin/rails test
 
   scan_ruby:
     runs-on: ubuntu-latest
