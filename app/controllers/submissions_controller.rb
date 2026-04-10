@@ -30,6 +30,7 @@ class SubmissionsController < ApplicationController
       )
     }
 
+    UploadEventLog.append upload
     ProcessSubmissionJob.perform_later upload
   end
 

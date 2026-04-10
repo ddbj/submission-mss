@@ -41,6 +41,13 @@ class SubmissionsTest < ActionDispatch::IntegrationTest
     }, as: :json
 
     assert_conform_schema 200
+
+    path  = Rails.application.config_for(:app).upload_events_log!
+    event = JSON.parse(File.read(path).lines.last)
+
+    assert_equal @user.submissions.order(:id).last.mass_id, event['mass_id']
+    assert_equal @user.uid,                                 event['dway_account']
+    assert_match(/\A\d{8}-\d{6}\z/,                         event['data_arrival_date'])
   end
 
   test 'show' do

@@ -3,6 +3,7 @@ development:
   extracts_dir:           <%= Rails.root.join("storage/extracts") %>
   mass_dir_path_template: <%= Rails.root.join("storage/mass/{user}") %>
   submissions_dir:        <%= Rails.root.join("storage/submissions") %>
+  upload_events_log:      <%= Rails.root.join("storage/upload_events.jsonl") %>
   web_url:                http://mssform.localhost:4200
 
 test:
@@ -10,6 +11,7 @@ test:
   extracts_dir:           <%= Rails.root.join("tmp/storage/extracts") %>
   mass_dir_path_template: <%= Rails.root.join("tmp/storage/mass/{user}") %>
   submissions_dir:        <%= Rails.root.join("tmp/storage/submissions") %>
+  upload_events_log:      <%= Rails.root.join("tmp/storage/upload_events.jsonl") %>
   web_url:                http://mssform.example.com:4200
 
 production: &production
@@ -17,6 +19,7 @@ production: &production
   extracts_dir:           <%= Rails.root.join("storage/extracts") %>
   mass_dir_path_template: /submission/{user}/submission/{user}/mass
   submissions_dir:        <%= Rails.root.join("storage/submissions") %>
+  upload_events_log:      <%= Rails.root.join("storage/upload_events.jsonl") %>
   web_url:                https://mss.ddbj.nig.ac.jp
 
 staging:

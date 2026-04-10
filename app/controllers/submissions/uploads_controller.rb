@@ -11,6 +11,7 @@ class Submissions::UploadsController < ApplicationController
       via: Upload.find_via(upload_params[:via]).from_params(**upload_params.to_h.symbolize_keys)
     )
 
+    UploadEventLog.append upload
     UploadJob.perform_later upload
 
     head :no_content
