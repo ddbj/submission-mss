@@ -51,8 +51,8 @@ importers:
         specifier: ^9.39.3
         version: 9.39.3
       '@glimmer/component':
-        specifier: ^2.0.0
-        version: 2.0.0
+        specifier: ^2.1.1
+        version: 2.1.1
       '@glimmer/tracking':
         specifier: ^1.1.2
         version: 1.1.2
@@ -127,7 +127,7 @@ importers:
         version: 4.0.1(@babel/core@7.29.0)
       ember-cli-htmlbars:
         specifier: ^7.0.0
-        version: 7.0.0(@babel/core@7.29.0)(ember-source@6.11.0(@glimmer/component@2.0.0)(rsvp@4.8.5))
+        version: 7.0.0(@babel/core@7.29.0)(ember-source@6.11.0(@glimmer/component@2.1.1)(rsvp@4.8.5))
       ember-concurrency:
         specifier: ^5.2.0
         version: 5.2.0(@babel/core@7.29.0)(@glint/template@1.7.4)
@@ -136,7 +136,7 @@ importers:
         version: 8.1.1(@babel/core@7.29.0)(@ember/test-helpers@5.4.1(@babel/core@7.29.0)(@glint/template@1.7.4))(typescript@5.9.3)
       ember-load-initializers:
         specifier: ^3.0.1
-        version: 3.0.1(ember-source@6.11.0(@glimmer/component@2.0.0)(rsvp@4.8.5))
+        version: 3.0.1(ember-source@6.11.0(@glimmer/component@2.1.1)(rsvp@4.8.5))
       ember-modifier:
         specifier: ^4.3.0
         version: 4.3.0(@babel/core@7.29.0)
@@ -151,7 +151,7 @@ importers:
         version: 13.2.0
       ember-source:
         specifier: ~6.11.0
-        version: 6.11.0(@glimmer/component@2.0.0)(rsvp@4.8.5)
+        version: 6.11.0(@glimmer/component@2.1.1)(rsvp@4.8.5)
       ember-svg-jar:
         specifier: ^2.7.1
         version: 2.7.1(@babel/core@7.29.0)(@glint/template@1.7.4)
@@ -1192,8 +1192,8 @@ packages:
     resolution: {integrity: sha512-t9eyLZIFsiwAib8Zyfu67yBep5Vn2bd5DScIE2hharPE/OKKI7cpQYi6BzQhSGYEBVU82ITd/2TLvJ1K8eIahA==}
     engines: {node: '>= 18.0.0'}
 
-  '@glimmer/component@2.0.0':
-    resolution: {integrity: sha512-eATSzBOUm0MZ9+YfJx7Y5p3gbwnaeMzLSSsCDn1ihDtUOIm5YYEV0ee0G7tXt/uKxowt8tXYn/EMbI9OlRF0CA==}
+  '@glimmer/component@2.1.1':
+    resolution: {integrity: sha512-zFZFaMbWy+9WOcDg/kCgrkGgqkLT39EE4FgyFD0MIkQO5coQsrRZyLsiBu1tbchyM+8hT8jAv+EQVUd8u+MdSQ==}
     engines: {node: '>= 18'}
 
   '@glimmer/destroyable@0.94.8':
@@ -8054,7 +8054,7 @@ snapshots:
       '@glimmer/util': 0.94.8
       '@glimmer/wire-format': 0.94.8
 
-  '@glimmer/component@2.0.0':
+  '@glimmer/component@2.1.1':
     dependencies:
       '@embroider/addon-shim': 1.10.2
       '@glimmer/env': 0.1.7
@@ -10437,7 +10437,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ember-cli-htmlbars@7.0.0(@babel/core@7.29.0)(ember-source@6.11.0(@glimmer/component@2.0.0)(rsvp@4.8.5)):
+  ember-cli-htmlbars@7.0.0(@babel/core@7.29.0)(ember-source@6.11.0(@glimmer/component@2.1.1)(rsvp@4.8.5)):
     dependencies:
       '@babel/core': 7.29.0
       '@ember/edition-utils': 1.2.0
@@ -10445,7 +10445,7 @@ snapshots:
       broccoli-debug: 0.6.5
       broccoli-persistent-filter: 3.1.3
       broccoli-plugin: 4.0.7
-      ember-source: 6.11.0(@glimmer/component@2.0.0)(rsvp@4.8.5)
+      ember-source: 6.11.0(@glimmer/component@2.1.1)(rsvp@4.8.5)
       fs-tree-diff: 2.0.1
       heimdalljs-logger: 0.1.10
       js-string-escape: 1.0.1
@@ -10698,9 +10698,9 @@ snapshots:
       - supports-color
       - typescript
 
-  ember-load-initializers@3.0.1(ember-source@6.11.0(@glimmer/component@2.0.0)(rsvp@4.8.5)):
+  ember-load-initializers@3.0.1(ember-source@6.11.0(@glimmer/component@2.1.1)(rsvp@4.8.5)):
     dependencies:
-      ember-source: 6.11.0(@glimmer/component@2.0.0)(rsvp@4.8.5)
+      ember-source: 6.11.0(@glimmer/component@2.1.1)(rsvp@4.8.5)
 
   ember-modifier@4.3.0(@babel/core@7.29.0):
     dependencies:
@@ -10741,13 +10741,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ember-source@6.11.0(@glimmer/component@2.0.0)(rsvp@4.8.5):
+  ember-source@6.11.0(@glimmer/component@2.1.1)(rsvp@4.8.5):
     dependencies:
       '@babel/core': 7.29.0
       '@ember/edition-utils': 1.2.0
       '@embroider/addon-shim': 1.10.2
       '@glimmer/compiler': 0.94.11
-      '@glimmer/component': 2.0.0
+      '@glimmer/component': 2.1.1
       '@glimmer/destroyable': 0.94.8
       '@glimmer/global-context': 0.93.4
       '@glimmer/interfaces': 0.94.6
