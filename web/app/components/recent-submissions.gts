@@ -9,7 +9,7 @@ import { task } from 'ember-concurrency';
 
 import type { components, paths } from 'schema/openapi';
 import type Owner from '@ember/owner';
-import type RequestManager from '@ember-data/request';
+import type { RequestManager } from '@warp-drive/core';
 
 type Submission = components['schemas']['Submission'];
 

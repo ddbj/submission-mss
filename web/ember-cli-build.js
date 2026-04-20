@@ -20,9 +20,8 @@ module.exports = async function (defaults) {
   });
 
   setConfig(app, __dirname, {
-    deprecations: {
-      DEPRECATE_STORE_EXTENDS_EMBER_OBJECT: false,
-    },
+    compatWith: '5.8',
+    deprecations: {},
   });
 
   return compatBuild(app, buildOnce);

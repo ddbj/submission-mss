@@ -21,7 +21,7 @@ import UploadProgressModal from 'mssform/components/upload-progress-modal';
 import userMassDir from 'mssform/helpers/user-mass-dir';
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
 
-import type RequestManager from '@ember-data/request';
+import type { RequestManager } from '@warp-drive/core';
 import type { SubmissionFile, SubmissionFileData, SubmissionError } from 'mssform/models/submission-file';
 import type UploadProgressModalComponent from 'mssform/components/upload-progress-modal';
 

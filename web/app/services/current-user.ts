@@ -2,7 +2,7 @@ import Service, { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import type { paths } from 'schema/openapi';
-import type RequestManager from '@ember-data/request';
+import type { RequestManager } from '@warp-drive/core';
 import type RouterService from '@ember/routing/router-service';
 import type Transition from '@ember/routing/transition';
 

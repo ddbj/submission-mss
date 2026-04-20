@@ -3,7 +3,7 @@ import { setOwner } from '@ember/owner';
 
 import type { components } from 'schema/openapi';
 import type Owner from '@ember/owner';
-import type RequestManager from '@ember-data/request';
+import type { RequestManager } from '@warp-drive/core';
 
 type DfastExtractionPayload = components['schemas']['DfastExtraction'];
 

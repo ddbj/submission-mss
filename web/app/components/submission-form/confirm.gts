@@ -14,7 +14,7 @@ import type { paths } from 'schema/openapi';
 import type Submission from 'mssform/models/submission';
 import type { SubmissionFile } from 'mssform/models/submission-file';
 import type { Navigation, State } from 'mssform/components/submission-form';
-import type RequestManager from '@ember-data/request';
+import type { RequestManager } from '@warp-drive/core';
 import type UploadProgressModalComponent from 'mssform/components/upload-progress-modal';
 
 interface DirectUploadBlob {
