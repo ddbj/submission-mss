@@ -3,10 +3,6 @@ ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
 
-# skooma 0.3.7 requires minitest/unit, which was removed in minitest 6.
-# Provide a shim until skooma is updated.
-$LOAD_PATH.unshift Rails.root.join('test/support/shims').to_s
-
 require 'minitest/mock'
 require 'webmock/minitest'
 
