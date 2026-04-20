@@ -1,3 +1,4 @@
+import '@warp-drive/ember/install';
 import Application from 'mssform/app';
 import config from 'mssform/config/environment';
 import * as QUnit from 'qunit';

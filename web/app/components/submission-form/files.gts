@@ -20,7 +20,7 @@ import OtherPerson from 'mssform/models/other-person';
 import type { paths } from 'schema/openapi';
 import type Submission from 'mssform/models/submission';
 import type { Navigation, State } from 'mssform/components/submission-form';
-import type RequestManager from '@ember-data/request';
+import type { RequestManager } from '@warp-drive/core';
 import type { SubmissionFileData, SubmissionError, ParsedData } from 'mssform/models/submission-file';
 
 export interface Signature {

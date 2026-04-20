@@ -1,5 +1,4 @@
-import RequestManager from '@ember-data/request';
-import Fetch from '@ember-data/request/fetch';
+import { Fetch, RequestManager } from '@warp-drive/core';
 import { getOwner, setOwner } from '@ember/owner';
 
 import AuthHandler from 'mssform/request-handlers/auth';
