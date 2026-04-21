@@ -24,8 +24,8 @@ importers:
         specifier: ~5.8.1
         version: 5.8.1(@babel/core@7.29.0)(@glint/template@1.7.7)
       '@ember-intl/vite':
-        specifier: ^0.5.6
-        version: 0.5.6
+        specifier: ^1.0.0
+        version: 1.0.0
       '@ember/optional-features':
         specifier: ^3.0.0
         version: 3.0.0(@types/node@25.6.0)
@@ -890,8 +890,8 @@ packages:
   '@ember-data/rfc395-data@0.0.4':
     resolution: {integrity: sha512-tGRdvgC9/QMQSuSuJV45xoyhI0Pzjm7A9o/MVVA3HakXIImJbbzx/k/6dO9CUEQXIyS2y0fW6C1XaYOG7rY0FQ==}
 
-  '@ember-intl/vite@0.5.6':
-    resolution: {integrity: sha512-uHoaxZkGZ1mXdHL0Tn7yBEaOjsB2R0GBN8cdPpkyPT6WyTVJJKNGVh7EzZGCA0HvInwo0p2PrKMGiQ2DleDC5g==}
+  '@ember-intl/vite@1.0.0':
+    resolution: {integrity: sha512-eOKjAIQREdywfvt4beigecmWJ0pW3eId6kHlMIEFefH1ZHTblgDA/i7LFxzDB+goI8MSnyGxICeLUMsmwZpS7Q==}
     engines: {node: 20.* || >= 22}
 
   '@ember-tooling/blueprint-blueprint@0.2.1':
@@ -6268,6 +6268,10 @@ packages:
     resolution: {integrity: sha512-1MOpMXuhGzGL5TTCZFItxCc0AARf1EZFQkGqMm7ERKj8+Hgr5oLvJOVFcC+lRmR8hCe2S3jC4T5D7Vg/d7/fhA==}
     engines: {node: '>=6'}
 
+  tapable@2.3.3:
+    resolution: {integrity: sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==}
+    engines: {node: '>=6'}
+
   terser-webpack-plugin@5.4.0:
     resolution: {integrity: sha512-Bn5vxm48flOIfkdl5CaD2+1CiUVbonWQ3KQPyP7/EuIl9Gbzq/gQFOzaMFUEgVjB1396tcK0SG8XcNJ/2kDH8g==}
     engines: {node: '>= 10.13.0'}
@@ -7776,7 +7780,7 @@ snapshots:
 
   '@ember-data/rfc395-data@0.0.4': {}
 
-  '@ember-intl/vite@0.5.6':
+  '@ember-intl/vite@1.0.0':
     dependencies:
       '@codemod-utils/files': 4.0.1
       js-yaml: 4.1.1
@@ -11096,7 +11100,7 @@ snapshots:
   enhanced-resolve@5.20.1:
     dependencies:
       graceful-fs: 4.2.11
-      tapable: 2.3.2
+      tapable: 2.3.3
 
   ensure-posix-path@1.1.1: {}
 
@@ -14281,6 +14285,8 @@ snapshots:
 
   tapable@2.3.2: {}
 
+  tapable@2.3.3: {}
+
   terser-webpack-plugin@5.4.0(webpack@5.104.1):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
@@ -14800,7 +14806,7 @@ snapshots:
       mime-types: 2.1.35
       neo-async: 2.6.2
       schema-utils: 4.3.3
-      tapable: 2.3.2
+      tapable: 2.3.3
       terser-webpack-plugin: 5.4.0(webpack@5.104.1)
       watchpack: 2.5.1
       webpack-sources: 3.3.4
