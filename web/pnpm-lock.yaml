@@ -93,8 +93,8 @@ importers:
         specifier: ^4.0.9
         version: 4.0.9
       '@warp-drive/build-config':
-        specifier: 5.8.1
-        version: 5.8.1(@babel/core@7.29.0)(@glint/template@1.7.7)
+        specifier: 5.8.2
+        version: 5.8.2(@babel/core@7.29.0)(@glint/template@1.7.7)
       '@warp-drive/core':
         specifier: 5.8.1
         version: 5.8.1(@babel/core@7.29.0)(@glint/template@1.7.7)
