@@ -38,25 +38,11 @@ class UploadJobTest < ActiveJob::TestCase
       body:    '{}'
     )
 
-    stub_request(:get, 'https://sheets.googleapis.com/v4/spreadsheets/WORKING_LIST_SHEET_ID/values:batchGet?ranges=WORKING_LIST_SHEET_NAME!A1:A100').to_return(
+    stub_request(:get, 'https://sheets.googleapis.com/v4/spreadsheets/WORKING_LIST_SHEET_ID/values/WORKING_LIST_SHEET_NAME!A:A').to_return(
       headers: {content_type: 'application/json'},
 
       body: JSON.generate(
-        valueRanges: [
-          values: 100.times.map {|i| ["CELL-#{i}"] }
-        ]
-      )
-    )
-
-    stub_request(:get, 'https://sheets.googleapis.com/v4/spreadsheets/WORKING_LIST_SHEET_ID/values:batchGet?ranges=WORKING_LIST_SHEET_NAME!A101:A200').to_return(
-      headers: {content_type: 'application/json'},
-
-      body: JSON.generate(
-        valueRanges: [
-          values: [
-            ['NSUB000042']
-          ]
-        ]
+        values: 100.times.map {|i| ["CELL-#{i}"] } + [['NSUB000042']]
       )
     )
 

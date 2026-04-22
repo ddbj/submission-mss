@@ -1,6 +1,7 @@
 Retriable.configure do |config|
   config.contexts[:google] = {
     on: [
+      Google::Apis::RateLimitError,
       Google::Apis::ServerError,
       Google::Apis::TransmissionError
     ],

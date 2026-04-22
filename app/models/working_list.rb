@@ -120,19 +120,13 @@ class WorkingList
 
   private
 
-  def find_row_number_by_mass_id(target_mass_id, offset: 1, limit: 100)
-    res = Retriable.with_context(:google) {
-      @service.batch_get_spreadsheet_values(@sheet_id, ranges: "#{@sheet_name}!A#{offset}:A#{offset + limit - 1}")
+  def find_row_number_by_mass_id(target_mass_id)
+    values = Retriable.with_context(:google) {
+      @service.get_spreadsheet_values(@sheet_id, "#{@sheet_name}!A:A").values || []
     }
 
-    values = res.value_ranges.first.values
+    index = values.rindex {|(mass_id)| mass_id == target_mass_id }
 
-    values.each_with_index do |(mass_id), i|
-      return offset + i if mass_id == target_mass_id
-    end
-
-    return nil if values.size < limit
-
-    find_row_number_by_mass_id(target_mass_id, offset: offset + limit, limit:)
+    index && index + 1
   end
 end
