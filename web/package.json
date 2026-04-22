@@ -33,7 +33,7 @@
     "@babel/plugin-transform-runtime": "^7.29.0",
     "@babel/plugin-transform-typescript": "^7.28.6",
     "@ember-data/request": "~5.8.1",
-    "@ember-intl/vite": "^0.5.6",
+    "@ember-intl/vite": "^1.0.0",
     "@ember/optional-features": "^3.0.0",
     "@ember/test-helpers": "^5.4.1",
     "@embroider/compat": "^4.1.14",
