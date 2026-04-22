@@ -118,7 +118,7 @@ export class SubmissionFile implements SubmissionFileData {
             }
 
             if (payload) {
-              this.parsedData = payload as ParsedData;
+              this.parsedData = payload;
             }
 
             resolve(this.parsedData);
