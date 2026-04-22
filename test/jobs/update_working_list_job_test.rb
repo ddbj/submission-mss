@@ -1,10 +1,6 @@
 require 'test_helper'
 
-using TmpUploadedFile
-
-class UploadJobTest < ActiveJob::TestCase
-  include ActionMailer::TestHelper
-
+class UpdateWorkingListJobTest < ActiveJob::TestCase
   setup do
     @submission = Submission.create!(
       mass_id:        'NSUB000042',
@@ -23,13 +19,9 @@ class UploadJobTest < ActiveJob::TestCase
       )
     )
 
-    via = WebuiUpload.create!(files: [
-      Rack::Test::UploadedFile.tmp('example.ann')
-    ])
-
-    @upload = Upload.create!(
+    Upload.create!(
       submission: @submission,
-      via:,
+      via:        WebuiUpload.new,
       created_at: '2022-01-02 12:34:56'
     )
 
@@ -47,21 +39,13 @@ class UploadJobTest < ActiveJob::TestCase
     )
 
     stub_request(:put, 'https://sheets.googleapis.com/v4/spreadsheets/WORKING_LIST_SHEET_ID/values/WORKING_LIST_SHEET_NAME!L101').with(query: hash_including({}))
-
-    UploadJob.perform_now @upload
   end
 
-  test 'copies files and updates working list' do
-    dir = Rails.root.join('tmp/storage/submissions/NSUB000042/20220102-123456')
-
-    assert_equal 'directory', dir.ftype
-    assert_equal 'file',      dir.join('example.ann').ftype
+  test 'updates the data_arrival_date cell in the working list' do
+    UpdateWorkingListJob.perform_now @submission
 
     assert_requested :put, 'https://sheets.googleapis.com/v4/spreadsheets/WORKING_LIST_SHEET_ID/values/WORKING_LIST_SHEET_NAME!L101',
       body:  {values: [['20220102-123456']]},
       query: {valueInputOption: 'RAW'}
-
-    assert_enqueued_email_with SubmissionMailer, :submitter_confirmation, params: {submission: @submission}
-    assert_enqueued_email_with SubmissionMailer, :curator_notification, params: {submission: @submission}
   end
 end

@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class SubmissionsTest < ActionDispatch::IntegrationTest
+  include ActionMailer::TestHelper
+
   setup do
     @user = users(:alice)
 
@@ -42,12 +44,20 @@ class SubmissionsTest < ActionDispatch::IntegrationTest
 
     assert_conform_schema 200
 
+    submission = @user.submissions.order(:id).last
+
     path  = Rails.application.config_for(:app).upload_events_log!
     event = JSON.parse(File.read(path).lines.last)
 
-    assert_equal @user.submissions.order(:id).last.mass_id, event['mass_id']
-    assert_equal @user.uid,                                 event['dway_account']
-    assert_match(/\A\d{8}-\d{6}\z/,                         event['data_arrival_date'])
+    assert_equal submission.mass_id, event['mass_id']
+    assert_equal @user.uid,          event['dway_account']
+    assert_match(/\A\d{8}-\d{6}\z/,  event['data_arrival_date'])
+
+    assert_enqueued_with job: CopySubmissionFilesJob
+    assert_enqueued_with job: AddToWorkingListJob, args: [submission]
+
+    assert_enqueued_email_with SubmissionMailer, :submitter_confirmation, params: {submission:}
+    assert_enqueued_email_with SubmissionMailer, :curator_notification,   params: {submission:}
   end
 
   test 'show' do
