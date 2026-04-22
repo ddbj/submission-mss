@@ -36,7 +36,7 @@
     "@ember-intl/vite": "^1.0.0",
     "@ember/optional-features": "^3.0.0",
     "@ember/test-helpers": "^5.4.1",
-    "@embroider/compat": "^4.1.14",
+    "@embroider/compat": "^4.1.17",
     "@embroider/config-meta-loader": "^1.0.0",
     "@embroider/core": "^4.4.7",
     "@embroider/macros": "^1.20.2",
