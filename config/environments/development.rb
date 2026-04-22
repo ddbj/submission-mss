@@ -70,5 +70,6 @@ Rails.application.configure do
 
   config.generators.apply_rubocop_autocorrect_after_generate!
 
-  config.active_storage.service = :seaweedfs
+  config.active_storage.service                       = :seaweedfs
+  config.mission_control.jobs.http_basic_auth_enabled = false
 end
