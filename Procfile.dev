@@ -1,4 +1,4 @@
 api: bin/rails server --port 3000
 web: cd web && pnpm start --port 4200
-seaweedfs: docker run --rm --name mssform-seaweedfs --publish 8333:8333 --volume mssform_seaweedfs:/data --volume ./docker/seaweedfs/entrypoint.sh:/entrypoint.sh --volume ./docker/seaweedfs/s3.development.json:/etc/seaweedfs/s3.json chrislusf/seaweedfs /entrypoint.sh
+seaweedfs: docker/seaweedfs/run.sh
 keycloak: docker run --rm --name mssform-keycloak --publish 8080:8080 --env KEYCLOAK_ADMIN=keycloak --env KEYCLOAK_ADMIN_PASSWORD=keycloak --env KC_DB_USERNAME=sa --volume mssform_keycloak:/opt/keycloak/data keycloak/keycloak:26.3.1 start-dev
