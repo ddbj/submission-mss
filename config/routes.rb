@@ -29,9 +29,13 @@ Rails.application.routes.draw do
     "#{web_url}/home/submission/#{submission.mass_id}/upload?locale=#{submission.email_language}"
   end
 
+  namespace :admin do
+    mount MissionControl::Jobs::Engine, at: '/jobs'
+  end
+
+  get 'up' => 'rails/health#show', as: :rails_health_check
+
   get '*paths', to: 'frontends#show', constraints: ->(req) {
     !req.xhr? && req.format.html?
   }
-
-  get 'up' => 'rails/health#show', as: :rails_health_check
 end

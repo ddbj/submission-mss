@@ -41,10 +41,11 @@ module MSSForm
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    config.action_mailer.delivery_job       = 'MailDeliveryJob'
-    config.active_storage.draw_routes       = false
-    config.active_storage.variant_processor = :disabled
-    config.time_zone                        = 'Asia/Tokyo'
+    config.action_mailer.delivery_job                 = 'MailDeliveryJob'
+    config.active_storage.draw_routes                 = false
+    config.active_storage.variant_processor           = :disabled
+    config.mission_control.jobs.base_controller_class = 'ActionController::Base'
+    config.time_zone                                  = 'Asia/Tokyo'
 
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
