@@ -92,7 +92,7 @@
     "globals": "^17.3.0",
     "js-yaml": "^4.1.1",
     "jwt-decode": "^4.0.0",
-    "msw": "^2.13.1",
+    "msw": "^2.13.4",
     "openapi-msw": "^2.0.0",
     "outdent": "^0.8.0",
     "prettier": "^3.8.3",
