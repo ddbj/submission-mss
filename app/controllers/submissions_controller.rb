@@ -31,7 +31,12 @@ class SubmissionsController < ApplicationController
     }
 
     UploadEventLog.append upload
-    ProcessSubmissionJob.perform_later upload
+
+    CopySubmissionFilesJob.perform_later upload
+    AddToWorkingListJob.perform_later    @submission
+
+    SubmissionMailer.with(submission: @submission).submitter_confirmation.deliver_later
+    SubmissionMailer.with(submission: @submission).curator_notification.deliver_later
   end
 
   def last_submitted

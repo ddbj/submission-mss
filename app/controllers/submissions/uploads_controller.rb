@@ -12,7 +12,12 @@ class Submissions::UploadsController < ApplicationController
     )
 
     UploadEventLog.append upload
-    UploadJob.perform_later upload
+
+    CopySubmissionFilesJob.perform_later upload
+    UpdateWorkingListJob.perform_later   submission
+
+    SubmissionMailer.with(submission:).submitter_confirmation.deliver_later
+    SubmissionMailer.with(submission:).curator_notification.deliver_later
 
     head :no_content
   end
