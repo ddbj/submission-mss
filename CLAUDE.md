@@ -4,7 +4,7 @@ DDBJ MSS (Mass Submission System) — monorepo with a Rails API and an Ember.js 
 
 ## Tech Stack
 
-- **Backend**: Ruby 4.0.2 / Rails 8.1 (API only) / PostgreSQL / Solid Queue / Solid Cache
+- **Backend**: Ruby 4.0.3 / Rails 8.1 (API only) / PostgreSQL / Solid Queue / Solid Cache
 - **Frontend**: Ember.js 6 / TypeScript / GTS (`.gts`) / Bootstrap 5 / Vite
 - **Storage**: SeaweedFS (S3-compatible) + Active Storage direct upload
 - **Auth**: OpenID Connect (Keycloak)
