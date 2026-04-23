@@ -221,6 +221,8 @@ COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
 \t\t\temail\talice@example.com
 \t\t\tinstitute\tWonderland Inc.
 CLN01\tgene\t1..100\tlocus_tag\tlocus_0001
+\tgene\t101..200\tlocus_tag\tLOCUS_0002
+\tgene\t201..300\tlocus_tag\tLocus_0003
     `,
       ],
       'foo.ann',
@@ -234,6 +236,16 @@ CLN01\tgene\t1..100\tlocus_tag\tlocus_0001
         severity: 'warning',
         id: 'annotation-file-parser.temporary-locus-tag',
         value: 'locus_0001',
+      },
+      {
+        severity: 'warning',
+        id: 'annotation-file-parser.temporary-locus-tag',
+        value: 'LOCUS_0002',
+      },
+      {
+        severity: 'warning',
+        id: 'annotation-file-parser.temporary-locus-tag',
+        value: 'Locus_0003',
       },
     ]);
 

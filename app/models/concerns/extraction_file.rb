@@ -105,7 +105,7 @@ module ExtractionFile
           # do nothing
         end
       else
-        if qualifier == 'locus_tag' && value&.start_with?('locus_', 'LOCUS_')
+        if qualifier == 'locus_tag' && value&.match?(/\Alocus_/i)
           warnings << {severity: :warning, id: 'annotation-file-parser.temporary-locus-tag', value:}
         end
       end

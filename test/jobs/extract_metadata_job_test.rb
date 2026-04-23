@@ -202,6 +202,8 @@ class ExtractMetadataJobTest < ActiveJob::TestCase
       \t\t\temail\talice@example.com
       \t\t\tinstitute\tWonderland Inc.
       CLN01\tgene\t1..100\tlocus_tag\tlocus_0001
+      \tgene\t101..200\tlocus_tag\tLOCUS_0002
+      \tgene\t201..300\tlocus_tag\tLocus_0003
     ANN
 
     ExtractMetadataJob.perform_now @extraction
@@ -220,9 +222,9 @@ class ExtractMetadataJobTest < ActiveJob::TestCase
     }, file.parsed_data)
 
     assert_equal [
-      'severity' => 'warning',
-      'id'       => 'annotation-file-parser.temporary-locus-tag',
-      'value'    => 'locus_0001'
+      {'severity' => 'warning', 'id' => 'annotation-file-parser.temporary-locus-tag', 'value' => 'locus_0001'},
+      {'severity' => 'warning', 'id' => 'annotation-file-parser.temporary-locus-tag', 'value' => 'LOCUS_0002'},
+      {'severity' => 'warning', 'id' => 'annotation-file-parser.temporary-locus-tag', 'value' => 'Locus_0003'}
     ], file._errors
   end
 
