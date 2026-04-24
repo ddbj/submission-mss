@@ -129,7 +129,7 @@ GEM
       activemodel
     enumerize (2.8.1)
       activesupport (>= 3.2)
-    erb (6.0.2)
+    erb (6.0.4)
     erubi (1.13.1)
     et-orbi (1.4.0)
       tzinfo
