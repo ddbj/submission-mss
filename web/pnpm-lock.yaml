@@ -69,8 +69,8 @@ importers:
         specifier: ^19.23.1
         version: 19.23.1
       '@rails/activestorage':
-        specifier: ^8.1.200
-        version: 8.1.200
+        specifier: ^8.1.300
+        version: 8.1.300
       '@rollup/plugin-babel':
         specifier: ^7.0.0
         version: 7.0.0(@babel/core@7.29.0)(rollup@4.60.1)
@@ -1621,8 +1621,8 @@ packages:
   '@primer/octicons@19.23.1':
     resolution: {integrity: sha512-CzjGmxkmNhyst6EekrS3SJPdtzgIkUMP/LSJch65y99/kmiFXbO1a+q7zoYe3hnI9NaOM0IN+ydDIbOmd8YqcA==}
 
-  '@rails/activestorage@8.1.200':
-    resolution: {integrity: sha512-bPZqv447REBd1NQfba//FjgUqbUd93zKh7+BWhh3vRZ7Nm+RUgm6c5GbWctmik/rMHjsruTHhusYGyoKyf60pg==}
+  '@rails/activestorage@8.1.300':
+    resolution: {integrity: sha512-AOv3zZrTJjQlzm4L9uzOQtCz6zaM4IqUyux6yzSqmS+PZ8EzwD1F2JAc4LlJNJAv4MSyNYriG+CaCm1QbQTjsA==}
 
   '@rollup/plugin-babel@7.0.0':
     resolution: {integrity: sha512-NS2+P7v80N3MQqehZEjgpaFb9UyX3URNMW/zvoECKGo4PY4DvJfQusTI7BX/Ks+CPvtTfk3TqcR6S9VYBi/C+A==}
@@ -8509,7 +8509,7 @@ snapshots:
     dependencies:
       object-assign: 4.1.1
 
-  '@rails/activestorage@8.1.200':
+  '@rails/activestorage@8.1.300':
     dependencies:
       spark-md5: 3.0.2
 
