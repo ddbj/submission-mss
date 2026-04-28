@@ -82,7 +82,7 @@
     "ember-svg-jar": "^2.7.1",
     "ember-template-lint": "^7.9.3",
     "ember-truth-helpers": "^5.0.0",
-    "eslint": "^9.39.4",
+    "eslint": "^10.2.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-ember": "^13.1.0",
     "eslint-plugin-n": "^17.24.0",
