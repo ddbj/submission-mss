@@ -24,8 +24,8 @@ importers:
         specifier: ~5.8.2
         version: 5.8.2(@babel/core@7.29.0)(@glint/template@1.7.7)
       '@ember-intl/vite':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.0.1
+        version: 1.0.1
       '@ember/optional-features':
         specifier: ^3.0.0
         version: 3.0.0(@types/node@25.6.0)
@@ -890,8 +890,8 @@ packages:
   '@ember-data/rfc395-data@0.0.4':
     resolution: {integrity: sha512-tGRdvgC9/QMQSuSuJV45xoyhI0Pzjm7A9o/MVVA3HakXIImJbbzx/k/6dO9CUEQXIyS2y0fW6C1XaYOG7rY0FQ==}
 
-  '@ember-intl/vite@1.0.0':
-    resolution: {integrity: sha512-eOKjAIQREdywfvt4beigecmWJ0pW3eId6kHlMIEFefH1ZHTblgDA/i7LFxzDB+goI8MSnyGxICeLUMsmwZpS7Q==}
+  '@ember-intl/vite@1.0.1':
+    resolution: {integrity: sha512-uJfhzyZbhUKG40ne2Far0F4kBc/I5hlAov348NLXnGSIwbxnsXeqgIbFbdM94MF0X+j9ZAGKT3IqCVZmcs7m8w==}
     engines: {node: 20.* || >= 22}
 
   '@ember-tooling/blueprint-blueprint@0.2.1':
@@ -7688,7 +7688,7 @@ snapshots:
 
   '@ember-data/rfc395-data@0.0.4': {}
 
-  '@ember-intl/vite@1.0.0':
+  '@ember-intl/vite@1.0.1':
     dependencies:
       '@codemod-utils/files': 4.0.1
       js-yaml: 4.1.1
