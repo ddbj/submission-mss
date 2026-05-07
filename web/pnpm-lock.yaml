@@ -201,11 +201,11 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0
       msw:
-        specifier: ^2.14.3
-        version: 2.14.3(@types/node@25.6.2)(typescript@6.0.3)
+        specifier: ^2.14.4
+        version: 2.14.4(@types/node@25.6.2)(typescript@6.0.3)
       openapi-msw:
         specifier: ^2.0.0
-        version: 2.0.0(msw@2.14.3(@types/node@25.6.2)(typescript@6.0.3))
+        version: 2.0.0(msw@2.14.4(@types/node@25.6.2)(typescript@6.0.3))
       outdent:
         specifier: ^0.8.0
         version: 0.8.0
@@ -1887,9 +1887,6 @@ packages:
 
   '@types/minimatch@5.1.2':
     resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
-
-  '@types/node@25.6.0':
-    resolution: {integrity: sha512-+qIYRKdNYJwY3vRCZMdJbPLJAtGjQBudzZzdzwQYkEPQd+PJGixUL5QfvCLDaULoLv+RhT3LDkwEfKaAkgSmNQ==}
 
   '@types/node@25.6.2':
     resolution: {integrity: sha512-sokuT28dxf9JT5Kady1fsXOvI4HVpjZa95NKT5y9PNTIrs2AsobR4GFAA90ZG8M+nxVRLysCXsVj6eGC7Vbrlw==}
@@ -4172,8 +4169,8 @@ packages:
   grapheme-splitter@1.0.4:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
 
-  graphql@16.13.2:
-    resolution: {integrity: sha512-5bJ+nf/UCpAjHM8i06fl7eLyVC9iuNAjm9qzkiu2ZGhM0VscSvS6WDPfAwkdkBuoXGM9FJSbKl6wylMwP9Ktig==}
+  graphql@16.14.0:
+    resolution: {integrity: sha512-BBvQ/406p+4CZbTpCbVPSxfzrZrbnuWSP1ELYgyS6B+hNeKzgrdB4JczCa5VZUBQrDa9hUngm0KnexY6pJRN5Q==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
 
   growly@1.3.0:
@@ -5014,8 +5011,8 @@ packages:
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
-  msw@2.14.3:
-    resolution: {integrity: sha512-kk8G5cocVlJ4wsKMGZegn2H6XLOEKjbA+nSJE2354e/SRp4mDicCHUYnMXpymzVcVDCs+GUAsmNqSn+yHv4T2A==}
+  msw@2.14.4:
+    resolution: {integrity: sha512-HVPZJ9Rx4nDCWhjNQ57lKQGSE+0zDHw0xWE2IN2rLOUTLkagEBWNlvWuKYNwG2pQWq96TMd8NiSK/6vO1udnWQ==}
     engines: {node: '>=18'}
     hasBin: true
     peerDependencies:
@@ -8671,7 +8668,7 @@ snapshots:
 
   '@types/cors@2.8.19':
     dependencies:
-      '@types/node': 25.6.0
+      '@types/node': 25.6.2
 
   '@types/eslint-scope@3.7.7':
     dependencies:
@@ -8696,7 +8693,7 @@ snapshots:
 
   '@types/fs-extra@5.1.0':
     dependencies:
-      '@types/node': 25.6.0
+      '@types/node': 25.6.2
 
   '@types/glob@9.0.0':
     dependencies:
@@ -8707,10 +8704,6 @@ snapshots:
   '@types/minimatch@3.0.5': {}
 
   '@types/minimatch@5.1.2': {}
-
-  '@types/node@25.6.0':
-    dependencies:
-      undici-types: 7.19.2
 
   '@types/node@25.6.2':
     dependencies:
@@ -8725,13 +8718,13 @@ snapshots:
   '@types/rimraf@2.0.5':
     dependencies:
       '@types/glob': 9.0.0
-      '@types/node': 25.6.0
+      '@types/node': 25.6.2
 
   '@types/rsvp@4.0.9': {}
 
   '@types/set-cookie-parser@2.4.10':
     dependencies:
-      '@types/node': 25.6.0
+      '@types/node': 25.6.2
 
   '@types/statuses@2.0.6': {}
 
@@ -10906,7 +10899,7 @@ snapshots:
   engine.io@6.6.5:
     dependencies:
       '@types/cors': 2.8.19
-      '@types/node': 25.6.0
+      '@types/node': 25.6.2
       accepts: 1.3.8
       base64id: 2.0.0
       cookie: 0.7.2
@@ -11868,7 +11861,7 @@ snapshots:
 
   grapheme-splitter@1.0.4: {}
 
-  graphql@16.13.2: {}
+  graphql@16.14.0: {}
 
   growly@1.3.0: {}
 
@@ -12732,14 +12725,14 @@ snapshots:
 
   ms@2.1.3: {}
 
-  msw@2.14.3(@types/node@25.6.2)(typescript@6.0.3):
+  msw@2.14.4(@types/node@25.6.2)(typescript@6.0.3):
     dependencies:
       '@inquirer/confirm': 6.0.12(@types/node@25.6.2)
       '@mswjs/interceptors': 0.41.8
       '@open-draft/deferred-promise': 3.0.0
       '@types/statuses': 2.0.6
       cookie: 1.1.1
-      graphql: 16.13.2
+      graphql: 16.14.0
       headers-polyfill: 5.0.1
       is-node-process: 1.2.0
       outvariant: 1.4.3
@@ -12896,9 +12889,9 @@ snapshots:
     dependencies:
       mimic-fn: 2.1.0
 
-  openapi-msw@2.0.0(msw@2.14.3(@types/node@25.6.2)(typescript@6.0.3)):
+  openapi-msw@2.0.0(msw@2.14.4(@types/node@25.6.2)(typescript@6.0.3)):
     dependencies:
-      msw: 2.14.3(@types/node@25.6.2)(typescript@6.0.3)
+      msw: 2.14.4(@types/node@25.6.2)(typescript@6.0.3)
 
   optional-require@1.1.10:
     dependencies:
