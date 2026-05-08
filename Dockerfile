@@ -49,7 +49,7 @@ RUN bundle exec bootsnap precompile app/ lib/
 # Precompile assets for mission_control-jobs (and anything else served via Propshaft)
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
-FROM docker.io/library/node:24.14.1 AS web
+FROM docker.io/library/node:26.1.0 AS web
 
 ARG RAILS_ENV
 
