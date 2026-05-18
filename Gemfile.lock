@@ -207,7 +207,7 @@ GEM
       regexp_parser (~> 2.0)
       uri-idna (~> 0.2)
       zeitwerk (~> 2.6)
-    jwt (3.1.2)
+    jwt (3.2.0)
       base64
     kamal (2.11.0)
       activesupport (>= 7.0)
