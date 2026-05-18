@@ -1,0 +1,12 @@
+allowBuilds:
+  core-js: true
+  esbuild: true
+  msw: true
+
+onlyBuiltDependencies:
+  - core-js
+  - esbuild
+  - msw
+
+overrides:
+  ember-cli-htmlbars: ^7.0.1
