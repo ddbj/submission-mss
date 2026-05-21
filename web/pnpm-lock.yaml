@@ -144,8 +144,8 @@ importers:
         specifier: ^5.2.0
         version: 5.2.0(@babel/core@7.29.0)(@glint/template@1.7.7)
       ember-intl:
-        specifier: ^8.2.4
-        version: 8.2.4(@babel/core@7.29.0)(@ember/test-helpers@5.4.2(@babel/core@7.29.0)(@glint/template@1.7.7))
+        specifier: ^8.2.5
+        version: 8.2.5(@babel/core@7.29.0)(@ember/test-helpers@5.4.2(@babel/core@7.29.0)(@glint/template@1.7.7))
       ember-load-initializers:
         specifier: ^3.0.1
         version: 3.0.1(ember-source@7.0.0(@glimmer/component@2.1.1))
@@ -3315,8 +3315,8 @@ packages:
   ember-estree@0.6.4:
     resolution: {integrity: sha512-/0+JLFt200RB/gUfLfRALTFWby6fGS7Bu+NN985Y8gadEntX4KoiYHhOl2hkzvy+AmBi+PbHxBa9QVCV7K/PUg==}
 
-  ember-intl@8.2.4:
-    resolution: {integrity: sha512-gVy24efx2ShZfkRgBEHt8omXL0yzcykE3Rtbp3Py1aPiNlVbp+aNwLEX1LTV/M0aIQCAkXdnqJn74IsDiW/yjg==}
+  ember-intl@8.2.5:
+    resolution: {integrity: sha512-rgHLQcE1Pqyf6Lem4pPP66jU7RjOkmPxQc+c18rUtgHjNeG9B48UL2JRJT0hGH0WCXIyj89t/yJxyoURKEodaA==}
     engines: {node: 20.* || >= 22}
     peerDependencies:
       '@ember/test-helpers': ^4.0.0 || ^5.0.0
@@ -3407,8 +3407,8 @@ packages:
     resolution: {integrity: sha512-QyL119InA+XXEkNLNTPCXPugSvOfhwv0JOlGNzvxs0hZaiHLNvXSpudUWsOlsXGWJh8G6ckCScEkVHfX3kw/2Q==}
     engines: {node: '>=10.13.0'}
 
-  enhanced-resolve@5.21.5:
-    resolution: {integrity: sha512-mLCNbrQli11K1ySUmuNt4ZUB3OpGIDq4q2vTBTf5cL2lpsRjI9QKqSD0ndjW8FyvcW/Jj46gMe9syyHAsvMa/A==}
+  enhanced-resolve@5.21.6:
+    resolution: {integrity: sha512-aNnGCvbJ/RIyWo1IuhNdVjnNF+EjH9wpzpNHt+ci/m9He9LJvUN8wrCcXjp9cWsGNAuvSpVFTx/vraAFQ8qGjQ==}
     engines: {node: '>=10.13.0'}
 
   ensure-posix-path@1.1.1:
@@ -10290,7 +10290,7 @@ snapshots:
       content-tag: 4.2.0
       oxc-parser: 0.130.0
 
-  ember-intl@8.2.4(@babel/core@7.29.0)(@ember/test-helpers@5.4.2(@babel/core@7.29.0)(@glint/template@1.7.7)):
+  ember-intl@8.2.5(@babel/core@7.29.0)(@ember/test-helpers@5.4.2(@babel/core@7.29.0)(@glint/template@1.7.7)):
     dependencies:
       '@embroider/addon-shim': 1.10.2
       '@formatjs/intl': 4.1.11
@@ -10445,7 +10445,7 @@ snapshots:
       graceful-fs: 4.2.11
       tapable: 2.3.3
 
-  enhanced-resolve@5.21.5:
+  enhanced-resolve@5.21.6:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.3.3
@@ -13858,7 +13858,7 @@ snapshots:
       acorn-import-phases: 1.0.4(acorn@8.16.0)
       browserslist: 4.28.2
       chrome-trace-event: 1.0.4
-      enhanced-resolve: 5.21.5
+      enhanced-resolve: 5.21.6
       es-module-lexer: 2.1.0
       eslint-scope: 5.1.1
       events: 3.3.0
