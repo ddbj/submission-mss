@@ -103,7 +103,7 @@
     "stylelint-config-standard": "^40.0.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.59.4",
-    "vite": "^7.3.2"
+    "vite": "^8.0.13"
   },
   "engines": {
     "node": ">= 20.19"
