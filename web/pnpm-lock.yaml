@@ -48,8 +48,8 @@ importers:
         specifier: ^1.20.3
         version: 1.20.3(@babel/core@7.29.7)(@glint/template@1.7.7)
       '@embroider/vite':
-        specifier: ^1.7.4
-        version: 1.7.4(@embroider/core@4.6.0(@glint/template@1.7.7))(@glint/template@1.7.7)(vite@8.0.14(@types/node@25.9.1)(terser@5.48.0)(yaml@2.9.0))
+        specifier: ^1.7.5
+        version: 1.7.5(@embroider/core@4.6.0(@glint/template@1.7.7))(@glint/template@1.7.7)(vite@8.0.14(@types/node@25.9.1)(terser@5.48.0)(yaml@2.9.0))
       '@eslint/js':
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.4.0)
@@ -1413,10 +1413,10 @@ packages:
     resolution: {integrity: sha512-DAEB8B0rAHMYnwCPIeYIrZ6uKGEesQx5XqLuO0beqDnZLwsIRcvWSSbpUgOu6nwqXm5EiJiJaTbrHedOSrlR5g==}
     engines: {node: 12.* || 14.* || >= 16}
 
-  '@embroider/vite@1.7.4':
-    resolution: {integrity: sha512-tuJG6nGiMCJevrfboIZU2/CzokyVyDXtnN9bXVY0dvRWFQjh0vsCM12rLzRMQeP/tin/pXOg6dNe4O3Urc9SOA==}
+  '@embroider/vite@1.7.5':
+    resolution: {integrity: sha512-hjqUaP6u8iSfXxBCodkvpu5z7DwnaETEokeCiRthpu9YuEIS9GTbbLG34kXBfAzHk9HKrThm7utuFcTSdCW8ag==}
     peerDependencies:
-      '@embroider/core': ^4.5.0
+      '@embroider/core': ^4.6.0
       vite: '>= 5.2.0'
 
   '@emnapi/core@1.10.0':
@@ -3460,8 +3460,8 @@ packages:
     engines: {node: '>=0.10.0'}
     hasBin: true
 
-  electron-to-chromium@1.5.362:
-    resolution: {integrity: sha512-PUY2DrLvkjkUuWqq+KPL2iWshrJsZOcIojzRQ7eXFacc9dWga7MGMJAa15VbiejSZB1PAXaRLAiKgruHP8LB1w==}
+  electron-to-chromium@1.5.363:
+    resolution: {integrity: sha512-VjUKPyWzGnT1fujlkEGC/BvN70Hh70KXtAqcmniXviYlJC/ivcT+BWGPyxWVbJZLfvtKR6dqg1L7T7pgAMBtWA==}
 
   ember-auto-import@2.13.1:
     resolution: {integrity: sha512-MjxJK2nfCJmmQI/rju2TrycmAa1AxmTarfvygbcrrgW0s4WeZHtbGXCO2z1lW9wfrShqeTo/o+3Mgk+9xcDTWg==}
@@ -6253,8 +6253,8 @@ packages:
     resolution: {integrity: sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==}
     engines: {node: '>=6'}
 
-  terser-webpack-plugin@5.6.0:
-    resolution: {integrity: sha512-Eum+5ajkaOhf5KbM26osvv21kLD7BaGqQ1UA4Ami4arYwylmGUQTgHFpHDdmJod1q4QXa66p0to/FBKID+J1vA==}
+  terser-webpack-plugin@5.6.1:
+    resolution: {integrity: sha512-201R5j+sJpK8nFWwKVyNfZot8FaJbLZDq5evriVzbV1wDtSXDjRUDRfJzHpAaxFDMEhsZL1QkeqM61wgsS3KaQ==}
     engines: {node: '>= 10.13.0'}
     peerDependencies:
       '@minify-html/node': '*'
@@ -8494,7 +8494,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@embroider/vite@1.7.4(@embroider/core@4.6.0(@glint/template@1.7.7))(@glint/template@1.7.7)(vite@8.0.14(@types/node@25.9.1)(terser@5.48.0)(yaml@2.9.0))':
+  '@embroider/vite@1.7.5(@embroider/core@4.6.0(@glint/template@1.7.7))(@glint/template@1.7.7)(vite@8.0.14(@types/node@25.9.1)(terser@5.48.0)(yaml@2.9.0))':
     dependencies:
       '@babel/core': 7.29.7
       '@embroider/core': 4.6.0(@glint/template@1.7.7)
@@ -10156,7 +10156,7 @@ snapshots:
     dependencies:
       baseline-browser-mapping: 2.10.32
       caniuse-lite: 1.0.30001793
-      electron-to-chromium: 1.5.362
+      electron-to-chromium: 1.5.363
       node-releases: 2.0.46
       update-browserslist-db: 1.2.3(browserslist@4.28.2)
 
@@ -10681,7 +10681,7 @@ snapshots:
     dependencies:
       jake: 10.9.4
 
-  electron-to-chromium@1.5.362: {}
+  electron-to-chromium@1.5.363: {}
 
   ember-auto-import@2.13.1(@glint/template@1.7.7)(webpack@5.106.2(postcss@8.5.15)):
     dependencies:
@@ -14152,7 +14152,7 @@ snapshots:
 
   tapable@2.3.3: {}
 
-  terser-webpack-plugin@5.6.0(postcss@8.5.15)(webpack@5.106.2(postcss@8.5.15)):
+  terser-webpack-plugin@5.6.1(postcss@8.5.15)(webpack@5.106.2(postcss@8.5.15)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
@@ -14643,7 +14643,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 4.3.3
       tapable: 2.3.3
-      terser-webpack-plugin: 5.6.0(postcss@8.5.15)(webpack@5.106.2(postcss@8.5.15))
+      terser-webpack-plugin: 5.6.1(postcss@8.5.15)(webpack@5.106.2(postcss@8.5.15))
       watchpack: 2.5.1
       webpack-sources: 3.5.0
     transitivePeerDependencies:
