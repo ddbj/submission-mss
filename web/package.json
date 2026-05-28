@@ -39,7 +39,7 @@
     "@embroider/compat": "^4.1.19",
     "@embroider/config-meta-loader": "^1.0.0",
     "@embroider/core": "^4.6.0",
-    "@embroider/macros": "^1.20.2",
+    "@embroider/macros": "^1.20.3",
     "@embroider/vite": "^1.7.4",
     "@eslint/js": "^10.0.1",
     "@glimmer/component": "^2.1.1",
