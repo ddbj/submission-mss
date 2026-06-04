@@ -84,7 +84,7 @@
     "ember-truth-helpers": "^5.0.0",
     "eslint": "^10.3.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-ember": "^13.3.1",
+    "eslint-plugin-ember": "^13.3.2",
     "eslint-plugin-n": "^18.0.1",
     "eslint-plugin-qunit": "^8.2.6",
     "eslint-plugin-warp-drive": "^5.8.2",
