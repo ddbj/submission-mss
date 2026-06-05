@@ -40,7 +40,7 @@
     "@embroider/config-meta-loader": "^1.0.0",
     "@embroider/core": "^4.6.0",
     "@embroider/macros": "^1.20.3",
-    "@embroider/vite": "^1.7.5",
+    "@embroider/vite": "^1.7.6",
     "@eslint/js": "^10.0.1",
     "@glimmer/component": "^2.1.1",
     "@glimmer/tracking": "^1.1.2",
