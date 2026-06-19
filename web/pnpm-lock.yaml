@@ -45,8 +45,8 @@ importers:
         specifier: ^4.6.0
         version: 4.6.0(@glint/template@1.7.7)
       '@embroider/macros':
-        specifier: ^1.20.3
-        version: 1.20.3(@babel/core@7.29.7)(@glint/template@1.7.7)
+        specifier: ^1.20.4
+        version: 1.20.4(@babel/core@7.29.7)(@glint/template@1.7.7)
       '@embroider/vite':
         specifier: ^1.7.5
         version: 1.7.5(@embroider/core@4.6.0(@glint/template@1.7.7))(@glint/template@1.7.7)(vite@8.0.16(@types/node@25.9.1)(terser@5.48.0)(yaml@2.9.0))
@@ -8493,7 +8493,23 @@ snapshots:
       find-up: 5.0.0
       lodash: 4.18.1
       resolve: 1.22.12
-      semver: 7.8.1
+      semver: 7.8.2
+    optionalDependencies:
+      '@glint/template': 1.7.7
+    transitivePeerDependencies:
+      - '@babel/core'
+      - supports-color
+
+  '@embroider/macros@1.20.4(@babel/core@7.29.7)(@glint/template@1.7.7)':
+    dependencies:
+      '@embroider/shared-internals': 3.1.1
+      assert-never: 1.4.0
+      babel-import-util: 3.0.1
+      ember-cli-babel: 8.3.1(@babel/core@7.29.7)
+      find-up: 5.0.0
+      lodash: 4.18.1
+      resolve: 1.22.12
+      semver: 7.8.2
     optionalDependencies:
       '@glint/template': 1.7.7
     transitivePeerDependencies:
@@ -8539,6 +8555,24 @@ snapshots:
       - supports-color
 
   '@embroider/shared-internals@3.1.0':
+    dependencies:
+      babel-import-util: 3.0.1
+      debug: 4.4.3
+      ember-rfc176-data: 0.3.18
+      fs-extra: 9.1.0
+      is-subdir: 1.2.0
+      js-string-escape: 1.0.1
+      lodash: 4.18.1
+      minimatch: 3.1.5
+      pkg-entry-points: 1.1.1
+      resolve-package-path: 4.0.3
+      resolve.exports: 2.0.3
+      semver: 7.8.2
+      typescript-memoize: 1.1.1
+    transitivePeerDependencies:
+      - supports-color
+
+  '@embroider/shared-internals@3.1.1':
     dependencies:
       babel-import-util: 3.0.1
       debug: 4.4.3
