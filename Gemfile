@@ -15,6 +15,7 @@ gem 'json'
 gem 'jwt'
 gem 'kamal', require: false
 gem 'mission_control-jobs'
+gem 'multi_json' # google-apis-sheets_v4
 gem 'omniauth_openid_connect'
 gem 'pg'
 gem 'propshaft'
