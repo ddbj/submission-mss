@@ -20,6 +20,13 @@ updates:
     directory: /web
     schedule:
       interval: daily
+    groups:
+      # @glint/template and @glint/ember-tsc ship on separate release lines
+      # and are incompatible unless bumped together, so update them in a
+      # single PR.
+      glint:
+        patterns:
+          - '@glint/*'
     ignore:
       # Babel 8 requires the whole @babel/* graph to move together, but the
       # Ember build toolchain (ember-cli-babel, broccoli-babel-transpiler)
