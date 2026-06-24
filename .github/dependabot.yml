@@ -20,3 +20,11 @@ updates:
     directory: /web
     schedule:
       interval: daily
+    ignore:
+      # Babel 8 requires the whole @babel/* graph to move together, but the
+      # Ember build toolchain (ember-cli-babel, broccoli-babel-transpiler)
+      # still pins @babel/core ^7. Until that ecosystem supports Babel 8,
+      # major bumps of individual @babel/* packages only break the build.
+      - dependency-name: '@babel/*'
+        update-types:
+          - version-update:semver-major
