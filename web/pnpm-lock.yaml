@@ -27,8 +27,8 @@ importers:
         specifier: ~5.8.2
         version: 5.8.2(@babel/core@7.29.7)(@glint/template@1.7.7)
       '@ember-intl/vite':
-        specifier: ^1.0.1
-        version: 1.0.1
+        specifier: ^1.0.2
+        version: 1.0.2
       '@ember/optional-features':
         specifier: ^3.0.0
         version: 3.0.0(@types/node@25.9.3)
@@ -1037,8 +1037,8 @@ packages:
   '@ember-data/rfc395-data@0.0.4':
     resolution: {integrity: sha512-tGRdvgC9/QMQSuSuJV45xoyhI0Pzjm7A9o/MVVA3HakXIImJbbzx/k/6dO9CUEQXIyS2y0fW6C1XaYOG7rY0FQ==}
 
-  '@ember-intl/vite@1.0.1':
-    resolution: {integrity: sha512-uJfhzyZbhUKG40ne2Far0F4kBc/I5hlAov348NLXnGSIwbxnsXeqgIbFbdM94MF0X+j9ZAGKT3IqCVZmcs7m8w==}
+  '@ember-intl/vite@1.0.2':
+    resolution: {integrity: sha512-chjrQXCwl1pebhe8Q+qkNiUnKI3ccFKnB4gwTG4u61eUhugRvWOfXphTfukb+TlhsDjb/8IIIncBLYRnIVjccQ==}
     engines: {node: 20.* || >= 22}
 
   '@ember-tooling/blueprint-blueprint@0.3.0':
@@ -4427,10 +4427,6 @@ packages:
 
   js-yaml@3.14.2:
     resolution: {integrity: sha512-PMSmkqxr106Xa156c2M265Z+FTrPl+oxd/rgOQy2tijQeK5TxQ43psO1ZCwhVOSdnn+RzkzlRz/eY4BgJBYVpg==}
-    hasBin: true
-
-  js-yaml@4.1.1:
-    resolution: {integrity: sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==}
     hasBin: true
 
   js-yaml@4.2.0:
@@ -8220,10 +8216,10 @@ snapshots:
 
   '@ember-data/rfc395-data@0.0.4': {}
 
-  '@ember-intl/vite@1.0.1':
+  '@ember-intl/vite@1.0.2':
     dependencies:
       '@codemod-utils/files': 4.0.1
-      js-yaml: 4.1.1
+      js-yaml: 4.2.0
 
   '@ember-tooling/blueprint-blueprint@0.3.0': {}
 
@@ -9604,7 +9600,7 @@ snapshots:
       optional-require: 1.1.10
     optionalDependencies:
       cson-parser: 4.0.9
-      js-yaml: 4.1.1
+      js-yaml: 4.2.0
 
   argparse@1.0.10:
     dependencies:
@@ -10553,7 +10549,7 @@ snapshots:
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.1
-      js-yaml: 4.1.1
+      js-yaml: 4.2.0
       parse-json: 5.2.0
     optionalDependencies:
       typescript: 6.0.3
@@ -12639,10 +12635,6 @@ snapshots:
       argparse: 1.0.10
       esprima: 4.0.1
 
-  js-yaml@4.1.1:
-    dependencies:
-      argparse: 2.0.1
-
   js-yaml@4.2.0:
     dependencies:
       argparse: 2.0.1
@@ -14359,7 +14351,7 @@ snapshots:
       express: 5.2.1
       glob: 13.0.6
       http-proxy: 1.18.1
-      js-yaml: 4.1.1
+      js-yaml: 4.2.0
       lodash: 4.18.1
       minimatch: 10.2.5
       mkdirp: 3.0.1
