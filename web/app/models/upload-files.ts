@@ -48,7 +48,7 @@ class UploadFile {
   perform(currentUser: CurrentUserService) {
     const upload = new DirectUpload(
       this.file.rawFile,
-      `${ENV.apiURL}/direct_uploads`,
+      ENV.directUploadURL,
       {
         directUploadWillCreateBlobWithXHR: (xhr: XMLHttpRequest) => {
           xhr.setRequestHeader('Authorization', `Bearer ${currentUser.token}`);

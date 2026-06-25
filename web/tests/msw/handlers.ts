@@ -4,7 +4,7 @@ import ENV from 'mssform/config/environment';
 
 import { http } from './http';
 
-const directUploadURL = new URL('/api/direct_uploads', ENV.apiURL).toString();
+const directUploadURL = ENV.directUploadURL;
 
 export const handlers = [
   http.get('/me', ({ response }) => {
@@ -27,13 +27,13 @@ export const handlers = [
       signed_id: 'test-signed-id',
 
       direct_upload: {
-        url: `${ENV.apiURL}/rails/active_storage/disk/test`,
+        url: `${ENV.appURL}/rails/active_storage/disk/test`,
         headers: { 'Content-Type': 'application/octet-stream' },
       },
     });
   }),
 
-  mswHttp.put(`${ENV.apiURL}/rails/active_storage/disk/*`, () => {
+  mswHttp.put(`${ENV.appURL}/rails/active_storage/disk/*`, () => {
     return new HttpResponse(null, { status: 204 });
   }),
 ];

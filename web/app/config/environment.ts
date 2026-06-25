@@ -21,5 +21,8 @@ export default config as {
   locationType: string;
   rootURL: string;
   APP: Record<string, unknown>;
+  appURL: string;
   apiURL: string;
+  authURL: string;
+  directUploadURL: string;
 } & Record<string, unknown>;
