@@ -10,6 +10,18 @@ const app = yaml.load(fs.readFileSync(path.join(__dirname, '../../config/app.yml
 const enums = yaml.load(fs.readFileSync(path.join(__dirname, '../../config/enums.yml')));
 
 module.exports = function (environment) {
+  // Origin of the Rails backend, used as the base for every backend URL below.
+  //
+  // In production the built assets are served from the same origin as the API,
+  // so we leave this empty and let the URLs resolve relative to wherever the app
+  // is served. That keeps a single production image environment-agnostic, so it
+  // can be promoted across environments without the frontend pointing at the
+  // wrong backend.
+  //
+  // In development and test the Ember and Rails servers run on separate origins,
+  // so we use the absolute app_url from config/app.yml.
+  const appURL = environment === 'production' ? '' : app.app_url;
+
   const ENV = {
     modulePrefix: 'mssform',
     environment,
@@ -29,10 +41,14 @@ module.exports = function (environment) {
     },
 
     railsEnv,
-    apiURL: new URL('/api', app.app_url).href,
+    appURL,
     sentryDSN: app.sentry_dsn,
     enums,
   };
+
+  ENV.apiURL = `${appURL}/api`;
+  ENV.authURL = `${appURL}/auth/keycloak`;
+  ENV.directUploadURL = `${appURL}/api/direct_uploads`;
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
