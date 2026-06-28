@@ -15,6 +15,7 @@ builder:
 
 volumes:
   - /mnt/submission:/submission
+  - /lustre9/open/home/w3dfast/ggs_volumes:/lustre9/open/home/w3dfast/ggs_volumes:ro
   - ./volumes/mssform-production/storage:/rails/storage
 
 accessories:
