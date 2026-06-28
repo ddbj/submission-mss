@@ -163,7 +163,7 @@ export class AnnotationFile extends SubmissionFile {
 }
 
 export class SequenceFile extends SubmissionFile {
-  static extensions = ['.fasta', '.seq.fa', '.fa', '.fna', '.seq'];
+  static extensions = ['.fasta', '.fsa', '.seq.fa', '.fa', '.fna', '.seq'];
   static parserURL = '/workers/sequence-file-parser.js';
 
   fileType = 'sequence' as const;

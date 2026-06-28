@@ -1,7 +1,6 @@
 class GgsExtraction < ApplicationRecord
   include Extraction
-
-  EXTENSIONS = %w[ann fa].freeze
+  include ArchiveExtraction
 
   UUID_FORMAT = /\A\h{8}-\h{4}-\h{4}-\h{4}-\h{12}\z/
 
@@ -14,34 +13,22 @@ class GgsExtraction < ApplicationRecord
   end
 
   def prepare_files
-    working_dir.mkpath
-
     ActiveRecord::Base.transaction do
       ggs_job_ids.uniq.each do |job_id|
-        copy_files job_id
+        copy_job_files job_id
       end
     end
   end
 
   private
 
-  def copy_files(job_id)
+  def copy_job_files(job_id)
     src_dir = job_output_dir(job_id)
 
     raise Extraction::Error.new(:directory_not_found, job_id:) unless src_dir.directory?
 
-    dest_dir = working_dir.join(job_id).tap(&:mkpath)
-
-    Pathname.glob("*.{#{EXTENSIONS.join(',')}}", base: src_dir).each do |rel|
-      name = normalize_path(rel)
-
-      FileUtils.cp src_dir.join(rel), dest_dir.join(name)
-
-      files.create!(
-        name:,
-        parsing:    true,
-        ggs_job_id: job_id
-      )
+    unarchive_and_copy_files(src_dir, working_dir.join(job_id)) do |name|
+      files.create!(name:, parsing: true, ggs_job_id: job_id)
     end
   end
 
