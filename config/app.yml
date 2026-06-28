@@ -28,6 +28,7 @@ production: &production
 
 staging:
   <<: *production
-  app_url:              https://mss-staging.ddbj.nig.ac.jp
-  mail_allowed_domains: ddbj.nig.ac.jp,ursm.jp
-  web_url:              https://mss-staging.ddbj.nig.ac.jp
+  app_url:               https://mss-staging.ddbj.nig.ac.jp
+  ggs_jobs_dir_template: /lustre9/open/home/w3dfast/ggs_volumes/test_jobs/{job_id}/output
+  mail_allowed_domains:  ddbj.nig.ac.jp,ursm.jp
+  web_url:               https://mss-staging.ddbj.nig.ac.jp
