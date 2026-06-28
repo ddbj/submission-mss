@@ -10,7 +10,7 @@ module ExtractionFile
   end
 
   ANN_EXT  = %w[ann annt.tsv ann.txt]
-  SEQ_EXT  = %w[fasta seq.fa fa fna seq]
+  SEQ_EXT  = %w[fasta fsa seq.fa fa fna seq]
   FILE_EXT = ANN_EXT + SEQ_EXT
 
   def fullpath = extraction.working_dir.join(name)

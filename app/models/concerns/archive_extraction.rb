@@ -73,8 +73,11 @@ module ArchiveExtraction
 
   def copy_file(base, dest_dir, src, &build)
     name = normalize_path(src)
+    dest = dest_dir.join(name)
 
-    FileUtils.cp base.join(src), dest_dir.join(name)
+    raise Extraction::Error.new(:duplicate_file_name, reason: "duplicate file name: #{name}") if dest.exist?
+
+    FileUtils.cp base.join(src), dest
 
     build.call name
   end
