@@ -12,8 +12,8 @@ import { eq, not } from 'ember-truth-helpers';
 import pageTitle from 'ember-page-title/helpers/page-title';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
-import DfastExtractor from 'mssform/components/dfast-extractor';
 import FileList from 'mssform/components/file-list';
+import JobIdExtractor from 'mssform/components/job-id-extractor';
 import SupportedFileTypes from 'mssform/components/file-list/supported-file-types';
 import MassDirectoryExtractor from 'mssform/components/mass-directory-extractor';
 import RadioGroup from 'mssform/components/radio-group';
@@ -145,6 +145,21 @@ export default class UploadFormComponent extends Component<Signature> {
                   <div class="form-check">
                     <group.radio as |radio|>
                       <radio.input
+                        checked={{eq this.uploadVia "ggs"}}
+                        required
+                        class="form-check-input"
+                        {{on "change" (fn this.setUploadVia "ggs")}}
+                      />
+
+                      <radio.label class="form-check-label">
+                        {{t "submission-form.files.a4"}}
+                      </radio.label>
+                    </group.radio>
+                  </div>
+
+                  <div class="form-check">
+                    <group.radio as |radio|>
+                      <radio.input
                         checked={{eq this.uploadVia "webui"}}
                         required
                         class="form-check-input"
@@ -187,7 +202,19 @@ export default class UploadFormComponent extends Component<Signature> {
             </div>
 
             {{#if (eq this.uploadVia "dfast")}}
-              <DfastExtractor @onPoll={{this.onExtractProgress}} @crossoverErrors={{this.crossoverErrors}} />
+              <JobIdExtractor
+                @endpoint="/dfast_extractions"
+                @i18nPrefix="dfast-extractor"
+                @onPoll={{this.onExtractProgress}}
+                @crossoverErrors={{this.crossoverErrors}}
+              />
+            {{else if (eq this.uploadVia "ggs")}}
+              <JobIdExtractor
+                @endpoint="/ggs_extractions"
+                @i18nPrefix="ggs-extractor"
+                @onPoll={{this.onExtractProgress}}
+                @crossoverErrors={{this.crossoverErrors}}
+              />
             {{else if (eq this.uploadVia "webui")}}
               <div class="card">
                 <div class="card-body">

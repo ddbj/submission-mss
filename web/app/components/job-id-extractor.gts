@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { uniqueId } from '@ember/helper';
+import { concat, uniqueId } from '@ember/helper';
 import { action } from '@ember/object';
 import { getOwner } from '@ember/application';
 import { on } from '@ember/modifier';
@@ -7,25 +7,24 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { t } from 'ember-intl';
 
-import GgsExtractorItem from 'mssform/components/ggs-extractor/item';
-import errorsFor from 'mssform/helpers/errors-for';
-import totalFileSize from 'mssform/helpers/total-file-size';
-import GgsExtraction from 'mssform/models/ggs-extraction';
+import ExtractedFiles from 'mssform/components/extracted-files';
+import SubmissionFileItem from 'mssform/components/submission-file-item';
+import Extraction from 'mssform/models/extraction';
 
-import type { components } from 'schema/openapi';
+import type { ExtractionPayload } from 'mssform/models/extraction';
 import type ErrorModalService from 'mssform/services/error-modal';
 import type { SubmissionFileData, SubmissionError } from 'mssform/models/submission-file';
 
-type GgsExtractionPayload = components['schemas']['GgsExtraction'];
-
 export interface Signature {
   Args: {
-    onPoll: (payload: GgsExtractionPayload) => void;
+    endpoint: string;
+    i18nPrefix: string;
+    onPoll: (payload: ExtractionPayload) => void;
     crossoverErrors: Map<SubmissionFileData, SubmissionError[]>;
   };
 }
 
-export default class GgsExtractorComponent extends Component<Signature> {
+export default class JobIdExtractorComponent extends Component<Signature> {
   @service declare errorModal: ErrorModalService;
 
   @tracked jobIdsText = '';
@@ -37,10 +36,6 @@ export default class GgsExtractorComponent extends Component<Signature> {
   willDestroy() {
     super.willDestroy();
     this.#abort.abort();
-  }
-
-  get sortedFiles() {
-    return this.files.toSorted((a, b) => a.name.localeCompare(b.name));
   }
 
   @action handleJobIdsInput(event: Event) {
@@ -61,7 +56,7 @@ export default class GgsExtractorComponent extends Component<Signature> {
     this.files = [];
 
     try {
-      const extraction = await GgsExtraction.create(getOwner(this)!, this.jobIds);
+      const extraction = await Extraction.create(getOwner(this)!, this.args.endpoint, this.jobIds);
 
       await extraction.pollForResult(
         (payload) => {
@@ -87,9 +82,9 @@ export default class GgsExtractorComponent extends Component<Signature> {
       <form class="card-body" {{on "submit" this.extract}}>
         <div class="mb-3">
           {{#let (uniqueId) as |id|}}
-            <label for={{id}} class="form-label">{{t "ggs-extractor.ids-label"}}</label>
+            <label for={{id}} class="form-label">{{t (concat @i18nPrefix ".ids-label")}}</label>
 
-            <div class="form-text">{{t "ggs-extractor.ids-help-html" htmlSafe=true}}</div>
+            <div class="form-text">{{t (concat @i18nPrefix ".ids-help-html") htmlSafe=true}}</div>
 
             <textarea
               rows={{6}}
@@ -104,7 +99,7 @@ export default class GgsExtractorComponent extends Component<Signature> {
         </div>
 
         <button type="submit" class="btn btn-primary" disabled={{this.extracting}}>
-          {{t "ggs-extractor.submit"}}
+          {{t (concat @i18nPrefix ".submit")}}
         </button>
 
         {{#if this.extracting}}
@@ -115,17 +110,11 @@ export default class GgsExtractorComponent extends Component<Signature> {
       </form>
 
       {{#if this.files.length}}
-        <ul class="list-group list-group-flush overflow-auto" style="max-height: 550px">
-          {{#each this.sortedFiles key="name" as |file|}}
-            <GgsExtractorItem @file={{file}} @errors={{errorsFor file @crossoverErrors}} />
-          {{/each}}
-        </ul>
-
-        <div class="card-footer">
-          {{this.files.length}}
-          files,
-          {{totalFileSize this.files}}
-        </div>
+        <ExtractedFiles @files={{this.files}} @crossoverErrors={{@crossoverErrors}} as |file errors|>
+          <SubmissionFileItem @file={{file}} @errors={{errors}}>
+            <:prefix>{{file.jobId}}/</:prefix>
+          </SubmissionFileItem>
+        </ExtractedFiles>
       {{/if}}
     </div>
   </template>

@@ -8,9 +8,8 @@ import { task } from 'ember-concurrency';
 import { eq, and, not } from 'ember-truth-helpers';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
-import DfastExtractor from 'mssform/components/dfast-extractor';
 import FileList from 'mssform/components/file-list';
-import GgsExtractor from 'mssform/components/ggs-extractor';
+import JobIdExtractor from 'mssform/components/job-id-extractor';
 import SupportedFileTypes from 'mssform/components/file-list/supported-file-types';
 import MassDirectoryExtractor from 'mssform/components/mass-directory-extractor';
 import RadioGroup from 'mssform/components/radio-group';
@@ -239,9 +238,19 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
         </div>
 
         {{#if (eq @model.uploadVia "dfast")}}
-          <DfastExtractor @onPoll={{this.onExtractProgress}} @crossoverErrors={{this.crossoverErrors}} />
+          <JobIdExtractor
+            @endpoint="/dfast_extractions"
+            @i18nPrefix="dfast-extractor"
+            @onPoll={{this.onExtractProgress}}
+            @crossoverErrors={{this.crossoverErrors}}
+          />
         {{else if (eq @model.uploadVia "ggs")}}
-          <GgsExtractor @onPoll={{this.onExtractProgress}} @crossoverErrors={{this.crossoverErrors}} />
+          <JobIdExtractor
+            @endpoint="/ggs_extractions"
+            @i18nPrefix="ggs-extractor"
+            @onPoll={{this.onExtractProgress}}
+            @crossoverErrors={{this.crossoverErrors}}
+          />
         {{else if (eq @model.uploadVia "webui")}}
           <div class="card">
             <div class="card-body">
