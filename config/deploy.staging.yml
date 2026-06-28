@@ -19,6 +19,7 @@ env:
 
 volumes:
   - /mnt/submission:/submission
+  - /lustre9/open/home/w3dfast/ggs_volumes:/lustre9/open/home/w3dfast/ggs_volumes:ro
   - ./volumes/mssform-staging/storage:/rails/storage
 
 accessories:
