@@ -31,6 +31,23 @@ class GgsExtractionTest < ActiveSupport::TestCase
     assert files.all? { _1.fullpath.exist? }
   end
 
+  test 'prepare_files accepts the same file set as the SFTP import (fasta, annt.tsv, gz)' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    dir    = output_dir(job_id)
+
+    dir.join('a.fasta').write    ">CLN01\nACGT\n"
+    dir.join('b.annt.tsv').write "COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n"
+
+    Zlib::GzipWriter.open(dir.join('c.fa.gz')) do |gz|
+      gz.write ">CLN02\nACGT\n"
+    end
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id])
+    extraction.prepare_files
+
+    assert_equal %w[a.fasta b.annt.tsv c.fa], extraction.files.order(:name).map(&:name)
+  end
+
   test 'prepare_files keeps files from different jobs separate' do
     job1 = '01234567-89ab-cdef-0000-000000000001'
     job2 = '01234567-89ab-cdef-0000-000000000002'
