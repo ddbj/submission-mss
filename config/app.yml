@@ -1,6 +1,7 @@
 development:
   app_url:                http://mssform.localhost:3000
   extracts_dir:           <%= Rails.root.join("storage/extracts") %>
+  ggs_jobs_dir_template:  <%= Rails.root.join("storage/ggs/{job_id}/output") %>
   mass_dir_path_template: <%= Rails.root.join("storage/mass/{user}") %>
   submissions_dir:        <%= Rails.root.join("storage/submissions") %>
   upload_events_log:      <%= Rails.root.join("storage/upload_events.jsonl") %>
@@ -9,6 +10,7 @@ development:
 test:
   app_url:                http://mssform.example.com:3000
   extracts_dir:           <%= Rails.root.join("tmp/storage/extracts") %>
+  ggs_jobs_dir_template:  <%= Rails.root.join("tmp/storage/ggs/{job_id}/output") %>
   mass_dir_path_template: <%= Rails.root.join("tmp/storage/mass/{user}") %>
   submissions_dir:        <%= Rails.root.join("tmp/storage/submissions") %>
   upload_events_log:      <%= Rails.root.join("tmp/storage/upload_events.jsonl") %>
@@ -17,6 +19,7 @@ test:
 production: &production
   app_url:                https://mss.ddbj.nig.ac.jp
   extracts_dir:           <%= Rails.root.join("storage/extracts") %>
+  ggs_jobs_dir_template:  /lustre9/open/home/w3dfast/ggs_volumes/jobs/{job_id}/output
   mass_dir_path_template: /submission/{user}/submission/{user}/mass
   submissions_dir:        <%= Rails.root.join("storage/submissions") %>
   upload_events_log:      <%= Rails.root.join("storage/upload_events.jsonl") %>

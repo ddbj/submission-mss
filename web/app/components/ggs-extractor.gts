@@ -7,25 +7,25 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { t } from 'ember-intl';
 
-import DfastExtractorItem from 'mssform/components/dfast-extractor/item';
+import GgsExtractorItem from 'mssform/components/ggs-extractor/item';
 import errorsFor from 'mssform/helpers/errors-for';
 import totalFileSize from 'mssform/helpers/total-file-size';
-import DfastExtraction from 'mssform/models/dfast-extraction';
+import GgsExtraction from 'mssform/models/ggs-extraction';
 
 import type { components } from 'schema/openapi';
 import type ErrorModalService from 'mssform/services/error-modal';
 import type { SubmissionFileData, SubmissionError } from 'mssform/models/submission-file';
 
-type DfastExtractionPayload = components['schemas']['DfastExtraction'];
+type GgsExtractionPayload = components['schemas']['GgsExtraction'];
 
 export interface Signature {
   Args: {
-    onPoll: (payload: DfastExtractionPayload) => void;
+    onPoll: (payload: GgsExtractionPayload) => void;
     crossoverErrors: Map<SubmissionFileData, SubmissionError[]>;
   };
 }
 
-export default class DfastExtractorComponent extends Component<Signature> {
+export default class GgsExtractorComponent extends Component<Signature> {
   @service declare errorModal: ErrorModalService;
 
   @tracked jobIdsText = '';
@@ -61,7 +61,7 @@ export default class DfastExtractorComponent extends Component<Signature> {
     this.files = [];
 
     try {
-      const extraction = await DfastExtraction.create(getOwner(this)!, this.jobIds);
+      const extraction = await GgsExtraction.create(getOwner(this)!, this.jobIds);
 
       await extraction.pollForResult(
         (payload) => {
@@ -87,9 +87,9 @@ export default class DfastExtractorComponent extends Component<Signature> {
       <form class="card-body" {{on "submit" this.extract}}>
         <div class="mb-3">
           {{#let (uniqueId) as |id|}}
-            <label for={{id}} class="form-label">{{t "dfast-extractor.ids-label"}}</label>
+            <label for={{id}} class="form-label">{{t "ggs-extractor.ids-label"}}</label>
 
-            <div class="form-text">{{t "dfast-extractor.ids-help-html" htmlSafe=true}}</div>
+            <div class="form-text">{{t "ggs-extractor.ids-help-html" htmlSafe=true}}</div>
 
             <textarea
               rows={{6}}
@@ -104,7 +104,7 @@ export default class DfastExtractorComponent extends Component<Signature> {
         </div>
 
         <button type="submit" class="btn btn-primary" disabled={{this.extracting}}>
-          {{t "dfast-extractor.submit"}}
+          {{t "ggs-extractor.submit"}}
         </button>
 
         {{#if this.extracting}}
@@ -117,7 +117,7 @@ export default class DfastExtractorComponent extends Component<Signature> {
       {{#if this.files.length}}
         <ul class="list-group list-group-flush overflow-auto" style="max-height: 550px">
           {{#each this.sortedFiles key="name" as |file|}}
-            <DfastExtractorItem @file={{file}} @errors={{errorsFor file @crossoverErrors}} />
+            <GgsExtractorItem @file={{file}} @errors={{errorsFor file @crossoverErrors}} />
           {{/each}}
         </ul>
 

@@ -9,6 +9,8 @@ using Module.new {
 }
 
 class MassDirectoryExtraction < ApplicationRecord
+  include Extraction
+
   ARCHIVE_EXT = %w[zip tar tar.gz tgz taz tar.Z taZ tar.bz2 tz2 tbz2 tbz tar.lz tar.lzma tlz tar.lzo tar.xz tar.zst tzst]
 
   COMPRESS = {
@@ -24,20 +26,10 @@ class MassDirectoryExtraction < ApplicationRecord
 
   COMPRESS_EXT = ExtractionFile::FILE_EXT.product(COMPRESS.keys).map { "#{_1}.#{_2}" }
 
-  belongs_to :user
-
-  has_many :files, dependent: :destroy, class_name: 'MassDirectoryExtractionFile', foreign_key: :extraction_id
-
   def prepare_files
     ActiveRecord::Base.transaction do
       unarchive_and_copy_files user_mass_dir
     end
-  end
-
-  def working_dir
-    dir = Rails.application.config_for(:app).extracts_dir!
-
-    Pathname.new(dir).join("mass-directory-#{id}")
   end
 
   private
@@ -96,9 +88,5 @@ class MassDirectoryExtraction < ApplicationRecord
       name:    dest,
       parsing: true
     )
-  end
-
-  def normalize_path(path)
-    path.to_s.gsub(%r{[/ ]}, '/' => '__', ' ' => '_')
   end
 end

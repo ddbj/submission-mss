@@ -1,21 +1,7 @@
 class DfastUpload < ApplicationRecord
-  include UploadVia
+  include ExtractionUpload
 
   belongs_to :extraction, class_name: 'DfastExtraction'
 
-  delegate :dfast_job_ids, to: :extraction
-
-  def self.from_params(extraction_id:, **)
-    new(extraction_id:)
-  end
-
-  def copy_files_to_submissions_dir
-    upload.files_dir.mkpath
-
-    extraction.files.find_each do |file|
-      FileUtils.cp file.fullpath, upload.files_dir
-    end
-
-    trim_annotation_fields!
-  end
+  def job_ids = extraction.dfast_job_ids
 end

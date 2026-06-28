@@ -1,23 +1,7 @@
 class MassDirectoryUpload < ApplicationRecord
-  include UploadVia
+  include ExtractionUpload
 
   belongs_to :extraction, class_name: 'MassDirectoryExtraction'
 
-  def self.from_params(extraction_id:, **)
-    new(extraction_id:)
-  end
-
-  def copy_files_to_submissions_dir
-    upload.files_dir.mkpath
-
-    extraction.files.find_each do |file|
-      FileUtils.cp file.fullpath, upload.files_dir
-    end
-
-    trim_annotation_fields!
-  end
-
-  def dfast_job_ids
-    nil
-  end
+  def job_ids = nil
 end

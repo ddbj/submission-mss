@@ -1,0 +1,4 @@
+alice_ggs_extraction:
+  user:        alice
+  ggs_job_ids: '{01234567-89ab-cdef-0000-000000000001}'
+  state:       pending

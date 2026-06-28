@@ -9,10 +9,10 @@ state = working_list_states[submission.mass_id]
 
   uploads: submission.uploads.map {|upload|
     {
-      id:            upload.id,
-      created_at:    upload.created_at.iso8601,
-      files:         Dir.glob('*.*', base: upload.files_dir),
-      dfast_job_ids: upload.via.dfast_job_ids || []
+      id:         upload.id,
+      created_at: upload.created_at.iso8601,
+      files:      Dir.glob('*.*', base: upload.files_dir),
+      job_ids:    upload.via.job_ids || []
     }
   }
 }

@@ -102,7 +102,7 @@ paths:
 
                     upload_via:
                       type: string
-                      enum: [webui, dfast, mass_directory]
+                      enum: [webui, dfast, mass_directory, ggs]
 
                     files:
                       type: array
@@ -113,7 +113,7 @@ paths:
 
                     extraction_id:
                       type: integer
-                      description: Extraction ID (for dfast or mass_directory upload)
+                      description: Extraction ID (for dfast, mass_directory, or ggs upload)
 
                     entries_count:
                       type: integer
@@ -350,7 +350,7 @@ paths:
                   properties:
                     via:
                       type: string
-                      enum: [webui, dfast, mass_directory]
+                      enum: [webui, dfast, mass_directory, ggs]
 
                     files:
                       type: array
@@ -361,7 +361,7 @@ paths:
 
                     extraction_id:
                       type: integer
-                      description: Extraction ID (for dfast or mass_directory upload)
+                      description: Extraction ID (for dfast, mass_directory, or ggs upload)
 
       responses:
         '204':
@@ -495,6 +495,76 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  /ggs_extractions:
+    post:
+      description: Create a GGS extraction.
+
+      tags:
+        - Extractions
+
+      requestBody:
+        required: true
+
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [ids]
+
+              properties:
+                ids:
+                  type: array
+
+                  items:
+                    type: string
+                    description: GGS job ID
+
+      responses:
+        '201':
+          description: Returns the created extraction.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GgsExtraction'
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+        '422':
+          $ref: '#/components/responses/UnprocessableContent'
+
+  /ggs_extractions/{id}:
+    get:
+      description: Get a GGS extraction.
+
+      tags:
+        - Extractions
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: Returns the requested extraction.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GgsExtraction'
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+        '404':
+          $ref: '#/components/responses/NotFound'
+
 components:
   schemas:
     Submission:
@@ -541,7 +611,7 @@ components:
         - id
         - created_at
         - files
-        - dfast_job_ids
+        - job_ids
 
       properties:
         id:
@@ -557,7 +627,7 @@ components:
           items:
             type: string
 
-        dfast_job_ids:
+        job_ids:
           type: array
 
           items:
@@ -756,6 +826,103 @@ components:
         fileType:
           type: string
           enum: [annotation, sequence]
+
+    GgsExtraction:
+      type: object
+      additionalProperties: false
+
+      required:
+        - _self
+        - id
+        - state
+        - error
+        - files
+
+      properties:
+        _self:
+          type: string
+          format: uri
+
+        id:
+          type: integer
+
+        state:
+          $ref: '#/components/schemas/ExtractionState'
+
+        error:
+          type:
+            - object
+            - 'null'
+
+          additionalProperties: false
+          required: [id]
+
+          properties:
+            id:
+              type: string
+
+            job_id:
+              type: string
+
+            reason:
+              type: string
+
+        files:
+          type: array
+
+          items:
+            $ref: '#/components/schemas/GgsExtractionFile'
+
+    GgsExtractionFile:
+      type: object
+      additionalProperties: false
+
+      required:
+        - name
+        - basename
+        - size
+        - isParsing
+        - parsedData
+        - isParseSucceeded
+        - errors
+        - fileType
+        - jobId
+
+      properties:
+        name:
+          type: string
+
+        basename:
+          type: string
+
+        size:
+          type: integer
+
+        isParsing:
+          type: boolean
+
+        parsedData:
+          anyOf:
+            - $ref: '#/components/schemas/ParsedData'
+            - type: 'null'
+
+        isParseSucceeded:
+          type: boolean
+
+        errors:
+          type:
+            - array
+            - 'null'
+
+          items:
+            $ref: '#/components/schemas/ExtractionFileError'
+
+        fileType:
+          type: string
+          enum: [annotation, sequence]
+
+        jobId:
+          type: string
 
     ParsedData:
       type: object
