@@ -3,19 +3,17 @@ import { getOwner } from '@ember/application';
 import { modifier } from 'ember-modifier';
 import { tracked } from '@glimmer/tracking';
 
-import MassDirectoryExtractorItem from 'mssform/components/mass-directory-extractor/item';
-import errorsFor from 'mssform/helpers/errors-for';
-import totalFileSize from 'mssform/helpers/total-file-size';
-import MassDirectoryExtraction from 'mssform/models/mass-directory-extraction';
+import ExtractedFiles from 'mssform/components/extracted-files';
+import SubmissionFileItem from 'mssform/components/submission-file-item';
+import userMassDir from 'mssform/helpers/user-mass-dir';
+import Extraction from 'mssform/models/extraction';
 
-import type { components } from 'schema/openapi';
+import type { ExtractionPayload } from 'mssform/models/extraction';
 import type { SubmissionFileData, SubmissionError } from 'mssform/models/submission-file';
-
-type MassDirectoryExtractionPayload = components['schemas']['MassDirectoryExtraction'];
 
 export interface Signature {
   Args: {
-    onPoll: (payload: MassDirectoryExtractionPayload) => void;
+    onPoll: (payload: ExtractionPayload) => void;
     crossoverErrors: Map<SubmissionFileData, SubmissionError[]>;
   };
 }
@@ -23,21 +21,21 @@ export interface Signature {
 export default class MassDirectoryExtractorComponent extends Component<Signature> {
   @tracked files: SubmissionFileData[] = [];
 
-  get sortedFiles() {
-    return this.files.toSorted((a, b) => a.name.localeCompare(b.name));
-  }
-
   fetchFiles = modifier(() => {
     const abort = new AbortController();
 
     void (async () => {
-      const extraction = await MassDirectoryExtraction.create(getOwner(this)!);
+      const extraction = await Extraction.create(getOwner(this)!, '/mass_directory_extractions');
 
-      await extraction.pollForResult((payload) => {
-        this.files = payload.files;
+      await extraction.pollForResult(
+        (payload) => {
+          this.files = payload.files;
 
-        this.args.onPoll(payload);
-      }, abort.signal);
+          this.args.onPoll(payload);
+        },
+        undefined,
+        abort.signal,
+      );
     })().catch((e) => {
       if (e instanceof DOMException && e.name === 'AbortError') return;
       throw e;
@@ -48,17 +46,11 @@ export default class MassDirectoryExtractorComponent extends Component<Signature
 
   <template>
     <div {{this.fetchFiles}} class="card">
-      <ul class="list-group list-group-flush overflow-auto" style="max-height: 550px">
-        {{#each this.sortedFiles key="name" as |file|}}
-          <MassDirectoryExtractorItem @file={{file}} @errors={{errorsFor file @crossoverErrors}} />
-        {{/each}}
-      </ul>
-
-      <div class="card-footer">
-        {{this.files.length}}
-        files,
-        {{totalFileSize this.files}}
-      </div>
+      <ExtractedFiles @files={{this.files}} @crossoverErrors={{@crossoverErrors}} as |file errors|>
+        <SubmissionFileItem @file={{file}} @errors={{errors}}>
+          <:prefix>{{userMassDir}}/</:prefix>
+        </SubmissionFileItem>
+      </ExtractedFiles>
     </div>
   </template>
 }

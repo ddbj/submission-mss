@@ -26,7 +26,7 @@ interface Signature {
   <li class="list-group-item hstack gap-2 align-items-center">
     <div class="align-self-start">
       {{#if @file.isParsing}}
-        <div class="spinner-border spinner-border-seconcary spinner-border-sm opacity-50" role="status">
+        <div class="spinner-border spinner-border-secondary spinner-border-sm opacity-50" role="status">
           <span class="visually-hidden">{{t "file-list.item.loading"}}</span>
         </div>
       {{else}}
