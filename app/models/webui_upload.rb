@@ -31,7 +31,5 @@ class WebuiUpload < ApplicationRecord
     update! copied: true, files: []
   end
 
-  def dfast_job_ids
-    nil
-  end
+  def job_ids = nil
 end

@@ -104,6 +104,7 @@ submission-form:
       登録ファイルをアップロードする場合は、事前に<a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank">UME (Parser, transChecker)</a>にてフォーマットやCDSフィーチャーの翻訳チェックを行い、エラーのないファイルを送付してください。公開予定日を指定するには、<a href="https://www.ddbj.nig.ac.jp/ddbj/file-format.html#date" target="_blank">アノテーションファイルCOMMON領域にhold_dateの記載が必要</a>です。フォームへの入力で指定することはできません。</p>
 
     a1: DFASTのジョブIDから登録ファイルを取り込んで送付する
+    a4: GGSのジョブIDから登録ファイルを取り込んで送付する
     a2: 登録ファイルをこのMSSフォームからアップロードする
 
     a3-html: |
@@ -262,6 +263,15 @@ dfast-extractor:
     複数のjob IDを指定する場合は改行で区切ってください。</p>
 
   submit: Retrieve submission files from DFAST
+
+ggs-extractor:
+  ids-label: GGS job IDs
+
+  ids-help-html: |
+    <p>ハイフンを含めた36桁のIDです。<a href="https://gss.ddbj.nig.ac.jp" target="_blank">GGS (Gene/genome submission tool)</a> で完了したジョブのIDを指定してください。<br />
+    複数のjob IDを指定する場合は改行で区切ってください。</p>
+
+  submit: Retrieve submission files from GGS
 
 submission.show:
   re-upload: 再アップロード

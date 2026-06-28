@@ -10,6 +10,7 @@ import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
 import DfastExtractor from 'mssform/components/dfast-extractor';
 import FileList from 'mssform/components/file-list';
+import GgsExtractor from 'mssform/components/ggs-extractor';
 import SupportedFileTypes from 'mssform/components/file-list/supported-file-types';
 import MassDirectoryExtractor from 'mssform/components/mass-directory-extractor';
 import RadioGroup from 'mssform/components/radio-group';
@@ -181,6 +182,21 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
               <div class="form-check">
                 <group.radio as |radio|>
                   <radio.input
+                    checked={{eq @model.uploadVia "ggs"}}
+                    required
+                    class="form-check-input"
+                    {{on "change" (fn this.setUploadVia "ggs")}}
+                  />
+
+                  <radio.label class="form-check-label">
+                    {{t "submission-form.files.a4"}}
+                  </radio.label>
+                </group.radio>
+              </div>
+
+              <div class="form-check">
+                <group.radio as |radio|>
+                  <radio.input
                     checked={{eq @model.uploadVia "webui"}}
                     required
                     class="form-check-input"
@@ -224,6 +240,8 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
 
         {{#if (eq @model.uploadVia "dfast")}}
           <DfastExtractor @onPoll={{this.onExtractProgress}} @crossoverErrors={{this.crossoverErrors}} />
+        {{else if (eq @model.uploadVia "ggs")}}
+          <GgsExtractor @onPoll={{this.onExtractProgress}} @crossoverErrors={{this.crossoverErrors}} />
         {{else if (eq @model.uploadVia "webui")}}
           <div class="card">
             <div class="card-body">

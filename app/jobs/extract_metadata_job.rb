@@ -3,7 +3,7 @@ class ExtractMetadataJob < ApplicationJob
     ActiveRecord::Base.transaction do
       begin
         extraction.prepare_files
-      rescue DfastExtraction::ExtractionError => e
+      rescue Extraction::Error => e
         extraction.update! state: 'rejected', error: {id: e.id, **e.data}
         return
       end

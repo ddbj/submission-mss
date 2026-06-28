@@ -1,0 +1,11 @@
+{
+  name:             file.name,
+  basename:         file.basename,
+  size:             file.size,
+  isParsing:        file.parsing?,
+  parsedData:       file.parsed_data,
+  isParseSucceeded: !!file.parsed_data,
+  errors:           file._errors,
+  fileType:         file.file_type,
+  jobId:            file.ggs_job_id
+}

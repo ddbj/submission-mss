@@ -13,8 +13,8 @@ import type { RequestManager } from '@warp-drive/core';
 
 type Submission = components['schemas']['Submission'];
 
-function dfastJobIds(submission: Submission): string[] {
-  return submission.uploads[0]?.dfast_job_ids ?? [];
+function submissionJobIds(submission: Submission): string[] {
+  return submission.uploads[0]?.job_ids ?? [];
 }
 
 function take<T>(n: number, arr: T[]): T[] {
@@ -55,7 +55,7 @@ export default class RecentSubmissions extends Component {
           <tr>
             <th>Mass ID</th>
             <th>Submission Date</th>
-            <th>DFAST Job IDs</th>
+            <th>Job IDs</th>
             <th>Status</th>
             <th>Accession</th>
           </tr>
@@ -73,7 +73,7 @@ export default class RecentSubmissions extends Component {
               </td>
 
               <td>
-                {{#let (dfastJobIds submission) as |jobIds|}}
+                {{#let (submissionJobIds submission) as |jobIds|}}
                   <ul class="list-unstyled m-0">
                     {{#each (take 3 jobIds) as |jobId|}}
                       <li><code>{{jobId}}</code></li>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_04_09_122233) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_28_030629) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -82,6 +82,34 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_09_122233) do
     t.bigint "extraction_id"
     t.datetime "updated_at", null: false
     t.index ["extraction_id"], name: "index_dfast_uploads_on_extraction_id"
+  end
+
+  create_table "ggs_extraction_files", force: :cascade do |t|
+    t.jsonb "_errors"
+    t.bigint "extraction_id", null: false
+    t.string "ggs_job_id", null: false
+    t.string "name", null: false
+    t.jsonb "parsed_data"
+    t.boolean "parsing", null: false
+    t.index ["extraction_id", "ggs_job_id", "name"], name: "idx_on_extraction_id_ggs_job_id_name_dc6e405a2b", unique: true
+    t.index ["extraction_id"], name: "index_ggs_extraction_files_on_extraction_id"
+  end
+
+  create_table "ggs_extractions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.jsonb "error"
+    t.string "ggs_job_ids", null: false, array: true
+    t.enum "state", default: "pending", null: false, enum_type: "extraction_state"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_ggs_extractions_on_user_id"
+  end
+
+  create_table "ggs_uploads", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "extraction_id"
+    t.datetime "updated_at", null: false
+    t.index ["extraction_id"], name: "index_ggs_uploads_on_extraction_id"
   end
 
   create_table "mass_directory_extraction_files", force: :cascade do |t|
@@ -164,6 +192,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_09_122233) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "dfast_extraction_files", "dfast_extractions", column: "extraction_id"
   add_foreign_key "dfast_uploads", "dfast_extractions", column: "extraction_id"
+  add_foreign_key "ggs_extraction_files", "ggs_extractions", column: "extraction_id"
+  add_foreign_key "ggs_uploads", "ggs_extractions", column: "extraction_id"
   add_foreign_key "mass_directory_extraction_files", "mass_directory_extractions", column: "extraction_id"
   add_foreign_key "mass_directory_uploads", "mass_directory_extractions", column: "extraction_id"
 end

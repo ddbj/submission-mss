@@ -89,9 +89,9 @@ export interface paths {
                         submission: {
                             tpa: boolean;
                             /** @enum {string} */
-                            upload_via: "webui" | "dfast" | "mass_directory";
+                            upload_via: "webui" | "dfast" | "mass_directory" | "ggs";
                             files?: string[];
-                            /** @description Extraction ID (for dfast or mass_directory upload) */
+                            /** @description Extraction ID (for dfast, mass_directory, or ggs upload) */
                             extraction_id?: number;
                             entries_count: number;
                             /** Format: date */
@@ -259,9 +259,9 @@ export interface paths {
                     "application/json": {
                         upload: {
                             /** @enum {string} */
-                            via: "webui" | "dfast" | "mass_directory";
+                            via: "webui" | "dfast" | "mass_directory" | "ggs";
                             files?: string[];
-                            /** @description Extraction ID (for dfast or mass_directory upload) */
+                            /** @description Extraction ID (for dfast, mass_directory, or ggs upload) */
                             extraction_id?: number;
                         };
                     };
@@ -269,7 +269,7 @@ export interface paths {
             };
             responses: {
                 /** @description Upload accepted. */
-                200: {
+                204: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -447,6 +447,90 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/ggs_extractions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Create a GGS extraction. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        ids: string[];
+                    };
+                };
+            };
+            responses: {
+                /** @description Returns the created extraction. */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["GgsExtraction"];
+                    };
+                };
+                401: components["responses"]["Unauthorized"];
+                422: components["responses"]["UnprocessableContent"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/ggs_extractions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get a GGS extraction. */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Returns the requested extraction. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["GgsExtraction"];
+                    };
+                };
+                401: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -464,7 +548,7 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             files: string[];
-            dfast_job_ids: string[];
+            job_ids: string[];
         };
         DfastExtraction: {
             /** Format: uri */
@@ -514,6 +598,30 @@ export interface components {
             errors: components["schemas"]["ExtractionFileError"][] | null;
             /** @enum {string} */
             fileType: "annotation" | "sequence";
+        };
+        GgsExtraction: {
+            /** Format: uri */
+            _self: string;
+            id: number;
+            state: components["schemas"]["ExtractionState"];
+            error: {
+                id: string;
+                job_id?: string;
+                reason?: string;
+            } | null;
+            files: components["schemas"]["GgsExtractionFile"][];
+        };
+        GgsExtractionFile: {
+            name: string;
+            basename: string;
+            size: number;
+            isParsing: boolean;
+            parsedData: components["schemas"]["ParsedData"] | null;
+            isParseSucceeded: boolean;
+            errors: components["schemas"]["ExtractionFileError"][] | null;
+            /** @enum {string} */
+            fileType: "annotation" | "sequence";
+            jobId: string;
         };
         ParsedData: {
             contactPerson?: {

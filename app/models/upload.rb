@@ -2,7 +2,8 @@ class Upload < ApplicationRecord
   VIA = {
     webui:          'WebuiUpload',
     dfast:          'DfastUpload',
-    mass_directory: 'MassDirectoryUpload'
+    mass_directory: 'MassDirectoryUpload',
+    ggs:            'GgsUpload'
   }
 
   def self.find_via(ident)
