@@ -55,6 +55,13 @@ module('Acceptance | submission', function (hooks) {
     assert.dom('h1').hasText('New Submission');
 
     await clickRadio('Yes, I have determined the nucleotide sequence');
+
+    assert.dom('button.px-5[type="submit"]').isDisabled('Next is disabled until the terms are agreed to');
+
+    await click('#agree-terms');
+
+    assert.dom('button.px-5[type="submit"]').isNotDisabled('Next is enabled once the terms are agreed to');
+
     await click('button[type="submit"]');
 
     // --- Step 2: Files ---
@@ -188,6 +195,7 @@ module('Acceptance | submission', function (hooks) {
     assert.dom('h1').hasText('New Submission');
 
     await clickRadio('Yes, I have determined the nucleotide sequence');
+    await click('#agree-terms');
     await click('button[type="submit"]');
 
     // --- Step 2: Files ---
@@ -310,6 +318,7 @@ module('Acceptance | submission', function (hooks) {
     assert.dom('h1').hasText('New Submission');
 
     await clickRadio('Yes, I have determined the nucleotide sequence');
+    await click('#agree-terms');
     await click('button[type="submit"]');
 
     // --- Step 2: Files ---
@@ -432,6 +441,7 @@ module('Acceptance | submission', function (hooks) {
     assert.dom('h1').hasText('New Submission');
 
     await clickRadio('Yes, I have determined the nucleotide sequence');
+    await click('#agree-terms');
     await click('button[type="submit"]');
 
     // --- Step 2: Files ---
