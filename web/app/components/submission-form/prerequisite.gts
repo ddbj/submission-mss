@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
 import { t } from 'ember-intl';
-import { eq, and } from 'ember-truth-helpers';
+import { eq, and, not } from 'ember-truth-helpers';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
@@ -29,6 +29,10 @@ export default class SubmissionFormPrerequisiteComponent extends Component<Signa
 
   @action setTpa(value: boolean) {
     this.args.model.tpa = value;
+  }
+
+  @action setAgreed(event: Event) {
+    this.args.state.agreed = (event.target as HTMLInputElement).checked;
   }
 
   @action handleSubmit(event: Event) {
@@ -136,8 +140,24 @@ export default class SubmissionFormPrerequisiteComponent extends Component<Signa
 
         <LinkTo @route="home">{{t "go-to-home"}}</LinkTo>
       {{else}}
-        <div class="hstack gap-3 justify-content-end">
-          <button type="submit" class="btn btn-primary px-5">{{t "submission-form.nav.next"}}</button>
+        <div class="hstack gap-3">
+          <div class="form-check me-auto">
+            <input
+              id="agree-terms"
+              type="checkbox"
+              checked={{@state.agreed}}
+              class="form-check-input"
+              {{on "change" this.setAgreed}}
+            />
+
+            <label for="agree-terms" class="form-check-label">
+              {{t "submission-form.prerequisite.agree-html" htmlSafe=true}}
+            </label>
+          </div>
+
+          <button type="submit" disabled={{not @state.agreed}} class="btn btn-primary px-5">
+            {{t "submission-form.nav.next"}}
+          </button>
         </div>
       {{/if}}
     </form>

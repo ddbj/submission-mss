@@ -98,6 +98,9 @@ submission-form:
 
     unacceptable: TPA の場合、論文を準備しないのであれば申し込みできません。
 
+    agree-html: |
+      <a href="https://www.ddbj.nig.ac.jp/policies.html" target="_blank">利用規約</a>に同意します。
+
   files:
     q-html: |
       <p>Submission ファイルの送付方法を選択してください。<br />

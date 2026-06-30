@@ -98,6 +98,9 @@ submission-form:
 
     unacceptable: Regarding TPA, you cannot apply to MSS unless you will prepare a paper.
 
+    agree-html: |
+      I have read and agree to the <a href="https://www.ddbj.nig.ac.jp/policies-e.html" target="_blank">Terms of Use</a>.
+
   files:
     q-html: |
       <p>Select the file transferring method for the submission.<br />
