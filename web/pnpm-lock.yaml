@@ -27,8 +27,8 @@ importers:
         specifier: ~5.8.2
         version: 5.8.2(@babel/core@7.29.7)(@glint/template@1.7.8)
       '@ember-intl/vite':
-        specifier: ^1.1.1
-        version: 1.1.1
+        specifier: ^1.2.0
+        version: 1.2.0
       '@ember/optional-features':
         specifier: ^3.0.0
         version: 3.0.0(@types/node@26.1.0)
@@ -826,8 +826,8 @@ packages:
     engines: {node: '>=0.1.95'}
     hasBin: true
 
-  '@codemod-utils/files@4.0.1':
-    resolution: {integrity: sha512-zIj3UC3kY0JAyPkkQXwuAiX7bz7+HU/PK9XqytWeaN262JSK858nfFyja0wGqou4rO3O3a3yw1HY7TTEuJZivQ==}
+  '@codemod-utils/files@4.1.0':
+    resolution: {integrity: sha512-/zZQj6o3/fA9V+cDUFNi0nqDw/oxaLktNB38izWm0Msr7EqhBnzWYJ7zkW4Gw5W6oHhYLYQykJfbUqMrYeS6xQ==}
     engines: {node: 22.* || >= 24}
 
   '@csstools/color-helpers@5.1.0':
@@ -908,8 +908,8 @@ packages:
   '@ember-data/rfc395-data@0.0.4':
     resolution: {integrity: sha512-tGRdvgC9/QMQSuSuJV45xoyhI0Pzjm7A9o/MVVA3HakXIImJbbzx/k/6dO9CUEQXIyS2y0fW6C1XaYOG7rY0FQ==}
 
-  '@ember-intl/vite@1.1.1':
-    resolution: {integrity: sha512-I15NkaiSoUBXLTDz6IQb2O5rYxZ4xgq2O5syApLOeyVYMzdFNexBIfYGjUNqdcFtUEErRKX+12DQUDyxR3T0Ww==}
+  '@ember-intl/vite@1.2.0':
+    resolution: {integrity: sha512-M9iMNFRqcUuGGLNtYlMg3g1Li8GFZgQC3Qt9uEIDNpVoCAYcU/anSx+Yk2hYf1yfO8l71v/gCrUI9CHCOQUwTQ==}
     engines: {node: 20.* || >= 22}
 
   '@ember-tooling/blueprint-blueprint@0.3.0':
@@ -7229,7 +7229,7 @@ snapshots:
       exec-sh: 0.3.6
       minimist: 1.2.8
 
-  '@codemod-utils/files@4.0.1':
+  '@codemod-utils/files@4.1.0':
     dependencies:
       glob: 13.0.6
 
@@ -7292,9 +7292,9 @@ snapshots:
 
   '@ember-data/rfc395-data@0.0.4': {}
 
-  '@ember-intl/vite@1.1.1':
+  '@ember-intl/vite@1.2.0':
     dependencies:
-      '@codemod-utils/files': 4.0.1
+      '@codemod-utils/files': 4.1.0
       js-yaml: 5.2.1
 
   '@ember-tooling/blueprint-blueprint@0.3.0': {}
