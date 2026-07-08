@@ -101,7 +101,7 @@ submission-form:
     agree: 私は、ここで登録するデータが、私の知る限り、バイオデータ研究拠点（BSI）が運用するデータベースを通じて制限なく公開・共有できることを承認します。また、登録者の権利と義務、ヒト由来研究データの取り扱い、ならびに遺伝資源のアクセスと利益配分（ABS）に関する規定を含むBSI利用規約を確認し、これに同意します。
 
     read-more-html: |
-      <p class="mb-1">詳しくはこちら:</p>
+      <p>詳しくはこちら:</p>
 
       <ul class="mb-0">
         <li><a href="https://www.ddbj.nig.ac.jp/policies.html" target="_blank">BSI利用規約</a></li>

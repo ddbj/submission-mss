@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
 import { t } from 'ember-intl';
-import { eq, and, not } from 'ember-truth-helpers';
+import { eq, and, not, or } from 'ember-truth-helpers';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
@@ -130,42 +130,46 @@ export default class SubmissionFormPrerequisiteComponent extends Component<Signa
               </RadioGroup>
             </div>
           </div>
+
+          {{#if (eq @model.tpa false)}}
+            <div>
+              <p>{{t "submission-form.prerequisite.unacceptable"}}</p>
+
+              <LinkTo @route="home">{{t "go-to-home"}}</LinkTo>
+            </div>
+          {{/if}}
+        {{/if}}
+
+        {{#if (or (eq @state.maybeTpa false) @model.tpa)}}
+          <div class="card">
+            <div class="card-body">
+              <div class="form-check mb-3">
+                <input
+                  id="agree-terms"
+                  type="checkbox"
+                  checked={{@state.agreed}}
+                  class="form-check-input"
+                  {{on "change" this.setAgreed}}
+                />
+
+                <label for="agree-terms" class="form-check-label">
+                  {{t "submission-form.prerequisite.agree"}}
+                </label>
+              </div>
+
+              {{t "submission-form.prerequisite.read-more-html" htmlSafe=true}}
+            </div>
+          </div>
         {{/if}}
       </div>
 
       <hr />
 
-      {{#if (and @state.maybeTpa (eq @model.tpa false))}}
-        <p>{{t "submission-form.prerequisite.unacceptable"}}</p>
-
-        <LinkTo @route="home">{{t "go-to-home"}}</LinkTo>
-      {{else}}
-        <div class="card mb-3">
-          <div class="card-body vstack gap-3">
-            <div class="form-check">
-              <input
-                id="agree-terms"
-                type="checkbox"
-                checked={{@state.agreed}}
-                class="form-check-input"
-                {{on "change" this.setAgreed}}
-              />
-
-              <label for="agree-terms" class="form-check-label">
-                {{t "submission-form.prerequisite.agree"}}
-              </label>
-            </div>
-
-            {{t "submission-form.prerequisite.read-more-html" htmlSafe=true}}
-          </div>
-        </div>
-
-        <div class="hstack gap-3 justify-content-end">
-          <button type="submit" disabled={{not @state.agreed}} class="btn btn-primary px-5">
-            {{t "submission-form.nav.next"}}
-          </button>
-        </div>
-      {{/if}}
+      <div class="hstack gap-3 justify-content-end">
+        <button type="submit" disabled={{not @state.agreed}} class="btn btn-primary px-5">
+          {{t "submission-form.nav.next"}}
+        </button>
+      </div>
     </form>
   </template>
 }
