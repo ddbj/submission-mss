@@ -76,7 +76,9 @@ export default class FileListComponent extends Component<Signature> {
   }
 
   <template>
-    <style {{! template-lint-disable no-forbidden-elements }}>
+    <style
+      {{! template-lint-disable no-forbidden-elements }}
+    >
       .drag-over * {
         pointer-events: none;
       }

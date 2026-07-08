@@ -48,7 +48,9 @@ export default class SubmissionFormComponent extends Component<Signature> {
   <template>
     {{pageTitle (t "submission-form.title")}}
 
-    <style {{! template-lint-disable no-forbidden-elements }}>
+    <style
+      {{! template-lint-disable no-forbidden-elements }}
+    >
       body {
         counter-reset: step 0;
       }
