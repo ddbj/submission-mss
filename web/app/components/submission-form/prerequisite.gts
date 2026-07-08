@@ -140,21 +140,27 @@ export default class SubmissionFormPrerequisiteComponent extends Component<Signa
 
         <LinkTo @route="home">{{t "go-to-home"}}</LinkTo>
       {{else}}
-        <div class="hstack gap-3">
-          <div class="form-check me-auto">
-            <input
-              id="agree-terms"
-              type="checkbox"
-              checked={{@state.agreed}}
-              class="form-check-input"
-              {{on "change" this.setAgreed}}
-            />
+        <div class="card mb-3">
+          <div class="card-body vstack gap-3">
+            <div class="form-check">
+              <input
+                id="agree-terms"
+                type="checkbox"
+                checked={{@state.agreed}}
+                class="form-check-input"
+                {{on "change" this.setAgreed}}
+              />
 
-            <label for="agree-terms" class="form-check-label">
-              {{t "submission-form.prerequisite.agree-html" htmlSafe=true}}
-            </label>
+              <label for="agree-terms" class="form-check-label">
+                {{t "submission-form.prerequisite.agree"}}
+              </label>
+            </div>
+
+            {{t "submission-form.prerequisite.read-more-html" htmlSafe=true}}
           </div>
+        </div>
 
+        <div class="hstack gap-3 justify-content-end">
           <button type="submit" disabled={{not @state.agreed}} class="btn btn-primary px-5">
             {{t "submission-form.nav.next"}}
           </button>

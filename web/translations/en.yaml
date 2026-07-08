@@ -98,8 +98,15 @@ submission-form:
 
     unacceptable: Regarding TPA, you cannot apply to MSS unless you will prepare a paper.
 
-    agree-html: |
-      I have read and agree to the <a href="https://www.ddbj.nig.ac.jp/policies-e.html" target="_blank">Terms of Use</a>.
+    agree: I confirm that, to the best of my knowledge, the data submitted here are not subject to any restrictions that would prevent their open sharing through the databases operated by the BioData Science Initiative (BSI). I have also reviewed and agreed to the BSI Terms of Use, including the provisions on the rights and duties of submitters, the handling of human-derived research data, and the access and benefit-sharing (ABS) of genetic resources.
+
+    read-more-html: |
+      <p class="mb-1">Read more:</p>
+
+      <ul class="mb-0">
+        <li><a href="https://www.ddbj.nig.ac.jp/policies-e.html" target="_blank">BSI Terms of Use</a></li>
+        <li><a href="https://www.ddbj.nig.ac.jp/faq/en/abs-data-sharing-e.html" target="_blank">Applicable national and international laws and rules on access and benefit-sharing</a></li>
+      </ul>
 
   files:
     q-html: |
