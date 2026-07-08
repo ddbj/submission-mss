@@ -111,7 +111,7 @@
   "ember": {
     "edition": "octane"
   },
-  "packageManager": "pnpm@11.1.2",
+  "packageManager": "pnpm@11.10.0",
   "ember-addon": {
     "type": "app",
     "version": 2
