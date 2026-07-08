@@ -1,8 +1,5 @@
-import { fn } from '@ember/helper';
-import { on } from '@ember/modifier';
 import { t } from 'ember-intl';
 import { formatNumber } from 'ember-intl';
-import { eq, or } from 'ember-truth-helpers';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
 import filesize from 'mssform/helpers/filesize';

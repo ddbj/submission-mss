@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { uniqueId, concat } from '@ember/helper';
 import { action } from '@ember/object';
-import { on } from '@ember/modifier';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { modifier } from 'ember-modifier';

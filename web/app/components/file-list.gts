@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { on } from '@ember/modifier';
-import { modifier } from 'ember-modifier';
 import { tracked } from '@glimmer/tracking';
+
+import { modifier } from 'ember-modifier';
 import { t } from 'ember-intl';
 
 import errorsFor from 'mssform/helpers/errors-for';

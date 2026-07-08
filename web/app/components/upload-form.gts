@@ -1,14 +1,11 @@
 import Component from '@glimmer/component';
 import { LinkTo } from '@ember/routing';
 import { action } from '@ember/object';
-import { fn } from '@ember/helper';
-import { on } from '@ember/modifier';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { trackedArray } from '@ember/reactive/collections';
 
 import { t } from 'ember-intl';
-import { eq, not } from 'ember-truth-helpers';
 import pageTitle from 'ember-page-title/helpers/page-title';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
 

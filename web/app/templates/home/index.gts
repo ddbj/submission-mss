@@ -1,4 +1,3 @@
-import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
 import { t } from 'ember-intl';
 import pageTitle from 'ember-page-title/helpers/page-title';

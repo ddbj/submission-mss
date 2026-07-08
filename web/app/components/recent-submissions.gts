@@ -4,7 +4,6 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import { formatDate } from 'ember-intl';
-import { gt } from 'ember-truth-helpers';
 import { task } from 'ember-concurrency';
 
 import type { components, paths } from 'schema/openapi';

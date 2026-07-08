@@ -1,10 +1,9 @@
 import Component from '@glimmer/component';
-import { fn, concat } from '@ember/helper';
+import { concat } from '@ember/helper';
 import { action } from '@ember/object';
-import { on } from '@ember/modifier';
 import { service } from '@ember/service';
+
 import { t } from 'ember-intl';
-import { eq, or } from 'ember-truth-helpers';
 
 import UploadProgressModal from 'mssform/components/upload-progress-modal';
 import userMassDir from 'mssform/helpers/user-mass-dir';
