@@ -1,0 +1,16 @@
+name: mssform
+
+services:
+  seaweedfs:
+    image: chrislusf/seaweedfs
+    container_name: mssform-seaweedfs
+    ports:
+      - 8333:8333
+    volumes:
+      - seaweedfs:/data
+      - ./docker/seaweedfs/entrypoint.sh:/entrypoint.sh
+      - ./docker/seaweedfs/s3.development.json:/etc/seaweedfs/s3.json
+    entrypoint: /entrypoint.sh
+
+volumes:
+  seaweedfs:

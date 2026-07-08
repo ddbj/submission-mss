@@ -17,7 +17,8 @@ Web portal for submitting nucleotide sequences to [DDBJ](https://www.ddbj.nig.ac
 - Node.js (see `.node-version`)
 - pnpm (see `packageManager` in `web/package.json`)
 - PostgreSQL
-- Docker (for SeaweedFS and Keycloak in development)
+- Docker (for SeaweedFS in development)
+- A Keycloak instance — in development we point at the one from [cloakman](https://github.com/ddbj/cloakman)
 
 ## Setup
 
@@ -28,17 +29,26 @@ cd web && pnpm install
 
 ## Development
 
-Start all services (Rails, Ember, SeaweedFS, Keycloak):
+Start Rails, Ember, and SeaweedFS (via Docker Compose):
 
 ```bash
 bin/dev
 ```
 
-| Service   | URL                          |
-| --------- | ---------------------------- |
-| Rails API | http://mssform.localhost:3000 |
-| Ember SPA | http://mssform.localhost:4200 |
-| Keycloak  | http://localhost:8080         |
+Keycloak is not started by `bin/dev`; the app talks to an external instance
+(cloakman's in development). Configure it through the environment:
+
+| Variable                 | Default                 | Notes                                  |
+| ------------------------ | ----------------------- | -------------------------------------- |
+| `KEYCLOAK_URL`           | `http://localhost:8080` | Base URL of the Keycloak instance      |
+| `KEYCLOAK_CLIENT_SECRET` | —                       | Secret of the `mssform` client         |
+| `APP_URL`                | `http://localhost:3000` | Origin of the Rails API                |
+| `WEB_URL`                | `http://localhost:4200` | Origin of the Ember SPA                |
+
+| Service   | URL                     |
+| --------- | ----------------------- |
+| Rails API | http://localhost:3000   |
+| Ember SPA | http://localhost:4200   |
 
 ## Testing
 

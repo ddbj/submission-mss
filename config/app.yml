@@ -1,11 +1,11 @@
 development:
-  app_url:                http://mssform.localhost:3000
+  app_url:                <%= ENV.fetch('APP_URL', 'http://localhost:3000') %>
   extracts_dir:           <%= Rails.root.join("storage/extracts") %>
   ggs_jobs_dir_template:  <%= Rails.root.join("storage/ggs/{job_id}/output") %>
   mass_dir_path_template: <%= Rails.root.join("storage/mass/{user}") %>
   submissions_dir:        <%= Rails.root.join("storage/submissions") %>
   upload_events_log:      <%= Rails.root.join("storage/upload_events.jsonl") %>
-  web_url:                http://mssform.localhost:4200
+  web_url:                <%= ENV.fetch('WEB_URL', 'http://localhost:4200') %>
 
 test:
   app_url:                http://mssform.example.com:3000

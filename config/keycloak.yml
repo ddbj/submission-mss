@@ -1,7 +1,7 @@
 development:
   client_id:     mssform
-  client_secret: <%= ENV["KEYCLOAK_CLIENT_SECRET"] %>
-  url:           http://keycloak.localhost:8080
+  client_secret: <%= ENV['KEYCLOAK_CLIENT_SECRET'] %>
+  url:           <%= ENV.fetch('KEYCLOAK_URL', 'http://localhost:8080') %>
 
 test:
   client_id:     mssform
