@@ -9,10 +9,6 @@ servers:
 proxy:
   host: mss.ddbj.nig.ac.jp
 
-builder:
-  args:
-    RAILS_ENV: production
-
 volumes:
   - /mnt/submission:/submission
   - /lustre9/open/home/w3dfast/ggs_volumes:/lustre9/open/home/w3dfast/ggs_volumes:ro

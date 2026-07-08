@@ -51,14 +51,10 @@ RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 FROM docker.io/library/node:24.18.0 AS web
 
-ARG RAILS_ENV
-
-ENV RAILS_ENV=${RAILS_ENV:?}
-
 RUN npm install --global pnpm
 
 WORKDIR /config
-COPY config/app.yml config/enums.yml ./
+COPY config/enums.yml ./
 
 WORKDIR /web
 COPY web/ ./

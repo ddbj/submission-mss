@@ -9,10 +9,6 @@ servers:
 proxy:
   host: mss-staging.ddbj.nig.ac.jp
 
-builder:
-  args:
-    RAILS_ENV: staging
-
 env:
   clear:
     RAILS_ENV: staging

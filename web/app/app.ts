@@ -10,10 +10,14 @@ if (macroCondition(isTesting())) {
 } else {
   const Sentry = importSync('@sentry/ember') as typeof import('@sentry/ember');
 
-  if (config['sentryDSN']) {
+  // The DSN and environment are injected at request time by the Rails backend
+  // (see FrontendsController), keeping the built assets environment-agnostic.
+  const dsn = document.querySelector('meta[name="sentry-dsn"]')?.getAttribute('content');
+
+  if (dsn) {
     Sentry.init({
-      dsn: config['sentryDSN'] as string,
-      environment: config['railsEnv'] as string,
+      dsn,
+      environment: document.querySelector('meta[name="sentry-environment"]')?.getAttribute('content') ?? undefined,
       sendDefaultPii: true,
     });
   }
