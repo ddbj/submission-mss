@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { concat, uniqueId } from '@ember/helper';
 import { action } from '@ember/object';
 import { getOwner } from '@ember/application';
-import { on } from '@ember/modifier';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { t } from 'ember-intl';

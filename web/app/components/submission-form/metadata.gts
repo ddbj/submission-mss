@@ -1,9 +1,8 @@
 import Component from '@glimmer/component';
-import { fn, concat } from '@ember/helper';
+import { concat } from '@ember/helper';
 import { action } from '@ember/object';
-import { on } from '@ember/modifier';
+
 import { t } from 'ember-intl';
-import { eq, or } from 'ember-truth-helpers';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
 import RadioGroup from 'mssform/components/radio-group';

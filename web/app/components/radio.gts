@@ -1,5 +1,4 @@
 import { uniqueId } from '@ember/helper';
-import { hash } from '@ember/helper';
 
 import RadioInput from './radio/input';
 import RadioLabel from './radio/label';

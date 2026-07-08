@@ -170,9 +170,6 @@ importers:
       ember-template-lint:
         specifier: ^7.9.3
         version: 7.9.3
-      ember-truth-helpers:
-        specifier: ^5.0.0
-        version: 5.0.0
       eslint:
         specifier: ^10.6.0
         version: 10.6.0
@@ -3185,9 +3182,6 @@ packages:
     resolution: {integrity: sha512-iqC4rv/oVlXViGuf7hlOA/bC550ZqacZKAc8WvQV0ueeCtIYPkYYK+Tc7FwpM8qGx3jiwu/ZsTuNfPInI5pL7Q==}
     engines: {node: ^18.18.0 || >= 20.9.0}
     hasBin: true
-
-  ember-truth-helpers@5.0.0:
-    resolution: {integrity: sha512-PnQd6D6hvlNC3k6gBu0SC2cvfXX6wH6W0nToomIIoxqyrD5cllk0zBh/j/1H0KsczVCWeuF9PWj5xJgL4jQAGg==}
 
   emoji-regex@10.6.0:
     resolution: {integrity: sha512-toUI84YS5YmxW219erniWD0CIVOo46xGKColeNQRgOzDorgBi1v4D71/OFzgD9GO2UGKIv1C3Sp8DAn0+j5w7A==}
@@ -10238,12 +10232,6 @@ snapshots:
     dependencies:
       '@lint-todo/utils': 13.1.1
       content-tag: 3.1.3
-
-  ember-truth-helpers@5.0.0:
-    dependencies:
-      '@embroider/addon-shim': 1.10.3
-    transitivePeerDependencies:
-      - supports-color
 
   emoji-regex@10.6.0: {}
 

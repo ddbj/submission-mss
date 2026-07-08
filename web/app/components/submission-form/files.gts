@@ -1,11 +1,9 @@
 import Component from '@glimmer/component';
-import { fn } from '@ember/helper';
 import { action } from '@ember/object';
-import { on } from '@ember/modifier';
 import { service } from '@ember/service';
+
 import { t } from 'ember-intl';
 import { task } from 'ember-concurrency';
-import { eq, and, not } from 'ember-truth-helpers';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
 import FileList from 'mssform/components/file-list';

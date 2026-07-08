@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
-import { fn, concat } from '@ember/helper';
+import { concat } from '@ember/helper';
 import { action } from '@ember/object';
-import { on } from '@ember/modifier';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { t } from 'ember-intl';
