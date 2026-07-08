@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
 import { t } from 'ember-intl';
-import { eq, and, not, or } from 'ember-truth-helpers';
+import { eq, or, not } from 'ember-truth-helpers';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
