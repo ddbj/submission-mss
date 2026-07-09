@@ -86,7 +86,6 @@ export default class SubmissionFormComponent extends Component<Signature> {
 
 export class State {
   @tracked maybeTpa: boolean | null = null;
-  @tracked agreed = false;
   @tracked files: SubmissionFileData[] = [];
 }
 

@@ -29,10 +29,6 @@ export default class SubmissionFormPrerequisiteComponent extends Component<Signa
     this.args.model.tpa = value;
   }
 
-  @action setAgreed(event: Event) {
-    this.args.state.agreed = (event.target as HTMLInputElement).checked;
-  }
-
   @action handleSubmit(event: Event) {
     event.preventDefault();
     this.args.nav.goNext();
@@ -137,36 +133,12 @@ export default class SubmissionFormPrerequisiteComponent extends Component<Signa
             </div>
           {{/if}}
         {{/if}}
-
-        {{#if (or (eq @state.maybeTpa false) @model.tpa)}}
-          <div class="card">
-            <div class="card-body">
-              <div class="form-check mb-3">
-                <input
-                  id="agree-terms"
-                  type="checkbox"
-                  checked={{@state.agreed}}
-                  class="form-check-input"
-                  {{on "change" this.setAgreed}}
-                />
-
-                <label for="agree-terms" class="form-check-label">
-                  {{t "submission-form.prerequisite.agree"}}
-                </label>
-              </div>
-
-              {{t "submission-form.prerequisite.read-more-html" htmlSafe=true}}
-            </div>
-          </div>
-        {{/if}}
       </div>
 
       <hr />
 
       <div class="hstack gap-3 justify-content-end">
-        <button type="submit" disabled={{not @state.agreed}} class="btn btn-primary px-5">
-          {{t "submission-form.nav.next"}}
-        </button>
+        <button type="submit" class="btn btn-primary px-5">{{t "submission-form.nav.next"}}</button>
       </div>
     </form>
   </template>
