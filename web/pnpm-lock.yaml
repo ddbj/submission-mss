@@ -144,8 +144,8 @@ importers:
         specifier: ^5.2.0
         version: 5.2.0(@babel/core@7.29.7)(@glint/template@1.7.8)
       ember-intl:
-        specifier: ^8.2.9
-        version: 8.2.9(@babel/core@7.29.7)(@ember/test-helpers@5.4.3(@babel/core@7.29.7))
+        specifier: ^8.3.0
+        version: 8.3.0(@babel/core@7.29.7)(@ember/test-helpers@5.4.3(@babel/core@7.29.7))
       ember-load-initializers:
         specifier: ^3.0.1
         version: 3.0.1(ember-source@7.1.0(@glimmer/component@2.1.1))
@@ -3124,8 +3124,8 @@ packages:
   ember-estree@0.6.10:
     resolution: {integrity: sha512-5nItZGzvxHgoCdASQbn9qBzF4sdjSggUeZpXdihAanmYWm6XkObT/TlUvakYtoKret1/8gm0jNLwNPqZYwHtCw==}
 
-  ember-intl@8.2.9:
-    resolution: {integrity: sha512-WfLBJHbR/EnOdeV6u4BKof3fVOGdDt/OzqXlwhjOie6WEV9xyxpEq6KOVvBw26A14M0DISO9BeSxRrVLgg1b5Q==}
+  ember-intl@8.3.0:
+    resolution: {integrity: sha512-vJSv7N0bUGU8rxObfrJ9JTaSn7j/O9tj3HxTXe4YqzL4hLSJdIJLmtD2r3Y1qzkzBS7a+F493MqoH0as0Jb7FQ==}
     engines: {node: 20.* || >= 22}
     peerDependencies:
       '@ember/test-helpers': ^4.0.0 || ^5.0.0
@@ -10111,7 +10111,7 @@ snapshots:
       content-tag: 4.2.0
       oxc-parser: 0.130.0
 
-  ember-intl@8.2.9(@babel/core@7.29.7)(@ember/test-helpers@5.4.3(@babel/core@7.29.7)):
+  ember-intl@8.3.0(@babel/core@7.29.7)(@ember/test-helpers@5.4.3(@babel/core@7.29.7)):
     dependencies:
       '@embroider/addon-shim': 1.10.3
       '@formatjs/intl': 4.1.14
