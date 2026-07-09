@@ -1,12 +1,7 @@
 allowBuilds:
-  core-js: true
-  esbuild: true
-  msw: true
-
-onlyBuiltDependencies:
-  - core-js
-  - esbuild
-  - msw
-
+  core-js: false
+  msw: false
+minimumReleaseAgeExclude:
+  - "@ember-intl/vite@1.2.0"
 overrides:
   ember-cli-htmlbars: ^7.0.1
