@@ -100,6 +100,12 @@ module('Acceptance | submission', function (hooks) {
 
     assert.dom('button[type="submit"]').hasText('Apply for registration');
 
+    assert.dom('button.px-5[type="submit"]').isDisabled('Submit is disabled until the terms are agreed to');
+
+    await click('#agree-terms');
+
+    assert.dom('button.px-5[type="submit"]').isNotDisabled('Submit is enabled once the terms are agreed to');
+
     await click('button[type="submit"]');
 
     // --- Step 5: Complete ---
@@ -107,6 +113,31 @@ module('Acceptance | submission', function (hooks) {
     await waitUntil(() => document.body.textContent?.includes('NSUB000001'));
 
     assert.ok(document.body.textContent?.includes('NSUB000001'), 'MASS ID is displayed');
+  });
+
+  test('the unacceptable TPA answer cannot proceed past the prerequisite step', async function (assert) {
+    worker.use(
+      http.get('/submissions', ({ response }) => {
+        return response(200).json({
+          submissions: [],
+        });
+      }),
+
+      http.get('/submissions/last_submitted', () => {
+        return new HttpResponse(null, { status: 404 });
+      }),
+    );
+
+    await visit('/home');
+    await click('a[href^="/home/submissions/new"]');
+
+    // --- Step 1: Prerequisite ---
+
+    await clickRadio('No, I have created the nucleotide sequences by assembling from the publicly available data.');
+    await clickRadio('No, I have no plan to submit a paper.');
+
+    assert.dom('form').containsText('you cannot apply to MSS unless you will prepare a paper');
+    assert.dom('button.px-5[type="submit"]').isDisabled('Next stays disabled for the unacceptable TPA answer');
   });
 
   test('new submission via DFAST job ID', async function (assert) {
@@ -224,6 +255,7 @@ module('Acceptance | submission', function (hooks) {
 
     assert.dom('button[type="submit"]').hasText('Apply for registration');
 
+    await click('#agree-terms');
     await click('button[type="submit"]');
 
     // --- Step 5: Complete ---
@@ -344,6 +376,7 @@ module('Acceptance | submission', function (hooks) {
 
     assert.dom('button[type="submit"]').hasText('Apply for registration');
 
+    await click('#agree-terms');
     await click('button[type="submit"]');
 
     // --- Step 5: Complete ---
@@ -468,6 +501,7 @@ module('Acceptance | submission', function (hooks) {
 
     assert.dom('button[type="submit"]').hasText('Apply for registration');
 
+    await click('#agree-terms');
     await click('button[type="submit"]');
 
     // --- Step 5: Complete ---
