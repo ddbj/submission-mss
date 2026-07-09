@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root to: redirect('/web')
+  root to: 'frontends#show'
 
   get 'auth/:provider/callback', to: 'sessions#create'
   get 'auth/failure',            to: 'sessions#failure'

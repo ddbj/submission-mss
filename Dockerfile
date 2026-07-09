@@ -79,6 +79,10 @@ COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 COPY --from=web /web/dist/ /rails/public
 
+# FrontendsController serves the SPA shell with the runtime config injected, so it
+# must not be served statically from public/. Move it out of the way.
+RUN mv public/index.html app/views/frontends/show.html
+
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid ${APP_GID:?} rails && \
     useradd rails --uid ${APP_UID:?} --gid ${APP_GID:?} --create-home --shell /bin/bash && \
