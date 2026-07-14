@@ -94,7 +94,7 @@
     "msw": "^2.15.0",
     "openapi-msw": "^2.0.0",
     "outdent": "^0.8.0",
-    "prettier": "^3.9.4",
+    "prettier": "^3.9.5",
     "prettier-plugin-ember-template-tag": "^2.1.7",
     "qunit": "^2.26.0",
     "qunit-dom": "^3.5.1",
