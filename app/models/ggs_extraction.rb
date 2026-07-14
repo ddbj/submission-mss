@@ -27,8 +27,31 @@ class GgsExtraction < ApplicationRecord
 
     raise Extraction::Error.new(:directory_not_found, job_id:) unless src_dir.directory?
 
-    unarchive_and_copy_files(src_dir, working_dir.join(job_id)) do |name|
-      files.create!(name:, parsing: true, ggs_job_id: job_id)
+    # Corrected files live under output/fixed/ and take priority over the same-named
+    # files in output/. Pick a single source per file name (fixed winning, unmatched
+    # output/ files kept), copy them into a flat directory, and import that so each
+    # file is stored once under its own basename. Resolving before copying keeps a
+    # read-only output/ file from being overwritten in place (which would fail).
+    sources = {}
+
+    [src_dir, src_dir.join('fixed')].each do |dir|
+      next unless dir.directory?
+
+      dir.each_child do |child|
+        sources[child.basename.to_s] = child if child.file?
+      end
+    end
+
+    Dir.mktmpdir do |tmp|
+      merged = Pathname.new(tmp)
+
+      sources.each_value do |src|
+        FileUtils.cp src, merged
+      end
+
+      unarchive_and_copy_files(merged, working_dir.join(job_id)) do |name|
+        files.create!(name:, parsing: true, ggs_job_id: job_id)
+      end
     end
   end
 

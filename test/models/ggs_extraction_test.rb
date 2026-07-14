@@ -31,6 +31,84 @@ class GgsExtractionTest < ActiveSupport::TestCase
     assert files.all? { _1.fullpath.exist? }
   end
 
+  test 'prepare_files prefers output/fixed/ over output/ for the same file name' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    dir    = output_dir(job_id)
+    fixed  = dir.join('fixed').tap(&:mkpath)
+
+    dir.join('foo.ann').write   "COMMON\tSUBMITTER\t\tcontact\tOutput\n"
+    dir.join('foo.fa').write    ">output\nACGT\n"
+    fixed.join('foo.ann').write "COMMON\tSUBMITTER\t\tcontact\tFixed\n"
+    fixed.join('foo.fa').write  ">fixed\nACGT\n"
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id])
+    extraction.prepare_files
+
+    files = extraction.files.order(:name)
+
+    assert_equal %w[foo.ann foo.fa], files.map(&:name)
+    assert_equal "COMMON\tSUBMITTER\t\tcontact\tFixed\n", files.first.fullpath.read
+    assert_equal ">fixed\nACGT\n",                        files.last.fullpath.read
+  end
+
+  test 'prepare_files prefers output/fixed/ even when the output/ files are read-only' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    dir    = output_dir(job_id)
+    fixed  = dir.join('fixed').tap(&:mkpath)
+
+    dir.join('foo.ann').write   "COMMON\tSUBMITTER\t\tcontact\tOutput\n"
+    dir.join('foo.fa').write    ">output\nACGT\n"
+    fixed.join('foo.ann').write "COMMON\tSUBMITTER\t\tcontact\tFixed\n"
+    fixed.join('foo.fa').write  ">fixed\nACGT\n"
+
+    # GGS job output lives on a shared filesystem and may be read-only.
+    [dir, fixed].each {|d| d.each_child { _1.chmod(0o444) if _1.file? } }
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id])
+    extraction.prepare_files
+
+    files = extraction.files.order(:name)
+
+    assert_equal %w[foo.ann foo.fa], files.map(&:name)
+    assert_equal ">fixed\nACGT\n", files.last.fullpath.read
+  end
+
+  test 'prepare_files keeps output/ files that have no counterpart under output/fixed/' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    dir    = output_dir(job_id)
+    fixed  = dir.join('fixed').tap(&:mkpath)
+
+    dir.join('a.ann').write   "COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n"
+    dir.join('a.fa').write    ">output\nACGT\n"
+    dir.join('b.ann').write   "COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n"
+    dir.join('b.fa').write    ">b\nACGT\n"
+    fixed.join('a.fa').write  ">fixed\nACGT\n"
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id])
+    extraction.prepare_files
+
+    files = extraction.files.order(:name)
+
+    assert_equal %w[a.ann a.fa b.ann b.fa], files.map(&:name)
+    assert_equal ">fixed\nACGT\n", files.find { _1.name == 'a.fa' }.fullpath.read
+    assert_equal ">b\nACGT\n",     files.find { _1.name == 'b.fa' }.fullpath.read
+  end
+
+  test 'prepare_files ignores subdirectories other than fixed (e.g. reports)' do
+    job_id  = '01234567-89ab-cdef-0000-000000000001'
+    dir     = output_dir(job_id)
+    reports = dir.join('reports').tap(&:mkpath)
+
+    dir.join('foo.ann').write     "COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n"
+    dir.join('foo.fa').write      ">foo\nACGT\n"
+    reports.join('report.fa').write ">report\nACGT\n"
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id])
+    extraction.prepare_files
+
+    assert_equal %w[foo.ann foo.fa], extraction.files.order(:name).map(&:name)
+  end
+
   test 'prepare_files accepts the same file set as the SFTP import (fasta, fsa, annt.tsv, gz)' do
     job_id = '01234567-89ab-cdef-0000-000000000001'
     dir    = output_dir(job_id)
