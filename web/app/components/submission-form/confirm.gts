@@ -31,6 +31,10 @@ export interface Signature {
 export default class SubmissionFormConfirmComponent extends Component<Signature> {
   @service declare requestManager: RequestManager;
 
+  @action setAgreed(event: Event) {
+    this.args.state.agreed = (event.target as HTMLInputElement).checked;
+  }
+
   @action async submit(uploadProgressModal: UploadProgressModalComponent, event: Event) {
     event.preventDefault();
     const { state, model, nav } = this.args;
@@ -209,6 +213,26 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
             </div>
           </div>
 
+          <div class="card">
+            <div class="card-body">
+              <div class="form-check mb-3">
+                <input
+                  id="agree-terms"
+                  type="checkbox"
+                  checked={{@state.agreed}}
+                  class="form-check-input"
+                  {{on "change" this.setAgreed}}
+                />
+
+                <label for="agree-terms" class="form-check-label">
+                  {{t "submission-form.confirm.agree"}}
+                </label>
+              </div>
+
+              {{t "submission-form.confirm.read-more-html" htmlSafe=true}}
+            </div>
+          </div>
+
           <p>{{t "submission-form.confirm.confirm-message"}}</p>
         </div>
 
@@ -218,7 +242,9 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
           <button type="button" class="btn btn-outline-primary px-4" {{on "click" @nav.goPrev}}>{{t
               "submission-form.nav.back"
             }}</button>
-          <button type="submit" class="btn btn-primary px-5">{{t "submission-form.confirm.submit"}}</button>
+          <button type="submit" disabled={{not @state.agreed}} class="btn btn-primary px-5">{{t
+              "submission-form.confirm.submit"
+            }}</button>
         </div>
       </form>
     </UploadProgressModal>

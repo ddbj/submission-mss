@@ -138,7 +138,9 @@ export default class SubmissionFormPrerequisiteComponent extends Component<Signa
       <hr />
 
       <div class="hstack gap-3 justify-content-end">
-        <button type="submit" class="btn btn-primary px-5">{{t "submission-form.nav.next"}}</button>
+        <button type="submit" disabled={{not (or (eq @state.maybeTpa false) @model.tpa)}} class="btn btn-primary px-5">
+          {{t "submission-form.nav.next"}}
+        </button>
       </div>
     </form>
   </template>
