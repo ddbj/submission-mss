@@ -104,6 +104,7 @@ submission-form:
       In the case where you upload the submission files, be sure to check the format and/or translation of CDS feature by <a href="https://www.ddbj.nig.ac.jp/ddbj/ume-e.html" target="_blank">UME (Parser, transChecker)</a> and fix the errors. Finally, transfer the submission files having no errors. In order to specify the hold date, you <a href="https://www.ddbj.nig.ac.jp/ddbj/file-format-e.html#date" target="_blank">need to describe the hold_date in COMMON of the annotation file</a>. You cannot specify the hold date by the input area in the form.</p>
 
     a1: Import the submission files from DFAST Job ID.
+    a4: Import the submission files from GGS Job ID.
     a2: Upload the submission files through the MSS form.
 
     a3-html: |
@@ -272,6 +273,15 @@ dfast-extractor:
     You can specify multiple job IDs by delimiting each ID with the line feed.</p>
 
   submit: Retrieve submission files from DFAST
+
+ggs-extractor:
+  ids-label: GGS job IDs
+
+  ids-help-html: |
+    <p>36-digits ID including hyphen. Specify the Job ID of a completed <a href="https://gss.ddbj.nig.ac.jp" target="_blank">GGS (Gene/genome submission tool)</a> job.<br />
+    You can specify multiple job IDs by delimiting each ID with the line feed.</p>
+
+  submit: Retrieve submission files from GGS
 
 submission.show:
   re-upload: Re-upload
