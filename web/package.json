@@ -87,7 +87,7 @@
     "eslint-plugin-n": "^18.2.1",
     "eslint-plugin-qunit": "^8.2.6",
     "eslint-plugin-warp-drive": "^5.8.2",
-    "filesize": "^11.0.19",
+    "filesize": "^11.0.22",
     "globals": "^17.7.0",
     "js-yaml": "^5.2.1",
     "jwt-decode": "^4.0.0",
