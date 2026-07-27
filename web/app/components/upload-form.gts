@@ -142,6 +142,21 @@ export default class UploadFormComponent extends Component<Signature> {
                   <div class="form-check">
                     <group.radio as |radio|>
                       <radio.input
+                        checked={{eq this.uploadVia "ggs"}}
+                        required
+                        class="form-check-input"
+                        {{on "change" (fn this.setUploadVia "ggs")}}
+                      />
+
+                      <radio.label class="form-check-label">
+                        {{t "submission-form.files.a4"}}
+                      </radio.label>
+                    </group.radio>
+                  </div>
+
+                  <div class="form-check">
+                    <group.radio as |radio|>
+                      <radio.input
                         checked={{eq this.uploadVia "webui"}}
                         required
                         class="form-check-input"
@@ -187,6 +202,13 @@ export default class UploadFormComponent extends Component<Signature> {
               <JobIdExtractor
                 @endpoint="/dfast_extractions"
                 @i18nPrefix="dfast-extractor"
+                @onPoll={{this.onExtractProgress}}
+                @crossoverErrors={{this.crossoverErrors}}
+              />
+            {{else if (eq this.uploadVia "ggs")}}
+              <JobIdExtractor
+                @endpoint="/ggs_extractions"
+                @i18nPrefix="ggs-extractor"
                 @onPoll={{this.onExtractProgress}}
                 @crossoverErrors={{this.crossoverErrors}}
               />
