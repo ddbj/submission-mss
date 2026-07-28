@@ -4,6 +4,9 @@ class ExtractMetadataJob < ApplicationJob
       begin
         extraction.prepare_files
       rescue Extraction::Error => e
+        # A partly-processed directory may have created some file records
+        # before failing; discard them so a rejected extraction keeps none.
+        extraction.files.destroy_all
         extraction.update! state: 'rejected', error: {id: e.id, **e.data}
         return
       end

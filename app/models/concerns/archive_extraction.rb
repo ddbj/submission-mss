@@ -1,3 +1,5 @@
+require 'open3'
+
 module ArchiveExtraction
   extend ActiveSupport::Concern
 
@@ -44,13 +46,14 @@ module ArchiveExtraction
         copy_file src_dir, dest_dir, src, &build
       elsif ext = src.match_ext?(ARCHIVE_EXT)
         Dir.mktmpdir do |tmp|
-          tmp  = Pathname.new(tmp)
-          dest = tmp.join(src.to_s.delete_suffix(".#{ext}")).tap(&:mkpath)
+          tmp   = Pathname.new(tmp)
+          input = src_dir.join(src)
+          dest  = tmp.join(src.to_s.delete_suffix(".#{ext}")).tap(&:mkpath)
 
           if src.to_s.end_with?('.zip')
-            system 'unzip', src_dir.join(src).to_s, '-d', dest.to_s, exception: true
+            extract! src, input, 'unzip', input.to_s, '-d', dest.to_s
           else
-            system 'tar', '--extract', '--file', src_dir.join(src).to_s, '--directory', dest.to_s, exception: true
+            extract! src, input, 'tar', '--extract', '--file', input.to_s, '--directory', dest.to_s
           end
 
           unarchive_and_copy_files tmp, dest_dir, &build
@@ -59,16 +62,35 @@ module ArchiveExtraction
         comp_ext = ext.split('.').last
 
         Dir.mktmpdir do |tmp|
-          tmp  = Pathname.new(tmp)
-          dest = tmp.join(src.dirname).tap(&:mkpath)
+          tmp   = Pathname.new(tmp)
+          input = tmp.join(src)
+          dest  = tmp.join(src.dirname).tap(&:mkpath)
 
           FileUtils.cp src_dir.join(src), dest
-          system(*COMPRESS.fetch(comp_ext), tmp.join(src).to_s, exception: true)
+          extract! src, input, *COMPRESS.fetch(comp_ext), input.to_s
 
           copy_file tmp, dest_dir, src.to_s.delete_suffix(".#{comp_ext}"), &build
         end
       end
     end
+  end
+
+  # Run an archive/decompression command on a user-supplied file. A broken or
+  # unsupported input makes the command exit non-zero; surface that as an
+  # Extraction::Error so the job rejects the extraction and shows the reason to
+  # the user, instead of crashing with an opaque error. A genuinely missing
+  # binary still raises Errno::ENOENT so it reaches Sentry as a deployment bug.
+  def extract!(name, input, *command)
+    _out, err, status = Open3.capture3(*command)
+
+    return if status.success?
+
+    # Report the first meaningful line, rewriting the internal temp/mass-dir
+    # path to the file's own name so we never leak server paths to the user.
+    detail = err.gsub(input.to_s, name.to_s).each_line.map(&:strip).find(&:present?)
+    detail ||= "#{command.first} exited with status #{status.exitstatus}"
+
+    raise Extraction::Error.new(:invalid_archive, reason: "#{name}: #{detail}")
   end
 
   def copy_file(base, dest_dir, src, &build)
