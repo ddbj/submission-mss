@@ -288,4 +288,26 @@ class ExtractMetadataJobTest < ActiveJob::TestCase
     # aaa.ann is copied before zzz.tar fails; the rejection must keep no files.
     assert_empty @extraction.files
   end
+
+  test 'archive: unreadable file (broken symlink)' do
+    write_file 'aaa.ann', <<~ANN
+      COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
+      \t\t\temail\talice@example.com
+      \t\t\tinstitute\tWonderland Inc.
+    ANN
+
+    dir = Rails.application.config_for(:app).mass_dir_path_template!.gsub('{user}', 'alice')
+    File.symlink '/nonexistent/target.ann', File.join(dir, 'zzz.ann')
+
+    ExtractMetadataJob.perform_now @extraction
+
+    @extraction.reload
+
+    assert_equal 'rejected', @extraction.state
+    assert_equal 'unreadable_file', @extraction.error['id']
+    assert_equal 'zzz.ann: broken symlink', @extraction.error['reason']
+
+    # aaa.ann is copied before zzz.ann fails; the rejection must keep no files.
+    assert_empty @extraction.files
+  end
 end

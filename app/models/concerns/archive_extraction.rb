@@ -94,12 +94,21 @@ module ArchiveExtraction
   end
 
   def copy_file(base, dest_dir, src, &build)
-    name = normalize_path(src)
-    dest = dest_dir.join(name)
+    name   = normalize_path(src)
+    dest   = dest_dir.join(name)
+    source = base.join(src)
 
     raise Extraction::Error.new(:duplicate_file_name, reason: "duplicate file name: #{name}") if dest.exist?
 
-    FileUtils.cp base.join(src), dest
+    # A broken symlink or otherwise unreadable entry in the user's directory
+    # should reject the extraction with the offending name, not crash the job.
+    unless source.file? && source.readable?
+      detail = source.symlink? && !source.exist? ? 'broken symlink' : 'not a readable file'
+
+      raise Extraction::Error.new(:unreadable_file, reason: "#{src}: #{detail}")
+    end
+
+    FileUtils.cp source, dest
 
     build.call name
   end
