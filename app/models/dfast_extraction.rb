@@ -27,6 +27,10 @@ class DfastExtraction < ApplicationRecord
 
       dest_name = normalize_path(entry.name)
 
+      # Different DFAST jobs can contain a file with the same name; reject the
+      # collision with the offending name instead of hitting the unique index.
+      raise Extraction::Error.new(:duplicate_file_name, reason: "duplicate file name: #{dest_name}") if files.exists?(name: dest_name)
+
       working_dir.join(dest_name).open 'w' do |dest|
         IO.copy_stream entry.get_input_stream, dest
 
