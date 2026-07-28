@@ -1,6 +1,11 @@
 module Extraction
   extend ActiveSupport::Concern
 
+  # DFAST/GGS job IDs are UUIDs that become path segments in the job's URL or
+  # output directory. Reject malformed values so a stray space or truncated ID
+  # can't crash the extraction with a URI parse error.
+  UUID_FORMAT = /\A\h{8}-\h{4}-\h{4}-\h{4}-\h{12}\z/
+
   class Error < StandardError
     def initialize(id, **data)
       super()

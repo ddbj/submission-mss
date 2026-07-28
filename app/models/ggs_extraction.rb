@@ -2,15 +2,7 @@ class GgsExtraction < ApplicationRecord
   include Extraction
   include ArchiveExtraction
 
-  UUID_FORMAT = /\A\h{8}-\h{4}-\h{4}-\h{4}-\h{12}\z/
-
   validates :ggs_job_ids, presence: true
-
-  validate do
-    next if ggs_job_ids.blank?
-
-    errors.add :ggs_job_ids, :invalid unless ggs_job_ids.all? { _1.match?(UUID_FORMAT) }
-  end
 
   def prepare_files
     ActiveRecord::Base.transaction do
@@ -23,6 +15,8 @@ class GgsExtraction < ApplicationRecord
   private
 
   def copy_job_files(job_id)
+    raise Extraction::Error.new(:invalid_job_id, job_id:, reason: "invalid job ID: #{job_id}") unless job_id.match?(UUID_FORMAT)
+
     src_dir = job_output_dir(job_id)
 
     raise Extraction::Error.new(:directory_not_found, job_id:) unless src_dir.directory?
