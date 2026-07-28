@@ -267,4 +267,25 @@ class ExtractMetadataJobTest < ActiveJob::TestCase
       'value'    => nil
     ], file._errors
   end
+
+  test 'archive: broken' do
+    write_file 'aaa.ann', <<~ANN
+      COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
+      \t\t\temail\talice@example.com
+      \t\t\tinstitute\tWonderland Inc.
+    ANN
+
+    write_file 'zzz.tar', 'this is not a tar archive'
+
+    ExtractMetadataJob.perform_now @extraction
+
+    @extraction.reload
+
+    assert_equal 'rejected', @extraction.state
+    assert_equal 'invalid_archive', @extraction.error['id']
+    assert_match(/\Azzz\.tar: /, @extraction.error['reason'])
+
+    # aaa.ann is copied before zzz.tar fails; the rejection must keep no files.
+    assert_empty @extraction.files
+  end
 end

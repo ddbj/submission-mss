@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { getOwner } from '@ember/application';
+import { service } from '@ember/service';
 import { modifier } from 'ember-modifier';
 import { tracked } from '@glimmer/tracking';
 
@@ -9,6 +10,7 @@ import userMassDir from 'mssform/helpers/user-mass-dir';
 import Extraction from 'mssform/models/extraction';
 
 import type { ExtractionPayload } from 'mssform/models/extraction';
+import type ErrorModalService from 'mssform/services/error-modal';
 import type { SubmissionFileData, SubmissionError } from 'mssform/models/submission-file';
 
 export interface Signature {
@@ -19,6 +21,8 @@ export interface Signature {
 }
 
 export default class MassDirectoryExtractorComponent extends Component<Signature> {
+  @service declare errorModal: ErrorModalService;
+
   @tracked files: SubmissionFileData[] = [];
 
   fetchFiles = modifier(() => {
@@ -33,7 +37,9 @@ export default class MassDirectoryExtractorComponent extends Component<Signature
 
           this.args.onPoll(payload);
         },
-        undefined,
+        (error) => {
+          this.errorModal.show(new Error(error.reason ?? error.id));
+        },
         abort.signal,
       );
     })().catch((e) => {
