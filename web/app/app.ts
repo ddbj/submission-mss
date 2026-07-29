@@ -2,6 +2,7 @@ import Application from '@ember/application';
 import Resolver from 'ember-resolver';
 import loadInitializers from 'ember-load-initializers';
 import config from './config/environment';
+import isRequestError from 'mssform/utils/is-request-error';
 import { importSync, isDevelopingApp, isTesting, macroCondition } from '@embroider/macros';
 
 if (macroCondition(isTesting())) {
@@ -19,6 +20,15 @@ if (macroCondition(isTesting())) {
       dsn,
       environment: document.querySelector('meta[name="sentry-environment"]')?.getAttribute('content') ?? undefined,
       sendDefaultPii: true,
+
+      beforeSend(event, hint) {
+        // Request failures are already shown to the user by the error-modal
+        // handler (and server errors are captured on the backend), so an
+        // uncaught one is expected noise here, not a client-side crash.
+        if (isRequestError(hint?.originalException)) return null;
+
+        return event;
+      },
     });
   }
 }
