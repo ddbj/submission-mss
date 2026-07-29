@@ -510,4 +510,55 @@ module('Acceptance | submission', function (hooks) {
 
     assert.ok(document.body.textContent?.includes('NSUB000004'), 'MASS ID is displayed');
   });
+
+  test('a rejected extraction shows the error modal instead of leaking an unhandled rejection', async function (assert) {
+    worker.use(
+      http.get('/submissions', ({ response }) => {
+        return response(200).json({
+          submissions: [],
+        });
+      }),
+
+      http.get('/submissions/last_submitted', () => {
+        return new HttpResponse(null, { status: 404 });
+      }),
+
+      http.post('/dfast_extractions', ({ response }) => {
+        return response(201).json({
+          _self: '/dfast_extractions/1',
+          id: 1,
+          state: 'pending',
+          error: null,
+          files: [],
+        });
+      }),
+
+      http.get('/dfast_extractions/{id}', ({ response }) => {
+        return response(200).json({
+          _self: '/dfast_extractions/1',
+          id: 1,
+          state: 'rejected',
+          error: { id: 'failed_to_fetch', job_id: '01234567-89ab-cdef-0000-000000000001', reason: '404 Not Found' },
+          files: [],
+        });
+      }),
+    );
+
+    await visit('/home');
+
+    await click('a[href^="/home/submissions/new"]');
+
+    await clickRadio('Yes, I have determined the nucleotide sequence');
+    await click('button[type="submit"]');
+
+    await clickRadio('Import the submission files from DFAST Job ID');
+    await fillIn('textarea', '01234567-89ab-cdef-0000-000000000001');
+    await click('.card-body button[type="submit"]');
+
+    await waitUntil(() => document.querySelector('.modal-body p')?.textContent);
+
+    // A rejected extraction is an expected user error: it must surface in the
+    // error modal, not escape as an unhandled rejection (which fails this test).
+    assert.dom('.modal-body p').hasText('404 Not Found');
+  });
 });
