@@ -16,6 +16,8 @@ class DfastExtraction < ApplicationRecord
   private
 
   def fetch_and_copy_files(job_id)
+    raise Extraction::Error.new(:invalid_job_id, job_id:, reason: "invalid job ID: #{job_id}") unless job_id.match?(UUID_FORMAT)
+
     res = Fetch::API.fetch("https://dfast.ddbj.nig.ac.jp/analysis/download/#{job_id}/ddbj_submission.zip")
 
     raise Extraction::Error.new(:failed_to_fetch, job_id:, reason: "#{res.status} #{res.status_text}") unless res.ok

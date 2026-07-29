@@ -184,11 +184,14 @@ class GgsExtractionTest < ActiveSupport::TestCase
     assert_equal %w[foo.ann foo.fa], extraction.files.order(:name).map(&:name)
   end
 
-  test 'rejects non-UUID job IDs' do
-    extraction = GgsExtraction.new(user: users(:alice), ggs_job_ids: ['not-a-uuid'])
+  test 'prepare_files rejects a malformed job ID' do
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: ['not-a-uuid'])
 
-    assert_not extraction.valid?
-    assert_includes extraction.errors[:ggs_job_ids], 'is invalid'
+    error = assert_raises Extraction::Error do
+      extraction.prepare_files
+    end
+
+    assert_equal :invalid_job_id, error.id
   end
 
   test 'rejects blank job IDs without raising' do

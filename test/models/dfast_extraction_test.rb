@@ -68,4 +68,16 @@ class DfastExtractionTest < ActiveSupport::TestCase
       assert_equal '404 Not Found',  error.data[:reason]
     end
   end
+
+  test 'prepare_files rejects a malformed job ID before building the download URL' do
+    # A job ID with an embedded space becomes an invalid download URL and used
+    # to crash the job with URI::InvalidURIError (MSSFORM-5Z).
+    extraction = DfastExtraction.create!(user: users(:alice), dfast_job_ids: ['838b545-ad30-4c3d-b238-2b42377a13e0 S'])
+
+    error = assert_raises Extraction::Error do
+      extraction.prepare_files
+    end
+
+    assert_equal :invalid_job_id, error.id
+  end
 end
