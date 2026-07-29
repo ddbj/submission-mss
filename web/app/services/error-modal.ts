@@ -8,7 +8,5 @@ export default class ErrorModalService extends Service {
     const controller = getOwner(this)!.lookup('controller:application') as ApplicationController;
 
     controller.showErrorModal(error);
-
-    throw error;
   }
 }
