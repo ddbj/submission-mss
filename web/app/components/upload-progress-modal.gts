@@ -14,6 +14,7 @@ import percentage from 'mssform/helpers/percentage';
 import UploadFiles from 'mssform/models/upload-files';
 
 import type CurrentUserService from 'mssform/services/current-user';
+import type ErrorModalService from 'mssform/services/error-modal';
 import type { SubmissionFile } from 'mssform/models/submission-file';
 
 interface Signature {
@@ -24,6 +25,7 @@ interface Signature {
 
 export default class UploadProgressModalComponent extends Component<Signature> {
   @service declare currentUser: CurrentUserService;
+  @service declare errorModal: ErrorModalService;
 
   @tracked uploadFiles?: UploadFiles;
 
@@ -37,21 +39,31 @@ export default class UploadProgressModalComponent extends Component<Signature> {
     this.modal.hide();
   }
 
+  // Returns the uploaded blobs, or `undefined` if the upload failed. A failure
+  // (e.g. a dropped connection) is expected, so it is surfaced in the error
+  // modal rather than left to escape as an unhandled rejection; callers must
+  // treat `undefined` as "abort" and not proceed with the submission.
   async performUpload(files: SubmissionFile[]) {
     if (!files.length) return [];
 
     this.uploadFiles = new UploadFiles(files);
     this.modal.show();
 
-    let blobs;
-
     try {
-      blobs = await this.uploadFiles.perform(this.currentUser);
-    } finally {
-      this.modal.hide();
-    }
+      const blobs = await this.uploadFiles.perform(this.currentUser);
 
-    return blobs;
+      this.modal.hide();
+
+      return blobs;
+    } catch (error) {
+      // Hide this modal before showing the error modal. This is only safe while
+      // this modal is not animated (no `fade`), so its backdrop is torn down
+      // synchronously and does not race the error modal's backdrop.
+      this.modal.hide();
+      this.errorModal.show(error as Error);
+
+      return undefined;
+    }
   }
 
   <template>

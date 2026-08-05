@@ -18,7 +18,6 @@ export class DirectUpload {
 
   async create() {
     const blob = new BlobRecord(this.file, await this.checksum, this.url);
-    blob.requestDidError = (event: ProgressEvent) => blob.callback(event.target);
 
     this.delegate.directUploadWillCreateBlobWithXHR!(blob.xhr);
 
@@ -28,7 +27,6 @@ export class DirectUpload {
           reject(new Error(error));
         } else {
           const upload = new BlobUpload(blob);
-          upload.requestDidError = (event: ProgressEvent) => upload.callback(event.target);
 
           this.delegate.directUploadWillStoreFileWithXHR!(upload.xhr);
 

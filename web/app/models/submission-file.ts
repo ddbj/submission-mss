@@ -152,6 +152,8 @@ export class SubmissionFile implements SubmissionFileData {
 
       worker.postMessage({ file: this.rawFile });
     });
+
+    return this.checksum;
   }
 }
 

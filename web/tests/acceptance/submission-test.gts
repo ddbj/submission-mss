@@ -3,7 +3,8 @@ import { visit, click, triggerEvent, waitUntil, fillIn } from '@ember/test-helpe
 import { setupApplicationTest } from 'mssform/tests/helpers';
 import { setupAuthentication } from 'mssform/tests/helpers/setup-auth';
 
-import { HttpResponse } from 'msw';
+import { HttpResponse, http as mswHttp } from 'msw';
+import ENV from 'mssform/config/environment';
 import { http } from '../msw/http';
 import { worker } from '../msw/worker';
 
@@ -560,5 +561,75 @@ module('Acceptance | submission', function (hooks) {
     // A rejected extraction is an expected user error: it must surface in the
     // error modal, not escape as an unhandled rejection (which fails this test).
     assert.dom('.modal-body p').hasText('404 Not Found');
+  });
+
+  test('a failed webui upload shows the error modal instead of leaking an unhandled rejection', async function (assert) {
+    worker.use(
+      http.get('/submissions', ({ response }) => {
+        return response(200).json({
+          submissions: [],
+        });
+      }),
+
+      http.get('/submissions/last_submitted', () => {
+        return new HttpResponse(null, { status: 404 });
+      }),
+
+      // The direct upload to storage fails mid-submission.
+      mswHttp.put(`${ENV.appURL}/rails/active_storage/disk/*`, () => {
+        return new HttpResponse(null, { status: 500 });
+      }),
+    );
+
+    await visit('/home');
+
+    await click('a[href^="/home/submissions/new"]');
+
+    // --- Step 1: Prerequisite ---
+
+    await clickRadio('Yes, I have determined the nucleotide sequence');
+    await click('button[type="submit"]');
+
+    // --- Step 2: Files ---
+
+    await clickRadio('Upload the submission files through the MSS form');
+
+    const ann = new File(
+      [
+        'COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n\t\t\temail\talice@example.com\n\t\t\tinstitute\tWonderland Inc.\n',
+      ],
+      'test.ann',
+    );
+
+    const seq = new File(['>entry1\nATCG\n'], 'test.fasta');
+
+    await triggerEvent('input[type="file"]', 'change', { files: [ann, seq] });
+
+    await waitUntil(() => document.querySelectorAll('.spinner-border').length === 0);
+
+    await click('button[type="submit"]');
+
+    // --- Step 3: Metadata ---
+
+    await waitUntil(() => document.querySelector('#entriesCount'));
+
+    await clickRadio('NGS');
+    await fillIn('#dataType', 'wgs');
+    await clickRadio('English');
+
+    await click('button[type="submit"]');
+
+    // --- Step 4: Confirm ---
+
+    await click('#agree-terms');
+    await click('button.px-5[type="submit"]');
+
+    await waitUntil(() => document.querySelector('.modal-body p')?.textContent);
+
+    // A failed upload is expected (e.g. a dropped connection): it must surface
+    // in the error modal, not escape as an unhandled rejection (which fails
+    // this test), and the submission must not proceed.
+    assert.dom('.modal-body p').hasText('Error storing "test.ann". Status: 500');
+    assert.dom('button.px-5[type="submit"]').exists('stays on the confirm step');
   });
 });

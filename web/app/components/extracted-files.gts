@@ -30,5 +30,5 @@ interface Signature {
 </template> satisfies TOC<Signature>;
 
 function sortByName(files: SubmissionFileData[]) {
-  return files.toSorted((a, b) => a.name.localeCompare(b.name));
+  return [...files].sort((a, b) => a.name.localeCompare(b.name));
 }
