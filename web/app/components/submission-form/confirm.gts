@@ -41,9 +41,11 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
     const { uploadVia } = model;
 
     if (uploadVia === 'webui') {
-      const blobs = (await uploadProgressModal.performUpload(
-        state.files as SubmissionFile[],
-      )) as unknown as DirectUploadBlob[];
+      const blobs = (await uploadProgressModal.performUpload(state.files as SubmissionFile[])) as unknown as
+        DirectUploadBlob[] | undefined;
+
+      // The upload failed and was surfaced in the error modal; stay on the form.
+      if (!blobs) return;
 
       model.files = blobs.map((blob) => blob.signed_id);
     }

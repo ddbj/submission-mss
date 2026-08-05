@@ -59,9 +59,13 @@ export default class FileListComponent extends Component<Signature> {
     for (const file of files) {
       this.args.onAdd(file);
 
-      void file.parse().then(() => {
-        file.calculateDigest();
-      });
+      // A parse failure is surfaced inline via file.errors, and a digest
+      // failure resurfaces when the upload awaits the checksum, so swallow the
+      // rejection here to keep it from escaping as an unhandled rejection.
+      void file
+        .parse()
+        .then(() => file.calculateDigest())
+        .catch(() => {});
     }
   }
 
