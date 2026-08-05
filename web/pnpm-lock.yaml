@@ -72,8 +72,8 @@ importers:
         specifier: ^19.32.0
         version: 19.32.0
       '@rails/activestorage':
-        specifier: ^8.1.300
-        version: 8.1.300
+        specifier: ^8.1.301
+        version: 8.1.301
       '@rollup/plugin-babel':
         specifier: ^7.1.0
         version: 7.1.0(@babel/core@7.29.7)
@@ -1482,8 +1482,8 @@ packages:
   '@primer/octicons@19.32.0':
     resolution: {integrity: sha512-a8QHSWZVOFusPWl8EzL7EyHnEtHCvfSqaHyR3fdb1XbetlyXfo4g+aZ2xEuEJH15848LGhcKn9x1PPztCUcgzA==}
 
-  '@rails/activestorage@8.1.300':
-    resolution: {integrity: sha512-AOv3zZrTJjQlzm4L9uzOQtCz6zaM4IqUyux6yzSqmS+PZ8EzwD1F2JAc4LlJNJAv4MSyNYriG+CaCm1QbQTjsA==}
+  '@rails/activestorage@8.1.301':
+    resolution: {integrity: sha512-o+gxhV96Wa/NpVdTWib9iR9RWlqWjjsylPv16muSFUjIhI6usZJBjM1y93h9cjwWfuW/FxI5QONeH3EFv3+cbg==}
 
   '@rolldown/binding-android-arm64@1.2.1':
     resolution: {integrity: sha512-02hOeOSryYxVrOIphmLAsqnCJWxwlzFk+pEt/N/i6OgT3lShHO7xGCU5cpgchRDHboAEbSjzgGh+O/u1GswQmA==}
@@ -8052,7 +8052,7 @@ snapshots:
     dependencies:
       object-assign: 4.1.1
 
-  '@rails/activestorage@8.1.300':
+  '@rails/activestorage@8.1.301':
     dependencies:
       spark-md5: 3.0.2
 
