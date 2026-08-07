@@ -127,7 +127,7 @@ GEM
     ed25519 (1.4.0)
     email_validator (2.2.4)
       activemodel
-    enumerize (2.8.1)
+    enumerize (3.0.0)
       activesupport (>= 3.2)
     erb (6.0.6)
     erubi (1.13.1)
