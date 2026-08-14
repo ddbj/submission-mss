@@ -1,10 +1,21 @@
 import { module, test } from 'qunit';
-import { visit, click, findAll, getRootElement, triggerEvent, waitFor, waitUntil, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  click,
+  findAll,
+  getRootElement,
+  settled,
+  triggerEvent,
+  waitFor,
+  waitUntil,
+  fillIn,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'mssform/tests/helpers';
 import { setupAuthentication } from 'mssform/tests/helpers/setup-auth';
 
 import { HttpResponse, http as mswHttp } from 'msw';
 import ENV from 'mssform/config/environment';
+import { SubmissionFile } from 'mssform/models/submission-file';
 import { http } from '../msw/http';
 import { worker } from '../msw/worker';
 
@@ -68,6 +79,55 @@ async function fillInWebuiSubmission() {
   // --- Step 4: Confirm ---
 
   await click('#agree-terms');
+}
+
+// Active Storage uploads over XHR, and msw does not tell its handlers when a
+// client hangs up on one, so count the aborts at the source. The caller has to
+// `restore()` whatever happens, or the counting subclass outlives the test.
+function watchAbortedRequests() {
+  const OriginalXHR = XMLHttpRequest;
+
+  const watcher = {
+    count: 0,
+
+    restore() {
+      window.XMLHttpRequest = OriginalXHR;
+    },
+  };
+
+  window.XMLHttpRequest = class extends OriginalXHR {
+    abort() {
+      watcher.count += 1;
+
+      super.abort();
+    }
+  };
+
+  return watcher;
+}
+
+// Holds the digest back, so an upload can be cancelled while its checksum is
+// still being calculated. The caller has to `restore()` whatever happens.
+function stallDigest() {
+  const original = Object.getOwnPropertyDescriptor(SubmissionFile.prototype, 'calculateDigest')!;
+
+  const digest = {
+    finish: undefined as ((checksum: string) => void) | undefined,
+
+    restore() {
+      Object.defineProperty(SubmissionFile.prototype, 'calculateDigest', original);
+    },
+  };
+
+  SubmissionFile.prototype.calculateDigest = function (this: SubmissionFile) {
+    this.checksum = new Promise<string>((resolve) => {
+      digest.finish = resolve;
+    });
+
+    return this.checksum;
+  };
+
+  return digest;
 }
 
 module('Acceptance | submission', function (hooks) {
@@ -636,20 +696,9 @@ module('Acceptance | submission', function (hooks) {
   });
 
   test('leaving the form during an upload aborts it and takes the backdrop with it', async function (assert) {
-    // Active Storage uploads over XHR, and msw does not tell its handlers when
-    // a client hangs up on one, so count the aborts at the source.
-    let abortedRequests = 0;
+    const aborted = watchAbortedRequests();
+
     let uploadStarted = false;
-
-    const OriginalXHR = XMLHttpRequest;
-
-    window.XMLHttpRequest = class extends OriginalXHR {
-      abort() {
-        abortedRequests += 1;
-
-        super.abort();
-      }
-    };
 
     try {
       worker.use(
@@ -695,14 +744,119 @@ module('Acceptance | submission', function (hooks) {
       // An upload left running would go on to report its outcome on the page
       // the user moved to, and submit the application from a destroyed
       // component.
-      assert.strictEqual(abortedRequests, 1, 'the upload is aborted with the form');
+      assert.strictEqual(aborted.count, 1, 'the upload is aborted with the form');
 
       // Nothing hides the modal when the browser's back button destroys the
       // form mid-upload, so an unclickable overlay would be left over the next
       // page.
       assert.notOk(backdrop?.isConnected, 'the backdrop is removed with the form');
     } finally {
-      window.XMLHttpRequest = OriginalXHR;
+      aborted.restore();
+    }
+  });
+
+  test('cancelling an upload stops it and stays on the confirm step', async function (assert) {
+    const aborted = watchAbortedRequests();
+
+    let uploadStarted = false;
+
+    try {
+      worker.use(
+        http.get('/submissions', ({ response }) => {
+          return response(200).json({
+            submissions: [],
+          });
+        }),
+
+        http.get('/submissions/last_submitted', () => {
+          return new HttpResponse(null, { status: 404 });
+        }),
+
+        // The direct upload never answers, so it is still running when it is
+        // cancelled.
+        mswHttp.put(`${ENV.appURL}/rails/active_storage/disk/*`, () => {
+          uploadStarted = true;
+
+          return new Promise<Response>(() => {});
+        }),
+      );
+
+      await fillInWebuiSubmission();
+
+      await click('button.px-5[type="submit"]');
+
+      // Cancel only once the file is on its way, so that there is a request to
+      // abort rather than a checksum still being calculated.
+      await waitUntil(() => uploadStarted);
+
+      await click('.modal-footer button');
+
+      assert.strictEqual(aborted.count, 1, 'the upload is aborted');
+
+      // Cancelling is a choice, not a failure, and it leaves the application
+      // ready to be submitted again.
+      assert.dom('.modal.show').doesNotExist('the progress modal is closed');
+      assert.dom('.modal-body p').doesNotExist('cancelling is not reported as an error');
+      assert.dom('button.px-5[type="submit"]').exists('stays on the confirm step');
+
+      // Submitting again must not inherit the cancelled upload's signal, which
+      // would abort the new one before it starts.
+      worker.use(
+        mswHttp.put(`${ENV.appURL}/rails/active_storage/disk/*`, () => new HttpResponse(null, { status: 204 })),
+
+        http.post('/submissions', ({ response }) => {
+          return response(200).json({
+            submission: { id: 'NSUB000005' },
+          });
+        }),
+      );
+
+      await click('button.px-5[type="submit"]');
+
+      await waitUntil(() => getRootElement().textContent?.includes('NSUB000005'));
+
+      assert.dom().containsText('NSUB000005', 'the application can still be submitted');
+    } finally {
+      aborted.restore();
+    }
+  });
+
+  test('cancelling before the upload starts leaves a later attempt alone', async function (assert) {
+    const digest = stallDigest();
+
+    try {
+      worker.use(
+        http.get('/submissions', ({ response }) => {
+          return response(200).json({
+            submissions: [],
+          });
+        }),
+
+        http.get('/submissions/last_submitted', () => {
+          return new HttpResponse(null, { status: 404 });
+        }),
+
+        // The direct upload never answers, so the second attempt is still
+        // running when the first one is told about the cancellation.
+        mswHttp.put(`${ENV.appURL}/rails/active_storage/disk/*`, () => new Promise<Response>(() => {})),
+      );
+
+      await fillInWebuiSubmission();
+
+      // Cancel while the checksum is still being calculated: this upload only
+      // hears about it once the checksum finishes.
+      await click('button.px-5[type="submit"]');
+      await click('.modal-footer button');
+
+      await click('button.px-5[type="submit"]');
+
+      digest.finish?.('checksum');
+
+      await settled();
+
+      assert.dom('.modal.show').exists('the cancelled upload leaves the running one on screen');
+    } finally {
+      digest.restore();
     }
   });
 });
