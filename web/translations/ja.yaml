@@ -248,6 +248,7 @@ upload-progress-modal:
 submission-file:
   invalid-filename: 'ファイル名は半角英数字にしてください。また、次の記号は使えません: \/:*?"<>|.'
   unsupported-filetype: 対応していないファイル形式です。
+  parser-failed: ページの読み込みに問題があり、このファイルを確認できませんでした。ページを再読み込みしてください。
 
 annotation-file-parser:
   invalid-hold-date: hold_date は8桁の数字 (YYYYMMDD) で指定してください。
