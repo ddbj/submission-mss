@@ -12,6 +12,7 @@ import Files from './submission-form/files';
 import Metadata from './submission-form/metadata';
 import Prerequisite from './submission-form/prerequisite';
 import stepNavLinkClass from 'mssform/helpers/step-nav-link-class';
+import { discardFiles } from 'mssform/models/submission-file';
 
 import type { ComponentLike } from '@glint/template';
 import type RouterService from '@ember/routing/router-service';
@@ -37,6 +38,14 @@ export default class SubmissionFormComponent extends Component<Signature> {
 
   state = new State();
   nav = new Navigation();
+
+  willDestroy() {
+    super.willDestroy();
+
+    // The files outlive the step that collected them, so they are discarded
+    // here rather than when the file step is swapped out.
+    discardFiles(this.state.files);
+  }
 
   get component() {
     return COMPONENTS[this.nav.currentStep] as ComponentLike<{
