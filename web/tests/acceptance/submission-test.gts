@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, click, triggerEvent, waitUntil, fillIn } from '@ember/test-helpers';
+import { visit, click, findAll, getRootElement, triggerEvent, waitFor, waitUntil, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'mssform/tests/helpers';
 import { setupAuthentication } from 'mssform/tests/helpers/setup-auth';
 
@@ -8,17 +8,66 @@ import ENV from 'mssform/config/environment';
 import { http } from '../msw/http';
 import { worker } from '../msw/worker';
 
+// Every DOM lookup below goes through the test helpers, which are scoped to the
+// application's root element. Querying `document` instead would also match the
+// Bootstrap modals that a previous test leaked into `<body>`: Bootstrap
+// re-appends a modal there if its show transition is still pending when the
+// application is torn down.
 function clickRadio(labelText: string) {
-  const labels = [...document.querySelectorAll<HTMLLabelElement>('.form-check-label')];
+  const labels = findAll('.form-check-label') as HTMLLabelElement[];
   const label = labels.find((el) => el.textContent?.trim().startsWith(labelText));
 
   if (!label) throw new Error(`Radio label not found: "${labelText}"`);
 
-  const input = document.getElementById(label.htmlFor) as HTMLInputElement;
+  const input = label.control as HTMLInputElement | null;
 
   if (!input) throw new Error(`Radio input not found for label: "${labelText}"`);
 
   return click(input);
+}
+
+// Walks a webui upload from the home page to the confirm step, with the terms
+// agreed to, leaving the caller to submit the application.
+async function fillInWebuiSubmission() {
+  await visit('/home');
+
+  await click('a[href^="/home/submissions/new"]');
+
+  // --- Step 1: Prerequisite ---
+
+  await clickRadio('Yes, I have determined the nucleotide sequence');
+  await click('button[type="submit"]');
+
+  // --- Step 2: Files ---
+
+  await clickRadio('Upload the submission files through the MSS form');
+
+  const ann = new File(
+    ['COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n\t\t\temail\talice@example.com\n\t\t\tinstitute\tWonderland Inc.\n'],
+    'test.ann',
+  );
+
+  const seq = new File(['>entry1\nATCG\n'], 'test.fasta');
+
+  await triggerEvent('input[type="file"]', 'change', { files: [ann, seq] });
+
+  await waitUntil(() => findAll('.spinner-border').length === 0);
+
+  await click('button[type="submit"]');
+
+  // --- Step 3: Metadata ---
+
+  await waitFor('#entriesCount');
+
+  await clickRadio('NGS');
+  await fillIn('#dataType', 'wgs');
+  await clickRadio('English');
+
+  await click('button[type="submit"]');
+
+  // --- Step 4: Confirm ---
+
+  await click('#agree-terms');
 }
 
 module('Acceptance | submission', function (hooks) {
@@ -74,9 +123,7 @@ module('Acceptance | submission', function (hooks) {
 
     await triggerEvent('input[type="file"]', 'change', { files: [ann, seq] });
 
-    await waitUntil(() => {
-      return document.querySelectorAll('.spinner-border').length === 0;
-    });
+    await waitUntil(() => findAll('.spinner-border').length === 0);
 
     assert.dom('.list-group-item').exists({ count: 2 });
 
@@ -84,7 +131,7 @@ module('Acceptance | submission', function (hooks) {
 
     // --- Step 3: Metadata ---
 
-    await waitUntil(() => document.querySelector('#entriesCount'));
+    await waitFor('#entriesCount');
 
     assert.dom('#entriesCount').hasValue('1');
     assert.dom('#contactPerson\\.email').hasValue('alice@example.com');
@@ -111,9 +158,9 @@ module('Acceptance | submission', function (hooks) {
 
     // --- Step 5: Complete ---
 
-    await waitUntil(() => document.body.textContent?.includes('NSUB000001'));
+    await waitUntil(() => getRootElement().textContent?.includes('NSUB000001'));
 
-    assert.ok(document.body.textContent?.includes('NSUB000001'), 'MASS ID is displayed');
+    assert.dom().containsText('NSUB000001', 'MASS ID is displayed');
   });
 
   test('the unacceptable TPA answer cannot proceed past the prerequisite step', async function (assert) {
@@ -229,9 +276,7 @@ module('Acceptance | submission', function (hooks) {
     await fillIn('textarea', '01234567-89ab-cdef-0000-000000000001');
     await click('.card-body button[type="submit"]');
 
-    await waitUntil(() => {
-      return document.querySelectorAll('.list-group-item').length > 0;
-    });
+    await waitFor('.list-group-item');
 
     assert.dom('.list-group-item').exists({ count: 2 });
 
@@ -239,7 +284,7 @@ module('Acceptance | submission', function (hooks) {
 
     // --- Step 3: Metadata ---
 
-    await waitUntil(() => document.querySelector('#entriesCount'));
+    await waitFor('#entriesCount');
 
     assert.dom('#entriesCount').hasValue('1');
     assert.dom('#contactPerson\\.email').hasValue('alice@example.com');
@@ -261,9 +306,9 @@ module('Acceptance | submission', function (hooks) {
 
     // --- Step 5: Complete ---
 
-    await waitUntil(() => document.body.textContent?.includes('NSUB000002'));
+    await waitUntil(() => getRootElement().textContent?.includes('NSUB000002'));
 
-    assert.ok(document.body.textContent?.includes('NSUB000002'), 'MASS ID is displayed');
+    assert.dom().containsText('NSUB000002', 'MASS ID is displayed');
   });
 
   test('new submission via mass directory', async function (assert) {
@@ -350,9 +395,7 @@ module('Acceptance | submission', function (hooks) {
 
     await clickRadio('Submit all files');
 
-    await waitUntil(() => {
-      return document.querySelectorAll('.list-group-item').length > 0;
-    });
+    await waitFor('.list-group-item');
 
     assert.dom('.list-group-item').exists({ count: 2 });
 
@@ -360,7 +403,7 @@ module('Acceptance | submission', function (hooks) {
 
     // --- Step 3: Metadata ---
 
-    await waitUntil(() => document.querySelector('#entriesCount'));
+    await waitFor('#entriesCount');
 
     assert.dom('#entriesCount').hasValue('1');
     assert.dom('#contactPerson\\.email').hasValue('alice@example.com');
@@ -382,9 +425,9 @@ module('Acceptance | submission', function (hooks) {
 
     // --- Step 5: Complete ---
 
-    await waitUntil(() => document.body.textContent?.includes('NSUB000003'));
+    await waitUntil(() => getRootElement().textContent?.includes('NSUB000003'));
 
-    assert.ok(document.body.textContent?.includes('NSUB000003'), 'MASS ID is displayed');
+    assert.dom().containsText('NSUB000003', 'MASS ID is displayed');
   });
 
   test('new submission via GGS job ID', async function (assert) {
@@ -475,9 +518,7 @@ module('Acceptance | submission', function (hooks) {
     await fillIn('textarea', '01234567-89ab-cdef-0000-000000000001');
     await click('.card-body button[type="submit"]');
 
-    await waitUntil(() => {
-      return document.querySelectorAll('.list-group-item').length > 0;
-    });
+    await waitFor('.list-group-item');
 
     assert.dom('.list-group-item').exists({ count: 2 });
 
@@ -485,7 +526,7 @@ module('Acceptance | submission', function (hooks) {
 
     // --- Step 3: Metadata ---
 
-    await waitUntil(() => document.querySelector('#entriesCount'));
+    await waitFor('#entriesCount');
 
     assert.dom('#entriesCount').hasValue('1');
     assert.dom('#contactPerson\\.email').hasValue('alice@example.com');
@@ -507,9 +548,9 @@ module('Acceptance | submission', function (hooks) {
 
     // --- Step 5: Complete ---
 
-    await waitUntil(() => document.body.textContent?.includes('NSUB000004'));
+    await waitUntil(() => getRootElement().textContent?.includes('NSUB000004'));
 
-    assert.ok(document.body.textContent?.includes('NSUB000004'), 'MASS ID is displayed');
+    assert.dom().containsText('NSUB000004', 'MASS ID is displayed');
   });
 
   test('a rejected extraction shows the error modal instead of leaking an unhandled rejection', async function (assert) {
@@ -556,7 +597,7 @@ module('Acceptance | submission', function (hooks) {
     await fillIn('textarea', '01234567-89ab-cdef-0000-000000000001');
     await click('.card-body button[type="submit"]');
 
-    await waitUntil(() => document.querySelector('.modal-body p')?.textContent);
+    await waitFor('.modal-body p');
 
     // A rejected extraction is an expected user error: it must surface in the
     // error modal, not escape as an unhandled rejection (which fails this test).
@@ -581,55 +622,70 @@ module('Acceptance | submission', function (hooks) {
       }),
     );
 
-    await visit('/home');
+    await fillInWebuiSubmission();
 
-    await click('a[href^="/home/submissions/new"]');
-
-    // --- Step 1: Prerequisite ---
-
-    await clickRadio('Yes, I have determined the nucleotide sequence');
-    await click('button[type="submit"]');
-
-    // --- Step 2: Files ---
-
-    await clickRadio('Upload the submission files through the MSS form');
-
-    const ann = new File(
-      [
-        'COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n\t\t\temail\talice@example.com\n\t\t\tinstitute\tWonderland Inc.\n',
-      ],
-      'test.ann',
-    );
-
-    const seq = new File(['>entry1\nATCG\n'], 'test.fasta');
-
-    await triggerEvent('input[type="file"]', 'change', { files: [ann, seq] });
-
-    await waitUntil(() => document.querySelectorAll('.spinner-border').length === 0);
-
-    await click('button[type="submit"]');
-
-    // --- Step 3: Metadata ---
-
-    await waitUntil(() => document.querySelector('#entriesCount'));
-
-    await clickRadio('NGS');
-    await fillIn('#dataType', 'wgs');
-    await clickRadio('English');
-
-    await click('button[type="submit"]');
-
-    // --- Step 4: Confirm ---
-
-    await click('#agree-terms');
     await click('button.px-5[type="submit"]');
 
-    await waitUntil(() => document.querySelector('.modal-body p')?.textContent);
+    await waitFor('.modal-body p');
 
     // A failed upload is expected (e.g. a dropped connection): it must surface
     // in the error modal, not escape as an unhandled rejection (which fails
     // this test), and the submission must not proceed.
     assert.dom('.modal-body p').hasText('Error storing "test.ann". Status: 500');
     assert.dom('button.px-5[type="submit"]').exists('stays on the confirm step');
+  });
+
+  test('leaving the form during an upload takes the progress modal backdrop with it', async function (assert) {
+    let failUpload!: () => void;
+
+    const uploadFailure = new Promise<void>((resolve) => {
+      failUpload = resolve;
+    });
+
+    worker.use(
+      http.get('/submissions', ({ response }) => {
+        return response(200).json({
+          submissions: [],
+        });
+      }),
+
+      http.get('/submissions/last_submitted', () => {
+        return new HttpResponse(null, { status: 404 });
+      }),
+
+      // The direct upload only answers when this test lets it, so the progress
+      // modal stays open while the form is left.
+      mswHttp.put(`${ENV.appURL}/rails/active_storage/disk/*`, async () => {
+        await uploadFailure;
+
+        return new HttpResponse(null, { status: 500 });
+      }),
+    );
+
+    await fillInWebuiSubmission();
+
+    // Bootstrap appends the backdrop to `<body>`, outside the application's
+    // root element, so it has to be looked up in the document. Identify it by
+    // what the submit click adds rather than by counting: earlier tests can
+    // leave backdrops of their own behind.
+    const backdrops = new Set(document.querySelectorAll('.modal-backdrop'));
+
+    await click('button.px-5[type="submit"]');
+
+    const backdrop = [...document.querySelectorAll('.modal-backdrop')].find((el) => !backdrops.has(el));
+
+    assert.ok(backdrop, 'the progress modal covers the page while the upload runs');
+
+    await visit('/home');
+
+    // Nothing hides the modal when the browser's back button destroys the form
+    // mid-upload, so an unclickable overlay would be left over the next page.
+    assert.notOk(backdrop?.isConnected, 'the backdrop is removed with the form');
+
+    // Settle the abandoned upload before the test ends. Left in flight, it
+    // resumes once the owner is destroyed and fails whichever test runs next.
+    failUpload();
+
+    await waitFor('.modal-body p');
   });
 });
