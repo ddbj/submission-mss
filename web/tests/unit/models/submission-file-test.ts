@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'mssform/tests/helpers';
 
-import { SubmissionFile } from 'mssform/models/submission-file';
+import { SequenceFile, SubmissionFile } from 'mssform/models/submission-file';
 
 function isAbortError(error: Error) {
   return error instanceof DOMException && error.name === 'AbortError';
@@ -32,6 +32,42 @@ function watchTerminatedWorkers() {
   return watcher;
 }
 
+// A file whose parser script is not there to be loaded, which the worker
+// reports as a bare `error` event with nothing to go by.
+class MissingParserFile extends SequenceFile {
+  static parser = class extends Worker {
+    constructor() {
+      super('/workers/no-such-worker.js');
+    }
+  };
+}
+
+// A file whose parser cannot even be constructed.
+class UnstartableParserFile extends SequenceFile {
+  static parser = class extends Worker {
+    constructor() {
+      // The worker has to exist before the constructor can fail, so give it a
+      // script that shuts it down again.
+      super('data:text/javascript,close()');
+
+      throw new Error('the worker could not be created');
+    }
+  };
+}
+
+// A file whose parser starts but throws before it can answer.
+class ThrowingParserFile extends SequenceFile {
+  static parser = class extends Worker {
+    constructor() {
+      const script = URL.createObjectURL(new Blob(['throw new Error("boom")'], { type: 'text/javascript' }));
+
+      super(script);
+
+      URL.revokeObjectURL(script);
+    }
+  };
+}
+
 module('Unit | Model | submission file', function (hooks) {
   setupTest(hooks);
 
@@ -57,6 +93,39 @@ module('Unit | Model | submission file', function (hooks) {
         id: 'submission-file.unsupported-filetype',
       },
     ]);
+  });
+
+  test('a parser that cannot be loaded is shown on the file', async function (assert) {
+    // Nothing settles the promise if the failure goes unnoticed.
+    assert.timeout(2000);
+
+    const file = new MissingParserFile(new File(['>entry1\nATCG\n'], 'test.fasta'));
+
+    await assert.rejects(file.parse());
+
+    assert.deepEqual(file.errors, [{ severity: 'error', id: 'submission-file.parser-failed' }]);
+    assert.false(file.isParsing, 'the spinner stops');
+    assert.false(file.isParseSucceeded, 'the file cannot be submitted');
+  });
+
+  test('a parser that cannot be constructed is shown on the file', async function (assert) {
+    assert.timeout(2000);
+
+    const file = new UnstartableParserFile(new File(['>entry1\nATCG\n'], 'test.fasta'));
+
+    await assert.rejects(file.parse());
+
+    assert.deepEqual(file.errors, [{ severity: 'error', id: 'submission-file.parser-failed' }]);
+  });
+
+  test('a parser that throws is shown on the file', async function (assert) {
+    assert.timeout(2000);
+
+    const file = new ThrowingParserFile(new File(['>entry1\nATCG\n'], 'test.fasta'));
+
+    await assert.rejects(file.parse());
+
+    assert.deepEqual(file.errors, [{ severity: 'error', id: 'submission-file.parser-failed' }]);
   });
 
   test('discarding a file stops the work still running for it', async function (assert) {

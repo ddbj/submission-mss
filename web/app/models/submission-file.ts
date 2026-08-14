@@ -1,6 +1,8 @@
 import { tracked } from '@glimmer/tracking';
 import { trackedArray } from '@ember/reactive/collections';
 
+import reportError from 'mssform/utils/report-error';
+
 import AnnotationFileParser from '/workers/annotation-file-parser?worker';
 import DigestCalculator from '/workers/calculate-digest?worker';
 import SequenceFileParser from '/workers/sequence-file-parser?worker';
@@ -37,6 +39,10 @@ export interface SubmissionFileData {
 }
 
 type SubmissionFileSubclass = typeof AnnotationFile | typeof SequenceFile | typeof UnsupportedFile;
+
+// The worker could not be run: a failure of the app itself rather than of the
+// file it was handed.
+class WorkerFailure extends Error {}
 
 export class SubmissionFile implements SubmissionFileData {
   static get allowedExtensions() {
@@ -115,6 +121,7 @@ export class SubmissionFile implements SubmissionFileData {
 
     return this.#runWorker(
       (this.constructor as SubmissionFileSubclass).parser,
+      'parser',
       ([errs, payload]: [StructuredError[] | string | null, unknown]) => {
         if (typeof errs === 'string') {
           console.error(errs);
@@ -134,13 +141,24 @@ export class SubmissionFile implements SubmissionFileData {
 
         return this.parsedData;
       },
-    ).finally(() => {
-      this.isParsing = false;
-    });
+    )
+      .catch((error: Error) => {
+        // The parser reports its own errors through `handle`; this is the
+        // worker failing to run at all, which the file has to show as well or
+        // it would look like a file that simply has nothing to say.
+        if (error instanceof WorkerFailure) {
+          this.errors.push({ severity: 'error', id: 'submission-file.parser-failed' });
+        }
+
+        throw error;
+      })
+      .finally(() => {
+        this.isParsing = false;
+      });
   }
 
   calculateDigest() {
-    this.checksum = this.#runWorker(DigestCalculator, ([err, digest]: [string | null, string]) => {
+    this.checksum = this.#runWorker(DigestCalculator, 'digest worker', ([err, digest]: [string | null, string]) => {
       if (err) {
         console.error(err);
 
@@ -156,7 +174,11 @@ export class SubmissionFile implements SubmissionFileData {
   // Hands the file to a worker and settles with its single answer, or with the
   // `AbortError` the upload also uses if the file is discarded first. The
   // worker, if one was started at all, is terminated either way.
-  async #runWorker<Message, Result>(WorkerClass: new () => Worker, handle: (message: Message) => Result) {
+  async #runWorker<Message, Result>(
+    WorkerClass: new () => Worker,
+    label: string,
+    handle: (message: Message) => Result,
+  ) {
     const { signal } = this.#discarded;
 
     signal.throwIfAborted();
@@ -164,7 +186,22 @@ export class SubmissionFile implements SubmissionFileData {
     let giveUp!: () => void;
 
     const message = await new Promise<Message>((resolve, reject) => {
-      const worker = new WorkerClass();
+      const fail = (cause: unknown) => {
+        const failure = new WorkerFailure(`The ${label} could not be run`, { cause });
+
+        reportError(failure);
+        reject(failure);
+      };
+
+      let worker;
+
+      try {
+        worker = new WorkerClass();
+      } catch (error) {
+        fail(error);
+
+        return;
+      }
 
       giveUp = () => {
         worker.terminate();
@@ -173,6 +210,20 @@ export class SubmissionFile implements SubmissionFileData {
       };
 
       signal.addEventListener('abort', giveUp, { once: true });
+
+      // A worker that cannot be started, or that throws before answering,
+      // reports through `error` and never sends a message. A script that fails
+      // to load raises a bare `Event`, so the detail comes from `cause` when
+      // there is any at all.
+      worker.addEventListener('error', (event) => {
+        // Uncancelled, the failure is reported to the page as well, where it
+        // would be an uncaught error rather than this file's problem.
+        event.preventDefault();
+
+        worker.terminate();
+
+        fail(event.error);
+      });
 
       worker.addEventListener('message', ({ data }: MessageEvent<Message>) => {
         worker.terminate();
