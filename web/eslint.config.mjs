@@ -69,6 +69,12 @@ export default ts.config(
     },
   },
   {
+    files: ['workers/**/*.js'],
+    languageOptions: {
+      globals: globals.worker,
+    },
+  },
+  {
     files: ['**/*.{ts,gts}'],
     languageOptions: {
       parser: ember.parser,

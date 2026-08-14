@@ -85,6 +85,17 @@ module('Unit | Model | submission file', function (hooks) {
     }
   });
 
+  test("the digest is the file's MD5", async function (assert) {
+    // The worker carries its own hashing code, so a broken bundle fails here
+    // rather than in production. A worker that cannot even start reports
+    // nothing at all yet, so cap the wait.
+    assert.timeout(2000);
+
+    const file = SubmissionFile.fromRawFile(new File(['>entry1\nATCG\n'], 'test.fasta'));
+
+    assert.strictEqual(await file.calculateDigest(), 'RBpimXtNvM1ORAJCMxIaJA==');
+  });
+
   test('a discarded file starts no further work', async function (assert) {
     // A half-done implementation could terminate the worker without settling
     // the promise: cap the wait rather than riding out QUnit's default timeout.
