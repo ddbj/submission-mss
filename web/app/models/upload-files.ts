@@ -23,13 +23,13 @@ export default class UploadFiles {
     return this.uploads.reduce((acc, { uploadedSize }) => acc + uploadedSize, 0);
   }
 
-  async perform(currentUser: CurrentUserService) {
+  async perform(currentUser: CurrentUserService, signal: AbortSignal) {
     const blobs = [];
 
     for (const upload of this.uploads) {
       this.currentUpload = upload;
 
-      blobs.push(await upload.perform(currentUser));
+      blobs.push(await upload.perform(currentUser, signal));
     }
 
     return blobs;
@@ -45,7 +45,7 @@ class UploadFile {
     this.file = file;
   }
 
-  perform(currentUser: CurrentUserService) {
+  perform(currentUser: CurrentUserService, signal: AbortSignal) {
     const upload = new DirectUpload(
       this.file.rawFile,
       ENV.directUploadURL,
@@ -65,6 +65,7 @@ class UploadFile {
         },
       },
       this.file.checksum!,
+      signal,
     );
 
     return upload.create();

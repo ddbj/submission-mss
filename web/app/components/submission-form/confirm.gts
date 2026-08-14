@@ -44,7 +44,8 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
       const blobs = (await uploadProgressModal.performUpload(state.files as SubmissionFile[])) as unknown as
         DirectUploadBlob[] | undefined;
 
-      // The upload failed and was surfaced in the error modal; stay on the form.
+      // The upload failed and was surfaced in the error modal, or it was
+      // abandoned along with the form. Either way, stop here.
       if (!blobs) return;
 
       model.files = blobs.map((blob) => blob.signed_id);

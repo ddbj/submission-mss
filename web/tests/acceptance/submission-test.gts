@@ -635,57 +635,74 @@ module('Acceptance | submission', function (hooks) {
     assert.dom('button.px-5[type="submit"]').exists('stays on the confirm step');
   });
 
-  test('leaving the form during an upload takes the progress modal backdrop with it', async function (assert) {
-    let failUpload!: () => void;
+  test('leaving the form during an upload aborts it and takes the backdrop with it', async function (assert) {
+    // Active Storage uploads over XHR, and msw does not tell its handlers when
+    // a client hangs up on one, so count the aborts at the source.
+    let abortedRequests = 0;
+    let uploadStarted = false;
 
-    const uploadFailure = new Promise<void>((resolve) => {
-      failUpload = resolve;
-    });
+    const OriginalXHR = XMLHttpRequest;
 
-    worker.use(
-      http.get('/submissions', ({ response }) => {
-        return response(200).json({
-          submissions: [],
-        });
-      }),
+    window.XMLHttpRequest = class extends OriginalXHR {
+      abort() {
+        abortedRequests += 1;
 
-      http.get('/submissions/last_submitted', () => {
-        return new HttpResponse(null, { status: 404 });
-      }),
+        super.abort();
+      }
+    };
 
-      // The direct upload only answers when this test lets it, so the progress
-      // modal stays open while the form is left.
-      mswHttp.put(`${ENV.appURL}/rails/active_storage/disk/*`, async () => {
-        await uploadFailure;
+    try {
+      worker.use(
+        http.get('/submissions', ({ response }) => {
+          return response(200).json({
+            submissions: [],
+          });
+        }),
 
-        return new HttpResponse(null, { status: 500 });
-      }),
-    );
+        http.get('/submissions/last_submitted', () => {
+          return new HttpResponse(null, { status: 404 });
+        }),
 
-    await fillInWebuiSubmission();
+        // The direct upload never answers, so it is still running when the form
+        // is left. Leaving aborts it, so nothing arrives afterwards.
+        mswHttp.put(`${ENV.appURL}/rails/active_storage/disk/*`, () => {
+          uploadStarted = true;
 
-    // Bootstrap appends the backdrop to `<body>`, outside the application's
-    // root element, so it has to be looked up in the document. Identify it by
-    // what the submit click adds rather than by counting: earlier tests can
-    // leave backdrops of their own behind.
-    const backdrops = new Set(document.querySelectorAll('.modal-backdrop'));
+          return new Promise<Response>(() => {});
+        }),
+      );
 
-    await click('button.px-5[type="submit"]');
+      await fillInWebuiSubmission();
 
-    const backdrop = [...document.querySelectorAll('.modal-backdrop')].find((el) => !backdrops.has(el));
+      // Bootstrap appends the backdrop to `<body>`, outside the application's
+      // root element, so it has to be looked up in the document. Identify it by
+      // what the submit click adds rather than by counting: earlier tests can
+      // leave backdrops of their own behind.
+      const backdrops = new Set(document.querySelectorAll('.modal-backdrop'));
 
-    assert.ok(backdrop, 'the progress modal covers the page while the upload runs');
+      await click('button.px-5[type="submit"]');
 
-    await visit('/home');
+      const backdrop = [...document.querySelectorAll('.modal-backdrop')].find((el) => !backdrops.has(el));
 
-    // Nothing hides the modal when the browser's back button destroys the form
-    // mid-upload, so an unclickable overlay would be left over the next page.
-    assert.notOk(backdrop?.isConnected, 'the backdrop is removed with the form');
+      assert.ok(backdrop, 'the progress modal covers the page while the upload runs');
 
-    // Settle the abandoned upload before the test ends. Left in flight, it
-    // resumes once the owner is destroyed and fails whichever test runs next.
-    failUpload();
+      // Leave only once the file is on its way, so that there is a request to
+      // abort rather than a checksum still being calculated.
+      await waitUntil(() => uploadStarted);
 
-    await waitFor('.modal-body p');
+      await visit('/home');
+
+      // An upload left running would go on to report its outcome on the page
+      // the user moved to, and submit the application from a destroyed
+      // component.
+      assert.strictEqual(abortedRequests, 1, 'the upload is aborted with the form');
+
+      // Nothing hides the modal when the browser's back button destroys the
+      // form mid-upload, so an unclickable overlay would be left over the next
+      // page.
+      assert.notOk(backdrop?.isConnected, 'the backdrop is removed with the form');
+    } finally {
+      window.XMLHttpRequest = OriginalXHR;
+    }
   });
 });
