@@ -62,6 +62,8 @@ export class SubmissionFile implements SubmissionFileData {
   rawFile: File;
   checksum?: Promise<string>;
 
+  #discarded = new AbortController();
+
   constructor(file: File) {
     const { name, type, lastModified } = file;
 
@@ -97,63 +99,89 @@ export class SubmissionFile implements SubmissionFileData {
     return (this.constructor as SubmissionFileSubclass).extensions.find((ext) => this.name.endsWith(ext));
   }
 
+  // Stops the parsing and hashing still running for this file. Hashing a large
+  // file takes a while, and there is nothing left to upload once the file has
+  // been taken off the form.
+  dispose() {
+    this.#discarded.abort();
+  }
+
   parse() {
     this.isParsing = true;
 
-    return new Promise<ParsedData | undefined>((resolve, reject) => {
-      const worker = new Worker((this.constructor as SubmissionFileSubclass).parserURL);
+    return this.#runWorker(
+      (this.constructor as SubmissionFileSubclass).parserURL,
+      ([errs, payload]: [StructuredError[] | string | null, unknown]) => {
+        if (typeof errs === 'string') {
+          console.error(errs);
 
-      worker.addEventListener(
-        'message',
-        ({ data: [errs, payload] }: MessageEvent<[StructuredError[] | string | null, unknown]>) => {
-          if (typeof errs === 'string') {
-            console.error(errs);
+          this.errors.push({ severity: 'error', message: errs });
 
-            this.errors.push({ severity: 'error', message: errs });
+          throw new Error(errs);
+        }
 
-            reject(new Error(errs));
-          } else {
-            if (errs) {
-              this.errors.push(...errs);
-            }
+        if (errs) {
+          this.errors.push(...errs);
+        }
 
-            if (payload) {
-              this.parsedData = payload;
-            }
+        if (payload) {
+          this.parsedData = payload;
+        }
 
-            resolve(this.parsedData);
-          }
-
-          worker.terminate();
-        },
-      );
-
-      worker.postMessage({ file: this.rawFile });
-    }).finally(() => {
+        return this.parsedData;
+      },
+    ).finally(() => {
       this.isParsing = false;
     });
   }
 
   calculateDigest() {
-    this.checksum = new Promise<string>((resolve, reject) => {
-      const worker = new Worker('/workers/calculate-digest.js');
+    this.checksum = this.#runWorker('/workers/calculate-digest.js', ([err, digest]: [string | null, string]) => {
+      if (err) {
+        console.error(err);
 
-      worker.addEventListener('message', ({ data: [err, digest] }: MessageEvent<[string | null, string]>) => {
-        if (err) {
-          console.error(err);
+        throw new Error(err);
+      }
 
-          reject(new Error(err));
-        } else {
-          resolve(digest);
-        }
-
-        worker.terminate();
-      });
-
-      worker.postMessage({ file: this.rawFile });
+      return digest;
     });
 
     return this.checksum;
+  }
+
+  // Hands the file to a worker and settles with its single answer, or with the
+  // `AbortError` the upload also uses if the file is discarded first. The
+  // worker, if one was started at all, is terminated either way.
+  async #runWorker<Message, Result>(url: string, handle: (message: Message) => Result) {
+    const { signal } = this.#discarded;
+
+    signal.throwIfAborted();
+
+    let giveUp!: () => void;
+
+    const message = await new Promise<Message>((resolve, reject) => {
+      const worker = new Worker(url);
+
+      giveUp = () => {
+        worker.terminate();
+
+        reject(signal.reason as Error);
+      };
+
+      signal.addEventListener('abort', giveUp, { once: true });
+
+      worker.addEventListener('message', ({ data }: MessageEvent<Message>) => {
+        worker.terminate();
+
+        resolve(data);
+      });
+
+      worker.postMessage({ file: this.rawFile });
+    }).finally(() => {
+      signal.removeEventListener('abort', giveUp);
+    });
+
+    return handle(message);
   }
 }
 
@@ -187,5 +215,13 @@ export class UnsupportedFile extends SubmissionFile {
     this.isParsing = false;
 
     return Promise.resolve(undefined);
+  }
+}
+
+// Stops whatever is still running for the files being taken off the form.
+// Extracted files are plain data, with no workers of their own.
+export function discardFiles(files: SubmissionFileData[]) {
+  for (const file of files) {
+    if (file instanceof SubmissionFile) file.dispose();
   }
 }

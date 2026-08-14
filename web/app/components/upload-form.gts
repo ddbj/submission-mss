@@ -16,6 +16,7 @@ import MassDirectoryExtractor from 'mssform/components/mass-directory-extractor'
 import RadioGroup from 'mssform/components/radio-group';
 import UploadProgressModal from 'mssform/components/upload-progress-modal';
 import userMassDir from 'mssform/helpers/user-mass-dir';
+import { discardFiles } from 'mssform/models/submission-file';
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
 
 import type { RequestManager } from '@warp-drive/core';
@@ -58,7 +59,15 @@ export default class UploadFormComponent extends Component<Signature> {
     return true;
   }
 
+  willDestroy() {
+    super.willDestroy();
+
+    discardFiles(this.files);
+  }
+
   @action setUploadVia(val: string) {
+    discardFiles(this.files);
+
     this.uploadVia = val;
     this.files.length = 0;
     this.extractionId = null;
@@ -75,6 +84,8 @@ export default class UploadFormComponent extends Component<Signature> {
   }
 
   @action removeFile(file: SubmissionFileData) {
+    discardFiles([file]);
+
     this.files.splice(this.files.indexOf(file), 1);
   }
 

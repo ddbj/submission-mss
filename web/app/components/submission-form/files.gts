@@ -14,6 +14,7 @@ import RadioGroup from 'mssform/components/radio-group';
 import userMassDir from 'mssform/helpers/user-mass-dir';
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
 import OtherPerson from 'mssform/models/other-person';
+import { discardFiles } from 'mssform/models/submission-file';
 
 import type { paths } from 'schema/openapi';
 import type Submission from 'mssform/models/submission';
@@ -65,6 +66,8 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
   }
 
   @action setUploadVia(val: string) {
+    discardFiles(this.args.state.files);
+
     this.args.model.uploadVia = val;
     this.args.model.extractionId = undefined;
     this.args.state.files = [];
@@ -80,6 +83,8 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
   }
 
   @action removeFile(file: SubmissionFileData) {
+    discardFiles([file]);
+
     this.args.state.files = this.args.state.files.filter((f) => f !== file);
   }
 
