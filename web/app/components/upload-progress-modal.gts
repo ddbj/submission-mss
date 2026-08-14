@@ -33,6 +33,18 @@ export default class UploadProgressModalComponent extends Component<Signature> {
 
   setModal = modifier((element: HTMLElement) => {
     this.modal = new Modal(element);
+
+    return () => {
+      // Leaving the form while the upload is running (the browser's back button
+      // is not covered by the `beforeunload` confirmation) destroys this
+      // element without Bootstrap noticing, stranding its backdrop and the
+      // `modal-open` class on `<body>`: the next page would be covered by an
+      // unclickable overlay and unable to scroll. Hiding tears both down
+      // synchronously because this modal is not animated. Disposing is left
+      // out on purpose; it would also drop the application-wide error modal's
+      // window listeners, which share Bootstrap's `.bs.modal` namespace.
+      this.modal.hide();
+    };
   });
 
   @action hide() {

@@ -26,6 +26,50 @@ function clickRadio(labelText: string) {
   return click(input);
 }
 
+// Walks a webui upload from the home page to the confirm step, with the terms
+// agreed to, leaving the caller to submit the application.
+async function fillInWebuiSubmission() {
+  await visit('/home');
+
+  await click('a[href^="/home/submissions/new"]');
+
+  // --- Step 1: Prerequisite ---
+
+  await clickRadio('Yes, I have determined the nucleotide sequence');
+  await click('button[type="submit"]');
+
+  // --- Step 2: Files ---
+
+  await clickRadio('Upload the submission files through the MSS form');
+
+  const ann = new File(
+    ['COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n\t\t\temail\talice@example.com\n\t\t\tinstitute\tWonderland Inc.\n'],
+    'test.ann',
+  );
+
+  const seq = new File(['>entry1\nATCG\n'], 'test.fasta');
+
+  await triggerEvent('input[type="file"]', 'change', { files: [ann, seq] });
+
+  await waitUntil(() => findAll('.spinner-border').length === 0);
+
+  await click('button[type="submit"]');
+
+  // --- Step 3: Metadata ---
+
+  await waitFor('#entriesCount');
+
+  await clickRadio('NGS');
+  await fillIn('#dataType', 'wgs');
+  await clickRadio('English');
+
+  await click('button[type="submit"]');
+
+  // --- Step 4: Confirm ---
+
+  await click('#agree-terms');
+}
+
 module('Acceptance | submission', function (hooks) {
   setupApplicationTest(hooks);
   setupAuthentication(hooks);
@@ -578,47 +622,8 @@ module('Acceptance | submission', function (hooks) {
       }),
     );
 
-    await visit('/home');
+    await fillInWebuiSubmission();
 
-    await click('a[href^="/home/submissions/new"]');
-
-    // --- Step 1: Prerequisite ---
-
-    await clickRadio('Yes, I have determined the nucleotide sequence');
-    await click('button[type="submit"]');
-
-    // --- Step 2: Files ---
-
-    await clickRadio('Upload the submission files through the MSS form');
-
-    const ann = new File(
-      [
-        'COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n\t\t\temail\talice@example.com\n\t\t\tinstitute\tWonderland Inc.\n',
-      ],
-      'test.ann',
-    );
-
-    const seq = new File(['>entry1\nATCG\n'], 'test.fasta');
-
-    await triggerEvent('input[type="file"]', 'change', { files: [ann, seq] });
-
-    await waitUntil(() => findAll('.spinner-border').length === 0);
-
-    await click('button[type="submit"]');
-
-    // --- Step 3: Metadata ---
-
-    await waitFor('#entriesCount');
-
-    await clickRadio('NGS');
-    await fillIn('#dataType', 'wgs');
-    await clickRadio('English');
-
-    await click('button[type="submit"]');
-
-    // --- Step 4: Confirm ---
-
-    await click('#agree-terms');
     await click('button.px-5[type="submit"]');
 
     await waitFor('.modal-body p');
@@ -628,5 +633,59 @@ module('Acceptance | submission', function (hooks) {
     // this test), and the submission must not proceed.
     assert.dom('.modal-body p').hasText('Error storing "test.ann". Status: 500');
     assert.dom('button.px-5[type="submit"]').exists('stays on the confirm step');
+  });
+
+  test('leaving the form during an upload takes the progress modal backdrop with it', async function (assert) {
+    let failUpload!: () => void;
+
+    const uploadFailure = new Promise<void>((resolve) => {
+      failUpload = resolve;
+    });
+
+    worker.use(
+      http.get('/submissions', ({ response }) => {
+        return response(200).json({
+          submissions: [],
+        });
+      }),
+
+      http.get('/submissions/last_submitted', () => {
+        return new HttpResponse(null, { status: 404 });
+      }),
+
+      // The direct upload only answers when this test lets it, so the progress
+      // modal stays open while the form is left.
+      mswHttp.put(`${ENV.appURL}/rails/active_storage/disk/*`, async () => {
+        await uploadFailure;
+
+        return new HttpResponse(null, { status: 500 });
+      }),
+    );
+
+    await fillInWebuiSubmission();
+
+    // Bootstrap appends the backdrop to `<body>`, outside the application's
+    // root element, so it has to be looked up in the document. Identify it by
+    // what the submit click adds rather than by counting: earlier tests can
+    // leave backdrops of their own behind.
+    const backdrops = new Set(document.querySelectorAll('.modal-backdrop'));
+
+    await click('button.px-5[type="submit"]');
+
+    const backdrop = [...document.querySelectorAll('.modal-backdrop')].find((el) => !backdrops.has(el));
+
+    assert.ok(backdrop, 'the progress modal covers the page while the upload runs');
+
+    await visit('/home');
+
+    // Nothing hides the modal when the browser's back button destroys the form
+    // mid-upload, so an unclickable overlay would be left over the next page.
+    assert.notOk(backdrop?.isConnected, 'the backdrop is removed with the form');
+
+    // Settle the abandoned upload before the test ends. Left in flight, it
+    // resumes once the owner is destroyed and fails whichever test runs next.
+    failUpload();
+
+    await waitFor('.modal-body p');
   });
 });
