@@ -31,7 +31,7 @@ export default class UploadProgressModalComponent extends Component<Signature> {
 
   modal!: Modal;
 
-  #abort = new AbortController();
+  #upload = new AbortController();
 
   willDestroy() {
     super.willDestroy();
@@ -39,7 +39,7 @@ export default class UploadProgressModalComponent extends Component<Signature> {
     // Leaving the form abandons the upload: the browser's back button is not
     // covered by the `beforeunload` confirmation, and an upload left running
     // would go on to submit the application from a destroyed component.
-    this.#abort.abort();
+    this.#upload.abort();
   }
 
   setModal = modifier((element: HTMLElement) => {
@@ -57,36 +57,46 @@ export default class UploadProgressModalComponent extends Component<Signature> {
     };
   });
 
-  @action hide() {
+  @action cancel() {
+    // Close right away rather than waiting for the upload to notice: a checksum
+    // still being calculated only sees the abort once it finishes.
+    this.#upload.abort();
     this.modal.hide();
   }
 
-  // Returns the uploaded blobs, or `undefined` if the upload failed or was
-  // abandoned. A failure (e.g. a dropped connection) is expected, so it is
-  // surfaced in the error modal rather than left to escape as an unhandled
-  // rejection; callers must treat `undefined` as "stop here" and not proceed
-  // with the submission.
+  // Returns the uploaded blobs, or `undefined` if the upload failed, was
+  // cancelled or was abandoned. A failure (e.g. a dropped connection) is
+  // expected, so it is surfaced in the error modal rather than left to escape
+  // as an unhandled rejection; callers must treat `undefined` as "stop here"
+  // and not proceed with the submission.
   async performUpload(files: SubmissionFile[]) {
     if (!files.length) return [];
 
+    // A controller per attempt: the one before it may have been cancelled, and
+    // its signal would abort this upload before it starts.
+    this.#upload = new AbortController();
     this.uploadFiles = new UploadFiles(files);
+
     this.modal.show();
 
     try {
-      const blobs = await this.uploadFiles.perform(this.currentUser, this.#abort.signal);
+      const blobs = await this.uploadFiles.perform(this.currentUser, this.#upload.signal);
 
       this.modal.hide();
 
       return blobs;
     } catch (error) {
+      // The user cancelled or left the form, so there is nothing to report --
+      // and both have hidden this modal already. Hiding it again here would
+      // close the modal of a later attempt: an upload cancelled while its
+      // checksum is being calculated only notices the abort once the checksum
+      // finishes, by which time the user may have submitted again.
+      if (error instanceof DOMException && error.name === 'AbortError') return undefined;
+
       // Hide this modal before showing the error modal. This is only safe while
       // this modal is not animated (no `fade`), so its backdrop is torn down
       // synchronously and does not race the error modal's backdrop.
       this.modal.hide();
-
-      // The user left the form, so there is nobody left to report to.
-      if (error instanceof DOMException && error.name === 'AbortError') return undefined;
-
       this.errorModal.show(error as Error);
 
       return undefined;
@@ -151,7 +161,7 @@ export default class UploadProgressModalComponent extends Component<Signature> {
             </div>
 
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" {{on "click" this.hide}}>{{t
+              <button type="button" class="btn btn-secondary" {{on "click" this.cancel}}>{{t
                   "upload-progress-modal.cancel"
                 }}</button>
             </div>

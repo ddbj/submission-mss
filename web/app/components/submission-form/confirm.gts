@@ -45,7 +45,7 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
         DirectUploadBlob[] | undefined;
 
       // The upload failed and was surfaced in the error modal, or it was
-      // abandoned along with the form. Either way, stop here.
+      // cancelled or abandoned along with the form. Either way, stop here.
       if (!blobs) return;
 
       model.files = blobs.map((blob) => blob.signed_id);
