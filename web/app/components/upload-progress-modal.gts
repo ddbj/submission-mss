@@ -31,18 +31,28 @@ export default class UploadProgressModalComponent extends Component<Signature> {
 
   modal!: Modal;
 
+  #abort = new AbortController();
+
+  willDestroy() {
+    super.willDestroy();
+
+    // Leaving the form abandons the upload: the browser's back button is not
+    // covered by the `beforeunload` confirmation, and an upload left running
+    // would go on to submit the application from a destroyed component.
+    this.#abort.abort();
+  }
+
   setModal = modifier((element: HTMLElement) => {
     this.modal = new Modal(element);
 
     return () => {
-      // Leaving the form while the upload is running (the browser's back button
-      // is not covered by the `beforeunload` confirmation) destroys this
-      // element without Bootstrap noticing, stranding its backdrop and the
-      // `modal-open` class on `<body>`: the next page would be covered by an
-      // unclickable overlay and unable to scroll. Hiding tears both down
-      // synchronously because this modal is not animated. Disposing is left
-      // out on purpose; it would also drop the application-wide error modal's
-      // window listeners, which share Bootstrap's `.bs.modal` namespace.
+      // Destroying this element while the modal is open leaves Bootstrap
+      // unaware, stranding its backdrop and the `modal-open` class on `<body>`:
+      // the next page would be covered by an unclickable overlay and unable to
+      // scroll. Hiding tears both down synchronously because this modal is not
+      // animated. Disposing is left out on purpose; it would also drop the
+      // application-wide error modal's window listeners, which share
+      // Bootstrap's `.bs.modal` namespace.
       this.modal.hide();
     };
   });
@@ -51,10 +61,11 @@ export default class UploadProgressModalComponent extends Component<Signature> {
     this.modal.hide();
   }
 
-  // Returns the uploaded blobs, or `undefined` if the upload failed. A failure
-  // (e.g. a dropped connection) is expected, so it is surfaced in the error
-  // modal rather than left to escape as an unhandled rejection; callers must
-  // treat `undefined` as "abort" and not proceed with the submission.
+  // Returns the uploaded blobs, or `undefined` if the upload failed or was
+  // abandoned. A failure (e.g. a dropped connection) is expected, so it is
+  // surfaced in the error modal rather than left to escape as an unhandled
+  // rejection; callers must treat `undefined` as "stop here" and not proceed
+  // with the submission.
   async performUpload(files: SubmissionFile[]) {
     if (!files.length) return [];
 
@@ -62,7 +73,7 @@ export default class UploadProgressModalComponent extends Component<Signature> {
     this.modal.show();
 
     try {
-      const blobs = await this.uploadFiles.perform(this.currentUser);
+      const blobs = await this.uploadFiles.perform(this.currentUser, this.#abort.signal);
 
       this.modal.hide();
 
@@ -72,6 +83,10 @@ export default class UploadProgressModalComponent extends Component<Signature> {
       // this modal is not animated (no `fade`), so its backdrop is torn down
       // synchronously and does not race the error modal's backdrop.
       this.modal.hide();
+
+      // The user left the form, so there is nobody left to report to.
+      if (error instanceof DOMException && error.name === 'AbortError') return undefined;
+
       this.errorModal.show(error as Error);
 
       return undefined;
