@@ -84,9 +84,13 @@ export default class UploadFormComponent extends Component<Signature> {
   }
 
   @action removeFile(file: SubmissionFileData) {
+    const index = this.files.indexOf(file);
+
+    if (index === -1) return;
+
     discardFiles([file]);
 
-    this.files.splice(this.files.indexOf(file), 1);
+    this.files.splice(index, 1);
   }
 
   @action async submit(uploadProgressModal: UploadProgressModalComponent, event: Event) {
