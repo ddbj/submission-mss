@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { concat } from '@ember/helper';
 import { action } from '@ember/object';
-import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { t } from 'ember-intl';
 import pageTitle from 'ember-page-title/helpers/page-title';
@@ -15,7 +14,6 @@ import stepNavLinkClass from 'mssform/helpers/step-nav-link-class';
 import { discardFiles } from 'mssform/models/submission-file';
 
 import type { ComponentLike } from '@glint/template';
-import type RouterService from '@ember/routing/router-service';
 import type Submission from 'mssform/models/submission';
 import type { SubmissionFileData } from 'mssform/models/submission-file';
 
@@ -34,8 +32,6 @@ export interface Signature {
 }
 
 export default class SubmissionFormComponent extends Component<Signature> {
-  @service declare router: RouterService;
-
   state = new State();
   nav = new Navigation();
 
