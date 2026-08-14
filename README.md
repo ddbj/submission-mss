@@ -86,7 +86,7 @@ web/                       Ember.js frontend
 ├── app/models/            Frontend models
 ├── app/request-handlers/  @ember-data/request handlers
 ├── app/services/          Ember services
-├── public/workers/        Web Workers (file parsers)
+├── workers/               Web Workers (file parsers), bundled by Vite
 └── tests/                 QUnit + MSW tests
 ```
 

@@ -15,11 +15,14 @@ export async function start() {
     onUnhandledRequest(request, print) {
       const url = new URL(request.url);
 
+      // The app's own code is served, never mocked: out of `/assets/` in a
+      // build, and out of the module graph the dev server runs from.
       if (
         url.pathname.startsWith('/socket.io/') ||
+        url.pathname.startsWith('/assets/') ||
         url.pathname.startsWith('/workers/') ||
-        url.pathname === '/favicon.ico' ||
-        url.hostname === 'cdn.jsdelivr.net'
+        url.pathname.startsWith('/node_modules/') ||
+        url.pathname === '/favicon.ico'
       ) {
         return;
       }

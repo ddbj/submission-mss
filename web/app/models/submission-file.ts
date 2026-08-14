@@ -1,6 +1,10 @@
 import { tracked } from '@glimmer/tracking';
 import { trackedArray } from '@ember/reactive/collections';
 
+import AnnotationFileParser from '/workers/annotation-file-parser?worker';
+import DigestCalculator from '/workers/calculate-digest?worker';
+import SequenceFileParser from '/workers/sequence-file-parser?worker';
+
 import type { components } from 'schema/openapi';
 
 export type ParsedData = components['schemas']['ParsedData'];
@@ -46,7 +50,7 @@ export class SubmissionFile implements SubmissionFileData {
   }
 
   static extensions: string[];
-  static parserURL: string;
+  static parser: new () => Worker;
 
   static matchExtension(filename: string) {
     return this.extensions.some((ext) => filename.endsWith(ext)) && this;
@@ -110,7 +114,7 @@ export class SubmissionFile implements SubmissionFileData {
     this.isParsing = true;
 
     return this.#runWorker(
-      (this.constructor as SubmissionFileSubclass).parserURL,
+      (this.constructor as SubmissionFileSubclass).parser,
       ([errs, payload]: [StructuredError[] | string | null, unknown]) => {
         if (typeof errs === 'string') {
           console.error(errs);
@@ -136,7 +140,7 @@ export class SubmissionFile implements SubmissionFileData {
   }
 
   calculateDigest() {
-    this.checksum = this.#runWorker('/workers/calculate-digest.js', ([err, digest]: [string | null, string]) => {
+    this.checksum = this.#runWorker(DigestCalculator, ([err, digest]: [string | null, string]) => {
       if (err) {
         console.error(err);
 
@@ -152,7 +156,7 @@ export class SubmissionFile implements SubmissionFileData {
   // Hands the file to a worker and settles with its single answer, or with the
   // `AbortError` the upload also uses if the file is discarded first. The
   // worker, if one was started at all, is terminated either way.
-  async #runWorker<Message, Result>(url: string, handle: (message: Message) => Result) {
+  async #runWorker<Message, Result>(WorkerClass: new () => Worker, handle: (message: Message) => Result) {
     const { signal } = this.#discarded;
 
     signal.throwIfAborted();
@@ -160,7 +164,7 @@ export class SubmissionFile implements SubmissionFileData {
     let giveUp!: () => void;
 
     const message = await new Promise<Message>((resolve, reject) => {
-      const worker = new Worker(url);
+      const worker = new WorkerClass();
 
       giveUp = () => {
         worker.terminate();
@@ -187,14 +191,14 @@ export class SubmissionFile implements SubmissionFileData {
 
 export class AnnotationFile extends SubmissionFile {
   static extensions = ['.ann', '.annt.tsv', '.ann.txt'];
-  static parserURL = '/workers/annotation-file-parser.js';
+  static parser = AnnotationFileParser;
 
   fileType = 'annotation' as const;
 }
 
 export class SequenceFile extends SubmissionFile {
   static extensions = ['.fasta', '.fsa', '.seq.fa', '.fa', '.fna', '.seq'];
-  static parserURL = '/workers/sequence-file-parser.js';
+  static parser = SequenceFileParser;
 
   fileType = 'sequence' as const;
 }

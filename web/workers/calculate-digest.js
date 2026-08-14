@@ -1,9 +1,4 @@
-/* global importScripts, hashwasm */
-
-// Same as `import`. To be compatible with Firefox: https://bugzilla.mozilla.org/show_bug.cgi?id=1247687
-importScripts('https://cdn.jsdelivr.net/npm/hash-wasm@4.9.0/dist/md5.umd.min.js');
-
-const { createMD5 } = hashwasm;
+import { createMD5 } from 'hash-wasm';
 
 addEventListener('message', async ({ data: { file } }) => {
   try {
