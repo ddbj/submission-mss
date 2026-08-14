@@ -12,6 +12,7 @@ import {
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'mssform/tests/helpers';
 import { setupAuthentication } from 'mssform/tests/helpers/setup-auth';
+import clickRadio from 'mssform/tests/helpers/click-radio';
 
 import { HttpResponse, http as mswHttp } from 'msw';
 import ENV from 'mssform/config/environment';
@@ -24,18 +25,6 @@ import { worker } from '../msw/worker';
 // Bootstrap modals that a previous test leaked into `<body>`: Bootstrap
 // re-appends a modal there if its show transition is still pending when the
 // application is torn down.
-function clickRadio(labelText: string) {
-  const labels = findAll('.form-check-label') as HTMLLabelElement[];
-  const label = labels.find((el) => el.textContent?.trim().startsWith(labelText));
-
-  if (!label) throw new Error(`Radio label not found: "${labelText}"`);
-
-  const input = label.control as HTMLInputElement | null;
-
-  if (!input) throw new Error(`Radio input not found for label: "${labelText}"`);
-
-  return click(input);
-}
 
 // Walks a webui upload from the home page to the confirm step, with the terms
 // agreed to, leaving the caller to submit the application.
