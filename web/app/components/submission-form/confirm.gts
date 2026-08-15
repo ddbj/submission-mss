@@ -38,10 +38,10 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
   @action async submit(uploadProgressModal: UploadProgressModalComponent, event: Event) {
     event.preventDefault();
     const { state, model, nav } = this.args;
-    const { uploadVia } = model;
+    const { selection } = state;
 
-    if (uploadVia === 'webui') {
-      const blobs = (await uploadProgressModal.performUpload(state.files as SubmissionFile[])) as unknown as
+    if (selection.via === 'webui') {
+      const blobs = (await uploadProgressModal.performUpload(selection.files as SubmissionFile[])) as unknown as
         DirectUploadBlob[] | undefined;
 
       // The upload failed and was surfaced in the error modal, or it was
@@ -60,9 +60,9 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
       data: {
         submission: {
           tpa: model.tpa,
-          upload_via: model.uploadVia,
+          upload_via: selection.via,
           files: model.files,
-          extraction_id: model.extractionId,
+          extraction_id: selection.extractionId,
           entries_count: model.entriesCount,
           hold_date: model.holdDate,
           sequencer: model.sequencer,
@@ -114,23 +114,23 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
                   <li>{{t "submission-form.prerequisite.a1-1"}}</li>
                 {{/if}}
 
-                {{#if (eq @model.uploadVia "dfast")}}
+                {{#if (eq @state.selection.via "dfast")}}
                   <li>{{t "submission-form.files.a1"}}</li>
-                {{else if (eq @model.uploadVia "webui")}}
+                {{else if (eq @state.selection.via "webui")}}
                   <li>{{t "submission-form.files.a2"}}</li>
-                {{else if (eq @model.uploadVia "mass_directory")}}
+                {{else if (eq @state.selection.via "mass_directory")}}
                   <li>{{t "submission-form.files.a3-html" htmlSafe=true userMassDir=(userMassDir)}}</li>
                 {{/if}}
               </ul>
             </div>
           </div>
 
-          {{#if @state.files}}
+          {{#if @state.selection.files}}
             <div class="card">
               <div class="card-header">{{t "submission-form.confirm.files"}}</div>
 
               <ul class="list-group list-group-flush">
-                {{#each @state.files as |file|}}
+                {{#each @state.selection.files as |file|}}
                   <li class="list-group-item">{{file.name}}</li>
                 {{/each}}
               </ul>

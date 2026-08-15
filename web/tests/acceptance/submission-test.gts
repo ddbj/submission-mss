@@ -124,6 +124,8 @@ module('Acceptance | submission', function (hooks) {
   setupAuthentication(hooks);
 
   test('new submission via webui upload', async function (assert) {
+    let submitted: { submission?: { upload_via?: string; files?: string[] } } | undefined;
+
     worker.use(
       http.get('/submissions', ({ response }) => {
         return response(200).json({
@@ -135,7 +137,9 @@ module('Acceptance | submission', function (hooks) {
         return new HttpResponse(null, { status: 404 });
       }),
 
-      http.post('/submissions', ({ response }) => {
+      http.post('/submissions', async ({ request, response }) => {
+        submitted = await request.json();
+
         return response(200).json({
           submission: { id: 'NSUB000001' },
         });
@@ -210,6 +214,9 @@ module('Acceptance | submission', function (hooks) {
     await waitUntil(() => getRootElement().textContent?.includes('NSUB000001'));
 
     assert.dom().containsText('NSUB000001', 'MASS ID is displayed');
+
+    assert.strictEqual(submitted?.submission?.upload_via, 'webui');
+    assert.deepEqual(submitted?.submission?.files, ['test-signed-id', 'test-signed-id']);
   });
 
   test('the unacceptable TPA answer cannot proceed past the prerequisite step', async function (assert) {
@@ -238,6 +245,8 @@ module('Acceptance | submission', function (hooks) {
   });
 
   test('new submission via DFAST job ID', async function (assert) {
+    let submitted: { submission?: { upload_via?: string; extraction_id?: number } } | undefined;
+
     const extractionFiles = [
       {
         name: '01234567-89ab-cdef-0000-000000000001/test.ann',
@@ -298,7 +307,9 @@ module('Acceptance | submission', function (hooks) {
         });
       }),
 
-      http.post('/submissions', ({ response }) => {
+      http.post('/submissions', async ({ request, response }) => {
+        submitted = await request.json();
+
         return response(200).json({
           submission: { id: 'NSUB000002' },
         });
@@ -358,6 +369,9 @@ module('Acceptance | submission', function (hooks) {
     await waitUntil(() => getRootElement().textContent?.includes('NSUB000002'));
 
     assert.dom().containsText('NSUB000002', 'MASS ID is displayed');
+
+    assert.strictEqual(submitted?.submission?.upload_via, 'dfast');
+    assert.strictEqual(submitted?.submission?.extraction_id, 1);
   });
 
   test('new submission via mass directory', async function (assert) {
