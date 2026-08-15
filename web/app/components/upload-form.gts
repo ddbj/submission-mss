@@ -17,10 +17,16 @@ import RadioGroup from 'mssform/components/radio-group';
 import UploadProgressModal from 'mssform/components/upload-progress-modal';
 import userMassDir from 'mssform/helpers/user-mass-dir';
 import { discardFiles } from 'mssform/models/submission-file';
+import {
+  collectCrossoverErrors,
+  hasBlockingErrors,
+  validateDuplicates,
+  validateSameness,
+} from 'mssform/utils/crossover-errors';
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
 
 import type { RequestManager } from '@warp-drive/core';
-import type { SubmissionFile, SubmissionFileData, SubmissionError } from 'mssform/models/submission-file';
+import type { SubmissionFile, SubmissionFileData } from 'mssform/models/submission-file';
 import type UploadProgressModalComponent from 'mssform/components/upload-progress-modal';
 
 interface DirectUploadBlob {
@@ -44,7 +50,15 @@ export default class UploadFormComponent extends Component<Signature> {
   @tracked extractionId: number | null = null;
   files: SubmissionFileData[] = trackedArray();
   @tracked isCompleted = false;
-  @tracked crossoverErrors = new Map<SubmissionFileData, SubmissionError[]>();
+
+  // Re-uploading often means replacing one half of a pair, so a lone annotation
+  // or sequence file is expected here -- unlike in the submission form, which
+  // takes whole pairs only. The rest still holds: the same name twice is a
+  // mistake, and the annotation files sent together have to agree on the
+  // contact person and the hold date the submission already has.
+  get crossoverErrors() {
+    return collectCrossoverErrors(this.files, [validateDuplicates, validateSameness]);
+  }
 
   get isSubmitButtonEnabled() {
     const { uploadVia, files } = this;
@@ -52,11 +66,7 @@ export default class UploadFormComponent extends Component<Signature> {
     if (!uploadVia) return false;
     if (!files.length) return false;
 
-    for (const file of files) {
-      if (file.isParsing || file.errors?.length) return false;
-    }
-
-    return true;
+    return !hasBlockingErrors(files, this.crossoverErrors);
   }
 
   willDestroy() {

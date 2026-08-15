@@ -15,12 +15,19 @@ import userMassDir from 'mssform/helpers/user-mass-dir';
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
 import OtherPerson from 'mssform/models/other-person';
 import { discardFiles } from 'mssform/models/submission-file';
+import {
+  collectCrossoverErrors,
+  hasBlockingErrors,
+  validateDuplicates,
+  validatePairs,
+  validateSameness,
+} from 'mssform/utils/crossover-errors';
 
 import type { paths } from 'schema/openapi';
 import type Submission from 'mssform/models/submission';
 import type { Navigation, State } from 'mssform/components/submission-form';
 import type { RequestManager } from '@warp-drive/core';
-import type { SubmissionFileData, SubmissionError, ParsedData } from 'mssform/models/submission-file';
+import type { SubmissionFileData } from 'mssform/models/submission-file';
 
 export interface Signature {
   Args: {
@@ -33,18 +40,10 @@ export interface Signature {
 export default class SubmissionFormFilesComponent extends Component<Signature> {
   @service declare requestManager: RequestManager;
 
+  // A new submission has to arrive complete: whole pairs, agreeing with each
+  // other.
   get crossoverErrors() {
-    const { files } = this.args.state;
-    const errors = new Map<SubmissionFileData, SubmissionError[]>();
-
-    for (const file of files) {
-      errors.set(file, []);
-    }
-
-    validatePair(errors, files);
-    validateSameness(errors, files);
-
-    return errors;
+    return collectCrossoverErrors(this.args.state.files, [validateDuplicates, validatePairs, validateSameness]);
   }
 
   get isNextButtonEnabled() {
@@ -54,15 +53,7 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
     if (!uploadVia) return false;
     if (!files.length) return false;
 
-    for (const file of files) {
-      if (file.isParsing || file.errors?.some((e) => e.severity === 'error')) return false;
-    }
-
-    for (const errs of this.crossoverErrors.values()) {
-      if (errs.some((e) => e.severity === 'error')) return false;
-    }
-
-    return true;
+    return !hasBlockingErrors(files, this.crossoverErrors);
   }
 
   @action setUploadVia(val: string) {
@@ -289,94 +280,4 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
       </div>
     </form>
   </template>
-}
-
-function validatePair(errors: Map<SubmissionFileData, SubmissionError[]>, files: SubmissionFileData[]) {
-  const grouped = files.reduce((map, file) => {
-    const val = map.has(file.basename) ? [...map.get(file.basename)!, file] : [file];
-
-    return map.set(file.basename, val);
-  }, new Map<string, SubmissionFileData[]>());
-
-  for (const files of grouped.values()) {
-    const [annotations, sequences] = files.reduce(
-      ([ann, seq], file) => {
-        return [
-          file.fileType === 'annotation' ? [...ann, file] : ann,
-          file.fileType === 'sequence' ? [...seq, file] : seq,
-        ];
-      },
-      [[], []] as [SubmissionFileData[], SubmissionFileData[]],
-    );
-
-    if (!annotations.length) {
-      for (const file of sequences) {
-        errors.get(file)!.push({
-          severity: 'error',
-          id: 'submission-form.files.errors.no-annotation',
-        });
-      }
-    }
-
-    if (annotations.length > 1) {
-      for (const file of annotations) {
-        errors.get(file)!.push({
-          severity: 'error',
-          id: 'submission-form.files.errors.duplicate-annotations',
-        });
-      }
-    }
-
-    if (!sequences.length) {
-      for (const file of annotations) {
-        errors.get(file)!.push({
-          severity: 'error',
-          id: 'submission-form.files.errors.no-sequence',
-        });
-      }
-    }
-
-    if (sequences.length > 1) {
-      for (const file of sequences) {
-        errors.get(file)!.push({
-          severity: 'error',
-          id: 'submission-form.files.errors.duplicate-sequences',
-        });
-      }
-    }
-  }
-}
-
-function validateSameness(errors: Map<SubmissionFileData, SubmissionError[]>, files: SubmissionFileData[]) {
-  const filtered = files.filter((file) => file.fileType === 'annotation' && file.isParseSucceeded);
-
-  if (!filtered.length) return;
-
-  const contactPersonSet = new Set<string>();
-  const holdDateSet = new Set<string>();
-
-  for (const file of filtered) {
-    const { contactPerson, holdDate } = file.parsedData as ParsedData;
-
-    contactPersonSet.add(JSON.stringify(contactPerson));
-    holdDateSet.add(holdDate ?? '');
-  }
-
-  if (contactPersonSet.size > 1) {
-    for (const file of filtered) {
-      errors.get(file)!.push({
-        severity: 'error',
-        id: 'submission-form.files.errors.different-contact-person',
-      });
-    }
-  }
-
-  if (holdDateSet.size > 1) {
-    for (const file of filtered) {
-      errors.get(file)!.push({
-        severity: 'error',
-        id: 'submission-form.files.errors.different-hold-date',
-      });
-    }
-  }
 }
