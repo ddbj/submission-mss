@@ -605,6 +605,7 @@ module('Acceptance | submission', function (hooks) {
     // --- Step 4: Confirm ---
 
     assert.dom('button[type="submit"]').hasText('Apply for registration');
+    assert.dom().containsText('Import the submission files from GGS Job ID', 'the chosen method is confirmed');
 
     await click('#agree-terms');
     await click('button[type="submit"]');

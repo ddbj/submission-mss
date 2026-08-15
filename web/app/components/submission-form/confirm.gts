@@ -116,6 +116,8 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
 
                 {{#if (eq @state.selection.via "dfast")}}
                   <li>{{t "submission-form.files.a1"}}</li>
+                {{else if (eq @state.selection.via "ggs")}}
+                  <li>{{t "submission-form.files.a4"}}</li>
                 {{else if (eq @state.selection.via "webui")}}
                   <li>{{t "submission-form.files.a2"}}</li>
                 {{else if (eq @state.selection.via "mass_directory")}}
