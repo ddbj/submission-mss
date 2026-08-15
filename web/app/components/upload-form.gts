@@ -3,30 +3,18 @@ import { LinkTo } from '@ember/routing';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { trackedArray } from '@ember/reactive/collections';
 
 import { t } from 'ember-intl';
 import pageTitle from 'ember-page-title/helpers/page-title';
-import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
-import FileList from 'mssform/components/file-list';
-import JobIdExtractor from 'mssform/components/job-id-extractor';
-import SupportedFileTypes from 'mssform/components/file-list/supported-file-types';
-import MassDirectoryExtractor from 'mssform/components/mass-directory-extractor';
-import RadioGroup from 'mssform/components/radio-group';
+import FileChooser from 'mssform/components/file-chooser';
 import UploadProgressModal from 'mssform/components/upload-progress-modal';
-import userMassDir from 'mssform/helpers/user-mass-dir';
-import { discardFiles } from 'mssform/models/submission-file';
-import {
-  collectCrossoverErrors,
-  hasBlockingErrors,
-  validateDuplicates,
-  validateSameness,
-} from 'mssform/utils/crossover-errors';
+import FileSelection from 'mssform/models/file-selection';
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
+import { validateDuplicates, validateSameness } from 'mssform/utils/crossover-errors';
 
 import type { RequestManager } from '@warp-drive/core';
-import type { SubmissionFile, SubmissionFileData } from 'mssform/models/submission-file';
+import type { SubmissionFile } from 'mssform/models/submission-file';
 import type UploadProgressModalComponent from 'mssform/components/upload-progress-modal';
 
 interface DirectUploadBlob {
@@ -46,9 +34,6 @@ export interface Signature {
 export default class UploadFormComponent extends Component<Signature> {
   @service declare requestManager: RequestManager;
 
-  @tracked uploadVia: string | null = null;
-  @tracked extractionId: number | null = null;
-  files: SubmissionFileData[] = trackedArray();
   @tracked isCompleted = false;
 
   // Re-uploading often means replacing one half of a pair, so a lone annotation
@@ -56,61 +41,25 @@ export default class UploadFormComponent extends Component<Signature> {
   // takes whole pairs only. The rest still holds: the same name twice is a
   // mistake, and the annotation files sent together have to agree on the
   // contact person and the hold date the submission already has.
-  get crossoverErrors() {
-    return collectCrossoverErrors(this.files, [validateDuplicates, validateSameness]);
-  }
-
-  get isSubmitButtonEnabled() {
-    const { uploadVia, files } = this;
-
-    if (!uploadVia) return false;
-    if (!files.length) return false;
-
-    return !hasBlockingErrors(files, this.crossoverErrors);
-  }
+  selection = new FileSelection([validateDuplicates, validateSameness]);
 
   willDestroy() {
     super.willDestroy();
 
-    discardFiles(this.files);
-  }
-
-  @action setUploadVia(val: string) {
-    discardFiles(this.files);
-
-    this.uploadVia = val;
-    this.files.length = 0;
-    this.extractionId = null;
-  }
-
-  @action onExtractProgress({ id, files }: { id: number; files: SubmissionFileData[] }) {
-    this.extractionId = id;
-    this.files.length = 0;
-    this.files.push(...files);
-  }
-
-  @action addFile(file: SubmissionFileData) {
-    this.files.push(file);
-  }
-
-  @action removeFile(file: SubmissionFileData) {
-    const index = this.files.indexOf(file);
-
-    if (index === -1) return;
-
-    discardFiles([file]);
-
-    this.files.splice(index, 1);
+    this.selection.discard();
   }
 
   @action async submit(uploadProgressModal: UploadProgressModalComponent, event: Event) {
     event.preventDefault();
+
+    const { selection } = this;
+
     const attrs: Record<string, unknown> = {
-      via: this.uploadVia,
+      via: selection.via,
     };
 
-    if (this.uploadVia == 'webui') {
-      const blobs = (await uploadProgressModal.performUpload(this.files as SubmissionFile[])) as unknown as
+    if (selection.via === 'webui') {
+      const blobs = (await uploadProgressModal.performUpload(selection.files as SubmissionFile[])) as unknown as
         DirectUploadBlob[] | undefined;
 
       // The upload failed and was surfaced in the error modal, or it was
@@ -119,7 +68,7 @@ export default class UploadFormComponent extends Component<Signature> {
 
       attrs['files'] = blobs.map((blob) => blob.signed_id);
     } else {
-      attrs['extraction_id'] = this.extractionId;
+      attrs['extraction_id'] = selection.extractionId;
     }
 
     await this.requestManager.request({
@@ -148,123 +97,15 @@ export default class UploadFormComponent extends Component<Signature> {
 
       <UploadProgressModal as |modal|>
         <form {{on "submit" (fn this.submit modal)}} {{leavingConfirmation}}>
-          <div class="vstack gap-3">
-            <div class="card">
-              <div class="card-body">
-                <RadioGroup as |group|>
-                  <div class="form-check">
-                    <group.radio as |radio|>
-                      <radio.input
-                        checked={{eq this.uploadVia "dfast"}}
-                        required
-                        class="form-check-input"
-                        {{on "change" (fn this.setUploadVia "dfast")}}
-                      />
+          <FileChooser @selection={{this.selection}}>
+            <:instructions>{{t "upload-form.instructions-html" htmlSafe=true}}</:instructions>
+          </FileChooser>
 
-                      <radio.label class="form-check-label">
-                        {{t "submission-form.files.a1"}}
-                      </radio.label>
-                    </group.radio>
-                  </div>
-
-                  <div class="form-check">
-                    <group.radio as |radio|>
-                      <radio.input
-                        checked={{eq this.uploadVia "ggs"}}
-                        required
-                        class="form-check-input"
-                        {{on "change" (fn this.setUploadVia "ggs")}}
-                      />
-
-                      <radio.label class="form-check-label">
-                        {{t "submission-form.files.a4"}}
-                      </radio.label>
-                    </group.radio>
-                  </div>
-
-                  <div class="form-check">
-                    <group.radio as |radio|>
-                      <radio.input
-                        checked={{eq this.uploadVia "webui"}}
-                        required
-                        class="form-check-input"
-                        {{on "change" (fn this.setUploadVia "webui")}}
-                      />
-
-                      <radio.label class="form-check-label">
-                        {{t "submission-form.files.a2"}}
-                      </radio.label>
-                    </group.radio>
-                  </div>
-
-                  <div class="hstack gap-3">
-                    <div class="form-check">
-                      <group.radio as |radio|>
-                        <radio.input
-                          checked={{eq this.uploadVia "mass_directory"}}
-                          required
-                          class="form-check-input"
-                          {{on "change" (fn this.setUploadVia "mass_directory")}}
-                        />
-
-                        <radio.label class="form-check-label">
-                          {{t "submission-form.files.a3-html" htmlSafe=true userMassDir=(userMassDir)}}
-                        </radio.label>
-
-                        {{t "submission-form.files.a3-note-html" htmlSafe=true}}
-                      </group.radio>
-                    </div>
-
-                    <small>
-                      <a href={{t "submission-form.files.a3-help-url"}} target="_blank" rel="noopener noreferrer">
-                        {{svgJar "question-16" class="octicon" width="14px" style="margin-top: 2px"}}
-                        {{t "submission-form.files.a3-help-text"}}
-                      </a>
-                    </small>
-                  </div>
-                </RadioGroup>
-              </div>
-            </div>
-
-            {{#if (eq this.uploadVia "dfast")}}
-              <JobIdExtractor
-                @endpoint="/dfast_extractions"
-                @i18nPrefix="dfast-extractor"
-                @onPoll={{this.onExtractProgress}}
-                @crossoverErrors={{this.crossoverErrors}}
-              />
-            {{else if (eq this.uploadVia "ggs")}}
-              <JobIdExtractor
-                @endpoint="/ggs_extractions"
-                @i18nPrefix="ggs-extractor"
-                @onPoll={{this.onExtractProgress}}
-                @crossoverErrors={{this.crossoverErrors}}
-              />
-            {{else if (eq this.uploadVia "webui")}}
-              <div class="card">
-                <div class="card-body">
-                  {{t "upload-form.instructions-html" htmlSafe=true}}
-
-                  <SupportedFileTypes />
-
-                  <FileList
-                    @files={{this.files}}
-                    @crossoverErrors={{this.crossoverErrors}}
-                    @onAdd={{this.addFile}}
-                    @onRemove={{this.removeFile}}
-                  />
-                </div>
-              </div>
-            {{else if (eq this.uploadVia "mass_directory")}}
-              <MassDirectoryExtractor @onPoll={{this.onExtractProgress}} @crossoverErrors={{this.crossoverErrors}} />
-            {{/if}}
-          </div>
-
-          {{#if this.uploadVia}}
+          {{#if this.selection.via}}
             <hr />
 
             <div class="text-end">
-              <button type="submit" disabled={{not this.isSubmitButtonEnabled}} class="btn btn-primary px-5">{{t
+              <button type="submit" disabled={{not this.selection.isSubmittable}} class="btn btn-primary px-5">{{t
                   "upload-form.upload"
                 }}</button>
             </div>

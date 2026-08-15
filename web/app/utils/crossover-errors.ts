@@ -2,7 +2,7 @@ import type { SubmissionError, SubmissionFileData } from 'mssform/models/submiss
 
 export type CrossoverErrors = Map<SubmissionFileData, SubmissionError[]>;
 
-type Validation = (errors: CrossoverErrors, files: SubmissionFileData[]) => void;
+export type Validation = (errors: CrossoverErrors, files: SubmissionFileData[]) => void;
 
 // Errors a file only has in the company of the others being sent with it, as
 // opposed to the ones its parser found in it on its own. Which of them apply

@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, click, findAll, getRootElement, triggerEvent, waitUntil } from '@ember/test-helpers';
+import { visit, click, fillIn, findAll, getRootElement, triggerEvent, waitFor, waitUntil } from '@ember/test-helpers';
 import { setupApplicationTest } from 'mssform/tests/helpers';
 import { setupAuthentication } from 'mssform/tests/helpers/setup-auth';
 import clickRadio from 'mssform/tests/helpers/click-radio';
@@ -76,6 +76,66 @@ module('Acceptance | upload', function (hooks) {
     await waitUntil(() => getRootElement().textContent?.includes('Go to home'));
 
     assert.deepEqual(uploaded, { upload: { via: 'webui', files: ['test-signed-id'] } });
+  });
+
+  test('adding files imported from a job', async function (assert) {
+    let uploaded: unknown;
+
+    worker.use(
+      http.post('/dfast_extractions', ({ response }) => {
+        return response(201).json({
+          _self: '/dfast_extractions/1',
+          id: 1,
+          state: 'pending',
+          error: null,
+          files: [],
+        });
+      }),
+
+      http.get('/dfast_extractions/{id}', ({ response }) => {
+        return response(200).json({
+          _self: '/dfast_extractions/1',
+          id: 1,
+          state: 'fulfilled',
+          error: null,
+
+          files: [
+            {
+              name: '01234567-89ab-cdef-0000-000000000001/test.fasta',
+              basename: 'test',
+              size: 50,
+              isParsing: false,
+              parsedData: { entriesCount: 1 },
+              isParseSucceeded: true,
+              errors: [],
+              fileType: 'sequence' as const,
+              jobId: '01234567-89ab-cdef-0000-000000000001',
+            },
+          ],
+        });
+      }),
+
+      http.post('/submissions/{mass_id}/uploads', async ({ request }) => {
+        uploaded = await request.json();
+
+        return new HttpResponse(null, { status: 204 });
+      }),
+    );
+
+    await visit('/home/submission/NSUB000001/upload');
+
+    await clickRadio('Import the submission files from DFAST Job ID');
+    await fillIn('textarea', '01234567-89ab-cdef-0000-000000000001');
+    await click('.card-body button[type="submit"]');
+
+    await waitFor('.list-group-item');
+
+    await click('button.px-5[type="submit"]');
+
+    await waitUntil(() => getRootElement().textContent?.includes('Go to home'));
+
+    // An import sends what to copy, not the files themselves.
+    assert.deepEqual(uploaded, { upload: { via: 'dfast', extraction_id: 1 } });
   });
 
   test('a warning does not stand in the way', async function (assert) {

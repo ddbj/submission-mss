@@ -11,11 +11,11 @@ import Files from './submission-form/files';
 import Metadata from './submission-form/metadata';
 import Prerequisite from './submission-form/prerequisite';
 import stepNavLinkClass from 'mssform/helpers/step-nav-link-class';
-import { discardFiles } from 'mssform/models/submission-file';
+import FileSelection from 'mssform/models/file-selection';
+import { validateDuplicates, validatePairs, validateSameness } from 'mssform/utils/crossover-errors';
 
 import type { ComponentLike } from '@glint/template';
 import type Submission from 'mssform/models/submission';
-import type { SubmissionFileData } from 'mssform/models/submission-file';
 
 const COMPONENTS: Record<string, unknown> = {
   prerequisite: Prerequisite,
@@ -38,9 +38,9 @@ export default class SubmissionFormComponent extends Component<Signature> {
   willDestroy() {
     super.willDestroy();
 
-    // The files outlive the step that collected them, so they are discarded
-    // here rather than when the file step is swapped out.
-    discardFiles(this.state.files);
+    // The selection outlives the step that made it, so it is discarded here
+    // rather than when the file step is swapped out.
+    this.state.selection.discard();
   }
 
   get component() {
@@ -92,7 +92,10 @@ export default class SubmissionFormComponent extends Component<Signature> {
 export class State {
   @tracked maybeTpa: boolean | null = null;
   @tracked agreed = false;
-  @tracked files: SubmissionFileData[] = [];
+
+  // A new submission has to arrive complete: whole pairs, agreeing with each
+  // other.
+  selection = new FileSelection([validateDuplicates, validatePairs, validateSameness]);
 }
 
 export class Navigation {

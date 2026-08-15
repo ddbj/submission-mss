@@ -6,8 +6,6 @@ import type OtherPerson from 'mssform/models/other-person';
 export default class Submission {
   @tracked id?: string;
   @tracked tpa: boolean | null = null;
-  @tracked uploadVia?: string;
-  @tracked extractionId?: number;
   @tracked files: string[] = [];
   @tracked entriesCount?: number;
   @tracked holdDate?: string;
