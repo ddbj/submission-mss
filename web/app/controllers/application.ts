@@ -29,6 +29,11 @@ export default class ApplicationController extends Controller {
 
     return () => {
       el.removeEventListener('hidden.bs.modal', handler);
+
+      // Bootstrap keeps the backdrop and the scroll lock on <body>, outside
+      // this element: destroying it while the modal is open would strand them
+      // there. Safe to do at once, this modal is not animated.
+      this.errorModal?.hide();
     };
   });
 

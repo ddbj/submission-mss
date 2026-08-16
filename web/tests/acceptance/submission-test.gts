@@ -729,8 +729,8 @@ module('Acceptance | submission', function (hooks) {
 
       // Bootstrap appends the backdrop to `<body>`, outside the application's
       // root element, so it has to be looked up in the document. Identify it by
-      // what the submit click adds rather than by counting: earlier tests can
-      // leave backdrops of their own behind.
+      // what the submit click adds rather than by counting, so that this does
+      // not depend on how many modals the page has open.
       const backdrops = new Set(document.querySelectorAll('.modal-backdrop'));
 
       await click('button.px-5[type="submit"]');

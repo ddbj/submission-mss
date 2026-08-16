@@ -46,7 +46,11 @@ interface Signature {
     {{outlet}}
   </div>
 
-  <div class="modal fade" tabindex="-1" {{@controller.setErrorModal}}>
+  {{! Not animated: Bootstrap re-appends a modal to <body> if its show
+  transition is still pending when the element goes away, and an error is
+  better shown at once than faded in anyway. The upload progress modal is
+  not animated for the same reason. }}
+  <div class="modal" tabindex="-1" {{@controller.setErrorModal}}>
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
