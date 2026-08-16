@@ -80,6 +80,10 @@ export default class UploadFormComponent extends Component<Signature> {
       },
     });
 
+    // The files are with the submission now, and this form is replaced by its
+    // completion message: nothing here will read them again.
+    selection.discard();
+
     this.isCompleted = true;
   }
 
