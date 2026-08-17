@@ -219,10 +219,6 @@ upload-form:
 
   upload: アップロード
 
-  complete-html: |
-    <h1 class="display-6 my-4">アップロード完了</h1>
-    <p>mass@ddbj.nig.ac.jp より、入力いただいたアドレス宛にメールが通知されます。メール添付での登録ファイル(再)送付はご遠慮ください。</p>
-
 file-list:
   add-files: ファイルの追加
   stats: "{filesCount} ファイル、{totalFileSize}"
@@ -288,3 +284,6 @@ ggs-extractor:
 submission.show:
   re-upload: 再アップロード
   submission-files: 登録ファイル
+
+  notice-html: |
+    <p>mass@ddbj.nig.ac.jp より、入力いただいたアドレス宛にメールが通知されます。メール添付での登録ファイル(再)送付はご遠慮ください。</p>

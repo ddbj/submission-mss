@@ -1,5 +1,15 @@
 import { module, test } from 'qunit';
-import { visit, click, fillIn, findAll, getRootElement, triggerEvent, waitFor, waitUntil } from '@ember/test-helpers';
+import {
+  visit,
+  click,
+  currentURL,
+  fillIn,
+  findAll,
+  settled,
+  triggerEvent,
+  waitFor,
+  waitUntil,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'mssform/tests/helpers';
 import { setupAuthentication } from 'mssform/tests/helpers/setup-auth';
 import clickRadio from 'mssform/tests/helpers/click-radio';
@@ -34,7 +44,13 @@ module('Acceptance | upload', function (hooks) {
   setupApplicationTest(hooks);
   setupAuthentication(hooks);
 
+  // The files of an upload are copied by a background job, so a fresh one is
+  // listed with none of them yet.
+  let uploads: { id: number; created_at: string; files: string[]; job_ids: string[] }[];
+
   hooks.beforeEach(function () {
+    uploads = [];
+
     worker.use(
       http.get('/submissions/{mass_id}', ({ response }) => {
         return response(200).json({
@@ -43,7 +59,7 @@ module('Acceptance | upload', function (hooks) {
             created_at: '2026-08-14T00:00:00Z',
             status: null,
             accessions: [],
-            uploads: [],
+            uploads,
           },
         });
       }),
@@ -56,6 +72,7 @@ module('Acceptance | upload', function (hooks) {
     worker.use(
       http.post('/submissions/{mass_id}/uploads', async ({ request }) => {
         uploaded = await request.json();
+        uploads = [{ id: 1, created_at: '2026-08-16T00:00:00Z', files: [], job_ids: [] }];
 
         return new HttpResponse(null, { status: 204 });
       }),
@@ -73,9 +90,17 @@ module('Acceptance | upload', function (hooks) {
 
     await click('button.px-5[type="submit"]');
 
-    await waitUntil(() => getRootElement().textContent?.includes('Go to home'));
+    // Sending is not tracked by `settled`, so wait for where it ends up. The
+    // query string carries the locale, and this page's own URL starts with the
+    // one it leaves for.
+    await waitUntil(() => currentURL()?.split('?')[0] === '/home/submission/NSUB000001');
+    await settled();
 
     assert.deepEqual(uploaded, { upload: { via: 'webui', files: ['test-signed-id'] } });
+
+    // The submission lists what was just added to it, which is the answer the
+    // submitter is after.
+    assert.dom('.card').exists({ count: 1 }, 'the upload is listed');
   });
 
   test('adding files imported from a job', async function (assert) {
@@ -117,6 +142,7 @@ module('Acceptance | upload', function (hooks) {
 
       http.post('/submissions/{mass_id}/uploads', async ({ request }) => {
         uploaded = await request.json();
+        uploads = [{ id: 1, created_at: '2026-08-16T00:00:00Z', files: [], job_ids: [] }];
 
         return new HttpResponse(null, { status: 204 });
       }),
@@ -132,7 +158,7 @@ module('Acceptance | upload', function (hooks) {
 
     await click('button.px-5[type="submit"]');
 
-    await waitUntil(() => getRootElement().textContent?.includes('Go to home'));
+    await waitUntil(() => currentURL()?.split('?')[0] === '/home/submission/NSUB000001');
 
     // An import sends what to copy, not the files themselves.
     assert.deepEqual(uploaded, { upload: { via: 'dfast', extraction_id: 1 } });
