@@ -31,6 +31,8 @@ interface Signature {
 
   <h2 class="mt-4">{{t "submission.show.submission-files"}}</h2>
 
+  {{t "submission.show.notice-html" htmlSafe=true}}
+
   <div class="vstack gap-3">
     {{#each (sortById @model.uploads) as |upload|}}
       <div class="card">

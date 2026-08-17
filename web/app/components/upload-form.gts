@@ -1,8 +1,6 @@
 import Component from '@glimmer/component';
-import { LinkTo } from '@ember/routing';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
 
 import { t } from 'ember-intl';
 import pageTitle from 'ember-page-title/helpers/page-title';
@@ -13,6 +11,7 @@ import FileSelection from 'mssform/models/file-selection';
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
 import { validateDuplicates, validateSameness } from 'mssform/utils/crossover-errors';
 
+import type RouterService from '@ember/routing/router-service';
 import type { RequestManager } from '@warp-drive/core';
 import type { SubmissionFile } from 'mssform/models/submission-file';
 import type UploadProgressModalComponent from 'mssform/components/upload-progress-modal';
@@ -33,8 +32,7 @@ export interface Signature {
 
 export default class UploadFormComponent extends Component<Signature> {
   @service declare requestManager: RequestManager;
-
-  @tracked isCompleted = false;
+  @service declare router: RouterService;
 
   // Re-uploading often means replacing one half of a pair, so a lone annotation
   // or sequence file is expected here -- unlike in the submission form, which
@@ -80,42 +78,48 @@ export default class UploadFormComponent extends Component<Signature> {
       },
     });
 
-    // The files are with the submission now, and this form is replaced by its
-    // completion message: nothing here will read them again.
+    // The files are with the submission now, and nothing here will read them
+    // again.
     selection.discard();
 
-    this.isCompleted = true;
+    // The submitter may have left while this was in flight: there is no
+    // submission route left to refresh, nor a page of theirs to take over.
+    if (this.isDestroying || this.isDestroyed) return;
+
+    // Back to the submission, which lists what has been uploaded to it. The
+    // submission's own model has to be fetched again for the upload just made
+    // to be among them -- but after arriving rather than before, so that a
+    // failure there leaves the submitter on their submission, where the upload
+    // plainly went through, instead of on an error page that suggests it did
+    // not. The failure itself still reaches the error modal.
+    await this.router.transitionTo('submission.index');
+
+    await this.router.refresh('submission').catch(() => {});
   }
 
   <template>
     {{pageTitle (t "upload-form.title")}}
 
-    {{#if this.isCompleted}}
-      {{t "upload-form.complete-html" htmlSafe=true}}
+    <h1 class="display-6 my-4">{{t "upload-form.title"}}</h1>
 
-      <LinkTo @route="home">{{t "go-to-home"}}</LinkTo>
-    {{else}}
-      <h1 class="display-6 my-4">{{t "upload-form.title"}}</h1>
+    {{t "upload-form.description-html" massId=@model.id htmlSafe=true}}
 
-      {{t "upload-form.description-html" massId=@model.id htmlSafe=true}}
+    <UploadProgressModal as |modal|>
+      <form {{on "submit" (fn this.submit modal)}} {{leavingConfirmation}}>
+        <FileChooser @selection={{this.selection}}>
+          <:instructions>{{t "upload-form.instructions-html" htmlSafe=true}}</:instructions>
+        </FileChooser>
 
-      <UploadProgressModal as |modal|>
-        <form {{on "submit" (fn this.submit modal)}} {{leavingConfirmation}}>
-          <FileChooser @selection={{this.selection}}>
-            <:instructions>{{t "upload-form.instructions-html" htmlSafe=true}}</:instructions>
-          </FileChooser>
+        {{#if this.selection.via}}
+          <hr />
 
-          {{#if this.selection.via}}
-            <hr />
-
-            <div class="text-end">
-              <button type="submit" disabled={{not this.selection.isSubmittable}} class="btn btn-primary px-5">{{t
-                  "upload-form.upload"
-                }}</button>
-            </div>
-          {{/if}}
-        </form>
-      </UploadProgressModal>
-    {{/if}}
+          <div class="text-end">
+            <button type="submit" disabled={{not this.selection.isSubmittable}} class="btn btn-primary px-5">{{t
+                "upload-form.upload"
+              }}</button>
+          </div>
+        {{/if}}
+      </form>
+    </UploadProgressModal>
   </template>
 }

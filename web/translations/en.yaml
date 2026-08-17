@@ -218,10 +218,6 @@ upload-form:
 
   upload: Upload
 
-  complete-html: |
-    <h1 class="display-6 my-4">Upload completed</h1>
-    <p>You will receive an email from mass@ddbj.nig.ac.jp to the address you entered. Please do not (re-)send submission files as an email attachment.</p>
-
 file-list:
   add-files: Add files
   stats: "{filesCount, plural, =1 {1 file} other {# files}}, {totalFileSize}"
@@ -287,3 +283,6 @@ ggs-extractor:
 submission.show:
   re-upload: Re-upload
   submission-files: Submission files
+
+  notice-html: |
+    <p>You will receive an email from mass@ddbj.nig.ac.jp to the address you entered. Please do not (re-)send submission files as an email attachment.</p>
