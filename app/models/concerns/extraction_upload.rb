@@ -10,12 +10,14 @@ module ExtractionUpload
   end
 
   def copy_files_to_submissions_dir
-    upload.files_dir.mkpath
-
-    extraction.files.find_each do |file|
-      FileUtils.cp file.fullpath, upload.files_dir
+    stage_files do |work|
+      extraction.files.find_each do |file|
+        FileUtils.cp file.fullpath, work
+      end
     end
+  end
 
-    trim_annotation_fields!
+  def source_file_names
+    extraction.files.pluck(:name).sort
   end
 end

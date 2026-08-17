@@ -3,8 +3,6 @@ class WebuiUpload < ApplicationRecord
 
   has_many_attached :files
 
-  delegate :submission, to: :upload
-
   def self.from_params(files:, **)
     new(files:)
   end
@@ -12,23 +10,21 @@ class WebuiUpload < ApplicationRecord
   def copy_files_to_submissions_dir
     return if copied?
 
-    work = submission.root_dir.join("../.work/#{submission.mass_id}-#{upload.timestamp}")
-    work.mkpath
-
-    files.each do |attachment|
-      work.join(attachment.filename.to_s).open 'wb' do |f|
-        attachment.download do |chunk|
-          f.write chunk
+    stage_files do |work|
+      files.each do |attachment|
+        work.join(attachment.filename.to_s).open 'wb' do |f|
+          attachment.download do |chunk|
+            f.write chunk
+          end
         end
       end
     end
 
-    upload.files_dir.dirname.mkpath
-    work.rename upload.files_dir
-
-    trim_annotation_fields!
-
     update! copied: true, files: []
+  end
+
+  def source_file_names
+    files.blobs.map { _1.filename.to_s }.sort
   end
 
   def job_ids = nil
