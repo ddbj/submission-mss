@@ -14,6 +14,13 @@ class Upload < ApplicationRecord
 
   delegated_type :via, types: VIA.values, dependent: :destroy
 
+  # The files this upload consists of. They are copied into place in the
+  # background, in one move, so until that has happened the names are known
+  # only where they came from.
+  def file_names
+    Dir.glob('*.*', base: files_dir).presence || via.source_file_names
+  end
+
   def files_dir
     submission.root_dir.join(timestamp)
   end

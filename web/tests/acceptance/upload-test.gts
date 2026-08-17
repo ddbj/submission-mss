@@ -44,8 +44,6 @@ module('Acceptance | upload', function (hooks) {
   setupApplicationTest(hooks);
   setupAuthentication(hooks);
 
-  // The files of an upload are copied by a background job, so a fresh one is
-  // listed with none of them yet.
   let uploads: { id: number; created_at: string; files: string[]; job_ids: string[] }[];
 
   hooks.beforeEach(function () {
@@ -72,7 +70,10 @@ module('Acceptance | upload', function (hooks) {
     worker.use(
       http.post('/submissions/{mass_id}/uploads', async ({ request }) => {
         uploaded = await request.json();
-        uploads = [{ id: 1, created_at: '2026-08-16T00:00:00Z', files: [], job_ids: [] }];
+
+        // An upload answers for its files from the moment it exists, even
+        // though they are copied into place afterwards.
+        uploads = [{ id: 1, created_at: '2026-08-16T00:00:00Z', files: ['test.fasta'], job_ids: [] }];
 
         return new HttpResponse(null, { status: 204 });
       }),
@@ -101,6 +102,7 @@ module('Acceptance | upload', function (hooks) {
     // The submission lists what was just added to it, which is the answer the
     // submitter is after.
     assert.dom('.card').exists({ count: 1 }, 'the upload is listed');
+    assert.dom('.list-group-item').hasText('test.fasta', 'with the file that was sent');
   });
 
   test('adding files imported from a job', async function (assert) {
@@ -142,7 +144,15 @@ module('Acceptance | upload', function (hooks) {
 
       http.post('/submissions/{mass_id}/uploads', async ({ request }) => {
         uploaded = await request.json();
-        uploads = [{ id: 1, created_at: '2026-08-16T00:00:00Z', files: [], job_ids: [] }];
+
+        uploads = [
+          {
+            id: 1,
+            created_at: '2026-08-16T00:00:00Z',
+            files: ['test.fasta'],
+            job_ids: ['01234567-89ab-cdef-0000-000000000001'],
+          },
+        ];
 
         return new HttpResponse(null, { status: 204 });
       }),

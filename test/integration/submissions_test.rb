@@ -66,6 +66,71 @@ class SubmissionsTest < ActionDispatch::IntegrationTest
     assert_conform_schema 200
   end
 
+  test 'show (files not copied yet)' do
+    submission = submissions(:alice_submission)
+    upload     = submission.uploads.create!(via: WebuiUpload.new(files: [fixture_file_upload('test.fasta', 'text/plain')]))
+
+    get "/api/submissions/#{submission.mass_id}"
+
+    assert_conform_schema 200
+
+    # The copy job has not run, so nothing is on disk: the upload answers for
+    # the files it was given.
+    assert_empty Dir.glob('*', base: upload.files_dir)
+
+    files = response.parsed_body['submission']['uploads'].find { _1['id'] == upload.id }['files']
+
+    assert_equal ['test.fasta'], files
+  end
+
+  test 'show (files copied)' do
+    submission = submissions(:alice_submission)
+    upload     = submission.uploads.create!(via: WebuiUpload.new(files: [fixture_file_upload('test.fasta', 'text/plain')]))
+
+    upload.via.copy_files_to_submissions_dir
+
+    get "/api/submissions/#{submission.mass_id}"
+
+    assert_conform_schema 200
+
+    files = response.parsed_body['submission']['uploads'].find { _1['id'] == upload.id }['files']
+
+    assert_equal ['test.fasta'], files
+  end
+
+  test 'show (imported files not copied yet)' do
+    submission = submissions(:alice_submission)
+    extraction = dfast_extractions(:alice_dfast_extraction)
+
+    extraction.working_dir.mkpath
+
+    %w[test.ann test.fasta].each do |name|
+      extraction.files.create!(name:, dfast_job_id: 'job-1', parsing: false)
+
+      FileUtils.touch extraction.working_dir.join(name)
+    end
+
+    upload = submission.uploads.create!(via: DfastUpload.new(extraction:))
+
+    get "/api/submissions/#{submission.mass_id}"
+
+    assert_conform_schema 200
+
+    files = response.parsed_body['submission']['uploads'].find { _1['id'] == upload.id }['files']
+
+    assert_equal %w[test.ann test.fasta], files
+
+    # And the same once they have been copied, which happens in one move so
+    # that the list never shrinks in between.
+    upload.via.copy_files_to_submissions_dir
+
+    get "/api/submissions/#{submission.mass_id}"
+
+    files = response.parsed_body['submission']['uploads'].find { _1['id'] == upload.id }['files']
+
+    assert_equal %w[test.ann test.fasta], files
+  end
+
   test 'show (not found)' do
     get '/api/submissions/NSUB999999'
 

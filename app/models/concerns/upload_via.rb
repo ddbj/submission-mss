@@ -6,9 +6,27 @@ module UploadVia
 
   included do
     has_one :upload, as: :via, touch: true, dependent: :destroy
+
+    delegate :submission, to: :upload
   end
 
   private
+
+  # Gathers the files aside and moves them into place in one go, so that the
+  # directory is never seen half filled -- neither by the curator it is handed
+  # to, nor by the submitter, who is told what the upload holds from where it
+  # came from until it is there.
+  def stage_files
+    work = submission.root_dir.join("../.work/#{submission.mass_id}-#{upload.timestamp}")
+    work.mkpath
+
+    yield work
+
+    upload.files_dir.dirname.mkpath
+    work.rename upload.files_dir
+
+    trim_annotation_fields!
+  end
 
   def trim_annotation_fields!
     upload.files_dir.glob '*' do |path|

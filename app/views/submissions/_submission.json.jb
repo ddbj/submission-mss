@@ -11,7 +11,7 @@ state = working_list_states[submission.mass_id]
     {
       id:         upload.id,
       created_at: upload.created_at.iso8601,
-      files:      Dir.glob('*.*', base: upload.files_dir),
+      files:      upload.file_names,
       job_ids:    upload.via.job_ids || []
     }
   }
