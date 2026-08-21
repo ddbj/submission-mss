@@ -26,7 +26,7 @@ class SubmissionsController < ApplicationController
       }
 
       @submission.uploads.create!(
-        via: Upload.find_via(upload_via).from_params(**submission_params.to_h.symbolize_keys)
+        via: Upload.find_via(upload_via).from_params(user: current_user, **submission_params.to_h.symbolize_keys)
       )
     }
 
