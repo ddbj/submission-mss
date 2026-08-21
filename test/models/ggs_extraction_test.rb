@@ -51,6 +51,28 @@ class GgsExtractionTest < ActiveSupport::TestCase
     assert_equal ">fixed\nACGT\n",                        files.last.fullpath.read
   end
 
+  test 'prepare_files prefers output/fixed/ when only one of the two is compressed' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    dir    = output_dir(job_id)
+    fixed  = dir.join('fixed').tap(&:mkpath)
+
+    dir.join('foo.fa').write ">output\nACGT\n"
+
+    Zlib::GzipWriter.open(fixed.join('foo.fa.gz')) do |gz|
+      gz.write ">fixed\nACGT\n"
+    end
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id])
+    extraction.prepare_files
+
+    # The two are the same file under different names, so taking both would
+    # have them collide the moment the compressed one is expanded.
+    file = extraction.files.sole
+
+    assert_equal 'foo.fa',         file.name
+    assert_equal ">fixed\nACGT\n", file.fullpath.read
+  end
+
   test 'prepare_files prefers output/fixed/ even when the output/ files are read-only' do
     job_id = '01234567-89ab-cdef-0000-000000000001'
     dir    = output_dir(job_id)

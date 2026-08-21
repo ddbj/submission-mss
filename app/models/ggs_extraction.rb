@@ -31,8 +31,8 @@ class GgsExtraction < ApplicationRecord
     [src_dir, src_dir.join('fixed')].each do |dir|
       next unless dir.directory?
 
-      dir.each_child do |child|
-        sources[child.basename.to_s] = child if child.file?
+      dir.children.sort.each do |child|
+        sources[source_name(child)] = child if child.file?
       end
     end
 
@@ -47,6 +47,16 @@ class GgsExtraction < ApplicationRecord
         files.create!(name:, parsing: true, ggs_job_id: job_id)
       end
     end
+  end
+
+  # The same file can be plain in output/ and compressed in output/fixed/, or
+  # the other way round. Key both on the name the import would store, so the
+  # two are recognised as one file instead of colliding once expanded.
+  def source_name(path)
+    name = path.basename.to_s
+    comp = COMPRESS.keys.find { name.end_with?(".#{_1}") }
+
+    comp ? name.delete_suffix(".#{comp}") : name
   end
 
   def job_output_dir(job_id)
