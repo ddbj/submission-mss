@@ -13,6 +13,7 @@ import {
 import { setupApplicationTest } from 'mssform/tests/helpers';
 import { setupAuthentication } from 'mssform/tests/helpers/setup-auth';
 import clickRadio from 'mssform/tests/helpers/click-radio';
+import findRadio from 'mssform/tests/helpers/find-radio';
 
 import { HttpResponse, http as mswHttp } from 'msw';
 import ENV from 'mssform/config/environment';
@@ -122,6 +123,62 @@ function stallDigest() {
 module('Acceptance | submission', function (hooks) {
   setupApplicationTest(hooks);
   setupAuthentication(hooks);
+
+  test('the last submission fills in what the files do not say', async function (assert) {
+    worker.use(
+      http.get('/submissions', ({ response }) => {
+        return response(200).json({ submissions: [] });
+      }),
+
+      http.get('/submissions/last_submitted', ({ response }) => {
+        return response(200).json({
+          submission: {
+            id: 'NSUB000001',
+            sequencer: 'sanger',
+            email_language: 'ja',
+
+            contact_person: {
+              id: 1,
+              email: 'alice@example.com',
+              full_name: 'Alice Liddell',
+              affiliation: 'Wonderland Inc.',
+            },
+
+            other_people: [],
+          },
+        });
+      }),
+    );
+
+    await visit('/home/submissions/new');
+
+    await clickRadio('Yes, I have determined the nucleotide sequence');
+    await click('button[type="submit"]');
+
+    await clickRadio('Upload the submission files through the MSS form');
+
+    await triggerEvent('input[type="file"]', 'change', {
+      files: [
+        new File(
+          [
+            'COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n\t\t\temail\talice@example.com\n\t\t\tinstitute\tWonderland Inc.\n',
+          ],
+          'test.ann',
+        ),
+        new File(['>entry1\nATCG\n'], 'test.fasta'),
+      ],
+    });
+
+    await waitUntil(() => findAll('.spinner-border').length === 0);
+
+    await click('button[type="submit"]');
+    await waitFor('#entriesCount');
+
+    // Neither is anywhere in the files, so the only place they can come from
+    // is what this submitter answered last time.
+    assert.true(findRadio('Sanger').checked, 'the sequencer is carried over');
+    assert.true(findRadio('Japanese').checked, 'the language is carried over');
+  });
 
   test('new submission via webui upload', async function (assert) {
     let submitted: { submission?: { upload_via?: string; files?: string[] } } | undefined;
