@@ -68,6 +68,10 @@ class ExtractionUploadTest < ActiveSupport::TestCase
     # files are there. A directory holding some of them would be reported as all
     # there is, and the list the submitter sees would shrink.
     assert_empty Dir.glob('*', base: upload.files_dir)
+
+    # Nor aside, where the half of them that were copied would be moved into
+    # place along with the next attempt's own.
+    assert_empty Dir.glob('*', base: submission.root_dir.join('../.work'))
   end
 
   private

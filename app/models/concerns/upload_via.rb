@@ -12,24 +12,40 @@ module UploadVia
 
   private
 
-  # Gathers the files aside and moves them into place in one go, so that the
-  # directory is never seen half filled -- neither by the curator it is handed
-  # to, nor by the submitter, who is told what the upload holds from where it
-  # came from until it is there.
+  # Gathers the files aside, finishes them there, and moves them into place in
+  # one go, so that the directory is never seen half filled -- neither by the
+  # curator it is handed to, nor by the submitter, who is told what the upload
+  # holds from where it came from until it is there.
+  #
+  # That move is also what records the copy: a job asked to do it again finds
+  # the directory and leaves it be. Without this a retry renamed onto a full
+  # directory, which fails with ENOTEMPTY however often it is tried.
   def stage_files
-    work = submission.root_dir.join("../.work/#{submission.mass_id}-#{upload.timestamp}")
+    return if upload.files_dir.exist?
+
+    # Named after the upload rather than the directory it is bound for: two
+    # uploads made in the same second share that name, and would gather into
+    # each other.
+    work = submission.root_dir.join("../.work/#{submission.mass_id}-#{upload.id}")
     work.mkpath
 
-    yield work
+    begin
+      yield work
 
-    upload.files_dir.dirname.mkpath
-    work.rename upload.files_dir
+      trim_annotation_fields! work
 
-    trim_annotation_fields!
+      upload.files_dir.dirname.mkpath
+      work.rename upload.files_dir
+    ensure
+      # The move takes this with it, so anything left is from an attempt that
+      # broke down. Clear it out: it would otherwise sit here for good, and the
+      # next attempt would move whatever it holds along with its own files.
+      work.rmtree if work.exist?
+    end
   end
 
-  def trim_annotation_fields!
-    upload.files_dir.glob '*' do |path|
+  def trim_annotation_fields!(dir)
+    dir.glob '*' do |path|
       next unless ANN_EXTENSIONS.any? { path.to_s.end_with?(_1) }
 
       content   = path.binread
