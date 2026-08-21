@@ -13,10 +13,6 @@ interface Signature {
     errors: SubmissionError[];
     onRemove?: (file: SubmissionFileData) => void;
   };
-
-  Blocks: {
-    prefix?: [];
-  };
 }
 
 <template>
@@ -38,10 +34,17 @@ interface Signature {
     </div>
 
     <div class={{if @file.isParsing "opacity-50"}}>
-      {{#if (has-block "prefix")}}<span class="text-body-secondary">{{yield to="prefix"}}</span>{{/if}}{{@file.name}}
+      {{@file.name}}
       <small class="text-body-secondary">{{filesize @file.size}}</small>
 
       <small class="hstack gap-3 text-body-secondary">
+        {{#if @file.jobId}}
+          <div>
+            <b>{{t "file-list.item.job-id"}}</b>
+            {{@file.jobId}}
+          </div>
+        {{/if}}
+
         {{#if @file.isParsing}}
           {{t "file-list.item.loading"}}
         {{else}}

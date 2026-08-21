@@ -234,6 +234,7 @@ file-list:
     contact-person: コンタクトパーソン
     hold-date: 公開予定日
     entries-count: エントリ数
+    job-id: 取得元ジョブ
     remove: 削除
 
 upload-progress-modal:
