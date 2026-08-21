@@ -21,6 +21,8 @@ module Extraction
     belongs_to :user
 
     has_many :files, dependent: :destroy, class_name: "#{name}File", foreign_key: :extraction_id
+
+    scope :fulfilled, -> { where(state: 'fulfilled') }
   end
 
   def working_dir

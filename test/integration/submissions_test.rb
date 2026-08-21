@@ -18,7 +18,7 @@ class SubmissionsTest < ActionDispatch::IntegrationTest
   end
 
   test 'create' do
-    extraction = @user.dfast_extractions.create!(dfast_job_ids: ['job-1'])
+    extraction = @user.dfast_extractions.create!(dfast_job_ids: ['job-1'], state: 'fulfilled')
 
     post '/api/submissions', params: {
       submission: {
@@ -58,6 +58,38 @@ class SubmissionsTest < ActionDispatch::IntegrationTest
 
     assert_enqueued_email_with SubmissionMailer, :submitter_confirmation, params: {submission:}
     assert_enqueued_email_with SubmissionMailer, :curator_notification,   params: {submission:}
+  end
+
+  test 'create with an extraction belonging to someone else' do
+    bob        = User.create!(uid: 'bob', email: 'bob@example.com')
+    extraction = bob.dfast_extractions.create!(dfast_job_ids: ['job-1'], state: 'fulfilled')
+
+    post '/api/submissions', params: {
+      submission: {
+        tpa:            false,
+        upload_via:     'dfast',
+        extraction_id:  extraction.id,
+        entries_count:  1,
+        hold_date:      nil,
+        sequencer:      'ngs',
+        data_type:      'wgs',
+        description:    'test',
+        email_language: 'en',
+
+        contact_person: {
+          email:       'alice@example.com',
+          full_name:   'Alice Liddell',
+          affiliation: 'Wonderland Inc.'
+        },
+
+        other_people: []
+      }
+    }, as: :json
+
+    # Bob's files would otherwise be copied into a submission of Alice's.
+    assert_conform_schema 404
+
+    assert_empty @user.submissions.where.not(id: submissions(:alice_submission))
   end
 
   test 'show' do

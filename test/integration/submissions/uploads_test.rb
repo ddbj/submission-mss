@@ -10,7 +10,7 @@ class Submissions::UploadsTest < ActionDispatch::IntegrationTest
   end
 
   test 'create' do
-    extraction = @user.dfast_extractions.create!(dfast_job_ids: ['job-1'])
+    extraction = @user.dfast_extractions.create!(dfast_job_ids: ['job-1'], state: 'fulfilled')
     submission = submissions(:alice_submission)
 
     post "/api/submissions/#{submission.mass_id}/uploads", params: {
@@ -34,5 +34,50 @@ class Submissions::UploadsTest < ActionDispatch::IntegrationTest
 
     assert_enqueued_email_with SubmissionMailer, :submitter_confirmation, params: {submission:}
     assert_enqueued_email_with SubmissionMailer, :curator_notification,   params: {submission:}
+  end
+
+  test 'create with an extraction belonging to someone else' do
+    bob        = User.create!(uid: 'bob', email: 'bob@example.com')
+    extraction = bob.dfast_extractions.create!(dfast_job_ids: ['job-1'], state: 'fulfilled')
+
+    post_upload extraction
+
+    # Bob's files would otherwise be copied into Alice's submission.
+    assert_conform_schema 404
+
+    assert_no_enqueued_jobs
+  end
+
+  test 'create with an extraction that has nothing to give' do
+    extraction = @user.dfast_extractions.create!(dfast_job_ids: ['job-1'], state: 'rejected')
+
+    post_upload extraction
+
+    assert_conform_schema 404
+
+    assert_no_enqueued_jobs
+  end
+
+  test 'create with a payload we cannot make an upload out of' do
+    post "/api/submissions/#{submissions(:alice_submission).mass_id}/uploads", params: {
+      upload: {
+        via: 'dfast'
+      }
+    }, as: :json
+
+    assert_conform_schema 422
+
+    assert_no_enqueued_jobs
+  end
+
+  private
+
+  def post_upload(extraction)
+    post "/api/submissions/#{submissions(:alice_submission).mass_id}/uploads", params: {
+      upload: {
+        via:           'dfast',
+        extraction_id: extraction.id
+      }
+    }, as: :json
   end
 end

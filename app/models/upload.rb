@@ -1,4 +1,9 @@
 class Upload < ApplicationRecord
+  # A request names the way its files arrive and carries what that way needs.
+  # Both come from the submitter, so a way we do not have, or one left without
+  # its parameters, is answered as a bad payload rather than crashed on.
+  class Malformed < StandardError; end
+
   VIA = {
     webui:          'WebuiUpload',
     dfast:          'DfastUpload',
@@ -6,8 +11,8 @@ class Upload < ApplicationRecord
     ggs:            'GgsUpload'
   }
 
-  def self.find_via(ident)
-    VIA.fetch(ident.to_sym).constantize
+  def self.build_via(via: nil, **params)
+    VIA.fetch(via.to_s.to_sym) { raise Malformed, "unknown via: #{via.inspect}" }.constantize.from_params(**params)
   end
 
   belongs_to :submission

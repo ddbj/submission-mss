@@ -192,6 +192,9 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
+        '404':
+          $ref: '#/components/responses/NotFound'
+
         '422':
           $ref: '#/components/responses/UnprocessableContent'
 
@@ -375,6 +378,9 @@ paths:
 
         '404':
           $ref: '#/components/responses/NotFound'
+
+        '422':
+          $ref: '#/components/responses/UnprocessableContent'
 
   /dfast_extractions:
     post:

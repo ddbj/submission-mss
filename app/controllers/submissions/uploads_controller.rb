@@ -8,7 +8,7 @@ class Submissions::UploadsController < ApplicationController
     end
 
     upload = submission.uploads.create!(
-      via: Upload.find_via(upload_params[:via]).from_params(**upload_params.to_h.symbolize_keys)
+      via: Upload.build_via(user: current_user, **upload_params.to_h.symbolize_keys)
     )
 
     UploadEventLog.append upload
