@@ -74,7 +74,7 @@ class WorkingList
       other_person:               submission.other_people.order(:position).map(&:email_address_with_name).join('; '),
       dway_account:               submission.user.uid,
       dway_account_email:         submission.user.email,
-      data_arrival_date:          submission.uploads.map(&:timestamp).join('; '),
+      data_arrival_date:          submission.uploads.map(&:files_dir_name).join('; '),
       check_start_date:           nil,
       finish_date:                nil,
       sequencer:                  submission.sequencer_text,

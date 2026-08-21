@@ -5,7 +5,7 @@ class UploadEventLog
     line = {
       mass_id:           submission.mass_id,
       dway_account:      submission.user.uid,
-      data_arrival_date: upload.timestamp
+      data_arrival_date: upload.files_dir_name
     }.to_json
 
     path = Rails.application.config_for(:app).upload_events_log!

@@ -23,9 +23,9 @@ module UploadVia
   def stage_files
     return if upload.files_dir.exist?
 
-    # Named after the upload rather than the directory it is bound for: two
-    # uploads made in the same second share that name, and would gather into
-    # each other.
+    # Named after the upload rather than the directory it is bound for, which
+    # is settled while the upload is being made: this runs long afterwards, and
+    # asks nothing of what it was settled to be.
     work = submission.root_dir.join("../.work/#{submission.mass_id}-#{upload.id}")
     work.mkpath
 
