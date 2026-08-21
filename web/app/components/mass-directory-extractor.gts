@@ -6,7 +6,6 @@ import { tracked } from '@glimmer/tracking';
 
 import ExtractedFiles from 'mssform/components/extracted-files';
 import SubmissionFileItem from 'mssform/components/submission-file-item';
-import userMassDir from 'mssform/helpers/user-mass-dir';
 import Extraction from 'mssform/models/extraction';
 
 import type { ExtractionPayload } from 'mssform/models/extraction';
@@ -53,9 +52,7 @@ export default class MassDirectoryExtractorComponent extends Component<Signature
   <template>
     <div {{this.fetchFiles}} class="card">
       <ExtractedFiles @files={{this.files}} @crossoverErrors={{@crossoverErrors}} as |file errors|>
-        <SubmissionFileItem @file={{file}} @errors={{errors}}>
-          <:prefix>{{userMassDir}}/</:prefix>
-        </SubmissionFileItem>
+        <SubmissionFileItem @file={{file}} @errors={{errors}} />
       </ExtractedFiles>
     </div>
   </template>

@@ -306,7 +306,7 @@ module('Acceptance | submission', function (hooks) {
 
     const extractionFiles = [
       {
-        name: '01234567-89ab-cdef-0000-000000000001/test.ann',
+        name: 'test.ann',
         basename: 'test',
         size: 100,
         isParsing: false,
@@ -321,7 +321,7 @@ module('Acceptance | submission', function (hooks) {
         jobId: '01234567-89ab-cdef-0000-000000000001',
       },
       {
-        name: '01234567-89ab-cdef-0000-000000000001/test.fasta',
+        name: 'test.fasta',
         basename: 'test',
         size: 50,
         isParsing: false,
@@ -396,6 +396,15 @@ module('Acceptance | submission', function (hooks) {
     await waitFor('.list-group-item');
 
     assert.dom('.list-group-item').exists({ count: 2 });
+
+    // The job is where the files came from, not where they are going: the
+    // submission holds them all in one directory, under the names shown here.
+    for (const item of findAll('.list-group-item')) {
+      assert.dom(item).containsText('Source job 01234567-89ab-cdef-0000-000000000001');
+      assert.dom(item).doesNotContainText('01234567-89ab-cdef-0000-000000000001/');
+    }
+
+    assert.dom('.list-group-item').containsText('test.ann', 'under the name the submission will hold it by');
 
     await click('button.px-5[type="submit"]');
 

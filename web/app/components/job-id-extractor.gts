@@ -110,9 +110,7 @@ export default class JobIdExtractorComponent extends Component<Signature> {
 
       {{#if this.files.length}}
         <ExtractedFiles @files={{this.files}} @crossoverErrors={{@crossoverErrors}} as |file errors|>
-          <SubmissionFileItem @file={{file}} @errors={{errors}}>
-            <:prefix>{{file.jobId}}/</:prefix>
-          </SubmissionFileItem>
+          <SubmissionFileItem @file={{file}} @errors={{errors}} />
         </ExtractedFiles>
       {{/if}}
     </div>

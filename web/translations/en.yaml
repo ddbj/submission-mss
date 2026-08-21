@@ -233,6 +233,7 @@ file-list:
     contact-person: Contact person
     hold-date: Hold date
     entries-count: Number of entries
+    job-id: Source job
     remove: Remove
 
 upload-progress-modal:
