@@ -41,6 +41,23 @@ class CopySubmissionFilesJobTest < ActiveJob::TestCase
     assert_equal 'file',      dir.join('example.ann').ftype
   end
 
+  test 'running again over files already in place' do
+    extraction = dfast_extractions(:alice_dfast_extraction)
+
+    extraction.working_dir.mkpath
+    extraction.files.create!(name: 'example.ann', dfast_job_id: 'job-1', parsing: false)
+
+    extraction.working_dir.join('example.ann').write "COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n"
+
+    upload = Upload.create!(submission: @submission, via: DfastUpload.new(extraction:), created_at: '2022-03-04 01:02:03')
+
+    2.times do
+      CopySubmissionFilesJob.perform_now upload
+    end
+
+    assert_equal ['example.ann'], Dir.glob('*', base: upload.files_dir)
+  end
+
   test 'trim whitespace from contact fields in annotation files' do
     ann_content = <<~TSV
       COMMON\tSUBMITTER\t\tcontact\t Alice Liddell
