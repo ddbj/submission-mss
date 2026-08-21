@@ -379,6 +379,9 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+        '422':
+          $ref: '#/components/responses/UnprocessableContent'
+
   /dfast_extractions:
     post:
       description: Create a DFAST extraction.

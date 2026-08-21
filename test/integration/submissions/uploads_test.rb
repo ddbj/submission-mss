@@ -58,6 +58,18 @@ class Submissions::UploadsTest < ActionDispatch::IntegrationTest
     assert_no_enqueued_jobs
   end
 
+  test 'create with a payload we cannot make an upload out of' do
+    post "/api/submissions/#{submissions(:alice_submission).mass_id}/uploads", params: {
+      upload: {
+        via: 'dfast'
+      }
+    }, as: :json
+
+    assert_conform_schema 422
+
+    assert_no_enqueued_jobs
+  end
+
   private
 
   def post_upload(extraction)
