@@ -50,8 +50,11 @@ class UploadFile {
       this.file.rawFile,
       ENV.directUploadURL,
       {
+        // Not routed through the request manager, so the session cookie and
+        // the token that says the write came from us have to be asked for here.
         directUploadWillCreateBlobWithXHR: (xhr: XMLHttpRequest) => {
-          xhr.setRequestHeader('Authorization', `Bearer ${currentUser.token}`);
+          xhr.withCredentials = true;
+          xhr.setRequestHeader('X-CSRF-Token', currentUser.csrfToken!);
         },
 
         directUploadWillStoreFileWithXHR: (xhr: XMLHttpRequest) => {

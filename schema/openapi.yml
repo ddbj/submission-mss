@@ -28,14 +28,35 @@ paths:
               schema:
                 type: object
                 additionalProperties: false
-                required: [uid]
+                required: [uid, csrf_token]
 
                 properties:
                   uid:
                     type: string
 
+                  csrf_token:
+                    type: string
+                    description: Send back as X-CSRF-Token on every request that writes
+
         '401':
           $ref: '#/components/responses/Unauthorized'
+
+  /session:
+    delete:
+      description: Sign out, discarding the session.
+
+      tags:
+        - Authentication
+
+      responses:
+        '204':
+          description: Signed out.
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+        '422':
+          $ref: '#/components/responses/UnprocessableContent'
 
   /submissions:
     get:

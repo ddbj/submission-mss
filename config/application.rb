@@ -47,7 +47,23 @@ module MSSForm
     config.mission_control.jobs.base_controller_class = 'ActionController::Base'
     config.time_zone                                  = 'Asia/Tokyo'
 
+    # An API-only application is not given a session, and this one needs one: it
+    # is the whole of a submitter's credential. The options go here rather than
+    # in config.session_options, which is read by the stack we do not have.
+    # OmniAuth is added after this and has to be, since it writes the session
+    # before sending the visitor to the provider.
+    #
+    # HttpOnly keeps the cookie away from any script that finds its way onto the
+    # page, Lax keeps it off cross-site writes, and the expiry is carried inside
+    # the encrypted cookie, so it holds however the browser is persuaded to keep
+    # sending it.
     config.middleware.use ActionDispatch::Cookies
-    config.middleware.use ActionDispatch::Session::CookieStore
+
+    config.middleware.use ActionDispatch::Session::CookieStore, **{
+      key:          '_mssform',
+      httponly:     true,
+      same_site:    :lax,
+      expire_after: 12.hours
+    }
   end
 end

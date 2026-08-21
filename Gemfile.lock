@@ -514,7 +514,6 @@ DEPENDENCIES
   googleauth
   jb
   json
-  jwt
   kamal
   minitest
   minitest-default_http_header

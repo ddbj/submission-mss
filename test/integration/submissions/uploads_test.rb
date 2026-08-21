@@ -5,8 +5,7 @@ class Submissions::UploadsTest < ActionDispatch::IntegrationTest
 
   setup do
     @user = users(:alice)
-
-    default_headers['Authorization'] = "Bearer #{@user.token}"
+    sign_in @user
   end
 
   test 'create' do

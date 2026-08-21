@@ -29,6 +29,8 @@ export interface paths {
                     content: {
                         "application/json": {
                             uid: string;
+                            /** @description Send back as X-CSRF-Token on every request that writes */
+                            csrf_token: string;
                         };
                     };
                 };
@@ -38,6 +40,42 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/session": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** @description Sign out, discarding the session. */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Signed out. */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                401: components["responses"]["Unauthorized"];
+                422: components["responses"]["UnprocessableContent"];
+            };
+        };
         options?: never;
         head?: never;
         patch?: never;

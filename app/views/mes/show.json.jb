@@ -1,3 +1,8 @@
 {
-  uid: @user.uid
+  uid: @user.uid,
+
+  # The frontend has to send this back on every write. It is the one thing a
+  # cross-site page cannot obtain: reading it takes a request the browser will
+  # only let our own origin make.
+  csrf_token: form_authenticity_token
 }
