@@ -44,6 +44,13 @@ class GgsExtraction < ApplicationRecord
       end
 
       unarchive_and_copy_files(merged, working_dir.join(job_id)) do |name|
+        # Each job keeps its files to itself here, but a submission copies them
+        # all into one directory, where one would overwrite the other. Name the
+        # job the file clashes with: it is not in front of the submitter.
+        if other = files.find_by(name:)
+          raise Extraction::Error.new(:duplicate_file_name, job_id:, reason: "duplicate file name: #{name} (already imported from job #{other.ggs_job_id})")
+        end
+
         files.create!(name:, parsing: true, ggs_job_id: job_id)
       end
     end
