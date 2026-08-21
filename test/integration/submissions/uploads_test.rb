@@ -10,6 +10,8 @@ class Submissions::UploadsTest < ActionDispatch::IntegrationTest
 
   test 'create' do
     extraction = @user.dfast_extractions.create!(dfast_job_ids: ['job-1'], state: 'fulfilled')
+
+    extraction.files.create!(name: 'test.ann', dfast_job_id: 'job-1', parsing: false)
     submission = submissions(:alice_submission)
 
     post "/api/submissions/#{submission.mass_id}/uploads", params: {
