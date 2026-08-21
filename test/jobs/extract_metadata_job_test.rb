@@ -285,8 +285,10 @@ class ExtractMetadataJobTest < ActiveJob::TestCase
     assert_equal 'invalid_archive', @extraction.error['id']
     assert_match(/\Azzz\.tar: /, @extraction.error['reason'])
 
-    # aaa.ann is copied before zzz.tar fails; the rejection must keep no files.
+    # aaa.ann is copied before zzz.tar fails; the rejection must keep no files,
+    # on disk no more than in the database.
     assert_empty @extraction.files
+    assert_not @extraction.working_dir.exist?
   end
 
   test 'archive: unreadable file (broken symlink)' do

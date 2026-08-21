@@ -31,6 +31,30 @@ class GgsExtractionTest < ActiveSupport::TestCase
     assert files.all? { _1.fullpath.exist? }
   end
 
+  test 'prepare_files rejects the same file name coming from two jobs' do
+    job_ids = ['01234567-89ab-cdef-0000-000000000001', '01234567-89ab-cdef-0000-000000000002']
+
+    job_ids.each do |job_id|
+      dir = output_dir(job_id)
+
+      dir.join('foo.ann').write "COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n"
+      dir.join('foo.fa').write  ">CLN01\nACGT\n"
+    end
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: job_ids)
+
+    # They sit under their own job here, but the submission they are copied to
+    # holds them in one directory.
+    error = assert_raises(Extraction::Error) { extraction.prepare_files }
+
+    assert_equal :duplicate_file_name, error.id
+    assert_equal job_ids.last, error.data[:job_id]
+    assert_equal "duplicate file name: foo.ann (already imported from job #{job_ids.first})", error.data[:reason]
+
+    # The name is turned down before the file it names is copied.
+    assert_not extraction.working_dir.join(job_ids.last, 'foo.ann').exist?
+  end
+
   test 'prepare_files prefers output/fixed/ over output/ for the same file name' do
     job_id = '01234567-89ab-cdef-0000-000000000001'
     dir    = output_dir(job_id)
@@ -49,6 +73,28 @@ class GgsExtractionTest < ActiveSupport::TestCase
     assert_equal %w[foo.ann foo.fa], files.map(&:name)
     assert_equal "COMMON\tSUBMITTER\t\tcontact\tFixed\n", files.first.fullpath.read
     assert_equal ">fixed\nACGT\n",                        files.last.fullpath.read
+  end
+
+  test 'prepare_files prefers output/fixed/ when only one of the two is compressed' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    dir    = output_dir(job_id)
+    fixed  = dir.join('fixed').tap(&:mkpath)
+
+    dir.join('foo.fa').write ">output\nACGT\n"
+
+    Zlib::GzipWriter.open(fixed.join('foo.fa.gz')) do |gz|
+      gz.write ">fixed\nACGT\n"
+    end
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id])
+    extraction.prepare_files
+
+    # The two are the same file under different names, so taking both would
+    # have them collide the moment the compressed one is expanded.
+    file = extraction.files.sole
+
+    assert_equal 'foo.fa',         file.name
+    assert_equal ">fixed\nACGT\n", file.fullpath.read
   end
 
   test 'prepare_files prefers output/fixed/ even when the output/ files are read-only' do
@@ -147,11 +193,11 @@ class GgsExtractionTest < ActiveSupport::TestCase
     job1 = '01234567-89ab-cdef-0000-000000000001'
     job2 = '01234567-89ab-cdef-0000-000000000002'
 
-    [job1, job2].each do |job_id|
+    {job1 => 'foo', job2 => 'bar'}.each do |job_id, basename|
       dir = output_dir(job_id)
 
-      dir.join('genome.ann').write "COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n"
-      dir.join('genome.fa').write  ">CLN01\nACGT\n"
+      dir.join("#{basename}.ann").write "COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n"
+      dir.join("#{basename}.fa").write  ">CLN01\nACGT\n"
     end
 
     extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job1, job2])
@@ -159,6 +205,9 @@ class GgsExtractionTest < ActiveSupport::TestCase
 
     assert_equal 4, extraction.files.count
     assert_equal [job1, job1, job2, job2], extraction.files.order(:ggs_job_id, :name).map(&:ggs_job_id)
+
+    assert_equal [job1, job2], extraction.working_dir.children.map { _1.basename.to_s }.sort
+    assert extraction.files.all? { _1.fullpath.exist? }
   end
 
   test 'prepare_files raises when the job output directory is missing' do

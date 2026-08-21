@@ -108,8 +108,12 @@ module ArchiveExtraction
       raise Extraction::Error.new(:unreadable_file, reason: "#{src}: #{detail}")
     end
 
-    FileUtils.cp source, dest
-
+    # Record the file before copying it, so a caller that turns the name down
+    # is not paid for in bytes first. Nothing is left half-done either way:
+    # prepare_files runs in a transaction, and a rejected extraction has its
+    # working directory removed.
     build.call name
+
+    FileUtils.cp source, dest
   end
 end
