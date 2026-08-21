@@ -25,8 +25,12 @@ Rails.application.configure do
   # Render exception templates for rescuable exceptions and raise for other exceptions.
   config.action_dispatch.show_exceptions = :rescuable
 
-  # Disable request forgery protection in test environment.
-  config.action_controller.allow_forgery_protection = false
+  # Left on, against the usual advice: the frontend sends the token on every
+  # write, so the tests should go through the protection rather than around it.
+  # Turning it off here would only reach ActionController::Base anyway -- the
+  # API controllers include RequestForgeryProtection after this is applied, and
+  # take its default.
+  config.action_controller.allow_forgery_protection = true
 
   # Store uploaded files on the local file system in a temporary directory.
   config.active_storage.service = :test

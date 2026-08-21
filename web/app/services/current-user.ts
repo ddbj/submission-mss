@@ -4,25 +4,27 @@ import { tracked } from '@glimmer/tracking';
 import type { paths } from 'schema/openapi';
 import type { RequestManager } from '@warp-drive/core';
 import type RouterService from '@ember/routing/router-service';
-import type Transition from '@ember/routing/transition';
+
+type Me = paths['/me']['get']['responses']['200']['content']['application/json'];
 
 export default class CurrentUserService extends Service {
   @service declare requestManager: RequestManager;
   @service declare router: RouterService;
 
-  @tracked token?: string;
   @tracked uid?: string;
 
-  previousTransition?: Transition;
+  // Sent back on every request that writes. The session itself is a cookie the
+  // browser attaches on its own, and one this never sees.
+  csrfToken?: string;
 
   get isLoggedIn() {
-    return Boolean(this.token);
+    return Boolean(this.uid);
   }
 
-  ensureLogin(transition: Transition) {
+  // Nothing is remembered of where they were headed: signing in leaves the
+  // application entirely and comes back to a fresh one.
+  ensureLogin() {
     if (this.isLoggedIn) return;
-
-    this.previousTransition = transition;
 
     this.router.transitionTo('index');
   }
@@ -33,47 +35,42 @@ export default class CurrentUserService extends Service {
     this.router.transitionTo('home');
   }
 
-  async login(token: string) {
-    this.clear();
-    localStorage.setItem('token', token);
+  async logout() {
+    try {
+      await this.requestManager.request({ url: '/session', method: 'DELETE' });
 
-    await this.restore();
-
-    if (this.previousTransition) {
-      this.previousTransition.retry();
-      this.previousTransition = undefined;
-    } else {
-      this.router.transitionTo('index');
+      this.forget();
+    } catch {
+      // A session the server has already forgotten is the outcome asked for,
+      // and answering 401 is how it says so -- which the handler chain has
+      // already acted on by the time it reaches here.
     }
   }
 
-  logout() {
+  // Asking who is signed in is also how a session that has run out is found:
+  // there is nothing here to inspect, only the server's answer.
+  async restore() {
+    if (this.isLoggedIn) return;
+
+    try {
+      const { content } = await this.requestManager.request<Me>({ url: '/me' });
+
+      this.uid = content.uid;
+      this.csrfToken = content.csrf_token;
+    } catch {
+      this.clear();
+    }
+  }
+
+  // The session ended somewhere other than here -- it ran out, or it was ended
+  // elsewhere. Nothing to tell the server; it already knows.
+  forget() {
     this.clear();
-    localStorage.removeItem('token');
 
     this.router.transitionTo('index');
   }
 
-  async restore() {
-    if (this.isLoggedIn) return;
-
-    this.token = localStorage.getItem('token') || undefined;
-
-    if (!this.isLoggedIn) {
-      this.clear();
-      return;
-    }
-
-    type Me = paths['/me']['get']['responses']['200']['content']['application/json'];
-
-    const { content } = await this.requestManager.request<Me>({
-      url: '/me',
-    });
-
-    this.uid = content.uid;
-  }
-
   clear() {
-    this.token = this.uid = undefined;
+    this.uid = this.csrfToken = undefined;
   }
 }

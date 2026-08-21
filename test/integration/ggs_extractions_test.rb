@@ -2,7 +2,7 @@ require 'test_helper'
 
 class GgsExtractionsTest < ActionDispatch::IntegrationTest
   setup do
-    default_headers['Authorization'] = "Bearer #{users(:alice).token}"
+    sign_in users(:alice)
   end
 
   test 'create' do

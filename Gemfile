@@ -12,7 +12,6 @@ gem 'google-apis-sheets_v4'
 gem 'googleauth'
 gem 'jb'
 gem 'json'
-gem 'jwt'
 gem 'kamal', require: false
 gem 'mission_control-jobs'
 gem 'multi_json' # google-apis-sheets_v4

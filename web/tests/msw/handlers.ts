@@ -7,10 +7,10 @@ import { http } from './http';
 const directUploadURL = ENV.directUploadURL;
 
 export const handlers = [
+  // Nobody is signed in until a test says so: the session lives in a cookie,
+  // and this is the only place the application can learn of one.
   http.get('/me', ({ response }) => {
-    return response(200).json({
-      uid: 'test-user',
-    });
+    return response(401).empty();
   }),
 
   mswHttp.post(directUploadURL, () => {

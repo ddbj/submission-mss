@@ -10,11 +10,17 @@ export default class ErrorModalHandler {
     try {
       return await next(context.request);
     } catch (e) {
-      if (!context.request.suppressErrorModal) {
+      // Nobody being signed in is not something to put in front of the visitor:
+      // the application answers it by showing them the way in.
+      if (!isUnauthorized(e) && !context.request.options?.['suppressErrorModal']) {
         this.errorModal.show(e as Error);
       }
 
       throw e;
     }
   }
+}
+
+function isUnauthorized(error: unknown) {
+  return typeof error === 'object' && error !== null && 'status' in error && error.status === 401;
 }

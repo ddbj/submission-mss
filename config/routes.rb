@@ -5,7 +5,8 @@ Rails.application.routes.draw do
   get 'auth/failure',            to: 'sessions#failure'
 
   scope :api, defaults: {format: :json} do
-    resource :me, only: %i[show]
+    resource :me,      only: %i[show]
+    resource :session, only: %i[destroy]
 
     resources :submissions, only: %i[index show create], param: :mass_id do
       collection do

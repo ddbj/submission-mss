@@ -8,7 +8,7 @@ export default class HomeIndexController extends Controller {
   @service declare currentUser: CurrentUserService;
 
   @action
-  logout() {
-    this.currentUser.logout();
+  async logout() {
+    await this.currentUser.logout();
   }
 }

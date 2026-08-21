@@ -16,12 +16,11 @@ module.exports = function (environment) {
   //
   // In development the Ember and Rails servers run on separate origins, so we
   // honour APP_URL and fall back to the default Puma port.
-  const appURL =
-    environment === 'development'
-      ? process.env.APP_URL || 'http://localhost:3000'
-      : environment === 'test'
-        ? 'http://localhost:3000'
-        : '';
+  //
+  // Tests are served from the same origin they call, as production is. The
+  // session travels in a cookie, and a cookie only crosses an origin the other
+  // side has named -- something a mocked response is in no position to do.
+  const appURL = environment === 'development' ? process.env.APP_URL || 'http://localhost:3000' : '';
 
   const ENV = {
     modulePrefix: 'mssform',
