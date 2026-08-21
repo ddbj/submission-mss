@@ -19,6 +19,8 @@ class SubmissionsTest < ActionDispatch::IntegrationTest
   test 'create' do
     extraction = @user.dfast_extractions.create!(dfast_job_ids: ['job-1'], state: 'fulfilled')
 
+    extraction.files.create!(name: 'test.ann', dfast_job_id: 'job-1', parsing: false)
+
     post '/api/submissions', params: {
       submission: {
         tpa:            false,

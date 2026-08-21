@@ -31,6 +31,30 @@ class ExtractionUploadTest < ActiveSupport::TestCase
     end
   end
 
+  test 'from_params turns down an extraction whose files have been swept up' do
+    extraction = dfast_extractions(:alice_dfast_extraction)
+
+    extraction.update! state: 'fulfilled'
+
+    # It is still fulfilled and still theirs; there is simply nothing left of it
+    # to copy, and copying nothing is what says an upload is done.
+    assert_raises Upload::Malformed do
+      DfastUpload.from_params(user: users(:alice), extraction_id: extraction.id)
+    end
+  end
+
+  test 'a copy with nothing left to copy is not taken for a finished one' do
+    submission = submissions(:alice_submission)
+    extraction = dfast_extractions(:alice_dfast_extraction)
+    upload     = submission.uploads.create!(via: DfastUpload.new(extraction:))
+
+    # Swept up between the upload being made and the job running. An empty
+    # directory renamed into place cannot be told from a full one afterwards.
+    assert_raises(RuntimeError) { upload.via.copy_files_to_submissions_dir }
+
+    assert_not upload.files_dir.exist?
+  end
+
   test 'from_params turns down a request that names no extraction' do
     assert_raises Upload::Malformed do
       DfastUpload.from_params(user: users(:alice))
@@ -83,8 +107,19 @@ class ExtractionUploadTest < ActiveSupport::TestCase
       DfastUpload         => dfast_extractions(:alice_dfast_extraction),
       GgsUpload           => ggs_extractions(:alice_ggs_extraction),
       MassDirectoryUpload => mass_directory_extractions(:alice_mass_directory_extraction)
-    }.each_value {
-      _1.update! state: 'fulfilled'
+    }.each_value {|extraction|
+      extraction.update! state: 'fulfilled'
+
+      # An extraction with nothing in it is one whose files have been swept up,
+      # and is turned down for that.
+      extraction.files.create!(name: 'test.ann', parsing: false, **job_id_for(extraction))
     }
+  end
+
+  # Only GGS and DFAST tag a file with the job it came from.
+  def job_id_for(extraction)
+    column = extraction.files.build.attribute_names.grep(/_job_id\z/).first
+
+    column ? {column => '01234567-89ab-cdef-0000-000000000001'} : {}
   end
 end

@@ -11,7 +11,14 @@ module ExtractionUpload
     def from_params(user:, extraction_id: nil, **)
       raise Upload::Malformed, 'extraction_id is missing' if extraction_id.blank?
 
-      new(extraction: extraction_class.fulfilled.where(user:).find(extraction_id))
+      extraction = extraction_class.fulfilled.where(user:).find(extraction_id)
+
+      # Swept up since the submitter last looked at it. Left alone this would
+      # copy an empty directory into place, and that copy is what says the
+      # upload is done: the submission would be finished and empty.
+      raise Upload::Malformed, "extraction #{extraction_id} has no files" if extraction.files.empty?
+
+      new(extraction:)
     end
 
     def extraction_class = reflect_on_association(:extraction).klass
@@ -19,6 +26,10 @@ module ExtractionUpload
 
   def copy_files_to_submissions_dir
     stage_files do |work|
+      # Swept up between the upload being made and this running. Copying nothing
+      # looks exactly like copying everything from here on, so say so instead.
+      raise "#{extraction.class.name} #{extraction.id} has no files to copy" if extraction.files.empty?
+
       extraction.files.find_each do |file|
         FileUtils.cp file.fullpath, work
       end

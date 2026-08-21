@@ -1,10 +1,18 @@
-# production:
-#   periodic_cleanup:
-#     class: CleanSoftDeletedRecordsJob
-#     queue: background
-#     args: [ 1000, { batch_size: 500 } ]
-#     schedule: every hour
-#   periodic_command:
-#     command: "SoftDeletedRecord.due.delete_all"
-#     priority: 2
-#     schedule: at 5am every day
+production: &production
+  # Both sweep up after what a submitter left behind: the files an extraction
+  # gathered, and the blobs a direct upload made for an application that was
+  # never sent. Overnight, when neither is likely to be in the middle of use,
+  # and behind everything else in the queue -- a backlog of them must not keep
+  # a submitter's own upload waiting.
+  purge_extractions:
+    class: PurgeExtractionsJob
+    priority: 10
+    schedule: at 4am every day
+
+  purge_unattached_uploads:
+    class: PurgeUnattachedUploadsJob
+    priority: 10
+    schedule: at 4:30am every day
+
+staging:
+  <<: *production

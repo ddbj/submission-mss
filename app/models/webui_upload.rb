@@ -4,14 +4,15 @@ class WebuiUpload < ApplicationRecord
   has_many_attached :files
 
   # The signed IDs come from a direct upload this submitter just made, so an
-  # empty list means nothing was uploaded, and one we cannot verify was never
-  # issued by us. Neither leaves anything to copy.
+  # empty list means nothing was uploaded; one we cannot verify was never issued
+  # by us; and one whose blob has since been swept up as unattached is a request
+  # that sat for days. None of them leaves anything to copy.
   def self.from_params(files: nil, **)
     raise Upload::Malformed, 'files is missing' if files.blank?
 
     new(files:)
-  rescue ActiveSupport::MessageVerifier::InvalidSignature
-    raise Upload::Malformed, 'files holds a signed ID we did not issue'
+  rescue ActiveSupport::MessageVerifier::InvalidSignature, ActiveRecord::RecordNotFound
+    raise Upload::Malformed, 'files holds a signed ID we cannot make a file out of'
   end
 
   def copy_files_to_submissions_dir
