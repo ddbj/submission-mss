@@ -1,3 +1,5 @@
 alice_upload:
-  submission: alice_submission
-  via:        one (WebuiUpload)
+  submission:     alice_submission
+  via:            one (WebuiUpload)
+  created_at:     2022-01-02 12:34:56
+  files_dir_name: 20220102-123456
