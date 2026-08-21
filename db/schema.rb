@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_28_030629) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_21_023312) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -91,7 +91,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_28_030629) do
     t.string "name", null: false
     t.jsonb "parsed_data"
     t.boolean "parsing", null: false
-    t.index ["extraction_id", "ggs_job_id", "name"], name: "idx_on_extraction_id_ggs_job_id_name_dc6e405a2b", unique: true
+    t.index ["extraction_id", "name"], name: "index_ggs_extraction_files_on_extraction_id_and_name", unique: true
     t.index ["extraction_id"], name: "index_ggs_extraction_files_on_extraction_id"
   end
 

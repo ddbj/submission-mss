@@ -55,6 +55,20 @@ class GgsExtractionTest < ActiveSupport::TestCase
     assert_not extraction.working_dir.join(job_ids.last, 'foo.ann').exist?
   end
 
+  test 'the database refuses the same file name whichever job brought it' do
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: ['01234567-89ab-cdef-0000-000000000001'])
+
+    extraction.files.create!(name: 'foo.fa', parsing: false, ggs_job_id: '01234567-89ab-cdef-0000-000000000001')
+
+    # prepare_files turns this down first; the index is what stops a path that
+    # ever forgets to.
+    assert_raises ActiveRecord::RecordNotUnique do
+      extraction.files.create!(name: 'foo.fa', parsing: false, ggs_job_id: '01234567-89ab-cdef-0000-000000000002')
+    end
+
+    assert_equal 1, extraction.files.count
+  end
+
   test 'prepare_files prefers output/fixed/ over output/ for the same file name' do
     job_id = '01234567-89ab-cdef-0000-000000000001'
     dir    = output_dir(job_id)
