@@ -32,6 +32,19 @@ class CopySubmissionFilesJobTest < ActiveJob::TestCase
     )
   end
 
+  # The job reads the upload back from the database, so the blob it downloads
+  # is not one this test holds: stand in for all of them. Attachment delegates
+  # what it does not have to its blob, which is where download really lives.
+  def stub_download(replacement)
+    original = ActiveStorage::Blob.instance_method(:download)
+
+    ActiveStorage::Blob.define_method(:download, &replacement)
+
+    yield
+  ensure
+    ActiveStorage::Blob.define_method(:download, original)
+  end
+
   test 'copies files to submissions dir' do
     CopySubmissionFilesJob.perform_now @upload
 
@@ -56,6 +69,60 @@ class CopySubmissionFilesJobTest < ActiveJob::TestCase
     end
 
     assert_equal ['example.ann'], Dir.glob('*', base: upload.files_dir)
+  end
+
+  test 'a copy that broke down on the way is tried again' do
+    extraction = dfast_extractions(:alice_dfast_extraction)
+
+    extraction.working_dir.mkpath
+    extraction.files.create!(name: 'example.ann', dfast_job_id: 'job-1', parsing: false)
+    extraction.working_dir.join('example.ann').write "COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n"
+
+    upload   = Upload.create!(submission: @submission, via: DfastUpload.new(extraction:), created_at: '2022-05-06 07:08:09')
+    attempts = 0
+
+    cp = ->(*args) {
+      attempts += 1
+
+      raise Errno::EIO if attempts == 1
+
+      FileUtils.copy(*args)
+    }
+
+    # Until this has run the blobs are the only copy of what the submitter
+    # sent, and nothing else comes for them: a disk that hiccups once must not
+    # be the end of it.
+    perform_enqueued_jobs do
+      FileUtils.stub :cp, cp do
+        CopySubmissionFilesJob.perform_later upload
+      end
+    end
+
+    assert_equal 2, attempts
+    assert_equal ['example.ann'], Dir.glob('*', base: upload.files_dir)
+  end
+
+  test 'a download the storage could not answer is tried again' do
+    attempts = 0
+
+    # What SeaweedFS answering while it restarts arrives as -- neither a
+    # SystemCallError nor a networking error. Named here as well as in the job,
+    # so that the job failing to load for want of the constant is a test
+    # failure rather than every upload breaking.
+    stub_download ->(&block) {
+      attempts += 1
+
+      raise Aws::S3::Errors::ServiceUnavailable.new(nil, 'try later') if attempts == 1
+
+      block.call "COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n"
+    } do
+      perform_enqueued_jobs do
+        CopySubmissionFilesJob.perform_later @upload
+      end
+    end
+
+    assert_equal 2, attempts
+    assert_equal ['example.ann'], Dir.glob('*', base: @upload.files_dir)
   end
 
   test 'trim whitespace from contact fields in annotation files' do

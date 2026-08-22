@@ -14,5 +14,13 @@ production: &production
     priority: 10
     schedule: at 4:30am every day
 
+  # Not a sweep: a look for uploads whose files never arrived. Until the copy
+  # has run, the blobs are the only copy the submitter has left with us, and
+  # nothing else says it has not.
+  report_uncopied_uploads:
+    class: ReportUncopiedUploadsJob
+    priority: 10
+    schedule: at 5am every day
+
 staging:
   <<: *production
