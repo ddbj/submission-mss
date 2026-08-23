@@ -35,8 +35,15 @@ class Upload < ApplicationRecord
   # background, in one move, so until that has happened the names are known
   # only where they came from.
   #
+  # Everything in the directory, rather than everything with a dot in its name,
+  # and in an order rather than the one the directory happens to hold them in.
+  # Only the staging writes there and it writes the files as they were sent, so
+  # what is in there is what the upload consists of -- extension or no, leading
+  # dot or no.
   def file_names
-    Dir.glob('*.*', base: files_dir).presence || via.source_file_names
+    names = files_dir.exist? ? Dir.children(files_dir).sort : []
+
+    names.presence || via.source_file_names
   end
 
   def files_dir
