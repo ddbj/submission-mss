@@ -1,4 +1,11 @@
 class WorkingList
+  # The submission is listed when it is first sent, so a row that is not there
+  # when another upload arrives means that listing did not happen. Said the same
+  # way every time, and the submission named in the job's own context rather
+  # than in the sentence -- which would otherwise be one thing to answer for per
+  # submission, none of them saying what went wrong.
+  class MissingRow < StandardError; end
+
   def self.instance
     @instance ||= begin
       config = Rails.application.config_for(:working_list)
@@ -48,10 +55,10 @@ class WorkingList
   def update_data_arrival_date(submission)
     row = find_row_number_by_mass_id(submission.mass_id)
 
-    raise submission.mass_id unless row
+    raise MissingRow, 'the working list has no row for this submission' unless row
 
     range = Google::Apis::SheetsV4::ValueRange.new(values: [
-      [to_row(submission).fetch(:data_arrival_date)]
+      [data_arrival_date(submission)]
     ])
 
     Retriable.with_context :google do
@@ -59,6 +66,14 @@ class WorkingList
         value_input_option: 'RAW'
       }
     end
+  end
+
+  # Every directory the submission has been handed files in, which is what the
+  # curator reads as the date the data arrived. Its own method because the row
+  # around it is a dozen more queries and a submission this one is the only part
+  # of that is wanted.
+  def data_arrival_date(submission)
+    submission.uploads.map(&:files_dir_name).join('; ')
   end
 
   def to_row(submission)
@@ -74,11 +89,11 @@ class WorkingList
       other_person:               submission.other_people.order(:position).map(&:email_address_with_name).join('; '),
       dway_account:               submission.user.uid,
       dway_account_email:         submission.user.email,
-      data_arrival_date:          submission.uploads.map(&:files_dir_name).join('; '),
+      data_arrival_date:          data_arrival_date(submission),
       check_start_date:           nil,
       finish_date:                nil,
       sequencer:                  submission.sequencer_text,
-      upload_via:                 submission.uploads.first.via_ident,
+      upload_via:                 submission.uploads.first&.via_ident,
       hup:                        submission.hold_date || 'non-HUP',
       tpa:                        submission.tpa?,
       data_type:                  submission.data_type.upcase,

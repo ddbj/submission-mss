@@ -1,9 +1,18 @@
-# Both sweep up after what a submitter left behind: the files an extraction
-# gathered, and the blobs a direct upload made for an application that was never
-# sent. Overnight, when neither is likely to be in the middle of use, and behind
-# everything else in the queue -- a backlog of them must not keep a submitter's
-# own upload waiting.
+# All three sweep up after something that was left: the files a copy had
+# gathered when it was stopped, the files an extraction gathered for a submitter
+# to look over, and the blobs a direct upload made for an application that was
+# never sent. Overnight, when none of them is likely to be in the middle of use,
+# and behind everything else in the queue -- a backlog of them must not keep a
+# submitter's own upload waiting.
 sweeps: &sweeps
+  # What a copy had gathered when it was stopped part way through. It clears up
+  # after itself when it is given the chance; a container killed mid-copy is not
+  # a chance.
+  purge_abandoned_staging:
+    class: PurgeAbandonedStagingJob
+    priority: 10
+    schedule: at 3:30am every day
+
   purge_extractions:
     class: PurgeExtractionsJob
     priority: 10
