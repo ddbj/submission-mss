@@ -1,13 +1,6 @@
 class WebuiUpload < ApplicationRecord
   include UploadVia
 
-  # Said two things at once and could only be seen from here, so both moved:
-  # whether the files were copied is on the upload now, and whether the blobs
-  # were let go is asked of the attachments. Ignored rather than dropped, so
-  # that the containers still serving during the deploy that stops writing it
-  # are not inserting a column this one has taken away.
-  self.ignored_columns = %i[copied]
-
   has_many_attached :files
 
   # The signed IDs come from a direct upload this submitter just made, so an
