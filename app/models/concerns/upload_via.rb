@@ -30,7 +30,7 @@ module UploadVia
       # Named after the upload rather than the directory it is bound for, which
       # is settled while the upload is being made: this runs long afterwards,
       # and asks nothing of what it was settled to be.
-      work = submission.root_dir.join("../.work/#{submission.mass_id}-#{upload.id}")
+      work = Submission.staging_dir.join("#{submission.mass_id}-#{upload.id}")
       work.mkpath
 
       begin

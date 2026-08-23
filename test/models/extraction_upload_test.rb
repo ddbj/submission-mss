@@ -95,7 +95,7 @@ class ExtractionUploadTest < ActiveSupport::TestCase
 
     # Nor aside, where the half of them that were copied would be moved into
     # place along with the next attempt's own.
-    assert_empty Dir.glob('*', base: submission.root_dir.join('../.work'))
+    assert_empty Dir.glob('*', base: Submission.staging_dir)
   end
 
   private

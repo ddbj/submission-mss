@@ -27,6 +27,13 @@ class Submission < ApplicationRecord
     @submissions_dir ||= Pathname.new(Rails.application.config_for(:app).submissions_dir!)
   end
 
+  # Where an upload's files are gathered before they are moved into place, off
+  # to one side of the submissions themselves so that a directory half filled is
+  # never anywhere a curator or a submitter is looking.
+  def self.staging_dir
+    submissions_dir.join('.work')
+  end
+
   def root_dir
     Submission.submissions_dir.join(mass_id)
   end
