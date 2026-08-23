@@ -17,31 +17,39 @@ module UploadVia
   # curator it is handed to, nor by the submitter, who is told what the upload
   # holds from where it came from until it is there.
   #
-  # That move is also what records the copy: a job asked to do it again finds
-  # the directory and leaves it be. Without this a retry renamed onto a full
-  # directory, which fails with ENOTEMPTY however often it is tried.
+  # A job asked to do it again finds the directory and leaves it be. Without
+  # this a retry renamed onto a full directory, which fails with ENOTEMPTY
+  # however often it is tried.
+  #
+  # The handover is written down here, where every way of arriving passes
+  # through -- including the way through that skips the move, so that an upload
+  # whose copy landed but whose job died on the way out is put right by being
+  # asked again.
   def stage_files
-    return if upload.files_dir.exist?
+    unless upload.files_dir.exist?
+      # Named after the upload rather than the directory it is bound for, which
+      # is settled while the upload is being made: this runs long afterwards,
+      # and asks nothing of what it was settled to be.
+      work = submission.root_dir.join("../.work/#{submission.mass_id}-#{upload.id}")
+      work.mkpath
 
-    # Named after the upload rather than the directory it is bound for, which
-    # is settled while the upload is being made: this runs long afterwards, and
-    # asks nothing of what it was settled to be.
-    work = submission.root_dir.join("../.work/#{submission.mass_id}-#{upload.id}")
-    work.mkpath
+      begin
+        yield work
 
-    begin
-      yield work
+        trim_annotation_fields! work
 
-      trim_annotation_fields! work
-
-      upload.files_dir.dirname.mkpath
-      work.rename upload.files_dir
-    ensure
-      # The move takes this with it, so anything left is from an attempt that
-      # broke down. Clear it out: it would otherwise sit here for good, and the
-      # next attempt would move whatever it holds along with its own files.
-      work.rmtree if work.exist?
+        upload.files_dir.dirname.mkpath
+        work.rename upload.files_dir
+      ensure
+        # The move takes this with it, so anything left is from an attempt that
+        # broke down. Clear it out: it would otherwise sit here for good, and
+        # the next attempt would move whatever it holds along with its own
+        # files.
+        work.rmtree if work.exist?
+      end
     end
+
+    upload.update! copied_at: Time.current unless upload.copied_at?
   end
 
   def trim_annotation_fields!(dir)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_22_033644) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_23_143111) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -166,6 +166,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_22_033644) do
   end
 
   create_table "uploads", force: :cascade do |t|
+    t.datetime "copied_at"
     t.datetime "created_at", null: false
     t.string "files_dir_name", null: false
     t.bigint "submission_id", null: false

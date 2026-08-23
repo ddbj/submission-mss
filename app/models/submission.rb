@@ -21,10 +21,14 @@ class Submission < ApplicationRecord
     last ? last.mass_id.delete_prefix('NSUB').to_i : 0
   end
 
-  def root_dir
-    dir = Rails.application.config_for(:app).submissions_dir!
+  # Read once. config_for parses the file afresh on every call, and the nightly
+  # look over every upload ever made asks each of them where its files are.
+  def self.submissions_dir
+    @submissions_dir ||= Pathname.new(Rails.application.config_for(:app).submissions_dir!)
+  end
 
-    Pathname.new(dir).join(mass_id)
+  def root_dir
+    Submission.submissions_dir.join(mass_id)
   end
 
   def upload_disabled?

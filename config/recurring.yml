@@ -1,9 +1,9 @@
-production: &production
-  # Both sweep up after what a submitter left behind: the files an extraction
-  # gathered, and the blobs a direct upload made for an application that was
-  # never sent. Overnight, when neither is likely to be in the middle of use,
-  # and behind everything else in the queue -- a backlog of them must not keep
-  # a submitter's own upload waiting.
+# Both sweep up after what a submitter left behind: the files an extraction
+# gathered, and the blobs a direct upload made for an application that was never
+# sent. Overnight, when neither is likely to be in the middle of use, and behind
+# everything else in the queue -- a backlog of them must not keep a submitter's
+# own upload waiting.
+sweeps: &sweeps
   purge_extractions:
     class: PurgeExtractionsJob
     priority: 10
@@ -14,13 +14,20 @@ production: &production
     priority: 10
     schedule: at 4:30am every day
 
+production:
+  <<: *sweeps
+
   # Not a sweep: a look for uploads whose files never arrived. Until the copy
   # has run, the blobs are the only copy the submitter has left with us, and
   # nothing else says it has not.
+  #
+  # Only here. Staging is where half-finished work is left lying, and an upload
+  # abandoned there is nobody's to answer for: reported, it would be the same
+  # few names every morning, in the same place the ones that matter arrive.
   report_uncopied_uploads:
     class: ReportUncopiedUploadsJob
     priority: 10
     schedule: at 5am every day
 
 staging:
-  <<: *production
+  <<: *sweeps

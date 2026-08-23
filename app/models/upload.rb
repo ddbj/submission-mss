@@ -34,12 +34,38 @@ class Upload < ApplicationRecord
   # The files this upload consists of. They are copied into place in the
   # background, in one move, so until that has happened the names are known
   # only where they came from.
+  #
+  # Everything in the directory, rather than everything with a dot in its name,
+  # and in an order rather than the one the directory happens to hold them in.
+  # Only the staging writes there and it writes the files as they were sent, so
+  # what is in there is what the upload consists of -- extension or no, leading
+  # dot or no.
   def file_names
-    Dir.glob('*.*', base: files_dir).presence || via.source_file_names
+    names = files_dir.exist? ? Dir.children(files_dir).sort : []
+
+    names.presence || via.source_file_names
   end
 
   def files_dir
     submission.root_dir.join(files_dir_name)
+  end
+
+  # Whether the files were handed over. The directory in place is the plain
+  # evidence, but it sits on a filesystem curators work on too, and one tidied
+  # away long after the submission was dealt with says nothing about whether it
+  # was ever filled. So the copy says so itself as it lands, and that no later
+  # tidying can take back.
+  #
+  # The directory still counts, for the uploads that were copied before anything
+  # was written down.
+  #
+  # The trade: files that were copied and then lost -- a restore that came back
+  # short, a volume mounted somewhere else -- read as handed over, because from
+  # here that is indistinguishable from a curator having tidied them away. What
+  # tells those apart is how long ago the copy was, and the nightly report asks
+  # that of the recent ones separately.
+  def copied?
+    copied_at? || files_dir.exist?
   end
 
   def via_ident

@@ -9,6 +9,38 @@ class UploadTest < ActiveSupport::TestCase
     @submission.uploads.create!(via: WebuiUpload.new, created_at: time)
   end
 
+  test 'a file the submitter named without an extension, or with a leading dot, is one of the files' do
+    upload = upload_at('2022-03-04 01:02:03')
+
+    upload.files_dir.mkpath
+
+    %w[sequence.ann README .hidden].each do |name|
+      upload.files_dir.join(name).write ''
+    end
+
+    # Submitters name their files, and nothing between here and the disk turns
+    # a name down. One left out of this list is one the submission never
+    # mentions again -- and if it were the only file, the list would fall back
+    # to the names the upload came in with, as though the copy had not run.
+    assert_equal %w[.hidden README sequence.ann], upload.file_names
+  end
+
+  test 'the files are listed in the same order before and after the copy' do
+    upload = upload_at('2022-03-04 01:02:03')
+
+    upload.files_dir.mkpath
+
+    # Written in an order the directory will not give them back in. The
+    # submitter is looking at this list while the copy runs, and it is drawn
+    # from the upload until then and from the disk afterwards: it must not
+    # rearrange itself under them the moment the files land.
+    %w[middle.ann alpha.ann zeta.ann beta.fasta gamma.tsv delta.txt].each do |name|
+      upload.files_dir.join(name).write ''
+    end
+
+    assert_equal %w[alpha.ann beta.fasta delta.txt gamma.tsv middle.ann zeta.ann], upload.file_names
+  end
+
   test 'build_via turns down a way of uploading we do not have' do
     ['sftp', '', nil].each do |via|
       assert_raises Upload::Malformed do

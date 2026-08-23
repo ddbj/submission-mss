@@ -54,6 +54,30 @@ class CopySubmissionFilesJobTest < ActiveJob::TestCase
     assert_equal 'file',      dir.join('example.ann').ftype
   end
 
+  test 'the blobs are let go once the files are in place' do
+    CopySubmissionFilesJob.perform_now @upload
+
+    # Active Storage is the waiting room, not the shelf. Nothing else comes for
+    # these: a sweep only takes the blobs nothing is attached to.
+    assert_not @upload.via.reload.files.attached?
+    assert_predicate @upload.reload, :copied_at
+  end
+
+  test 'a copy that landed but never let its blobs go is put right by being asked again' do
+    # What a crash between the move and the purge leaves behind, which is how
+    # two uploads sat for five months: the files were handed over, and the
+    # blobs they came in stayed attached where no sweep could reach them.
+    @upload.files_dir.mkpath
+    @upload.files_dir.join('example.ann').write "COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n"
+
+    CopySubmissionFilesJob.perform_now @upload
+
+    assert_not @upload.via.reload.files.attached?
+    assert_predicate @upload.reload, :copied_at
+
+    assert_equal "COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n", @upload.files_dir.join('example.ann').read
+  end
+
   test 'running again over files already in place' do
     extraction = dfast_extractions(:alice_dfast_extraction)
 
@@ -69,6 +93,24 @@ class CopySubmissionFilesJobTest < ActiveJob::TestCase
     end
 
     assert_equal ['example.ann'], Dir.glob('*', base: upload.files_dir)
+
+    # Written down here as much as for a direct upload: the staging both go
+    # through is the one place that knows the files have landed.
+    assert_predicate upload.reload, :copied_at
+  end
+
+  test 'when the files landed is not moved by asking again' do
+    CopySubmissionFilesJob.perform_now @upload
+
+    landed = @upload.reload.copied_at
+
+    travel 1.day do
+      CopySubmissionFilesJob.perform_now @upload
+    end
+
+    # It says when the submitter's files reached the submission, which is not
+    # something a later run has anything new to say about.
+    assert_equal landed, @upload.reload.copied_at
   end
 
   test 'a copy that broke down on the way is tried again' do
