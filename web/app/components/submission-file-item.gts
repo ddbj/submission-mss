@@ -2,6 +2,7 @@ import { t } from 'ember-intl';
 import { formatNumber } from 'ember-intl';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
+import escapeHtml from 'mssform/helpers/escape-html';
 import filesize from 'mssform/helpers/filesize';
 
 import type { TOC } from '@ember/component/template-only';
@@ -84,7 +85,7 @@ interface Signature {
           {{#each @errors as |error|}}
             <li class={{if (isWarning error) "text-warning-emphasis" "text-danger"}}>
               {{#if error.id}}
-                {{t error.id value=error.value htmlSafe=true}}
+                {{t error.id value=(escapeHtml error.value) htmlSafe=true}}
               {{else}}
                 {{error.message}}
               {{/if}}

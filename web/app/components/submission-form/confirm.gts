@@ -6,6 +6,7 @@ import { service } from '@ember/service';
 import { t } from 'ember-intl';
 
 import UploadProgressModal from 'mssform/components/upload-progress-modal';
+import escapeHtml from 'mssform/helpers/escape-html';
 import userMassDir from 'mssform/helpers/user-mass-dir';
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
 
@@ -121,7 +122,7 @@ export default class SubmissionFormConfirmComponent extends Component<Signature>
                 {{else if (eq @state.selection.via "webui")}}
                   <li>{{t "submission-form.files.a2"}}</li>
                 {{else if (eq @state.selection.via "mass_directory")}}
-                  <li>{{t "submission-form.files.a3-html" htmlSafe=true userMassDir=(userMassDir)}}</li>
+                  <li>{{t "submission-form.files.a3-html" htmlSafe=true userMassDir=(escapeHtml (userMassDir))}}</li>
                 {{/if}}
               </ul>
             </div>

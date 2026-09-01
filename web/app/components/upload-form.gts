@@ -7,6 +7,7 @@ import pageTitle from 'ember-page-title/helpers/page-title';
 
 import FileChooser from 'mssform/components/file-chooser';
 import UploadProgressModal from 'mssform/components/upload-progress-modal';
+import escapeHtml from 'mssform/helpers/escape-html';
 import FileSelection from 'mssform/models/file-selection';
 import leavingConfirmation from 'mssform/modifiers/leaving-confirmation';
 import { validateDuplicates, validateSameness } from 'mssform/utils/crossover-errors';
@@ -102,7 +103,7 @@ export default class UploadFormComponent extends Component<Signature> {
 
     <h1 class="display-6 my-4">{{t "upload-form.title"}}</h1>
 
-    {{t "upload-form.description-html" massId=@model.id htmlSafe=true}}
+    {{t "upload-form.description-html" massId=(escapeHtml @model.id) htmlSafe=true}}
 
     <UploadProgressModal as |modal|>
       <form {{on "submit" (fn this.submit modal)}} {{leavingConfirmation}}>

@@ -6,6 +6,7 @@ import JobIdExtractor from 'mssform/components/job-id-extractor';
 import SupportedFileTypes from 'mssform/components/file-list/supported-file-types';
 import MassDirectoryExtractor from 'mssform/components/mass-directory-extractor';
 import RadioGroup from 'mssform/components/radio-group';
+import escapeHtml from 'mssform/helpers/escape-html';
 import userMassDir from 'mssform/helpers/user-mass-dir';
 
 import type { TOC } from '@ember/component/template-only';
@@ -91,7 +92,7 @@ interface Signature {
                 />
 
                 <radio.label class="form-check-label">
-                  {{t "submission-form.files.a3-html" htmlSafe=true userMassDir=(userMassDir)}}
+                  {{t "submission-form.files.a3-html" htmlSafe=true userMassDir=(escapeHtml (userMassDir))}}
                 </radio.label>
 
                 {{t "submission-form.files.a3-note-html" htmlSafe=true}}
