@@ -144,8 +144,8 @@ importers:
         specifier: ^5.2.0
         version: 5.2.0(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.8.1)(supports-color@10.2.2)
       ember-intl:
-        specifier: ^8.4.0
-        version: 8.4.0(@babel/core@7.29.7(supports-color@10.2.2))(@ember/test-helpers@5.4.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(supports-color@10.2.2)
+        specifier: ^9.0.0
+        version: 9.0.0(@babel/core@7.29.7(supports-color@10.2.2))(@ember/test-helpers@5.4.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(supports-color@10.2.2)
       ember-load-initializers:
         specifier: ^3.0.1
         version: 3.0.1(ember-source@7.2.0(@glimmer/component@2.1.1(supports-color@10.2.2))(supports-color@10.2.2))
@@ -3169,11 +3169,11 @@ packages:
   ember-estree@0.8.0:
     resolution: {integrity: sha512-FvH2jGEkcIMPDPgQLHFVSTyF5p7HscVIiJ36v6ce1C9q/6KXCcE0EB2idaGcDWlhB42I3PmLg+vLbUp2GIznBQ==}
 
-  ember-intl@8.4.0:
-    resolution: {integrity: sha512-uv+Ip7RCnmPR1QIPdJc8iT+CUnl3DnXcABWH+OpR6xWZSq0gajaVeaml3frngPLSg8ctER7vvYalB3z0k2dFmw==}
-    engines: {node: 20.* || >= 22}
+  ember-intl@9.0.0:
+    resolution: {integrity: sha512-X1YcDMC4VaKcAIxO2jvfzxCca3WR3BOrB3R1gziFh5HKitEGtHBP8h+m726PmmLs9Ie3zeaXw827UW9VjmhHdA==}
+    engines: {node: 22.* || >= 24}
     peerDependencies:
-      '@ember/test-helpers': ^4.0.0 || ^5.0.0
+      '@ember/test-helpers': ^5.0.0
     peerDependenciesMeta:
       '@ember/test-helpers':
         optional: true
@@ -10238,7 +10238,7 @@ snapshots:
       content-tag: 4.2.0
       oxc-parser: 0.130.0
 
-  ember-intl@8.4.0(@babel/core@7.29.7(supports-color@10.2.2))(@ember/test-helpers@5.4.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(supports-color@10.2.2):
+  ember-intl@9.0.0(@babel/core@7.29.7(supports-color@10.2.2))(@ember/test-helpers@5.4.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(supports-color@10.2.2):
     dependencies:
       '@embroider/addon-shim': 1.10.3(supports-color@10.2.2)
       '@formatjs/intl': 4.1.19
