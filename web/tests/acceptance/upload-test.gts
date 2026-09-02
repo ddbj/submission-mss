@@ -18,12 +18,12 @@ import { HttpResponse } from 'msw';
 import { http } from '../msw/http';
 import { worker } from '../msw/worker';
 
-function annotationFile(name = 'test.ann', contact = 'Alice Liddell') {
+function annotationFile(name = 'test.ann', contact = 'Alice Liddell', locusTag = 'LOCUS_0001') {
   const lines = [
     `COMMON\tSUBMITTER\t\tcontact\t${contact}\n`,
     '\t\t\temail\talice@example.com\n',
     '\t\t\tinstitute\tWonderland Inc.\n',
-    'CLN01\tgene\t1..100\tlocus_tag\tLOCUS_0001\n',
+    `CLN01\tgene\t1..100\tlocus_tag\t${locusTag}\n`,
   ];
 
   return new File([lines.join('')], name);
@@ -186,6 +186,19 @@ module('Acceptance | upload', function (hooks) {
     assert.dom('.list-group-item').exists({ count: 2 });
     assert.dom('.list-group-item').containsText('LOCUS_0001', 'the warning is shown');
     assert.dom('button.px-5[type="submit"]').isNotDisabled();
+  });
+
+  test('a value the file provided is not markup', async function (assert) {
+    await visit('/home/submission/NSUB000001/upload');
+
+    await clickRadio('Upload the submission files through the MSS form');
+
+    // The warning quotes the locus_tag inside a message rendered as HTML, so
+    // the file must not be able to bring markup of its own along with it.
+    await addFiles([annotationFile('test.ann', 'Alice Liddell', 'LOCUS_<img src=x>'), sequenceFile()]);
+
+    assert.dom('.list-group-item code').hasText('locus_tag LOCUS_<img src=x>');
+    assert.dom('.list-group-item img').doesNotExist();
   });
 
   test('the annotation files disagree with each other', async function (assert) {

@@ -56,12 +56,13 @@ interface Enums {
   sequencers: { key: string; label: string }[];
 }
 
+// addTranslations takes a flat translation JSON, so the keys are namespaced by hand.
 function enumTranslations(locale: 'en' | 'ja') {
   const { locales, data_types, sequencers } = ENV['enums'] as Enums;
 
-  return {
-    locales: Object.fromEntries(locales.map(({ key, label }) => [key, label[locale]])),
-    data_types: Object.fromEntries(data_types.map(({ key, label }) => [key, label])),
-    sequencers: Object.fromEntries(sequencers.map(({ key, label }) => [key, label])),
-  };
+  return Object.fromEntries([
+    ...locales.map(({ key, label }) => [`locales.${key}`, label[locale]] as const),
+    ...data_types.map(({ key, label }) => [`data_types.${key}`, label] as const),
+    ...sequencers.map(({ key, label }) => [`sequencers.${key}`, label] as const),
+  ]);
 }

@@ -3,6 +3,7 @@ import { t } from 'ember-intl';
 import pageTitle from 'ember-page-title/helpers/page-title';
 
 import RecentSubmissions from 'mssform/components/recent-submissions';
+import escapeHtml from 'mssform/helpers/escape-html';
 
 import type { TOC } from '@ember/component/template-only';
 import type HomeIndexController from 'mssform/controllers/home/index';
@@ -19,7 +20,7 @@ interface Signature {
   <h1 class="display-6 my-4">{{t "home.title"}}</h1>
 
   <p>
-    {{t "home.login-as-html" account=@controller.currentUser.uid htmlSafe=true}}
+    {{t "home.login-as-html" account=(escapeHtml @controller.currentUser.uid) htmlSafe=true}}
     <small>(<button type="button" class="btn btn-link p-0 align-baseline" {{on "click" @controller.logout}}>{{t
           "home.logout"
         }}</button>)</small>
