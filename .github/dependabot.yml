@@ -22,6 +22,14 @@ updates:
       glint:
         patterns:
           - '@glint/*'
+
+      # ember-intl and the @ember-intl/* packages divide the work of loading
+      # translations between them, so a major bump of one without the others
+      # leaves the app unable to read its own translation files.
+      ember-intl:
+        patterns:
+          - 'ember-intl'
+          - '@ember-intl/*'
     ignore:
       # Babel 8 requires the whole @babel/* graph to move together, but the
       # Ember build toolchain (ember-cli-babel, broccoli-babel-transpiler)
