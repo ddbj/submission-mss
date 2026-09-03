@@ -17,10 +17,48 @@ Web portal for submitting nucleotide sequences to [DDBJ](https://www.ddbj.nig.ac
 - Node.js (see `.node-version`)
 - pnpm (see `packageManager` in `web/package.json`)
 - PostgreSQL
-- Docker (for SeaweedFS in development)
+- A SeaweedFS instance — in development we point at one running on the host, shared with the other projects
 - A Keycloak instance — in development we point at the one from [cloakman](https://github.com/ddbj/cloakman)
 
 ## Setup
+
+Neither SeaweedFS nor Keycloak is started by `bin/dev` — the application talks
+to instances running outside it (in development, the host's SeaweedFS and
+cloakman's Keycloak). Point it at them through the environment:
+
+| Variable                 | Default                 | Notes                                  |
+| ------------------------ | ----------------------- | -------------------------------------- |
+| `KEYCLOAK_URL`           | `http://localhost:8080` | Base URL of the Keycloak instance      |
+| `KEYCLOAK_CLIENT_SECRET` | —                       | Secret of the `mssform` client         |
+| `SEAWEEDFS_ACCESS_KEY`   | —                       | Access key of the `mssform` identity   |
+| `SEAWEEDFS_SECRET_KEY`   | —                       | Secret key of the `mssform` identity   |
+| `APP_URL`                | `http://localhost:3000` | Origin of the Rails API                |
+| `WEB_URL`                | `http://localhost:4200` | Origin of the Ember SPA                |
+
+### SeaweedFS
+
+The development instance is shared with the other projects, so this application
+is given a bucket of its own and an identity that reaches no further. Create
+both once, on the machine the instance runs on:
+
+```bash
+echo 's3.bucket.create -name mssform' | weed shell
+
+echo 's3.configure -user=mssform -buckets=mssform -actions=Read,Write,List -access_key=<access key> -secret_key=<secret key> -apply' | weed shell
+```
+
+The browser uploads files to the instance directly, so it answers the preflight
+requests itself: start it with `-s3.allowedOrigins=http://localhost:4200`, the
+origin the SPA is served from. The endpoint and the bucket name live in
+`config/seaweedfs.yml`.
+
+Without the keys the AWS SDK works its way down to the EC2 metadata service, so
+a timeout against 169.254.169.254 is the environment talking, not the instance.
+
+### Application
+
+`bin/setup` starts the application when it is done, so leave it until the
+storage is in place:
 
 ```bash
 bin/setup
@@ -29,21 +67,11 @@ cd web && pnpm install
 
 ## Development
 
-Start Rails, Ember, and SeaweedFS (via Docker Compose):
+Start Rails and Ember:
 
 ```bash
 bin/dev
 ```
-
-Keycloak is not started by `bin/dev`; the app talks to an external instance
-(cloakman's in development). Configure it through the environment:
-
-| Variable                 | Default                 | Notes                                  |
-| ------------------------ | ----------------------- | -------------------------------------- |
-| `KEYCLOAK_URL`           | `http://localhost:8080` | Base URL of the Keycloak instance      |
-| `KEYCLOAK_CLIENT_SECRET` | —                       | Secret of the `mssform` client         |
-| `APP_URL`                | `http://localhost:3000` | Origin of the Rails API                |
-| `WEB_URL`                | `http://localhost:4200` | Origin of the Ember SPA                |
 
 | Service   | URL                     |
 | --------- | ----------------------- |
