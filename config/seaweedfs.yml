@@ -1,11 +1,13 @@
 development:
-  access_key: development
   endpoint:   http://localhost:8333
-  secret_key: development
+  bucket:     mssform
+  access_key: <%= ENV['SEAWEEDFS_ACCESS_KEY'] %>
+  secret_key: <%= ENV['SEAWEEDFS_SECRET_KEY'] %>
 
 production: &production
-  access_key: <%= Rails.application.credentials.dig(:seaweedfs, :access_key) %>
   endpoint:   https://mss-storage.ddbj.nig.ac.jp
+  bucket:     uploads
+  access_key: <%= Rails.application.credentials.dig(:seaweedfs, :access_key) %>
   secret_key: <%= Rails.application.credentials.dig(:seaweedfs, :secret_key) %>
 
 staging:

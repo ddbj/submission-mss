@@ -13,7 +13,7 @@ DDBJ MSS (Mass Submission System) — monorepo with a Rails API and an Ember.js 
 ## Commands
 
 ```bash
-# Start all dev services (Rails + Ember + SeaweedFS + Keycloak)
+# Start Rails and Ember (SeaweedFS and Keycloak run outside)
 bin/dev
 
 # Rails tests

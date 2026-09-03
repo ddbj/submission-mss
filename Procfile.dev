@@ -1,3 +1,2 @@
 api: PORT=3000 bundle exec puma
 web: cd web && pnpm start --port 4200
-services: docker compose -f compose.dev.yaml up
