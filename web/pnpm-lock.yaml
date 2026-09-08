@@ -27,8 +27,8 @@ importers:
         specifier: ~5.8.2
         version: 5.8.2(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
       '@ember-intl/vite':
-        specifier: ^2.0.0
-        version: 2.0.0
+        specifier: ^2.0.1
+        version: 2.0.1
       '@ember/optional-features':
         specifier: ^3.0.0
         version: 3.0.0(@types/node@26.2.0)(supports-color@10.2.2)
@@ -144,8 +144,8 @@ importers:
         specifier: ^5.2.0
         version: 5.2.0(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
       ember-intl:
-        specifier: ^9.0.0
-        version: 9.0.0(@babel/core@7.29.7(supports-color@10.2.2))(@ember/test-helpers@5.4.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(supports-color@10.2.2)
+        specifier: ^9.0.1
+        version: 9.0.1(@babel/core@7.29.7(supports-color@10.2.2))(@ember/test-helpers@5.4.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(supports-color@10.2.2)
       ember-load-initializers:
         specifier: ^3.0.1
         version: 3.0.1(ember-source@7.2.0(@glimmer/component@2.1.1(supports-color@10.2.2))(supports-color@10.2.2))
@@ -908,8 +908,8 @@ packages:
   '@ember-data/rfc395-data@0.0.4':
     resolution: {integrity: sha512-tGRdvgC9/QMQSuSuJV45xoyhI0Pzjm7A9o/MVVA3HakXIImJbbzx/k/6dO9CUEQXIyS2y0fW6C1XaYOG7rY0FQ==}
 
-  '@ember-intl/vite@2.0.0':
-    resolution: {integrity: sha512-6v0SKzblFJe29GI5SwwfWeTi6Bihg9wrvqB/BwBk4G+ZxKQjvLK6ShXp1PhTkT2rO0S7f8fo/rzJrCjMscFnbA==}
+  '@ember-intl/vite@2.0.1':
+    resolution: {integrity: sha512-Y3qmVkZJbzVm9QonDshoa1QGjvK9CGEm6sqqwAtgOBuBTA6G18X41mKABcFIrpbG1VqeokunI1pEisXJVwYJdg==}
     engines: {node: 22.* || >= 24}
 
   '@ember-tooling/blueprint-blueprint@0.3.0':
@@ -1042,8 +1042,8 @@ packages:
   '@formatjs/icu-skeleton-parser@2.1.11':
     resolution: {integrity: sha512-j8cUmOJzVgkHuS0QiQ6ga76UIoLOFSAMWhs7aZJztH3aAdCOAE6vpC8KVvFB4cU10ON0y2/5oOVmPJ43s2lTwA==}
 
-  '@formatjs/intl@4.1.19':
-    resolution: {integrity: sha512-bZMROATl+rzfL8wsDZ53i8XWHx5e6rVr8QlGT5GDvHImEUro4WE9pxUd2dobzmI3CtD+zkt/wkEdqcb+3CK8Fg==}
+  '@formatjs/intl@4.1.20':
+    resolution: {integrity: sha512-q3gaFvc1mXrl0fcSY2QKSS+WzJxpbIXs48O+QLA3UsRtIwVhazvxtLrLGKEse5Mq4U8hAYyTB6Y9buU2ZRFz/w==}
 
   '@glimmer/component@2.1.1':
     resolution: {integrity: sha512-zFZFaMbWy+9WOcDg/kCgrkGgqkLT39EE4FgyFD0MIkQO5coQsrRZyLsiBu1tbchyM+8hT8jAv+EQVUd8u+MdSQ==}
@@ -3157,8 +3157,8 @@ packages:
   ember-estree@0.8.0:
     resolution: {integrity: sha512-FvH2jGEkcIMPDPgQLHFVSTyF5p7HscVIiJ36v6ce1C9q/6KXCcE0EB2idaGcDWlhB42I3PmLg+vLbUp2GIznBQ==}
 
-  ember-intl@9.0.0:
-    resolution: {integrity: sha512-X1YcDMC4VaKcAIxO2jvfzxCca3WR3BOrB3R1gziFh5HKitEGtHBP8h+m726PmmLs9Ie3zeaXw827UW9VjmhHdA==}
+  ember-intl@9.0.1:
+    resolution: {integrity: sha512-NOiATTVGRPJN81wBjJ/lV/BrXBC6YNZ+BlRD5ge0pkGxkEs8IGJJLFGfqAt4hcnt2E8BkwWZ1kJhrvh+PE5tWA==}
     engines: {node: 22.* || >= 24}
     peerDependencies:
       '@ember/test-helpers': ^5.0.0
@@ -7320,7 +7320,7 @@ snapshots:
 
   '@ember-data/rfc395-data@0.0.4': {}
 
-  '@ember-intl/vite@2.0.0':
+  '@ember-intl/vite@2.0.1':
     dependencies:
       '@codemod-utils/files': 4.1.0
       js-yaml: 5.4.1
@@ -7650,7 +7650,7 @@ snapshots:
 
   '@formatjs/icu-skeleton-parser@2.1.11': {}
 
-  '@formatjs/intl@4.1.19':
+  '@formatjs/intl@4.1.20':
     dependencies:
       '@formatjs/fast-memoize': 3.1.7
       '@formatjs/icu-messageformat-parser': 3.5.17
@@ -10183,10 +10183,10 @@ snapshots:
       content-tag: 4.2.0
       oxc-parser: 0.130.0
 
-  ember-intl@9.0.0(@babel/core@7.29.7(supports-color@10.2.2))(@ember/test-helpers@5.4.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(supports-color@10.2.2):
+  ember-intl@9.0.1(@babel/core@7.29.7(supports-color@10.2.2))(@ember/test-helpers@5.4.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(supports-color@10.2.2):
     dependencies:
       '@embroider/addon-shim': 1.10.3(supports-color@10.2.2)
-      '@formatjs/intl': 4.1.19
+      '@formatjs/intl': 4.1.20
       decorator-transforms: 2.4.0(@babel/core@7.29.7(supports-color@10.2.2))
     optionalDependencies:
       '@ember/test-helpers': 5.4.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2)
