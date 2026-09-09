@@ -96,8 +96,8 @@ importers:
         specifier: ^4.0.9
         version: 4.0.9
       '@warp-drive/build-config':
-        specifier: 5.8.2
-        version: 5.8.2(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
+        specifier: 5.9.1
+        version: 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
       '@warp-drive/core':
         specifier: 5.8.2
         version: 5.8.2(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
@@ -1845,6 +1845,9 @@ packages:
 
   '@warp-drive/build-config@5.8.2':
     resolution: {integrity: sha512-QU/6tSexAi/t149upEK3P04yGXdEwieTfQ5ihBON3A/3xGipveGIVJx6B8EYCot0AC2n91GmTc8ezzQmAK64/g==}
+
+  '@warp-drive/build-config@5.9.1':
+    resolution: {integrity: sha512-atPMCxb1S3jR1IF0v8XNWujiAztnNwubJicQABA2vBL2cdw2Or/xce2KyCvGZh1rJEQy1NkCeIQRCs7O1UO5OA==}
 
   '@warp-drive/core@5.8.2':
     resolution: {integrity: sha512-6dtfOaHK+9ErQMy6OlewRJw2nkAPb2CPMoTFncsZBbEAQlyn1zwjTSpk1Czr5TOc0YQ84vrTK6IOwTzdHG4r+A==}
@@ -8457,8 +8460,20 @@ snapshots:
   '@warp-drive/build-config@5.8.2(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)':
     dependencies:
       '@embroider/addon-shim': 1.10.3(supports-color@10.2.2)
-      '@embroider/macros': 1.20.6(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
+      '@embroider/macros': 1.20.7(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
       babel-import-util: 2.1.1
+      babel-plugin-debug-macros: 2.0.0(@babel/core@7.29.7(supports-color@10.2.2))
+      semver: 7.8.5
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@glint/template'
+      - supports-color
+
+  '@warp-drive/build-config@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)':
+    dependencies:
+      '@embroider/addon-shim': 1.10.3(supports-color@10.2.2)
+      '@embroider/macros': 1.20.7(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
+      babel-import-util: 3.0.1
       babel-plugin-debug-macros: 2.0.0(@babel/core@7.29.7(supports-color@10.2.2))
       semver: 7.8.5
     transitivePeerDependencies:
