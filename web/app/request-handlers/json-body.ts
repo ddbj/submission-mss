@@ -1,11 +1,12 @@
-import type { NextFn } from '@ember-data/request';
+import type { NextFn } from '@warp-drive/core/request';
+import type { RequestContext } from '@warp-drive/core/types/request';
 
 export default class JsonBodyHandler {
-  request<T>(context: { request: { data?: Record<string, unknown> } }, next: NextFn<T>) {
+  request<T>(context: RequestContext, next: NextFn<T>) {
     const { data } = context.request;
 
     if (data) {
-      const headers = new Headers((context.request as { headers?: HeadersInit }).headers);
+      const headers = new Headers(context.request.headers);
       headers.set('Content-Type', 'application/json');
 
       return next(Object.assign({}, context.request, { data: undefined, headers, body: JSON.stringify(data) }));
