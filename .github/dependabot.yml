@@ -30,6 +30,14 @@ updates:
         patterns:
           - 'ember-intl'
           - '@ember-intl/*'
+
+      # The @warp-drive/* packages are released in lockstep and expect each
+      # other at the same version, and eslint-plugin-warp-drive follows the
+      # same release train so that its rules match the APIs of that version.
+      warp-drive:
+        patterns:
+          - '@warp-drive/*'
+          - 'eslint-plugin-warp-drive'
     ignore:
       # Babel 8 requires the whole @babel/* graph to move together, but the
       # Ember build toolchain (ember-cli-babel, broccoli-babel-transpiler)
