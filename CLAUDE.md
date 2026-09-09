@@ -47,7 +47,7 @@ cd web && pnpm lint:fix           # JS/TS/CSS/HBS + Prettier
 web/                       Ember.js frontend
 ├── app/components/        GTS components
 ├── app/models/            Frontend models
-├── app/request-handlers/  @ember-data/request handlers
+├── app/request-handlers/  RequestManager handlers
 ├── app/services/          Ember services
 ├── workers/               Web Workers (file parsers, etc.), bundled by Vite
 └── tests/                 QUnit + MSW tests
@@ -72,7 +72,7 @@ end
 ### Ember / TypeScript
 
 - GTS template tag format (`<template>` block)
-- API calls go through the RequestManager handler chain (`@ember-data/request`)
+- API calls go through the RequestManager handler chain (`@warp-drive/core`)
 - Reference OpenAPI types as `paths['/endpoint']['method']['responses']['200']['content']['application/json']`
 - Tests use MSW + openapi-msw for mocking
 

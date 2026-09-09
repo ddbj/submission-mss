@@ -1,6 +1,7 @@
 import { service } from '@ember/service';
 
-import type { NextFn, RequestContext } from '@ember-data/request';
+import type { NextFn } from '@warp-drive/core/request';
+import type { RequestContext } from '@warp-drive/core/types/request';
 import type ErrorModalService from 'mssform/services/error-modal';
 
 export default class ErrorModalHandler {

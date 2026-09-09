@@ -23,9 +23,6 @@ importers:
       '@babel/plugin-transform-typescript':
         specifier: ^7.29.7
         version: 7.29.7(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2)
-      '@ember-data/request':
-        specifier: ~5.9.1
-        version: 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
       '@ember-intl/vite':
         specifier: ^2.0.1
         version: 2.0.1
@@ -186,8 +183,8 @@ importers:
         specifier: ^8.2.6
         version: 8.2.6(eslint@10.9.1(supports-color@10.2.2))
       eslint-plugin-warp-drive:
-        specifier: ^5.8.2
-        version: 5.8.2(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
+        specifier: ^5.9.1
+        version: 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(@typescript-eslint/parser@8.69.0(eslint@10.9.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(supports-color@10.2.2)(typescript@6.0.3)
       filesize:
         specifier: ^11.0.23
         version: 11.0.23
@@ -901,9 +898,6 @@ packages:
     engines: {node: '>=20.19.0'}
     peerDependencies:
       postcss-selector-parser: ^7.1.1
-
-  '@ember-data/request@5.9.1':
-    resolution: {integrity: sha512-r96A+Dy9OVvOBhZXD1hNVjmQci6M6p6ezkP2N+i47EGkrrajFRBjlmxaa9aA3kbu8NIDM3mhFQSPeYuCAsBNmw==}
 
   '@ember-data/rfc395-data@0.0.4':
     resolution: {integrity: sha512-tGRdvgC9/QMQSuSuJV45xoyhI0Pzjm7A9o/MVVA3HakXIImJbbzx/k/6dO9CUEQXIyS2y0fW6C1XaYOG7rY0FQ==}
@@ -1879,6 +1873,11 @@ packages:
     resolution: {integrity: sha512-AK0cf0ClOwxyr/EjqCrK4iLNRP+GVf73SSBycXhK05/FkiQBD8lowjV/w1Yp5ZTykFNQ5HWk3Eg613rS3Og8Hw==}
     peerDependencies:
       '@warp-drive/core': 5.8.2
+
+  '@warp-drive/utilities@5.9.1':
+    resolution: {integrity: sha512-3ECkyc3K6pdfzxBrMUDHHT6zAoS0eTL7mNy9F5FYqL0cfsQI0YR+gV0lvJFLK4zPaxm1OVwGoMohFPGrMHiUaA==}
+    peerDependencies:
+      '@warp-drive/core': 5.9.1
 
   '@webassemblyjs/ast@1.14.1':
     resolution: {integrity: sha512-nuBEDgQfm1ccRp/8bCQrx1frohyufl4JlbMMZ4P1wpeOfDhF6FQkxZJ1b/e+PLwr6X1Nhw6OLme5usuBWYBvuQ==}
@@ -3398,8 +3397,8 @@ packages:
     peerDependencies:
       eslint: '>=8.38.0'
 
-  eslint-plugin-warp-drive@5.8.2:
-    resolution: {integrity: sha512-fHoqi+vapz20C182cdCm9AK2lCIBpHLi7mcjnFKd3YdyuQpEKohMmjzTki6corziz50DbXKn0pXugOw5YFFw2g==}
+  eslint-plugin-warp-drive@5.9.1:
+    resolution: {integrity: sha512-uvMWWP/pFWQoswzAU7KH/k5rpCOI6Jp+h7tXoZc0S2l0jMC1VZBKVsadikWbMNLmC7L+HsN9AEv5WYFozZ9qmQ==}
 
   eslint-scope@5.1.1:
     resolution: {integrity: sha512-2NxwbF/hZ0KpepYN0cNbo+FN6XoK7GaHlQhgx/hIZl6Va0bF45RQOOwhLIy8lQDbuCiadSLCBnH2CFYquit5bw==}
@@ -7338,15 +7337,6 @@ snapshots:
     dependencies:
       postcss-selector-parser: 7.1.6
 
-  '@ember-data/request@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)':
-    dependencies:
-      '@embroider/macros': 1.20.7(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
-      '@warp-drive/core': 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
-    transitivePeerDependencies:
-      - '@babel/core'
-      - '@glint/template'
-      - supports-color
-
   '@ember-data/rfc395-data@0.0.4': {}
 
   '@ember-intl/vite@2.0.1':
@@ -8543,6 +8533,15 @@ snapshots:
     dependencies:
       '@embroider/macros': 1.20.6(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
       '@warp-drive/core': 5.8.2(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@glint/template'
+      - supports-color
+
+  '@warp-drive/utilities@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(@warp-drive/core@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2))(supports-color@10.2.2)':
+    dependencies:
+      '@embroider/macros': 1.20.7(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
+      '@warp-drive/core': 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
     transitivePeerDependencies:
       - '@babel/core'
       - '@glint/template'
@@ -10605,15 +10604,19 @@ snapshots:
       eslint: 10.9.1(supports-color@10.2.2)
       requireindex: 1.2.0
 
-  eslint-plugin-warp-drive@5.8.2(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2):
+  eslint-plugin-warp-drive@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(@typescript-eslint/parser@8.69.0(eslint@10.9.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(supports-color@10.2.2)(typescript@6.0.3):
     dependencies:
-      '@warp-drive/core': 5.8.2(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
-      '@warp-drive/utilities': 5.8.2(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(@warp-drive/core@5.8.2(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2))(supports-color@10.2.2)
+      '@warp-drive/core': 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
+      '@warp-drive/utilities': 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(@warp-drive/core@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2))(supports-color@10.2.2)
+      ember-eslint-parser: 0.14.6(@typescript-eslint/parser@8.69.0(eslint@10.9.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(typescript@6.0.3)
       requireindex: 1.2.0
     transitivePeerDependencies:
       - '@babel/core'
+      - '@babel/eslint-parser'
       - '@glint/template'
+      - '@typescript-eslint/parser'
       - supports-color
+      - typescript
 
   eslint-scope@5.1.1:
     dependencies:
