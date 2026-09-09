@@ -24,8 +24,8 @@ importers:
         specifier: ^7.29.7
         version: 7.29.7(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2)
       '@ember-data/request':
-        specifier: ~5.8.2
-        version: 5.8.2(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
+        specifier: ~5.9.1
+        version: 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
       '@ember-intl/vite':
         specifier: ^2.0.1
         version: 2.0.1
@@ -902,8 +902,8 @@ packages:
     peerDependencies:
       postcss-selector-parser: ^7.1.1
 
-  '@ember-data/request@5.8.2':
-    resolution: {integrity: sha512-WJ/gETxejs/L5dZhB/2yAyO6288rBaTd7PaFR7iVRJQ33jCiSfFq7pd937jnKeVXldhjP2mroF0TnbHVvgiliw==}
+  '@ember-data/request@5.9.1':
+    resolution: {integrity: sha512-r96A+Dy9OVvOBhZXD1hNVjmQci6M6p6ezkP2N+i47EGkrrajFRBjlmxaa9aA3kbu8NIDM3mhFQSPeYuCAsBNmw==}
 
   '@ember-data/rfc395-data@0.0.4':
     resolution: {integrity: sha512-tGRdvgC9/QMQSuSuJV45xoyhI0Pzjm7A9o/MVVA3HakXIImJbbzx/k/6dO9CUEQXIyS2y0fW6C1XaYOG7rY0FQ==}
@@ -1851,6 +1851,9 @@ packages:
 
   '@warp-drive/core@5.8.2':
     resolution: {integrity: sha512-6dtfOaHK+9ErQMy6OlewRJw2nkAPb2CPMoTFncsZBbEAQlyn1zwjTSpk1Czr5TOc0YQ84vrTK6IOwTzdHG4r+A==}
+
+  '@warp-drive/core@5.9.1':
+    resolution: {integrity: sha512-7HJ6G4+mmTjya8+qOh31KDWQ2uELuwcOtRGDVE7qTzhOzDiFpAMbK87LlK+5I+tw++NqKfriA1X3DbquCoxMVQ==}
 
   '@warp-drive/ember@5.8.2':
     resolution: {integrity: sha512-X1kUz00+/sp4xLmR0ALFxF2CFKmMIuJq0PUdyxSakXM+bLB1Xy2LQ9PFKeFU1KYT1SsBBjtlLp2pDyf1DeLgPw==}
@@ -7335,10 +7338,10 @@ snapshots:
     dependencies:
       postcss-selector-parser: 7.1.6
 
-  '@ember-data/request@5.8.2(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)':
+  '@ember-data/request@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)':
     dependencies:
-      '@embroider/macros': 1.20.6(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
-      '@warp-drive/core': 5.8.2(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
+      '@embroider/macros': 1.20.7(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
+      '@warp-drive/core': 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
     transitivePeerDependencies:
       - '@babel/core'
       - '@glint/template'
@@ -8487,6 +8490,15 @@ snapshots:
     dependencies:
       '@embroider/macros': 1.20.6(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
       '@warp-drive/build-config': 5.8.2(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@glint/template'
+      - supports-color
+
+  '@warp-drive/core@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)':
+    dependencies:
+      '@embroider/macros': 1.20.7(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
+      '@warp-drive/build-config': 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
     transitivePeerDependencies:
       - '@babel/core'
       - '@glint/template'
