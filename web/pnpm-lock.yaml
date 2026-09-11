@@ -24,8 +24,8 @@ importers:
         specifier: ^7.29.7
         version: 7.29.7(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2)
       '@ember-intl/vite':
-        specifier: ^2.0.1
-        version: 2.0.1
+        specifier: ^2.0.2
+        version: 2.0.2
       '@ember/optional-features':
         specifier: ^3.0.0
         version: 3.0.0(@types/node@26.2.0)(supports-color@10.2.2)
@@ -141,8 +141,8 @@ importers:
         specifier: ^5.2.0
         version: 5.2.0(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.9.0)(supports-color@10.2.2)
       ember-intl:
-        specifier: ^9.0.1
-        version: 9.0.1(@babel/core@7.29.7(supports-color@10.2.2))(@ember/test-helpers@5.4.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(supports-color@10.2.2)
+        specifier: ^9.0.2
+        version: 9.0.2(@babel/core@7.29.7(supports-color@10.2.2))(@ember/test-helpers@5.4.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(supports-color@10.2.2)
       ember-load-initializers:
         specifier: ^3.0.1
         version: 3.0.1(ember-source@7.2.0(@glimmer/component@2.1.1(supports-color@10.2.2))(supports-color@10.2.2))
@@ -902,8 +902,8 @@ packages:
   '@ember-data/rfc395-data@0.0.4':
     resolution: {integrity: sha512-tGRdvgC9/QMQSuSuJV45xoyhI0Pzjm7A9o/MVVA3HakXIImJbbzx/k/6dO9CUEQXIyS2y0fW6C1XaYOG7rY0FQ==}
 
-  '@ember-intl/vite@2.0.1':
-    resolution: {integrity: sha512-Y3qmVkZJbzVm9QonDshoa1QGjvK9CGEm6sqqwAtgOBuBTA6G18X41mKABcFIrpbG1VqeokunI1pEisXJVwYJdg==}
+  '@ember-intl/vite@2.0.2':
+    resolution: {integrity: sha512-UB0jbZz+UTKEZriXpcDCn8J7mvTI5G494ffNzeMMwwHrmV4ad1a46EPYg8xbA0xjQHmx7a4pV+NIcgOVdu39RA==}
     engines: {node: 22.* || >= 24}
 
   '@ember-tooling/blueprint-blueprint@0.3.0':
@@ -3158,8 +3158,8 @@ packages:
   ember-estree@0.8.0:
     resolution: {integrity: sha512-FvH2jGEkcIMPDPgQLHFVSTyF5p7HscVIiJ36v6ce1C9q/6KXCcE0EB2idaGcDWlhB42I3PmLg+vLbUp2GIznBQ==}
 
-  ember-intl@9.0.1:
-    resolution: {integrity: sha512-NOiATTVGRPJN81wBjJ/lV/BrXBC6YNZ+BlRD5ge0pkGxkEs8IGJJLFGfqAt4hcnt2E8BkwWZ1kJhrvh+PE5tWA==}
+  ember-intl@9.0.2:
+    resolution: {integrity: sha512-k1RQ/vGxxSJIGygnu15FCi7vzDCCy38zPUl6gxNBv6J84755NNh7e6Xpzl+zWmspa2Fgwr6Wg+GUMov1yRhVVw==}
     engines: {node: 22.* || >= 24}
     peerDependencies:
       '@ember/test-helpers': ^5.0.0
@@ -4308,10 +4308,6 @@ packages:
 
   js-yaml@3.15.1:
     resolution: {integrity: sha512-S99WuO3HlhO3XN41EtYUNl9zzXjoJx7QvmipxsJVxtCBT0YHEFy+iOJhjSvrmV12nYhWpZaM8lPHkJm0yUMbag==}
-    hasBin: true
-
-  js-yaml@4.3.1:
-    resolution: {integrity: sha512-CY6crGq313MX8GkwvB7tzgp99vjQxY1++5y10/BKN/GUfHqWaOGQMNZkBvqSzsZKWk/ijwHlWzzkLulsGHhjWQ==}
     hasBin: true
 
   js-yaml@4.3.2:
@@ -7302,7 +7298,7 @@ snapshots:
 
   '@ember-data/rfc395-data@0.0.4': {}
 
-  '@ember-intl/vite@2.0.1':
+  '@ember-intl/vite@2.0.2':
     dependencies:
       '@codemod-utils/files': 4.1.0
       js-yaml: 5.4.1
@@ -10183,7 +10179,7 @@ snapshots:
       content-tag: 4.2.0
       oxc-parser: 0.130.0
 
-  ember-intl@9.0.1(@babel/core@7.29.7(supports-color@10.2.2))(@ember/test-helpers@5.4.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(supports-color@10.2.2):
+  ember-intl@9.0.2(@babel/core@7.29.7(supports-color@10.2.2))(@ember/test-helpers@5.4.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(supports-color@10.2.2):
     dependencies:
       '@embroider/addon-shim': 1.10.3(supports-color@10.2.2)
       '@formatjs/intl': 4.1.20
@@ -11611,10 +11607,6 @@ snapshots:
     dependencies:
       argparse: 1.0.10
       esprima: 4.0.1
-
-  js-yaml@4.3.1:
-    dependencies:
-      argparse: 2.0.1
 
   js-yaml@4.3.2:
     dependencies:
@@ -13323,7 +13315,7 @@ snapshots:
       express: 5.2.1(supports-color@10.2.2)
       glob: 13.0.6
       http-proxy: 1.18.1(debug@4.4.3(supports-color@10.2.2))
-      js-yaml: 4.3.1
+      js-yaml: 4.3.2
       lodash: 4.18.1
       minimatch: 10.2.6
       mkdirp: 3.0.1
