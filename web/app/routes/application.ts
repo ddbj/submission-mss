@@ -23,10 +23,10 @@ export default class ApplicationRoute extends Route {
   };
 
   async beforeModel(transition: Transition) {
-    await this.currentUser.restore();
-
     const { queryParams } = transition.to!;
 
+    // Words first: should restoring the user fail below, the error is shown
+    // before there is a page, and has to be able to say so.
     this.intl.addTranslations('en', translationsForEn);
     this.intl.addTranslations('ja', translationsForJa);
 
@@ -36,6 +36,8 @@ export default class ApplicationRoute extends Route {
     const locale = [queryParams['locale'] as string, ...navigator.languages].find((l) => this.intl.locales.includes(l));
 
     this.intl.setLocale(locale || 'ja');
+
+    await this.currentUser.restore();
   }
 
   // XXX https://github.com/emberjs/ember.js/issues/18577

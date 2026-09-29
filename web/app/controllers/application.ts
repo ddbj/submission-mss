@@ -51,12 +51,14 @@ export default class ApplicationController extends Controller {
     if (this.errorModal) {
       this.errorModal.show();
     } else {
-      alert(`Error:
-Something went wrong. Please try again later.
+      // Before the page is there to put the modal on: the user failing to be
+      // restored on the way in, say.
+      alert(`${this.intl.t('error.title')}:
+${this.intl.t('error.something-went-wrong')}
 
 ${error.message}
 
-Details:
+${this.intl.t('error.details')}:
 ${error.stack}`);
     }
   }

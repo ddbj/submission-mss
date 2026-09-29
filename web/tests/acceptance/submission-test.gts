@@ -209,6 +209,13 @@ module('Acceptance | submission', function (hooks) {
     await visit('/home');
     assert.dom('h1').hasText('Home');
 
+    await waitFor('table');
+
+    assert.deepEqual(
+      findAll('thead th').map((th) => th.textContent?.trim()),
+      ['MSS Submission ID', 'Submission Date', 'Job IDs', 'Status', 'Accessions'],
+    );
+
     await click('a[href^="/home/submissions/new"]');
 
     // --- Step 1: Prerequisite ---
@@ -439,6 +446,27 @@ module('Acceptance | submission', function (hooks) {
 
     assert.strictEqual(submitted?.submission?.upload_via, 'dfast');
     assert.strictEqual(submitted?.submission?.extraction_id, 1);
+  });
+
+  test('the home page in Japanese', async function (assert) {
+    worker.use(
+      http.get('/submissions', ({ response }) => {
+        return response(200).json({
+          submissions: [],
+        });
+      }),
+    );
+
+    await visit('/home?locale=ja');
+
+    assert.dom('h1').hasText('ホーム');
+
+    await waitFor('table');
+
+    assert.deepEqual(
+      findAll('thead th').map((th) => th.textContent?.trim()),
+      ['MSS 申し込み ID', '申し込み日', 'job ID', '状況', 'Accession'],
+    );
   });
 
   test('new submission via mass directory', async function (assert) {
