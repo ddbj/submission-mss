@@ -13,8 +13,8 @@ index:
   title: MSS 登録フォーム
 
   instructions-html: |
-    <p>Mass Submission System (MSS) では、<a href="https://www.ddbj.nig.ac.jp/ddbj/mss.html#outline"  target="_blank">以下 1 - 3 のいずれかに該当する配列データ登録ファイル(reads ではない)</a>を受け付けます。<br />
-    <a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept" target="_blank">DDBJ に登録可能なデータ</a>も合わせてお読みください。</p>
+    <p>Mass Submission System (MSS) では、<a href="https://www.ddbj.nig.ac.jp/ddbj/mss.html#outline"  target="_blank" rel="noopener noreferrer">以下 1 - 3 のいずれかに該当する配列データ登録ファイル(reads ではない)</a>を受け付けます。<br />
+    <a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept" target="_blank" rel="noopener noreferrer">DDBJ に登録可能なデータ</a>も合わせてお読みください。</p>
 
     <ol>
       <li>
@@ -22,10 +22,10 @@ index:
 
         <ul>
           <li>
-            <a href="https://www.ddbj.nig.ac.jp/ddbj/est.html" target="_blank">EST</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/tsa.html" target="_blank">TSA</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/htc.html" target="_blank">HTC</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/gss.html" target="_blank">GSS</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/htg.html" target="_blank">HTG</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/wgs.html" target="_blank">WGS</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/tls.html" target="_blank">TLS</a>
+            <a href="https://www.ddbj.nig.ac.jp/ddbj/est.html" target="_blank" rel="noopener noreferrer">EST</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/tsa.html" target="_blank" rel="noopener noreferrer">TSA</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/htc.html" target="_blank" rel="noopener noreferrer">HTC</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/gss.html" target="_blank" rel="noopener noreferrer">GSS</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/htg.html" target="_blank" rel="noopener noreferrer">HTG</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/wgs.html" target="_blank" rel="noopener noreferrer">WGS</a>、<a href="https://www.ddbj.nig.ac.jp/ddbj/tls.html" target="_blank" rel="noopener noreferrer">TLS</a>
 
             <ul>
-              <li>データ種別の詳細は、<a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#detail" target="_blank">Annotated/Assembled データの区分</a>をご確認ください。</li>
+              <li>データ種別の詳細は、<a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#detail" target="_blank" rel="noopener noreferrer">Annotated/Assembled データの区分</a>をご確認ください。</li>
             </ul>
           </li>
 
@@ -75,7 +75,7 @@ submission-form:
 
   prerequisite:
     instructions-html: |
-      <p>以下のすべてに該当する場合のみ、<a href="https://www.ddbj.nig.ac.jp/ddbj/mss.html#submission" target="_blank">一度の submission として申し込みできます</a>。いずれか該当しない場合、各 submission が条件に合致するように submission ファイルを分け、別々に申し込みを行ってください。<a href="https://www.ddbj.nig.ac.jp/ddbj/mss.html#submission-1" target="_blank">複数回に分けての申し込みが必要な例</a>もご覧ください。</p>
+      <p>以下のすべてに該当する場合のみ、<a href="https://www.ddbj.nig.ac.jp/ddbj/mss.html#submission" target="_blank" rel="noopener noreferrer">一度の submission として申し込みできます</a>。いずれか該当しない場合、各 submission が条件に合致するように submission ファイルを分け、別々に申し込みを行ってください。<a href="https://www.ddbj.nig.ac.jp/ddbj/mss.html#submission-1" target="_blank" rel="noopener noreferrer">複数回に分けての申し込みが必要な例</a>もご覧ください。</p>
 
       <ul>
         <li>コンタクトパーソンが同一である</li>
@@ -101,7 +101,7 @@ submission-form:
   files:
     q-html: |
       <p>Submission ファイルの送付方法を選択してください。<br />
-      登録ファイルをアップロードする場合は、事前に<a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank">UME (Parser, transChecker)</a>にてフォーマットやCDSフィーチャーの翻訳チェックを行い、エラーのないファイルを送付してください。公開予定日を指定するには、<a href="https://www.ddbj.nig.ac.jp/ddbj/file-format.html#date" target="_blank">アノテーションファイルCOMMON領域にhold_dateの記載が必要</a>です。フォームへの入力で指定することはできません。</p>
+      登録ファイルをアップロードする場合は、事前に<a href="https://www.ddbj.nig.ac.jp/ddbj/ume.html" target="_blank" rel="noopener noreferrer">UME (Parser, transChecker)</a>にてフォーマットやCDSフィーチャーの翻訳チェックを行い、エラーのないファイルを送付してください。公開予定日を指定するには、<a href="https://www.ddbj.nig.ac.jp/ddbj/file-format.html#date" target="_blank" rel="noopener noreferrer">アノテーションファイルCOMMON領域にhold_dateの記載が必要</a>です。フォームへの入力で指定することはできません。</p>
 
     a1: DFASTのジョブIDから登録ファイルを取り込んで送付する
     a4: GGSのジョブIDから登録ファイルを取り込んで送付する
@@ -197,8 +197,8 @@ submission-form:
       <p>詳しくはこちら:</p>
 
       <ul class="mb-0">
-        <li><a href="https://www.ddbj.nig.ac.jp/policies.html" target="_blank">BSI利用規約</a></li>
-        <li><a href="https://www.ddbj.nig.ac.jp/faq/ja/abs-data-sharing.html" target="_blank">アクセスと利益配分に関する国内外の法令・ルール</a></li>
+        <li><a href="https://www.ddbj.nig.ac.jp/policies.html" target="_blank" rel="noopener noreferrer">BSI利用規約</a></li>
+        <li><a href="https://www.ddbj.nig.ac.jp/faq/ja/abs-data-sharing.html" target="_blank" rel="noopener noreferrer">アクセスと利益配分に関する国内外の法令・ルール</a></li>
       </ul>
 
     submit: 登録申請
@@ -259,7 +259,7 @@ annotation-file-parser:
 
     <pre class="my-2"><code>      locus_tag  {value}</code></pre>
 
-    BioSample申請時にlocus_tag prefixを申請している場合には問題ありませんが、未申請の場合は、<a href="https://www.ddbj.nig.ac.jp/contact-ddbj.html" target="_blank">お問い合わせページ</a>の「BioProject/BioSample/DRA 更新依頼フォーム」より、locus_tag prefixの申請取得をお願いします。locus_tag prefixはAccession番号発行に必須となりますので、ご留意ください。
+    BioSample申請時にlocus_tag prefixを申請している場合には問題ありませんが、未申請の場合は、<a href="https://www.ddbj.nig.ac.jp/contact-ddbj.html" target="_blank" rel="noopener noreferrer">お問い合わせページ</a>の「BioProject/BioSample/DRA 更新依頼フォーム」より、locus_tag prefixの申請取得をお願いします。locus_tag prefixはAccession番号発行に必須となりますので、ご留意ください。
 
 sequence-file-parser:
   no-entries: エントリが1つも含まれていません。
@@ -268,7 +268,7 @@ dfast-extractor:
   ids-label: DFAST job IDs
 
   ids-help-html: |
-    <p>ハイフンを含めた36桁のIDです。Submitするには、<a href="https://dfast.ddbj.nig.ac.jp/help_login" target="_blank">DFASTにてメタデータを入力し、Format Check</a>をしておいてください。<br />
+    <p>ハイフンを含めた36桁のIDです。Submitするには、<a href="https://dfast.ddbj.nig.ac.jp/help_login" target="_blank" rel="noopener noreferrer">DFASTにてメタデータを入力し、Format Check</a>をしておいてください。<br />
     複数のjob IDを指定する場合は改行で区切ってください。</p>
 
   submit: Retrieve submission files from DFAST
@@ -277,7 +277,7 @@ ggs-extractor:
   ids-label: GGS job IDs
 
   ids-help-html: |
-    <p>ハイフンを含めた36桁のIDです。<a href="https://gss.ddbj.nig.ac.jp" target="_blank">GGS (Gene/genome submission tool)</a> で完了したジョブのIDを指定してください。<br />
+    <p>ハイフンを含めた36桁のIDです。<a href="https://gss.ddbj.nig.ac.jp" target="_blank" rel="noopener noreferrer">GGS (Gene/genome submission tool)</a> で完了したジョブのIDを指定してください。<br />
     複数のjob IDを指定する場合は改行で区切ってください。</p>
 
   submit: Retrieve submission files from GGS

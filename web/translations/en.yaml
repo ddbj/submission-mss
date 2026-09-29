@@ -13,8 +13,8 @@ index:
   title: MSS Application Form
 
   instructions-html: |
-    <p>Mass Submission System (MSS) accepts <a href="https://www.ddbj.nig.ac.jp/ddbj/mss-e.html#outline" target="_blank">the following (1 - 3) nucleotide sequence data (not reads)</a>.<br />
-    We also ask you to see <a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept" target="_blank">"Acceptable data for DDBJ"</a>.</p>
+    <p>Mass Submission System (MSS) accepts <a href="https://www.ddbj.nig.ac.jp/ddbj/mss-e.html#outline" target="_blank" rel="noopener noreferrer">the following (1 - 3) nucleotide sequence data (not reads)</a>.<br />
+    We also ask you to see <a href="https://www.ddbj.nig.ac.jp/documents/data-categories.html#accept" target="_blank" rel="noopener noreferrer">"Acceptable data for DDBJ"</a>.</p>
 
     <ol>
       <li>
@@ -22,10 +22,10 @@ index:
 
         <ul>
           <li>
-            <a href="https://www.ddbj.nig.ac.jp/ddbj/est-e.html" target="_blank">EST</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/tsa-e.html" target="_blank">TSA</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/htc-e.html" target="_blank">HTC</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/gss-e.html" target="_blank">GSS</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/htg-e.html" target="_blank">HTG</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/wgs-e.html" target="_blank">WGS</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/tls-e.html" target="_blank">TLS</a>
+            <a href="https://www.ddbj.nig.ac.jp/ddbj/est-e.html" target="_blank" rel="noopener noreferrer">EST</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/tsa-e.html" target="_blank" rel="noopener noreferrer">TSA</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/htc-e.html" target="_blank" rel="noopener noreferrer">HTC</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/gss-e.html" target="_blank" rel="noopener noreferrer">GSS</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/htg-e.html" target="_blank" rel="noopener noreferrer">HTG</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/wgs-e.html" target="_blank" rel="noopener noreferrer">WGS</a>, <a href="https://www.ddbj.nig.ac.jp/ddbj/tls-e.html" target="_blank" rel="noopener noreferrer">TLS</a>
 
             <ul>
-              <li>See <a href="https://www.ddbj.nig.ac.jp/documents/data-categories-e.html#detail" target="_blank">Annotated/Assembled Data Categories</a> for details.</li>
+              <li>See <a href="https://www.ddbj.nig.ac.jp/documents/data-categories-e.html#detail" target="_blank" rel="noopener noreferrer">Annotated/Assembled Data Categories</a> for details.</li>
             </ul>
           </li>
 
@@ -75,7 +75,7 @@ submission-form:
 
   prerequisite:
     instructions-html: |
-      <p>You can <a href="https://www.ddbj.nig.ac.jp/ddbj/mss.html#submission" target="_blank">apply as one submission</a> when the submission matches the all requirements below. Otherwise, you must separate the submission files so that each submission becomes to match the requirements, and apply each submission separately. See <a href="https://www.ddbj.nig.ac.jp/ddbj/mss-e.html#submission-1" target="_blank">"Example case where you must apply for the registration more than two times"</a>.</p>
+      <p>You can <a href="https://www.ddbj.nig.ac.jp/ddbj/mss.html#submission" target="_blank" rel="noopener noreferrer">apply as one submission</a> when the submission matches the all requirements below. Otherwise, you must separate the submission files so that each submission becomes to match the requirements, and apply each submission separately. See <a href="https://www.ddbj.nig.ac.jp/ddbj/mss-e.html#submission-1" target="_blank" rel="noopener noreferrer">"Example case where you must apply for the registration more than two times"</a>.</p>
 
       <ul>
         <li>same contact person</li>
@@ -101,7 +101,7 @@ submission-form:
   files:
     q-html: |
       <p>Select the file transferring method for the submission.<br />
-      In the case where you upload the submission files, be sure to check the format and/or translation of CDS feature by <a href="https://www.ddbj.nig.ac.jp/ddbj/ume-e.html" target="_blank">UME (Parser, transChecker)</a> and fix the errors. Finally, transfer the submission files having no errors. In order to specify the hold date, you <a href="https://www.ddbj.nig.ac.jp/ddbj/file-format-e.html#date" target="_blank">need to describe the hold_date in COMMON of the annotation file</a>. You cannot specify the hold date by the input area in the form.</p>
+      In the case where you upload the submission files, be sure to check the format and/or translation of CDS feature by <a href="https://www.ddbj.nig.ac.jp/ddbj/ume-e.html" target="_blank" rel="noopener noreferrer">UME (Parser, transChecker)</a> and fix the errors. Finally, transfer the submission files having no errors. In order to specify the hold date, you <a href="https://www.ddbj.nig.ac.jp/ddbj/file-format-e.html#date" target="_blank" rel="noopener noreferrer">need to describe the hold_date in COMMON of the annotation file</a>. You cannot specify the hold date by the input area in the form.</p>
 
     a1: Import the submission files from DFAST Job ID.
     a4: Import the submission files from GGS Job ID.
@@ -196,8 +196,8 @@ submission-form:
       <p>Read more:</p>
 
       <ul class="mb-0">
-        <li><a href="https://www.ddbj.nig.ac.jp/policies-e.html" target="_blank">BSI Terms of Use</a></li>
-        <li><a href="https://www.ddbj.nig.ac.jp/faq/en/abs-data-sharing-e.html" target="_blank">Applicable national and international laws and rules on access and benefit-sharing</a></li>
+        <li><a href="https://www.ddbj.nig.ac.jp/policies-e.html" target="_blank" rel="noopener noreferrer">BSI Terms of Use</a></li>
+        <li><a href="https://www.ddbj.nig.ac.jp/faq/en/abs-data-sharing-e.html" target="_blank" rel="noopener noreferrer">Applicable national and international laws and rules on access and benefit-sharing</a></li>
       </ul>
 
     submit: Apply for registration
@@ -258,7 +258,7 @@ annotation-file-parser:
 
     <pre class="my-2"><code>      locus_tag  {value}</code></pre>
 
-    In case of you applied for the locus tag prefix of the BioSample submission, there is no problem. If not, please apply for the locus_tag prefix using the "Application Form for BioProject/BioSample/DRA Update" in <a href="https://www.ddbj.nig.ac.jp/contact-ddbj-e.html" target="_blank">our contact page</a>. Please note that the locus_tag prefix is required for issuing Accession numbers.
+    In case of you applied for the locus tag prefix of the BioSample submission, there is no problem. If not, please apply for the locus_tag prefix using the "Application Form for BioProject/BioSample/DRA Update" in <a href="https://www.ddbj.nig.ac.jp/contact-ddbj-e.html" target="_blank" rel="noopener noreferrer">our contact page</a>. Please note that the locus_tag prefix is required for issuing Accession numbers.
 
 sequence-file-parser:
   no-entries: No entries found.
@@ -267,7 +267,7 @@ dfast-extractor:
   ids-label: DFAST job IDs
 
   ids-help-html: |
-    <p>36-digits ID including hyphen. You need to <a href="https://dfast.ddbj.nig.ac.jp/help_login" target="_blank">fill the metadata and run "Format Check" in DFAST</a> before submitting the data.<br />
+    <p>36-digits ID including hyphen. You need to <a href="https://dfast.ddbj.nig.ac.jp/help_login" target="_blank" rel="noopener noreferrer">fill the metadata and run "Format Check" in DFAST</a> before submitting the data.<br />
     You can specify multiple job IDs by delimiting each ID with the line feed.</p>
 
   submit: Retrieve submission files from DFAST
@@ -276,7 +276,7 @@ ggs-extractor:
   ids-label: GGS job IDs
 
   ids-help-html: |
-    <p>36-digits ID including hyphen. Specify the Job ID of a completed <a href="https://gss.ddbj.nig.ac.jp" target="_blank">GGS (Gene/genome submission tool)</a> job.<br />
+    <p>36-digits ID including hyphen. Specify the Job ID of a completed <a href="https://gss.ddbj.nig.ac.jp" target="_blank" rel="noopener noreferrer">GGS (Gene/genome submission tool)</a> job.<br />
     You can specify multiple job IDs by delimiting each ID with the line feed.</p>
 
   submit: Retrieve submission files from GGS
