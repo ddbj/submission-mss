@@ -286,6 +286,7 @@ dfast-extractor:
     You can specify multiple job IDs by delimiting each ID with the line feed.</p>
 
   extract: Retrieve submission files from DFAST
+  ids-missing: Enter the DFAST job IDs.
 
   where-to-fix-html: |
     Files imported from DFAST cannot be corrected here. <a href="https://dfast.ddbj.nig.ac.jp/help_login" target="_blank" rel="noopener noreferrer">Fill or correct the metadata and run "Format Check" in DFAST</a>, or review the job IDs, then retrieve the files again.
@@ -298,6 +299,7 @@ ggs-extractor:
     You can specify multiple job IDs by delimiting each ID with the line feed.</p>
 
   extract: Retrieve submission files from GGS
+  ids-missing: Enter the GGS job IDs.
 
   where-to-fix-html: |
     Files imported from GGS cannot be corrected here. Correct them in <a href="https://gss.ddbj.nig.ac.jp" target="_blank" rel="noopener noreferrer">GGS</a>, or review the job IDs, then retrieve the files again.
