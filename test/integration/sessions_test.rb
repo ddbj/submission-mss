@@ -39,6 +39,56 @@ class SessionsTest < ActionDispatch::IntegrationTest
     assert_match %r{\A#{Regexp.escape(ISSUER)}/protocol/openid-connect/auth\?}, response.headers['Location']
   end
 
+  # And here all the way: the code exchanged for tokens, the ID token checked
+  # against the provider's keys, the user read from userinfo. Nothing else in
+  # the tests goes past the callback's mock.
+  test 'signing in through the identity provider' do
+    key = JSON::JWK.new(OpenSSL::PKey::RSA.generate(2048), kid: 'provider')
+
+    stub_discovery
+    stub_provider_keys key
+
+    without_omniauth_test_mode do
+      state, nonce = start_signing_in
+
+      stub_tokens id_token(key, nonce:)
+      stub_userinfo users(:alice)
+
+      get '/auth/keycloak/callback', params: {code: 'the-code', state:}
+    end
+
+    assert_equal Rails.application.config_for(:app).web_url!, response.headers['Location']
+    assert_requested :post, "#{ISSUER}/protocol/openid-connect/token", body: hash_including(code: 'the-code')
+
+    get '/api/me'
+
+    assert_conform_schema 200
+    assert_equal users(:alice).uid, response.parsed_body['uid']
+  end
+
+  test 'an ID token the provider did not sign is not taken' do
+    key = JSON::JWK.new(OpenSSL::PKey::RSA.generate(2048), kid: 'provider')
+
+    stub_discovery
+    stub_provider_keys key
+
+    assert_error_reported JSON::JWS::VerificationFailed do
+      without_omniauth_test_mode do
+        state, nonce = start_signing_in
+
+        # Signed with another key under the provider's key ID.
+        stub_tokens id_token(JSON::JWK.new(OpenSSL::PKey::RSA.generate(2048), kid: 'provider'), nonce:)
+        stub_userinfo users(:alice)
+
+        get '/auth/keycloak/callback', params: {code: 'the-code', state:}
+      end
+    end
+
+    get '/api/me'
+
+    assert_conform_schema 401
+  end
+
   test 'a sign-in that fails on our side is reported, and goes back quietly' do
     stub_request(:get, "#{ISSUER}/.well-known/openid-configuration").to_return(status: 503)
 
@@ -160,6 +210,58 @@ class SessionsTest < ActionDispatch::IntegrationTest
         response_types_supported:              %w[code],
         subject_types_supported:               %w[public],
         id_token_signing_alg_values_supported: %w[RS256]
+      }.to_json
+    )
+  end
+
+  def stub_provider_keys(key)
+    stub_request(:get, "#{ISSUER}/protocol/openid-connect/certs").to_return(
+      headers: {'Content-Type' => 'application/json'},
+      body:    JSON::JWK::Set.new(key.to_key.public_key.to_jwk(kid: key[:kid])).to_json
+    )
+  end
+
+  # The state and nonce the provider is sent to bring back.
+  def start_signing_in
+    post '/auth/keycloak'
+
+    params = Rack::Utils.parse_query(URI.parse(response.headers['Location']).query)
+
+    params.values_at('state', 'nonce')
+  end
+
+  def id_token(key, nonce:)
+    JSON::JWT.new(
+      iss:   ISSUER,
+      sub:   'the-subject',
+      aud:   Rails.application.config_for(:keycloak).client_id,
+      iat:   Time.current.to_i,
+      exp:   1.hour.from_now.to_i,
+      nonce:
+    ).sign(key, :RS256).to_s
+  end
+
+  def stub_tokens(id_token)
+    stub_request(:post, "#{ISSUER}/protocol/openid-connect/token").to_return(
+      headers: {'Content-Type' => 'application/json'},
+
+      body: {
+        access_token: 'the-access-token',
+        token_type:   'Bearer',
+        expires_in:   300,
+        id_token:
+      }.to_json
+    )
+  end
+
+  def stub_userinfo(user)
+    stub_request(:get, "#{ISSUER}/protocol/openid-connect/userinfo").to_return(
+      headers: {'Content-Type' => 'application/json'},
+
+      body: {
+        sub:                'the-subject',
+        preferred_username: user.uid,
+        email:              user.email
       }.to_json
     )
   end
