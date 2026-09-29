@@ -34,7 +34,7 @@
     "@babel/plugin-transform-typescript": "^7.29.7",
     "@ember-intl/vite": "^2.0.2",
     "@ember/optional-features": "^3.0.0",
-    "@ember/test-helpers": "^5.4.3",
+    "@ember/test-helpers": "^5.5.0",
     "@embroider/compat": "^4.1.23",
     "@embroider/config-meta-loader": "^1.0.0",
     "@embroider/core": "^4.6.7",
