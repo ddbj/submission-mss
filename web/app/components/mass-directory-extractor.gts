@@ -1,12 +1,15 @@
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { getOwner } from '@ember/application';
 import { service } from '@ember/service';
 import { modifier } from 'ember-modifier';
 import { tracked } from '@glimmer/tracking';
+import { t } from 'ember-intl';
 
 import ExtractedFiles from 'mssform/components/extracted-files';
 import SubmissionFileItem from 'mssform/components/submission-file-item';
 import Extraction from 'mssform/models/extraction';
+import isRequestError from 'mssform/utils/is-request-error';
 
 import type { ExtractionPayload } from 'mssform/models/extraction';
 import type ErrorModalService from 'mssform/services/error-modal';
@@ -14,6 +17,7 @@ import type { SubmissionFileData, SubmissionError } from 'mssform/models/submiss
 
 export interface Signature {
   Args: {
+    onStart: () => void;
     onPoll: (payload: ExtractionPayload) => void;
     crossoverErrors: Map<SubmissionFileData, SubmissionError[]>;
   };
@@ -22,12 +26,32 @@ export interface Signature {
 export default class MassDirectoryExtractorComponent extends Component<Signature> {
   @service declare errorModal: ErrorModalService;
 
+  @tracked extracting = false;
   @tracked files: SubmissionFileData[] = [];
 
-  fetchFiles = modifier(() => {
-    const abort = new AbortController();
+  #abort = new AbortController();
 
-    void (async () => {
+  willDestroy() {
+    super.willDestroy();
+    this.#abort.abort();
+  }
+
+  // The directory is the submitter's own, so there is nothing to ask before
+  // looking in it.
+  extractOnInsert = modifier(() => {
+    void this.extract();
+  });
+
+  // Again after the submitter has corrected the files there: they cannot be
+  // corrected here.
+  @action
+  async extract() {
+    this.extracting = true;
+    this.files = [];
+
+    this.args.onStart();
+
+    try {
       const extraction = await Extraction.create(getOwner(this)!, '/mass_directory_extractions');
 
       await extraction.pollForResult(
@@ -39,21 +63,44 @@ export default class MassDirectoryExtractorComponent extends Component<Signature
         (error) => {
           this.errorModal.show(new Error(error.reason ?? error.id));
         },
-        abort.signal,
+        this.#abort.signal,
       );
-    })().catch((e) => {
-      if (e instanceof DOMException && e.name === 'AbortError') return;
-      throw e;
-    });
+    } catch (e) {
+      // The error modal has shown what went wrong with the request, and an
+      // abort means the submitter has left: nothing is left to handle here.
+      if (isRequestError(e) || (e instanceof DOMException && e.name === 'AbortError')) return;
 
-    return () => abort.abort();
-  });
+      throw e;
+    } finally {
+      this.extracting = false;
+    }
+  }
 
   <template>
-    <div {{this.fetchFiles}} class="card">
-      <ExtractedFiles @files={{this.files}} @crossoverErrors={{@crossoverErrors}} as |file errors|>
-        <SubmissionFileItem @file={{file}} @errors={{errors}} />
-      </ExtractedFiles>
+    <div {{this.extractOnInsert}} class="card">
+      <div class="card-body">
+        <button type="button" class="btn btn-outline-primary" disabled={{this.extracting}} {{on "click" this.extract}}>
+          {{t "mass-directory-extractor.extract-again"}}
+        </button>
+
+        {{#if this.extracting}}
+          <div class="spinner-border spinner-border-secondary spinner-border-sm opacity-50 ms-2" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        {{/if}}
+      </div>
+
+      {{#if this.files.length}}
+        <ExtractedFiles @files={{this.files}} @crossoverErrors={{@crossoverErrors}}>
+          <:default as |file errors|>
+            <SubmissionFileItem @file={{file}} @errors={{errors}} />
+          </:default>
+
+          <:whereToFix>
+            {{t "mass-directory-extractor.where-to-fix"}}
+          </:whereToFix>
+        </ExtractedFiles>
+      {{/if}}
     </div>
   </template>
 }

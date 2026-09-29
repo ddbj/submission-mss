@@ -4,6 +4,7 @@ import { setupTest } from 'mssform/tests/helpers';
 import {
   collectCrossoverErrors,
   hasBlockingErrors,
+  hasErrors,
   validateDuplicates,
   validatePairs,
   validateSameness,
@@ -101,6 +102,23 @@ module('Unit | Utility | crossover errors', function (hooks) {
     ]);
   });
 
+  test('the annotation files agree, whatever order their lines are in', function (assert) {
+    const alice = file('foo', 'annotation', {
+      parsedData: { contactPerson: contactPerson('alice@example.com'), holdDate: null },
+    });
+
+    const { fullName, email, affiliation } = contactPerson('alice@example.com');
+
+    const reordered = file('bar', 'annotation', {
+      parsedData: { contactPerson: { affiliation, fullName, email }, holdDate: null },
+    });
+
+    const errors = collectCrossoverErrors([alice, reordered], [validateSameness]);
+
+    assert.deepEqual(idsFor(errors, alice), []);
+    assert.deepEqual(idsFor(errors, reordered), []);
+  });
+
   test('files that are still being read block', function (assert) {
     const files = [file('foo', 'annotation', { isParsing: true })];
 
@@ -121,5 +139,18 @@ module('Unit | Utility | crossover errors', function (hooks) {
     const duplicated = [file('foo', 'annotation'), file('foo', 'annotation')];
 
     assert.true(hasBlockingErrors(duplicated, collectCrossoverErrors(duplicated, [validateDuplicates])));
+  });
+
+  test('files that are still being read are not wrong for it', function (assert) {
+    const files = [file('foo', 'annotation', { isParsing: true })];
+
+    assert.false(hasErrors(files, collectCrossoverErrors(files, [])));
+  });
+
+  test('a file is wrong in the company of the others alone', function (assert) {
+    const files = [file('foo', 'annotation')];
+
+    assert.false(hasErrors(files, collectCrossoverErrors(files, [])));
+    assert.true(hasErrors(files, collectCrossoverErrors(files, [validatePairs])));
   });
 });

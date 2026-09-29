@@ -14,6 +14,8 @@ addEventListener('message', async ({ data: { file } }) => {
 const email_re =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
+const CONTACT_PERSON_QUALIFIERS = ['contact', 'email', 'institute'];
+
 class ParseError {
   constructor(severity, id, value) {
     this.severity = severity;
@@ -30,11 +32,20 @@ async function parse(file) {
   let inCommon;
 
   for await (const line of lines(file)) {
-    const [entry, , , qualifier, value] = line.split('\t');
+    const [entry, , , qualifier, rawValue] = line.split('\t');
+
+    // The same whitespace as the server's parser strips, so that the two agree
+    // on what is blank.
+    const value = rawValue?.replace(/^[\s\u0085]+|[\s\u0085]+$/g, '') || undefined;
 
     if (entry) {
       inCommon = entry === 'COMMON';
     }
+
+    // Templates, and DFAST jobs run without metadata, leave the contact
+    // person's qualifiers with no value. Such a line says no more than a
+    // missing one would.
+    if (!value && CONTACT_PERSON_QUALIFIERS.includes(qualifier)) continue;
 
     if (inCommon) {
       switch (qualifier) {
@@ -44,12 +55,10 @@ async function parse(file) {
             break;
           }
 
-          contactPerson.fullName = value?.trim();
+          contactPerson.fullName = value;
           break;
-        case 'email': {
-          const trimmedEmail = value?.trim();
-
-          if (!email_re.test(trimmedEmail)) {
+        case 'email':
+          if (!email_re.test(value)) {
             errors.push(new ParseError('error', 'annotation-file-parser.invalid-email-address', value));
             break;
           }
@@ -59,28 +68,26 @@ async function parse(file) {
             break;
           }
 
-          contactPerson.email = trimmedEmail;
+          contactPerson.email = value;
           break;
-        }
         case 'institute':
           if (contactPerson.affiliation) {
             errors.push(new ParseError('error', 'annotation-file-parser.duplicate-contact-person-information'));
             break;
           }
 
-          contactPerson.affiliation = value?.trim();
+          contactPerson.affiliation = value;
           break;
-        case 'hold_date': {
-          const m = value.match(/^(\d{4})(\d{2})(\d{2})$/);
+        case 'hold_date':
+          // A blank or impossible date is not taken for none: that would publish
+          // the data as soon as it is accepted, which cannot be taken back.
+          holdDate = parseHoldDate(value);
 
-          if (!m) {
+          if (!holdDate) {
             errors.push(new ParseError('error', 'annotation-file-parser.invalid-hold-date', value));
-            break;
           }
 
-          holdDate = m.slice(1).join('-');
           break;
-        }
         default:
         // do nothing
       }
@@ -102,6 +109,22 @@ async function parse(file) {
   }
 
   return [errors, hasErrors ? null : { contactPerson, holdDate }];
+}
+
+// YYYYMMDD, of a day that exists, as YYYY-MM-DD.
+function parseHoldDate(value) {
+  const m = value?.match(/^(\d{4})(\d{2})(\d{2})$/);
+
+  if (!m) return null;
+
+  const [, year, month, day] = m.map(Number);
+  const date = new Date(0);
+
+  date.setUTCFullYear(year, month - 1, day);
+
+  if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) return null;
+
+  return m.slice(1).join('-');
 }
 
 async function* lines(file) {

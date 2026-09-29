@@ -166,12 +166,66 @@ module('Acceptance | upload', function (hooks) {
 
     await waitFor('.list-group-item');
 
+    assert.dom('.alert-danger').doesNotExist('nothing to correct, so nowhere to be sent');
+
     await click('button.px-5[type="submit"]');
 
     await waitUntil(() => currentURL()?.split('?')[0] === '/home/submission/NSUB000001');
 
     // An import sends what to copy, not the files themselves.
     assert.deepEqual(uploaded, { upload: { via: 'dfast', extraction_id: 1 } });
+  });
+
+  test('an imported file that is wrong says where to correct it', async function (assert) {
+    worker.use(
+      http.post('/dfast_extractions', ({ response }) => {
+        return response(201).json({
+          _self: '/dfast_extractions/1',
+          id: 1,
+          state: 'pending',
+          error: null,
+          files: [],
+        });
+      }),
+
+      http.get('/dfast_extractions/{id}', ({ response }) => {
+        return response(200).json({
+          _self: '/dfast_extractions/1',
+          id: 1,
+          state: 'fulfilled',
+          error: null,
+
+          files: [
+            {
+              name: '01234567-89ab-cdef-0000-000000000001/test.ann',
+              basename: 'test',
+              size: 50,
+              isParsing: false,
+              parsedData: null,
+              isParseSucceeded: false,
+              errors: [{ severity: 'error', id: 'annotation-file-parser.missing-contact-person', value: null }],
+              fileType: 'annotation' as const,
+              jobId: '01234567-89ab-cdef-0000-000000000001',
+            },
+          ],
+        });
+      }),
+    );
+
+    await visit('/home/submission/NSUB000001/upload');
+
+    await clickRadio('Import the submission files from DFAST Job ID');
+    await fillIn('textarea', '01234567-89ab-cdef-0000-000000000001');
+    await click('.card-body button[type="submit"]');
+
+    await waitFor('.list-group-item');
+
+    // The file cannot be edited here, and the submitter who ran DFAST without
+    // its metadata needs to be told that DFAST is where to fill it in.
+    assert.dom('.list-group-item').containsText('Contact person information (contact, email, institute) is missing.');
+    assert.dom('.alert-danger').containsText('Files imported from DFAST cannot be corrected here.');
+    assert.dom('.alert-danger a').hasAttribute('href', 'https://dfast.ddbj.nig.ac.jp/help_login');
+    assert.dom('button.px-5[type="submit"]').isDisabled();
   });
 
   test('a warning does not stand in the way', async function (assert) {

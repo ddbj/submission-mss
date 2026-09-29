@@ -20,8 +20,13 @@ export function collectCrossoverErrors(files: SubmissionFileData[], validations:
 
 // Whether anything stands in the way of sending these files.
 export function hasBlockingErrors(files: SubmissionFileData[], crossoverErrors: CrossoverErrors) {
+  return files.some((file) => file.isParsing) || hasErrors(files, crossoverErrors);
+}
+
+// Whether any of these files has something wrong with it, on its own or in the
+// company of the others.
+export function hasErrors(files: SubmissionFileData[], crossoverErrors: CrossoverErrors) {
   for (const file of files) {
-    if (file.isParsing) return true;
     if (file.errors?.some((e) => e.severity === 'error')) return true;
   }
 
@@ -71,7 +76,11 @@ export function validateSameness(errors: CrossoverErrors, files: SubmissionFileD
   for (const { parsedData } of annotations) {
     const { contactPerson, holdDate } = parsedData!;
 
-    contactPersons.add(JSON.stringify(contactPerson));
+    // In a fixed order: the parser builds the object in the order of the
+    // file's lines, which two files that agree need not share.
+    const { fullName, email, affiliation } = contactPerson ?? {};
+
+    contactPersons.add(JSON.stringify([fullName, email, affiliation]));
     holdDates.add(holdDate ?? '');
   }
 

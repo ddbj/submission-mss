@@ -114,6 +114,7 @@ interface Signature {
       <JobIdExtractor
         @endpoint="/dfast_extractions"
         @i18nPrefix="dfast-extractor"
+        @onStart={{@selection.onExtractStart}}
         @onPoll={{@selection.onExtractProgress}}
         @crossoverErrors={{@selection.crossoverErrors}}
       />
@@ -121,6 +122,7 @@ interface Signature {
       <JobIdExtractor
         @endpoint="/ggs_extractions"
         @i18nPrefix="ggs-extractor"
+        @onStart={{@selection.onExtractStart}}
         @onPoll={{@selection.onExtractProgress}}
         @crossoverErrors={{@selection.crossoverErrors}}
       />
@@ -141,6 +143,7 @@ interface Signature {
       </div>
     {{else if (eq @selection.via "mass_directory")}}
       <MassDirectoryExtractor
+        @onStart={{@selection.onExtractStart}}
         @onPoll={{@selection.onExtractProgress}}
         @crossoverErrors={{@selection.crossoverErrors}}
       />
