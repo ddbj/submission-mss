@@ -18,6 +18,7 @@ export interface Signature {
   Args: {
     endpoint: string;
     i18nPrefix: string;
+    onStart: () => void;
     onPoll: (payload: ExtractionPayload) => void;
     crossoverErrors: Map<SubmissionFileData, SubmissionError[]>;
   };
@@ -53,6 +54,8 @@ export default class JobIdExtractorComponent extends Component<Signature> {
     event.preventDefault();
     this.extracting = true;
     this.files = [];
+
+    this.args.onStart();
 
     try {
       const extraction = await Extraction.create(getOwner(this)!, this.args.endpoint, this.jobIds);

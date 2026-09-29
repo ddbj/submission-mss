@@ -51,6 +51,13 @@ export default class FileSelection {
     this.files = this.files.filter((f) => f !== file);
   }
 
+  // A new extraction replaces whatever the last one found, before it has found
+  // anything itself: until then there is nothing to send.
+  @action onExtractStart() {
+    this.extractionId = undefined;
+    this.files = [];
+  }
+
   // An extraction reports the files it has found so far, replacing what it
   // reported before.
   @action onExtractProgress({ id, files }: { id: number; files: SubmissionFileData[] }) {
