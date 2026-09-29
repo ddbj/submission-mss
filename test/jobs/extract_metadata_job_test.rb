@@ -471,7 +471,8 @@ class ExtractMetadataJobTest < ActiveJob::TestCase
 
     assert_equal 'rejected', @extraction.state
     assert_equal 'invalid_archive', @extraction.error['id']
-    assert_match(/\Azzz\.tar: /, @extraction.error['reason'])
+    assert_equal 'zzz.tar', @extraction.error['file']
+    assert_predicate @extraction.error['detail'], :present?
 
     # aaa.ann is copied before zzz.tar fails; the rejection must keep no files,
     # on disk no more than in the database.
@@ -494,8 +495,8 @@ class ExtractMetadataJobTest < ActiveJob::TestCase
     @extraction.reload
 
     assert_equal 'rejected', @extraction.state
-    assert_equal 'unreadable_file', @extraction.error['id']
-    assert_equal 'zzz.ann: broken symlink', @extraction.error['reason']
+    assert_equal 'broken_symlink', @extraction.error['id']
+    assert_equal 'zzz.ann',        @extraction.error['file']
 
     # aaa.ann is copied before zzz.ann fails; the rejection must keep no files.
     assert_empty @extraction.files

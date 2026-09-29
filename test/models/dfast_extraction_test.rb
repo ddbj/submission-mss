@@ -46,9 +46,41 @@ class DfastExtractionTest < ActiveSupport::TestCase
         extraction.prepare_files
       end
 
-      assert_equal :duplicate_file_name,                              error.id
-      assert_equal 'duplicate file name: SAMD01943820_unspecified.ann', error.data[:reason]
+      assert_equal :duplicate_file_name_across_jobs, error.id
+
+      assert_equal({
+        file:         'SAMD01943820_unspecified.ann',
+        job_id:       job2,
+        other_job_id: job1
+      }, error.data)
     end
+  end
+
+  test 'prepare_files rejects two files of one job that are stored under the same name' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+
+    extraction = DfastExtraction.create!(user: users(:alice), dfast_job_ids: [job_id])
+
+    stub_fetch zip_with('a b.ann', 'a_b.ann') do
+      error = assert_raises Extraction::Error do
+        extraction.prepare_files
+      end
+
+      assert_equal :duplicate_file_name, error.id
+      assert_equal({file: 'a_b.ann'},    error.data)
+    end
+  end
+
+  test 'prepare_files takes a job pasted twice once' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+
+    extraction = DfastExtraction.create!(user: users(:alice), dfast_job_ids: [job_id, job_id])
+
+    stub_fetch zip_with('foo.ann') do
+      extraction.prepare_files
+    end
+
+    assert_equal %w[foo.ann], extraction.files.pluck(:name)
   end
 
   test 'prepare_files rejects when a job download fails' do
@@ -65,7 +97,7 @@ class DfastExtractionTest < ActiveSupport::TestCase
 
       assert_equal :failed_to_fetch, error.id
       assert_equal job_id,           error.data[:job_id]
-      assert_equal '404 Not Found',  error.data[:reason]
+      assert_equal '404 Not Found',  error.data[:detail]
     end
   end
 

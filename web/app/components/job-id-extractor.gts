@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { concat, uniqueId } from '@ember/helper';
 import { action } from '@ember/object';
 import { getOwner } from '@ember/application';
-import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { t } from 'ember-intl';
 
@@ -12,7 +11,6 @@ import Extraction from 'mssform/models/extraction';
 import isRequestError from 'mssform/utils/is-request-error';
 
 import type { ExtractionPayload } from 'mssform/models/extraction';
-import type ErrorModalService from 'mssform/services/error-modal';
 import type { SubmissionFileData, SubmissionError } from 'mssform/models/submission-file';
 
 export interface Signature {
@@ -26,8 +24,6 @@ export interface Signature {
 }
 
 export default class JobIdExtractorComponent extends Component<Signature> {
-  @service declare errorModal: ErrorModalService;
-
   @tracked jobIdsText = '';
   @tracked extracting = false;
   @tracked files: SubmissionFileData[] = [];
@@ -61,17 +57,11 @@ export default class JobIdExtractorComponent extends Component<Signature> {
     try {
       const extraction = await Extraction.create(getOwner(this)!, this.args.endpoint, this.jobIds);
 
-      await extraction.pollForResult(
-        (payload) => {
-          this.files = payload.files;
+      await extraction.pollForResult((payload) => {
+        this.files = payload.files;
 
-          this.args.onPoll(payload);
-        },
-        (error) => {
-          this.errorModal.show(new Error(error.reason ?? error.id));
-        },
-        this.#abort.signal,
-      );
+        this.args.onPoll(payload);
+      }, this.#abort.signal);
     } catch (e) {
       // The error modal has shown what went wrong with the request, and an
       // abort means the submitter has left: nothing is left to handle here.

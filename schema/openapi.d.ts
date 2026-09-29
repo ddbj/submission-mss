@@ -595,11 +595,7 @@ export interface components {
             _self: string;
             id: number;
             state: components["schemas"]["ExtractionState"];
-            error: {
-                id: string;
-                job_id?: string;
-                reason?: string;
-            } | null;
+            error: components["schemas"]["ExtractionError"] | null;
             files: components["schemas"]["DfastExtractionFile"][];
         };
         MassDirectoryExtraction: {
@@ -607,15 +603,19 @@ export interface components {
             _self: string;
             id: number;
             state: components["schemas"]["ExtractionState"];
-            error: {
-                id: string;
-                job_id?: string;
-                reason?: string;
-            } | null;
+            error: components["schemas"]["ExtractionError"] | null;
             files: components["schemas"]["MassDirectoryExtractionFile"][];
         };
         /** @enum {string} */
         ExtractionState: "pending" | "fulfilled" | "rejected";
+        ExtractionError: {
+            /** @enum {string} */
+            id: "invalid_job_id" | "failed_to_fetch" | "directory_not_found" | "duplicate_file_name" | "duplicate_file_name_across_jobs" | "invalid_archive" | "broken_symlink" | "unreadable_file" | "unexpected";
+            job_id?: string;
+            other_job_id?: string;
+            file?: string;
+            detail?: string;
+        };
         DfastExtractionFile: {
             name: string;
             basename: string;
@@ -644,11 +644,7 @@ export interface components {
             _self: string;
             id: number;
             state: components["schemas"]["ExtractionState"];
-            error: {
-                id: string;
-                job_id?: string;
-                reason?: string;
-            } | null;
+            error: components["schemas"]["ExtractionError"] | null;
             files: components["schemas"]["GgsExtractionFile"][];
         };
         GgsExtractionFile: {
