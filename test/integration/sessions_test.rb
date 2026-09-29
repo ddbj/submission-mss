@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class SessionsTest < ActionDispatch::IntegrationTest
+  ISSUER = URI.join(Rails.application.config_for(:keycloak).url!, '/realms/master').to_s
+
   test 'signing in leaves the credential in the cookie and nowhere else' do
     visit_provider_callback users(:alice)
 
@@ -20,6 +22,61 @@ class SessionsTest < ActionDispatch::IntegrationTest
 
     assert_conform_schema 200
     assert_equal users(:alice).uid, response.parsed_body['uid']
+  end
+
+  # Everywhere else the sign-in is mocked up to the callback. Here it goes to
+  # the identity provider for real, up to reading how to reach it -- which a
+  # JSON gem that Faraday called the wrong way once broke, unnoticed until
+  # nobody could sign in.
+  test 'signing in starts at the identity provider' do
+    stub_discovery
+
+    without_omniauth_test_mode do
+      post '/auth/keycloak'
+    end
+
+    assert_response :redirect
+    assert_match %r{\A#{Regexp.escape(ISSUER)}/protocol/openid-connect/auth\?}, response.headers['Location']
+  end
+
+  test 'a sign-in that fails on our side is reported, and goes back quietly' do
+    stub_request(:get, "#{ISSUER}/.well-known/openid-configuration").to_return(status: 503)
+
+    assert_error_reported OpenIDConnect::Discovery::DiscoveryFailed do
+      without_omniauth_test_mode do
+        post '/auth/keycloak'
+      end
+    end
+
+    # Not by way of a URL carrying what went wrong, which can be longer than
+    # the proxy in front of us will pass on.
+    assert_equal Rails.application.config_for(:app).web_url!, response.headers['Location']
+  end
+
+  test 'a sign-in that does not survive the round trip is reported' do
+    # Back at the callback with no state to match: the session set on the way
+    # out did not come back with the submitter.
+    assert_error_reported OmniAuth::Strategies::OpenIDConnect::CallbackError do
+      without_omniauth_test_mode do
+        get '/auth/keycloak/callback', params: {code: 'whatever', state: 'whatever'}
+      end
+    end
+
+    assert_equal Rails.application.config_for(:app).web_url!, response.headers['Location']
+  end
+
+  test 'a sign-in the submitter turns down is not reported' do
+    assert_no_error_reported do
+      without_omniauth_test_mode do
+        get '/auth/keycloak/callback', params: {error: 'access_denied'}
+      end
+    end
+
+    assert_equal Rails.application.config_for(:app).web_url!, response.headers['Location']
+
+    get '/api/me'
+
+    assert_conform_schema 401
   end
 
   test 'signing out' do
@@ -88,13 +145,30 @@ class SessionsTest < ActionDispatch::IntegrationTest
     assert_not_equal was, session[:_csrf_token], 'whatever the visitor arrived holding is not carried over'
   end
 
-  test 'a login the provider turned down' do
-    get '/auth/failure'
+  private
 
-    assert_equal Rails.application.config_for(:app).web_url!, response.headers['Location']
+  def stub_discovery
+    stub_request(:get, "#{ISSUER}/.well-known/openid-configuration").to_return(
+      headers: {'Content-Type' => 'application/json'},
 
-    get '/api/me'
+      body: {
+        issuer:                                ISSUER,
+        authorization_endpoint:                "#{ISSUER}/protocol/openid-connect/auth",
+        token_endpoint:                        "#{ISSUER}/protocol/openid-connect/token",
+        userinfo_endpoint:                     "#{ISSUER}/protocol/openid-connect/userinfo",
+        jwks_uri:                              "#{ISSUER}/protocol/openid-connect/certs",
+        response_types_supported:              %w[code],
+        subject_types_supported:               %w[public],
+        id_token_signing_alg_values_supported: %w[RS256]
+      }.to_json
+    )
+  end
 
-    assert_conform_schema 401
+  def without_omniauth_test_mode
+    OmniAuth.config.test_mode = false
+
+    yield
+  ensure
+    OmniAuth.config.test_mode = true
   end
 end
