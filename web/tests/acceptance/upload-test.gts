@@ -4,6 +4,7 @@ import {
   click,
   currentURL,
   fillIn,
+  find,
   findAll,
   settled,
   triggerEvent,
@@ -108,9 +109,12 @@ module('Acceptance | upload', function (hooks) {
 
   test('adding files imported from a job', async function (assert) {
     let uploaded: unknown;
+    let extractions = 0;
 
     worker.use(
       http.post('/dfast_extractions', ({ response }) => {
+        extractions += 1;
+
         return response(201).json({
           _self: '/dfast_extractions/1',
           id: 1,
@@ -163,18 +167,37 @@ module('Acceptance | upload', function (hooks) {
 
     await clickRadio('Import the submission files from DFAST Job ID');
 
-    assert.dom(findButton('Retrieve submission files')).isDisabled('no job to retrieve from yet');
+    // Pressed with no job to retrieve from, it says what is missing rather than
+    // retrieving nothing, and takes the submitter to where it is missing.
+    await click(findButton('Retrieve submission files'));
 
+    assert.dom('textarea').isFocused();
+    assert.dom('textarea').hasClass('is-invalid');
+    assert.dom('textarea').hasAria('invalid', 'true');
+    assert.dom(`#${find('textarea')!.getAttribute('aria-describedby')}`).hasText('Enter the DFAST job IDs.');
+    assert.strictEqual(extractions, 0, 'nothing is asked of the server');
+
+    // Said no longer once there is a job.
     await fillIn('textarea', '01234567-89ab-cdef-0000-000000000001');
+
+    assert.dom('textarea').doesNotHaveClass('is-invalid');
+    assert.dom('textarea').doesNotHaveAttribute('aria-invalid');
+    assert.dom('textarea').doesNotHaveAttribute('aria-describedby');
+
     await click(findButton('Retrieve submission files'));
 
     await waitFor('.list-group-item');
 
     assert.dom('.alert-danger').doesNotExist('nothing to correct, so nowhere to be sent');
 
+    assert.strictEqual(extractions, 1);
+
     // The job IDs are the extractor's, not the form's: clearing them after the
-    // files have come does not stand in the way of sending those files.
+    // files have come does not stand in the way of sending those files -- nor
+    // is it taken for the button pressed with nothing in the field.
     await fillIn('textarea', '');
+
+    assert.dom('textarea').doesNotHaveClass('is-invalid');
 
     await click('button.px-5[type="submit"]');
 

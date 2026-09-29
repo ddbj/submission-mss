@@ -287,6 +287,7 @@ dfast-extractor:
     複数のjob IDを指定する場合は改行で区切ってください。</p>
 
   extract: Retrieve submission files from DFAST
+  ids-missing: DFASTのjob IDを入力してください。
 
   where-to-fix-html: |
     取り込んだファイルはこの画面では修正できません。<a href="https://dfast.ddbj.nig.ac.jp/help_login" target="_blank" rel="noopener noreferrer">DFASTにてメタデータを入力・修正してFormat Check</a>をするか、指定するjob IDを見直してから、もう一度取り込んでください。
@@ -299,6 +300,7 @@ ggs-extractor:
     複数のjob IDを指定する場合は改行で区切ってください。</p>
 
   extract: Retrieve submission files from GGS
+  ids-missing: GGSのjob IDを入力してください。
 
   where-to-fix-html: |
     取り込んだファイルはこの画面では修正できません。<a href="https://gss.ddbj.nig.ac.jp" target="_blank" rel="noopener noreferrer">GGS</a> で修正するか、指定するjob IDを見直してから、もう一度取り込んでください。

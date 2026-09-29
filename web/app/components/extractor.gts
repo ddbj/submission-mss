@@ -18,8 +18,10 @@ export interface Signature {
     endpoint: string;
 
     // What to extract from, for an endpoint that asks. Until there is some,
-    // there is nothing to extract.
+    // there is nothing to extract, and pressing the button only tells
+    // onNothingToExtract so.
     ids?: string[];
+    onNothingToExtract?: () => void;
 
     // Extract as soon as shown, where there is nothing to ask first. The
     // button is then for extracting again.
@@ -64,12 +66,13 @@ export default class ExtractorComponent extends Component<Signature> {
     if (this.args.extractOnInsert) void this.extract();
   });
 
-  get isDisabled() {
-    return this.extracting || this.args.ids?.length === 0;
-  }
-
   @action
   async extract() {
+    if (this.args.ids?.length === 0) {
+      this.args.onNothingToExtract?.();
+      return;
+    }
+
     this.extracting = true;
     this.files = [];
     this.rejection = undefined;
@@ -104,7 +107,7 @@ export default class ExtractorComponent extends Component<Signature> {
         <button
           type="button"
           class="btn {{if @extractOnInsert 'btn-outline-primary' 'btn-primary'}}"
-          disabled={{this.isDisabled}}
+          disabled={{this.extracting}}
           {{on "click" this.extract}}
         >
           {{yield to="button"}}
