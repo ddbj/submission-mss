@@ -13,6 +13,12 @@ class Submission < ApplicationRecord
     enumerize :email_language, in: enums.fetch(:locales).map    { _1.fetch(:key) }, i18n_scope: 'mssform.locales'
   end
 
+  # A date that does not exist is cast to nil, which would have the data
+  # published as soon as it is accepted. Turn it away instead.
+  validate do
+    errors.add :hold_date, :invalid if hold_date_before_type_cast.present? && hold_date.nil?
+  end
+
   def self.last_mass_id_seq
     connection.execute "SELECT pg_advisory_xact_lock(hashtext('submissions.mass_id'))"
 
