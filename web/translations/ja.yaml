@@ -276,6 +276,9 @@ extraction-error:
   unreadable_file: 「{file}」を読み込めません。ファイルの読み取り権限を確認してください。
   unexpected: 予期しないエラーが発生しました。しばらくしてからもう一度お試しください。
 
+extractor:
+  extracting: 取り込み中...
+
 dfast-extractor:
   ids-label: DFAST job IDs
 
@@ -283,7 +286,7 @@ dfast-extractor:
     <p>ハイフンを含めた36桁のIDです。Submitするには、<a href="https://dfast.ddbj.nig.ac.jp/help_login" target="_blank" rel="noopener noreferrer">DFASTにてメタデータを入力し、Format Check</a>をしておいてください。<br />
     複数のjob IDを指定する場合は改行で区切ってください。</p>
 
-  submit: Retrieve submission files from DFAST
+  extract: Retrieve submission files from DFAST
 
   where-to-fix-html: |
     取り込んだファイルはこの画面では修正できません。<a href="https://dfast.ddbj.nig.ac.jp/help_login" target="_blank" rel="noopener noreferrer">DFASTにてメタデータを入力・修正してFormat Check</a>をするか、指定するjob IDを見直してから、もう一度取り込んでください。
@@ -295,7 +298,7 @@ ggs-extractor:
     <p>ハイフンを含めた36桁のIDです。<a href="https://gss.ddbj.nig.ac.jp" target="_blank" rel="noopener noreferrer">GGS (Gene/genome submission tool)</a> で完了したジョブのIDを指定してください。<br />
     複数のjob IDを指定する場合は改行で区切ってください。</p>
 
-  submit: Retrieve submission files from GGS
+  extract: Retrieve submission files from GGS
 
   where-to-fix-html: |
     取り込んだファイルはこの画面では修正できません。<a href="https://gss.ddbj.nig.ac.jp" target="_blank" rel="noopener noreferrer">GGS</a> で修正するか、指定するjob IDを見直してから、もう一度取り込んでください。

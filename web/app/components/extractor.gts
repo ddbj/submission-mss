@@ -15,13 +15,36 @@ import type { SubmissionFileData, SubmissionError } from 'mssform/models/submiss
 
 export interface Signature {
   Args: {
+    endpoint: string;
+
+    // What to extract from, for an endpoint that asks. Until there is some,
+    // there is nothing to extract.
+    ids?: string[];
+
+    // Extract as soon as shown, where there is nothing to ask first. The
+    // button is then for extracting again.
+    extractOnInsert?: boolean;
+
     onStart: () => void;
     onPoll: (payload: ExtractionPayload) => void;
     crossoverErrors: Map<SubmissionFileData, SubmissionError[]>;
   };
+
+  Blocks: {
+    // Whatever says what to extract from; disabled while extracting.
+    fields?: [extracting: boolean];
+
+    button: [];
+
+    // Where to put right what is wrong with the files extracted.
+    whereToFix: [];
+  };
 }
 
-export default class MassDirectoryExtractorComponent extends Component<Signature> {
+// Files gathered by the server from somewhere else -- a job, the submitter's
+// directory -- for the submitter to look over before sending them. The files
+// cannot be changed here; only extracted again once put right where they are.
+export default class ExtractorComponent extends Component<Signature> {
   @tracked extracting = false;
   @tracked files: SubmissionFileData[] = [];
 
@@ -37,14 +60,14 @@ export default class MassDirectoryExtractorComponent extends Component<Signature
     this.#abort.abort();
   }
 
-  // The directory is the submitter's own, so there is nothing to ask before
-  // looking in it.
   extractOnInsert = modifier(() => {
-    void this.extract();
+    if (this.args.extractOnInsert) void this.extract();
   });
 
-  // Again after the submitter has corrected the files there: they cannot be
-  // corrected here.
+  get isDisabled() {
+    return this.extracting || this.args.ids?.length === 0;
+  }
+
   @action
   async extract() {
     this.extracting = true;
@@ -54,7 +77,7 @@ export default class MassDirectoryExtractorComponent extends Component<Signature
     this.args.onStart();
 
     try {
-      const extraction = await Extraction.create(getOwner(this)!, '/mass_directory_extractions');
+      const extraction = await Extraction.create(getOwner(this)!, this.args.endpoint, this.args.ids);
 
       this.rejection = await extraction.pollForResult((payload) => {
         this.files = payload.files;
@@ -73,15 +96,23 @@ export default class MassDirectoryExtractorComponent extends Component<Signature
   }
 
   <template>
+    {{! Not a form of its own: it sits inside the form that sends the files. }}
     <div {{this.extractOnInsert}} class="card">
       <div class="card-body">
-        <button type="button" class="btn btn-outline-primary" disabled={{this.extracting}} {{on "click" this.extract}}>
-          {{t "mass-directory-extractor.extract-again"}}
+        {{yield this.extracting to="fields"}}
+
+        <button
+          type="button"
+          class="btn {{if @extractOnInsert 'btn-outline-primary' 'btn-primary'}}"
+          disabled={{this.isDisabled}}
+          {{on "click" this.extract}}
+        >
+          {{yield to="button"}}
         </button>
 
         {{#if this.extracting}}
           <div class="spinner-border spinner-border-secondary spinner-border-sm opacity-50 ms-2" role="status">
-            <span class="visually-hidden">Loading...</span>
+            <span class="visually-hidden">{{t "extractor.extracting"}}</span>
           </div>
         {{/if}}
 
@@ -97,7 +128,7 @@ export default class MassDirectoryExtractorComponent extends Component<Signature
           </:default>
 
           <:whereToFix>
-            {{t "mass-directory-extractor.where-to-fix"}}
+            {{yield to="whereToFix"}}
           </:whereToFix>
         </ExtractedFiles>
       {{/if}}

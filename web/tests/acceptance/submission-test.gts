@@ -13,6 +13,7 @@ import {
 import { setupApplicationTest } from 'mssform/tests/helpers';
 import { setupAuthentication } from 'mssform/tests/helpers/setup-auth';
 import clickRadio from 'mssform/tests/helpers/click-radio';
+import findButton from 'mssform/tests/helpers/find-button';
 import findRadio from 'mssform/tests/helpers/find-radio';
 
 import { HttpResponse, http as mswHttp } from 'msw';
@@ -118,12 +119,6 @@ function stallDigest() {
   };
 
   return digest;
-}
-
-function importAgainButton() {
-  return findAll('button').find((button) =>
-    button.textContent?.includes('Import from the directory again'),
-  ) as HTMLButtonElement;
 }
 
 module('Acceptance | submission', function (hooks) {
@@ -397,7 +392,7 @@ module('Acceptance | submission', function (hooks) {
 
     await clickRadio('Import the submission files from DFAST Job ID');
     await fillIn('textarea', '01234567-89ab-cdef-0000-000000000001');
-    await click('.card-body button[type="submit"]');
+    await click(findButton('Retrieve submission files'));
 
     await waitFor('.list-group-item');
 
@@ -644,7 +639,7 @@ module('Acceptance | submission', function (hooks) {
     assert.dom('.alert-danger').containsText('Files imported from the directory cannot be corrected here.');
     assert.dom('button[type="submit"]').isDisabled();
 
-    await click(importAgainButton());
+    await click(findButton('Import from the directory again'));
 
     await waitUntil(() => findAll('.list-group-item').length === 2);
 
@@ -705,9 +700,9 @@ module('Acceptance | submission', function (hooks) {
     assert.dom('.modal.show').doesNotExist();
     assert.dom('button[type="submit"]').isDisabled('nothing to send');
 
-    void click(importAgainButton());
+    void click(findButton('Import from the directory again'));
 
-    await waitUntil(() => extractions === 2 && importAgainButton().disabled);
+    await waitUntil(() => extractions === 2 && findButton('Import from the directory again').disabled);
 
     // Gone as soon as the next attempt starts, not when it ends.
     assert.dom('.alert-danger').doesNotExist();
@@ -741,7 +736,7 @@ module('Acceptance | submission', function (hooks) {
 
     // Surfaced in the error modal, not leaked as an unhandled rejection (which
     // fails this test), and the submitter is not left without a way to retry.
-    await waitUntil(() => !importAgainButton().disabled);
+    await waitUntil(() => !findButton('Import from the directory again').disabled);
 
     assert.dom('button[type="submit"]').isDisabled();
   });
@@ -832,7 +827,7 @@ module('Acceptance | submission', function (hooks) {
 
     await clickRadio('Import the submission files from GGS Job ID');
     await fillIn('textarea', '01234567-89ab-cdef-0000-000000000001');
-    await click('.card-body button[type="submit"]');
+    await click(findButton('Retrieve submission files'));
 
     await waitFor('.list-group-item');
 
@@ -924,7 +919,7 @@ module('Acceptance | submission', function (hooks) {
 
     await clickRadio('Import the submission files from DFAST Job ID');
     await fillIn('textarea', '01234567-89ab-cdef-0000-000000000001');
-    await click('.card-body button[type="submit"]');
+    await click(findButton('Retrieve submission files'));
 
     await waitFor('.alert-danger');
 
@@ -943,7 +938,7 @@ module('Acceptance | submission', function (hooks) {
     // not when it ends.
     rejected = false;
 
-    void click('.card-body button[type="submit"]');
+    void click(findButton('Retrieve submission files'));
 
     await waitFor('.spinner-border');
 
