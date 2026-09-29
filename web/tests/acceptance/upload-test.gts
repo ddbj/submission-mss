@@ -312,5 +312,17 @@ module('Acceptance | upload', function (hooks) {
 
     assert.dom('.list-group-item').exists({ count: 2 }, 'both files are flagged');
     assert.dom('button.px-5[type="submit"]').isDisabled();
+
+    // Said beside the button, and tied to it for screen readers, since it
+    // cannot be pressed to find out.
+    const why = `#${find('button.px-5[type="submit"]')!.getAttribute('aria-describedby')}`;
+
+    assert.dom(why).hasText('Some files have errors. See the message on each file.');
+
+    await click(findAll('.list-group-item button')[1]!);
+
+    assert.dom('button.px-5[type="submit"]').isNotDisabled();
+    assert.dom('button.px-5[type="submit"]').doesNotHaveAttribute('aria-describedby');
+    assert.dom(why).hasNoText();
   });
 });

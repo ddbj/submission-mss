@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { concat, uniqueId } from '@ember/helper';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 
@@ -114,11 +115,21 @@ export default class UploadFormComponent extends Component<Signature> {
         {{#if this.selection.via}}
           <hr />
 
-          <div class="text-end">
-            <button type="submit" disabled={{not this.selection.isSubmittable}} class="btn btn-primary px-5">{{t
-                "upload-form.upload"
-              }}</button>
-          </div>
+          {{#let (uniqueId) this.selection.whyNotSubmittable as |whyId why|}}
+            {{! Always there, so that a reason appearing or changing is read out. }}
+            <p id={{whyId}} class="small text-body-secondary text-end mb-2" role="status">
+              {{#if why}}{{t (concat "file-selection.why-not-submittable." why)}}{{/if}}
+            </p>
+
+            <div class="text-end">
+              <button
+                type="submit"
+                disabled={{not this.selection.isSubmittable}}
+                aria-describedby={{if why whyId}}
+                class="btn btn-primary px-5"
+              >{{t "upload-form.upload"}}</button>
+            </div>
+          {{/let}}
         {{/if}}
       </form>
     </UploadProgressModal>

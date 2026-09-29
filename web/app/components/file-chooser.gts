@@ -116,6 +116,7 @@ interface Signature {
         @i18nPrefix="dfast-extractor"
         @onStart={{@selection.onExtractStart}}
         @onPoll={{@selection.onExtractProgress}}
+        @onEnd={{@selection.onExtractEnd}}
         @crossoverErrors={{@selection.crossoverErrors}}
       />
     {{else if (eq @selection.via "ggs")}}
@@ -124,6 +125,7 @@ interface Signature {
         @i18nPrefix="ggs-extractor"
         @onStart={{@selection.onExtractStart}}
         @onPoll={{@selection.onExtractProgress}}
+        @onEnd={{@selection.onExtractEnd}}
         @crossoverErrors={{@selection.crossoverErrors}}
       />
     {{else if (eq @selection.via "webui")}}
@@ -149,6 +151,7 @@ interface Signature {
         @extractOnInsert={{true}}
         @onStart={{@selection.onExtractStart}}
         @onPoll={{@selection.onExtractProgress}}
+        @onEnd={{@selection.onExtractEnd}}
         @crossoverErrors={{@selection.crossoverErrors}}
       >
         <:button>{{t "mass-directory-extractor.extract-again"}}</:button>

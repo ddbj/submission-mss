@@ -236,6 +236,15 @@ upload-form:
 
   upload: アップロード
 
+file-selection:
+  why-not-submittable:
+    no-via: 登録ファイルの送付方法を選んでください。
+    extracting: 登録ファイルを取り込んでいます。しばらくお待ちください。
+    rejected: 登録ファイルを取り込めませんでした。上のメッセージを確認してください。
+    no-files: 送付する登録ファイルがありません。
+    reading: ファイルを確認しています。しばらくお待ちください。
+    errors: エラーのあるファイルがあります。各ファイルのメッセージを確認してください。
+
 file-list:
   add-files: ファイルの追加
   stats: "{filesCount} ファイル、{totalFileSize}"

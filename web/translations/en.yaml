@@ -235,6 +235,15 @@ upload-form:
 
   upload: Upload
 
+file-selection:
+  why-not-submittable:
+    no-via: Choose how to send the submission files.
+    extracting: The submission files are being imported. Please wait.
+    rejected: The submission files could not be imported. See the message above.
+    no-files: There are no submission files to send.
+    reading: The files are being checked. Please wait.
+    errors: Some files have errors. See the message on each file.
+
 file-list:
   add-files: Add files
   stats: "{filesCount, plural, =1 {1 file} other {# files}}, {totalFileSize}"
