@@ -25,6 +25,11 @@ export default class MassDirectoryExtractorComponent extends Component<Signature
   @tracked extracting = false;
   @tracked files: SubmissionFileData[] = [];
 
+  // Why the last extraction was turned down. Mostly something the submitter can
+  // put right, so it stays beside what they are putting right rather than in
+  // the error modal.
+  @tracked rejection?: string;
+
   #abort = new AbortController();
 
   willDestroy() {
@@ -44,13 +49,14 @@ export default class MassDirectoryExtractorComponent extends Component<Signature
   async extract() {
     this.extracting = true;
     this.files = [];
+    this.rejection = undefined;
 
     this.args.onStart();
 
     try {
       const extraction = await Extraction.create(getOwner(this)!, '/mass_directory_extractions');
 
-      await extraction.pollForResult((payload) => {
+      this.rejection = await extraction.pollForResult((payload) => {
         this.files = payload.files;
 
         this.args.onPoll(payload);
@@ -77,6 +83,10 @@ export default class MassDirectoryExtractorComponent extends Component<Signature
           <div class="spinner-border spinner-border-secondary spinner-border-sm opacity-50 ms-2" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
+        {{/if}}
+
+        {{#if this.rejection}}
+          <div class="alert alert-danger mt-3 mb-0" role="alert">{{this.rejection}}</div>
         {{/if}}
       </div>
 

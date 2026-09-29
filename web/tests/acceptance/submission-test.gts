@@ -653,6 +653,66 @@ module('Acceptance | submission', function (hooks) {
     assert.dom('button[type="submit"]').isNotDisabled();
   });
 
+  test('a rejected directory import is explained until it is imported again', async function (assert) {
+    let extractions = 0;
+
+    worker.use(
+      http.get('/submissions', ({ response }) => {
+        return response(200).json({
+          submissions: [],
+        });
+      }),
+
+      http.get('/submissions/last_submitted', () => {
+        return new HttpResponse(null, { status: 404 });
+      }),
+
+      http.post('/mass_directory_extractions', ({ response }) => {
+        extractions += 1;
+
+        return response(201).json({
+          _self: `/mass_directory_extractions/${extractions}`,
+          id: extractions,
+          state: 'pending',
+          error: null,
+          files: [],
+        });
+      }),
+
+      http.get('/mass_directory_extractions/{id}', ({ params, response }) => {
+        const id = Number(params.id);
+
+        return response(200).json({
+          _self: `/mass_directory_extractions/${id}`,
+          id,
+          state: id === 1 ? 'rejected' : 'pending',
+          error: id === 1 ? { id: 'broken_symlink', file: 'test.ann' } : null,
+          files: [],
+        });
+      }),
+    );
+
+    await visit('/home/submissions/new');
+
+    await clickRadio('Yes, I have determined the nucleotide sequence');
+    await click('button[type="submit"]');
+
+    await clickRadio('Submit all files');
+
+    await waitFor('.alert-danger');
+
+    assert.dom('.alert-danger').hasText('"test.ann" is a symbolic link to nothing. Check the files in the directory.');
+    assert.dom('.modal.show').doesNotExist();
+    assert.dom('button[type="submit"]').isDisabled('nothing to send');
+
+    void click(importAgainButton());
+
+    await waitUntil(() => extractions === 2 && importAgainButton().disabled);
+
+    // Gone as soon as the next attempt starts, not when it ends.
+    assert.dom('.alert-danger').doesNotExist();
+  });
+
   test('a directory import that fails to start shows the error modal and can be tried again', async function (assert) {
     worker.use(
       http.get('/submissions', ({ response }) => {
@@ -677,7 +737,7 @@ module('Acceptance | submission', function (hooks) {
 
     await clickRadio('Submit all files');
 
-    await waitFor('.modal-body');
+    await waitFor('.modal.show');
 
     // Surfaced in the error modal, not leaked as an unhandled rejection (which
     // fails this test), and the submitter is not left without a way to retry.
@@ -810,7 +870,9 @@ module('Acceptance | submission', function (hooks) {
     assert.dom().containsText('NSUB000004', 'MASS ID is displayed');
   });
 
-  test('a rejected extraction shows the error modal instead of leaking an unhandled rejection', async function (assert) {
+  test('a rejected extraction is explained beside the job IDs', async function (assert) {
+    let rejected = true;
+
     worker.use(
       http.get('/submissions', ({ response }) => {
         return response(200).json({
@@ -833,11 +895,21 @@ module('Acceptance | submission', function (hooks) {
       }),
 
       http.get('/dfast_extractions/{id}', ({ response }) => {
+        if (rejected) {
+          return response(200).json({
+            _self: '/dfast_extractions/1',
+            id: 1,
+            state: 'rejected',
+            error: { id: 'failed_to_fetch', job_id: '01234567-89ab-cdef-0000-000000000001', detail: '404 Not Found' },
+            files: [],
+          });
+        }
+
         return response(200).json({
           _self: '/dfast_extractions/1',
           id: 1,
-          state: 'rejected',
-          error: { id: 'failed_to_fetch', job_id: '01234567-89ab-cdef-0000-000000000001', detail: '404 Not Found' },
+          state: 'pending',
+          error: null,
           files: [],
         });
       }),
@@ -854,15 +926,28 @@ module('Acceptance | submission', function (hooks) {
     await fillIn('textarea', '01234567-89ab-cdef-0000-000000000001');
     await click('.card-body button[type="submit"]');
 
-    await waitFor('.modal-body p');
+    await waitFor('.alert-danger');
 
-    // A rejected extraction is an expected user error: it must surface in the
-    // error modal, not escape as an unhandled rejection (which fails this test).
+    // The submitter can put it right, so it is said beside the job IDs they
+    // put it right in, not in the error modal meant for what they cannot.
     assert
-      .dom('.modal-body p')
+      .dom('.alert-danger')
       .hasText(
         'Could not retrieve the submission files of the job ID "01234567-89ab-cdef-0000-000000000001" from DFAST (404 Not Found). Check the job ID, and that you have filled the metadata and run "Format Check" in DFAST.',
       );
+
+    assert.dom('.modal.show').doesNotExist();
+    assert.dom('button.px-5[type="submit"]').isDisabled('nothing to send');
+
+    // Once put right, the explanation goes as soon as the next attempt starts,
+    // not when it ends.
+    rejected = false;
+
+    void click('.card-body button[type="submit"]');
+
+    await waitFor('.spinner-border');
+
+    assert.dom('.alert-danger').doesNotExist();
   });
 
   test('a failed webui upload shows the error modal instead of leaking an unhandled rejection', async function (assert) {

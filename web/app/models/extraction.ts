@@ -5,7 +5,6 @@ import type { components } from 'schema/openapi';
 import type Owner from '@ember/owner';
 import type IntlService from 'ember-intl/services/intl';
 import type { RequestManager } from '@warp-drive/core';
-import type ErrorModalService from 'mssform/services/error-modal';
 import type { SubmissionFileData } from 'mssform/models/submission-file';
 
 // The three extraction payloads share the same shape apart from their file
@@ -28,7 +27,6 @@ export default class Extraction {
     return new Extraction(owner, content._self);
   }
 
-  @service declare errorModal: ErrorModalService;
   @service declare intl: IntlService;
   @service declare requestManager: RequestManager;
 
@@ -40,8 +38,8 @@ export default class Extraction {
     this.url = url;
   }
 
-  // Reports the files found so far until the extraction is done with. One that
-  // is turned down is explained in the error modal.
+  // Reports the files found so far until the extraction is done with, and
+  // resolves to why it was turned down, in words, if it was.
   async pollForResult(callback: (payload: ExtractionPayload) => void, signal?: AbortSignal) {
     for (;;) {
       signal?.throwIfAborted();
@@ -59,10 +57,9 @@ export default class Extraction {
           await new Promise((resolve) => setTimeout(resolve, 1000));
           continue;
         case 'fulfilled':
-          return;
+          return undefined;
         case 'rejected':
-          this.errorModal.show(new Error(this.describe(payload.error!)));
-          return;
+          return this.describe(payload.error!);
         default:
           throw new Error('must not happen');
       }
