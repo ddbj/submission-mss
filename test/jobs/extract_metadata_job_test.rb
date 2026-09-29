@@ -17,7 +17,7 @@ class ExtractMetadataJobTest < ActiveJob::TestCase
       COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
       \t\t\temail\talice@example.com
       \t\t\tinstitute\tWonderland Inc.
-      \tDATE\t\thold_date\t20200102
+      \tDATE\t\thold_date\t20990102
     ANN
 
     ExtractMetadataJob.perform_now @extraction
@@ -32,7 +32,7 @@ class ExtractMetadataJobTest < ActiveJob::TestCase
         'email'       => 'alice@example.com',
         'affiliation' => 'Wonderland Inc.'
       },
-      'holdDate' => '2020-01-02'
+      'holdDate' => '2099-01-02'
     }, file.parsed_data)
 
     assert_equal [], file._errors
@@ -57,7 +57,7 @@ class ExtractMetadataJobTest < ActiveJob::TestCase
 
   test 'ann: missing contact person' do
     write_file 'foo.ann', <<~ANN
-      COMMON\tDATE\t\thold_date\t20231126
+      COMMON\tDATE\t\thold_date\t20991126
     ANN
 
     ExtractMetadataJob.perform_now @extraction
@@ -98,7 +98,7 @@ class ExtractMetadataJobTest < ActiveJob::TestCase
       COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
       \t\t\temail\tfoo
       \t\t\tinstitute\tWonderland Inc.
-      \tDATE\t\thold_date\t20200102
+      \tDATE\t\thold_date\t20990102
     ANN
 
     ExtractMetadataJob.perform_now @extraction
@@ -350,6 +350,40 @@ class ExtractMetadataJobTest < ActiveJob::TestCase
     end
   end
 
+  test 'ann: a hold date in the past' do
+    write_file 'foo.ann', <<~ANN
+      COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
+      \t\t\temail\talice@example.com
+      \t\t\tinstitute\tWonderland Inc.
+      \tDATE\t\thold_date\t20000101
+    ANN
+
+    ExtractMetadataJob.perform_now @extraction
+
+    file = @extraction.files.first
+
+    assert_equal '2000-01-01', file.parsed_data['holdDate']
+
+    assert_equal [
+      'severity' => 'warning',
+      'id'       => 'annotation-file-parser.past-hold-date',
+      'value'    => '20000101'
+    ], file._errors
+  end
+
+  test 'ann: a hold date of today' do
+    write_file 'foo.ann', <<~ANN
+      COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
+      \t\t\temail\talice@example.com
+      \t\t\tinstitute\tWonderland Inc.
+      \tDATE\t\thold_date\t#{Date.current.strftime('%Y%m%d')}
+    ANN
+
+    ExtractMetadataJob.perform_now @extraction
+
+    assert_equal [], @extraction.files.first._errors
+  end
+
   test 'ann: temporary locus_tag' do
     write_file 'foo.ann', <<~ANN
       COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
@@ -464,6 +498,38 @@ class ExtractMetadataJobTest < ActiveJob::TestCase
     assert_equal 'zzz.ann: broken symlink', @extraction.error['reason']
 
     # aaa.ann is copied before zzz.ann fails; the rejection must keep no files.
+    assert_empty @extraction.files
+  end
+
+  test 'an unexpected failure rejects the extraction' do
+    write_file 'foo.fasta', ">entry1\nATCG\n"
+
+    def @extraction.prepare_files
+      super
+
+      raise 'something we did not see coming'
+    end
+
+    assert_raises RuntimeError do
+      ExtractMetadataJob.perform_now @extraction
+    end
+
+    @extraction.reload
+
+    assert_equal 'rejected', @extraction.state
+    assert_equal 'unexpected', @extraction.error['id']
+    assert_empty @extraction.files, 'what was gathered before the failure goes'
+    assert_not @extraction.working_dir.exist?
+  end
+
+  test 'an extraction no longer pending is left alone' do
+    @extraction.update! state: 'rejected', error: {id: 'unexpected'}
+
+    write_file 'foo.fasta', ">entry1\nATCG\n"
+
+    ExtractMetadataJob.perform_now @extraction
+
+    assert_equal 'rejected', @extraction.reload.state
     assert_empty @extraction.files
   end
 end

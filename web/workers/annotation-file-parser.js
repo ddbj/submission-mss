@@ -85,6 +85,10 @@ async function parse(file) {
 
           if (!holdDate) {
             errors.push(new ParseError('error', 'annotation-file-parser.invalid-hold-date', value));
+          } else if (holdDate < today()) {
+            // Allowed, but most likely not meant: the data is published as soon
+            // as it has been processed.
+            errors.push(new ParseError('warning', 'annotation-file-parser.past-hold-date', value));
           }
 
           break;
@@ -125,6 +129,14 @@ function parseHoldDate(value) {
   if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) return null;
 
   return m.slice(1).join('-');
+}
+
+// Today as YYYY-MM-DD, in Japan wherever the submitter is: DDBJ, and the server
+// that checks imported files, count days there. Japan keeps UTC+9 all year, so
+// shifting the clock is enough -- and, unlike a locale's date format, cannot
+// change under us.
+function today() {
+  return new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
 }
 
 async function* lines(file) {

@@ -16,7 +16,7 @@ module('Unit | Model | annotation file', function (hooks) {
 COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
 \t\t\temail\talice@example.com
 \t\t\tinstitute\tWonderland Inc.
-\tDATE\t\thold_date\t20200102
+\tDATE\t\thold_date\t20990102
       `,
         ],
         'foo.ann',
@@ -33,7 +33,7 @@ COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
       assert.strictEqual(fullName, 'Alice Liddell');
       assert.strictEqual(email, 'alice@example.com');
       assert.strictEqual(affiliation, 'Wonderland Inc.');
-      assert.strictEqual(holdDate, '2020-01-02');
+      assert.strictEqual(holdDate, '2099-01-02');
     });
   }
 
@@ -56,7 +56,7 @@ COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
     const raw = new File(
       [
         outdent`
-COMMON\tDATE\t\thold_date\t20231126
+COMMON\tDATE\t\thold_date\t20991126
     `,
       ],
       'foo.ann',
@@ -366,6 +366,54 @@ COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
     const parsedData = await new AnnotationFile(file).parse();
 
     assert.strictEqual(parsedData?.contactPerson?.fullName, 'Alice Liddell');
+  });
+
+  test('a hold date in the past', async function (assert) {
+    const file = new File(
+      [
+        outdent`
+COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
+\t\t\temail\talice@example.com
+\t\t\tinstitute\tWonderland Inc.
+\tDATE\t\thold_date\t20000101
+      `,
+      ],
+      'foo.ann',
+    );
+
+    const annotationFile = new AnnotationFile(file);
+    const parsedData = await annotationFile.parse();
+
+    assert.strictEqual(parsedData?.holdDate, '2000-01-01');
+
+    assert.deepEqual(annotationFile.errors, [
+      {
+        severity: 'warning',
+        id: 'annotation-file-parser.past-hold-date',
+        value: '20000101',
+      },
+    ]);
+  });
+
+  test('a hold date of today', async function (assert) {
+    const today = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10).replaceAll('-', '');
+
+    const file = new File(
+      [
+        outdent`
+COMMON\tSUBMITTER\t\tcontact\tAlice Liddell
+\t\t\temail\talice@example.com
+\t\t\tinstitute\tWonderland Inc.
+\tDATE\t\thold_date\t${today}
+      `,
+      ],
+      'foo.ann',
+    );
+
+    const annotationFile = new AnnotationFile(file);
+    await annotationFile.parse();
+
+    assert.deepEqual(annotationFile.errors, []);
   });
 
   test('temporary locus_tag', async function (assert) {
