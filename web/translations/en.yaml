@@ -264,6 +264,17 @@ annotation-file-parser:
 sequence-file-parser:
   no-entries: No entries found.
 
+extraction-error:
+  invalid_job_id: The job ID "{jobId}" is malformed. Specify the 36-digit ID including hyphens.
+  failed_to_fetch: Could not retrieve the submission files of the job ID "{jobId}" from DFAST ({detail}). Check the job ID, and that you have filled the metadata and run "Format Check" in DFAST.
+  directory_not_found: The results of the job ID "{jobId}" were not found in GGS. Check that you specified the ID of a completed job.
+  duplicate_file_name: More than one file would be imported as "{file}". Make sure that the file names do not overlap, bearing in mind that spaces are replaced with "_" and a compressed file takes the name it has once decompressed.
+  duplicate_file_name_across_jobs: A file named "{file}" is in both of the job IDs "{otherJobId}" and "{jobId}". Specify only jobs whose file names do not overlap in one submission.
+  invalid_archive: Could not extract the archive "{file}" ({detail}). Check that the file is not broken.
+  broken_symlink: '"{file}" is a symbolic link to nothing. Check the files in the directory.'
+  unreadable_file: Could not read "{file}". Check the permissions of the file.
+  unexpected: An unexpected error occurred. Please try again later.
+
 dfast-extractor:
   ids-label: DFAST job IDs
 

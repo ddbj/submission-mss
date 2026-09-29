@@ -86,11 +86,12 @@ module ArchiveExtraction
     return if status.success?
 
     # Report the first meaningful line, rewriting the internal temp/mass-dir
-    # path to the file's own name so we never leak server paths to the user.
-    detail = err.gsub(input.to_s, name.to_s).each_line.map(&:strip).find(&:present?)
+    # path to the file's own name, and any other temporary path out of it, so
+    # we never leak server paths to the user.
+    detail = err.gsub(input.to_s, name.to_s).gsub(%r{#{Regexp.escape(Dir.tmpdir)}/[^\s:'"]*}, '...').each_line.map(&:strip).find(&:present?)
     detail ||= "#{command.first} exited with status #{status.exitstatus}"
 
-    raise Extraction::Error.new(:invalid_archive, reason: "#{name}: #{detail}")
+    raise Extraction::Error.new(:invalid_archive, file: name.to_s, detail:)
   end
 
   def copy_file(base, dest_dir, src, &build)
@@ -98,14 +99,12 @@ module ArchiveExtraction
     dest   = dest_dir.join(name)
     source = base.join(src)
 
-    raise Extraction::Error.new(:duplicate_file_name, reason: "duplicate file name: #{name}") if dest.exist?
+    raise Extraction::Error.new(:duplicate_file_name, file: name) if dest.exist?
 
     # A broken symlink or otherwise unreadable entry in the user's directory
     # should reject the extraction with the offending name, not crash the job.
     unless source.file? && source.readable?
-      detail = source.symlink? && !source.exist? ? 'broken symlink' : 'not a readable file'
-
-      raise Extraction::Error.new(:unreadable_file, reason: "#{src}: #{detail}")
+      raise Extraction::Error.new(source.symlink? && !source.exist? ? :broken_symlink : :unreadable_file, file: src.to_s)
     end
 
     # Record the file before copying it, so a caller that turns the name down

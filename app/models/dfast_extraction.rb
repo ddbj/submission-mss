@@ -7,7 +7,8 @@ class DfastExtraction < ApplicationRecord
     working_dir.mkpath
 
     ActiveRecord::Base.transaction do
-      dfast_job_ids.each do |job_id|
+      # The same job pasted twice would clash with itself.
+      dfast_job_ids.uniq.each do |job_id|
         fetch_and_copy_files job_id
       end
     end
@@ -16,11 +17,11 @@ class DfastExtraction < ApplicationRecord
   private
 
   def fetch_and_copy_files(job_id)
-    raise Extraction::Error.new(:invalid_job_id, job_id:, reason: "invalid job ID: #{job_id}") unless job_id.match?(UUID_FORMAT)
+    raise Extraction::Error.new(:invalid_job_id, job_id:) unless job_id.match?(UUID_FORMAT)
 
     res = Fetch::API.fetch("https://dfast.ddbj.nig.ac.jp/analysis/download/#{job_id}/ddbj_submission.zip")
 
-    raise Extraction::Error.new(:failed_to_fetch, job_id:, reason: "#{res.status} #{res.status_text}") unless res.ok
+    raise Extraction::Error.new(:failed_to_fetch, job_id:, detail: "#{res.status} #{res.status_text}".strip) unless res.ok
 
     zip = Zip::InputStream.new(StringIO.new(res.body))
 
@@ -31,7 +32,10 @@ class DfastExtraction < ApplicationRecord
 
       # Different DFAST jobs can contain a file with the same name; reject the
       # collision with the offending name instead of hitting the unique index.
-      raise Extraction::Error.new(:duplicate_file_name, reason: "duplicate file name: #{dest_name}") if files.exists?(name: dest_name)
+      if other = files.find_by(name: dest_name)
+        raise Extraction::Error.new(:duplicate_file_name, file: dest_name) if other.dfast_job_id == job_id
+        raise Extraction::Error.new(:duplicate_file_name_across_jobs, file: dest_name, job_id:, other_job_id: other.dfast_job_id)
+      end
 
       working_dir.join(dest_name).open 'w' do |dest|
         IO.copy_stream entry.get_input_stream, dest

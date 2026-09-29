@@ -265,6 +265,17 @@ annotation-file-parser:
 sequence-file-parser:
   no-entries: エントリが1つも含まれていません。
 
+extraction-error:
+  invalid_job_id: job ID「{jobId}」の形式が正しくありません。ハイフンを含めた36桁のIDを指定してください。
+  failed_to_fetch: DFASTからjob ID「{jobId}」の登録ファイルを取得できませんでした ({detail})。job IDと、DFASTでメタデータを入力しFormat Checkをしたかどうかを確認してください。
+  directory_not_found: GGSにjob ID「{jobId}」の結果が見つかりません。完了したジョブのIDを指定しているか確認してください。
+  duplicate_file_name: 複数のファイルが同じ「{file}」という名前で取り込まれます。空白は「_」に置き換えられ、圧縮ファイルは展開後の名前になることも踏まえて、ファイル名が重ならないようにしてください。
+  duplicate_file_name_across_jobs: 同じ名前のファイル「{file}」がjob ID「{otherJobId}」と「{jobId}」の両方に含まれています。1つの申し込みにはファイル名の重ならないジョブのみ指定してください。
+  invalid_archive: 圧縮ファイル「{file}」を展開できません ({detail})。ファイルが壊れていないか確認してください。
+  broken_symlink: 「{file}」はリンク先の存在しないシンボリックリンクです。ディレクトリ内のファイルを確認してください。
+  unreadable_file: 「{file}」を読み込めません。ファイルの読み取り権限を確認してください。
+  unexpected: 予期しないエラーが発生しました。しばらくしてからもう一度お試しください。
+
 dfast-extractor:
   ids-label: DFAST job IDs
 

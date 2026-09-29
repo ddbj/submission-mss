@@ -683,22 +683,9 @@ components:
           $ref: '#/components/schemas/ExtractionState'
 
         error:
-          type:
-            - object
-            - 'null'
-
-          additionalProperties: false
-          required: [id]
-
-          properties:
-            id:
-              type: string
-
-            job_id:
-              type: string
-
-            reason:
-              type: string
+          oneOf:
+            - $ref: '#/components/schemas/ExtractionError'
+            - type: 'null'
 
         files:
           type: array
@@ -729,22 +716,9 @@ components:
           $ref: '#/components/schemas/ExtractionState'
 
         error:
-          type:
-            - object
-            - 'null'
-
-          additionalProperties: false
-          required: [id]
-
-          properties:
-            id:
-              type: string
-
-            job_id:
-              type: string
-
-            reason:
-              type: string
+          oneOf:
+            - $ref: '#/components/schemas/ExtractionError'
+            - type: 'null'
 
         files:
           type: array
@@ -755,6 +729,43 @@ components:
     ExtractionState:
       type: string
       enum: [pending, fulfilled, rejected]
+
+    # Why an extraction was turned down, as data for the frontend to put into
+    # words: which of the fields come with it depends on the id.
+    ExtractionError:
+      type: object
+      additionalProperties: false
+      required: [id]
+
+      properties:
+        id:
+          type: string
+
+          enum:
+            - invalid_job_id
+            - failed_to_fetch
+            - directory_not_found
+            - duplicate_file_name
+            - duplicate_file_name_across_jobs
+            - invalid_archive
+            - broken_symlink
+            - unreadable_file
+            - unexpected
+
+        # The job the extraction was reading from.
+        job_id:
+          type: string
+
+        # The job that brought in the file this one clashes with.
+        other_job_id:
+          type: string
+
+        file:
+          type: string
+
+        # What the service or the tool that failed said, untranslated.
+        detail:
+          type: string
 
     DfastExtractionFile:
       type: object
@@ -877,22 +888,9 @@ components:
           $ref: '#/components/schemas/ExtractionState'
 
         error:
-          type:
-            - object
-            - 'null'
-
-          additionalProperties: false
-          required: [id]
-
-          properties:
-            id:
-              type: string
-
-            job_id:
-              type: string
-
-            reason:
-              type: string
+          oneOf:
+            - $ref: '#/components/schemas/ExtractionError'
+            - type: 'null'
 
         files:
           type: array

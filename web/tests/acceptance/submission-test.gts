@@ -837,7 +837,7 @@ module('Acceptance | submission', function (hooks) {
           _self: '/dfast_extractions/1',
           id: 1,
           state: 'rejected',
-          error: { id: 'failed_to_fetch', job_id: '01234567-89ab-cdef-0000-000000000001', reason: '404 Not Found' },
+          error: { id: 'failed_to_fetch', job_id: '01234567-89ab-cdef-0000-000000000001', detail: '404 Not Found' },
           files: [],
         });
       }),
@@ -858,7 +858,11 @@ module('Acceptance | submission', function (hooks) {
 
     // A rejected extraction is an expected user error: it must surface in the
     // error modal, not escape as an unhandled rejection (which fails this test).
-    assert.dom('.modal-body p').hasText('404 Not Found');
+    assert
+      .dom('.modal-body p')
+      .hasText(
+        'Could not retrieve the submission files of the job ID "01234567-89ab-cdef-0000-000000000001" from DFAST (404 Not Found). Check the job ID, and that you have filled the metadata and run "Format Check" in DFAST.',
+      );
   });
 
   test('a failed webui upload shows the error modal instead of leaking an unhandled rejection', async function (assert) {

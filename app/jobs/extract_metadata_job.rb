@@ -44,7 +44,7 @@ class ExtractMetadataJob < ApplicationJob
     # What was gathered goes, as for a rejection above: the transaction takes
     # the records back only when it is the outermost one, and never the files.
     extraction.discard_files
-    extraction.update! state: 'rejected', error: {id: 'unexpected', reason: 'An unexpected error occurred. Please try again later.'}
+    extraction.update! state: 'rejected', error: {id: 'unexpected'}
 
     raise
   end

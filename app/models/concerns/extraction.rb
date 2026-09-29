@@ -7,7 +7,23 @@ module Extraction
   UUID_FORMAT = /\A\h{8}-\h{4}-\h{4}-\h{4}-\h{12}\z/
 
   class Error < StandardError
+    # The reasons the frontend has words for; the schema lists the same, and a
+    # test holds the two together.
+    IDS = %i[
+      invalid_job_id
+      failed_to_fetch
+      directory_not_found
+      duplicate_file_name
+      duplicate_file_name_across_jobs
+      invalid_archive
+      broken_symlink
+      unreadable_file
+      unexpected
+    ]
+
     def initialize(id, **data)
+      raise ArgumentError, "unknown extraction error: #{id}" unless IDS.include?(id)
+
       super()
 
       @id   = id

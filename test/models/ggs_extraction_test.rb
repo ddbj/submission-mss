@@ -47,9 +47,13 @@ class GgsExtractionTest < ActiveSupport::TestCase
     # holds them in one directory.
     error = assert_raises(Extraction::Error) { extraction.prepare_files }
 
-    assert_equal :duplicate_file_name, error.id
-    assert_equal job_ids.last, error.data[:job_id]
-    assert_equal "duplicate file name: foo.ann (already imported from job #{job_ids.first})", error.data[:reason]
+    assert_equal :duplicate_file_name_across_jobs, error.id
+
+    assert_equal({
+      file:         'foo.ann',
+      job_id:       job_ids.last,
+      other_job_id: job_ids.first
+    }, error.data)
 
     # The name is turned down before the file it names is copied.
     assert_not extraction.working_dir.join(job_ids.last, 'foo.ann').exist?
