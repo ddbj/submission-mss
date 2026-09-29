@@ -71,7 +71,11 @@ export function validateSameness(errors: CrossoverErrors, files: SubmissionFileD
   for (const { parsedData } of annotations) {
     const { contactPerson, holdDate } = parsedData!;
 
-    contactPersons.add(JSON.stringify(contactPerson));
+    // In a fixed order: the parser builds the object in the order of the
+    // file's lines, which two files that agree need not share.
+    const { fullName, email, affiliation } = contactPerson ?? {};
+
+    contactPersons.add(JSON.stringify([fullName, email, affiliation]));
     holdDates.add(holdDate ?? '');
   }
 

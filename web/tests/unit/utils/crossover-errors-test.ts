@@ -101,6 +101,23 @@ module('Unit | Utility | crossover errors', function (hooks) {
     ]);
   });
 
+  test('the annotation files agree, whatever order their lines are in', function (assert) {
+    const alice = file('foo', 'annotation', {
+      parsedData: { contactPerson: contactPerson('alice@example.com'), holdDate: null },
+    });
+
+    const { fullName, email, affiliation } = contactPerson('alice@example.com');
+
+    const reordered = file('bar', 'annotation', {
+      parsedData: { contactPerson: { affiliation, fullName, email }, holdDate: null },
+    });
+
+    const errors = collectCrossoverErrors([alice, reordered], [validateSameness]);
+
+    assert.deepEqual(idsFor(errors, alice), []);
+    assert.deepEqual(idsFor(errors, reordered), []);
+  });
+
   test('files that are still being read block', function (assert) {
     const files = [file('foo', 'annotation', { isParsing: true })];
 
