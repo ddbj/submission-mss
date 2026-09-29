@@ -110,6 +110,10 @@ module ExtractionFile
             id:       'annotation-file-parser.invalid-hold-date',
             value:
           ) unless hold_date
+
+          # Allowed, but most likely not meant: the data is published as soon
+          # as it has been processed.
+          warnings << {severity: :warning, id: 'annotation-file-parser.past-hold-date', value:} if hold_date < Date.current.iso8601
         else
           # do nothing
         end

@@ -249,6 +249,7 @@ submission-file:
 
 annotation-file-parser:
   invalid-hold-date: hold_date は実在する日付を8桁の数字 (YYYYMMDD) で指定してください。
+  past-hold-date: hold_date ({value}) が過去の日付のため、登録処理が完了し次第公開されます。公開を保留する場合は hold_date を修正してください。
   missing-contact-person: コンタクトパーソンの情報 (contact, email, institute) が見つかりません。
   invalid-contact-person: アノテーションファイルのcontact, email, instituteのすべてに値が記載されているか、またcontact, email, instituteの文字列にタイプミスがないか、ご確認ください。
   invalid-email-address: アノテーションファイルのcontactのメールアドレスが不正です。アップロードするファイルのcontact行を確認してください。

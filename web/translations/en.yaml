@@ -248,6 +248,7 @@ submission-file:
 
 annotation-file-parser:
   invalid-hold-date: hold_date must be a date that exists, as an 8-digit number (YYYYMMDD).
+  past-hold-date: hold_date ({value}) is in the past, so the data will be released as soon as it has been processed. Correct hold_date to keep it unpublished until a later date.
   missing-contact-person: Contact person information (contact, email, institute) is missing.
   invalid-contact-person: Please check all the values of contact, email, institute in your annotation files were filled, and there is no typo in the letters of “contact, email, institute“.
   invalid-email-address: Invalid email address for contact in annotation file. Check the contact line in your upload files.
