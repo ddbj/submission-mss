@@ -466,4 +466,36 @@ class ExtractMetadataJobTest < ActiveJob::TestCase
     # aaa.ann is copied before zzz.ann fails; the rejection must keep no files.
     assert_empty @extraction.files
   end
+
+  test 'an unexpected failure rejects the extraction' do
+    write_file 'foo.fasta', ">entry1\nATCG\n"
+
+    def @extraction.prepare_files
+      super
+
+      raise 'something we did not see coming'
+    end
+
+    assert_raises RuntimeError do
+      ExtractMetadataJob.perform_now @extraction
+    end
+
+    @extraction.reload
+
+    assert_equal 'rejected', @extraction.state
+    assert_equal 'unexpected', @extraction.error['id']
+    assert_empty @extraction.files, 'what was gathered before the failure goes'
+    assert_not @extraction.working_dir.exist?
+  end
+
+  test 'an extraction no longer pending is left alone' do
+    @extraction.update! state: 'rejected', error: {id: 'unexpected'}
+
+    write_file 'foo.fasta', ">entry1\nATCG\n"
+
+    ExtractMetadataJob.perform_now @extraction
+
+    assert_equal 'rejected', @extraction.reload.state
+    assert_empty @extraction.files
+  end
 end
