@@ -2,7 +2,6 @@ Rails.application.routes.draw do
   root to: 'frontends#show'
 
   get 'auth/:provider/callback', to: 'sessions#create'
-  get 'auth/failure',            to: 'sessions#failure'
 
   scope :api, defaults: {format: :json} do
     resource :me,      only: %i[show]

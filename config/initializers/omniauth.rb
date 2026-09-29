@@ -1,5 +1,11 @@
 OmniAuth.config.request_validation_phase = nil
 
+# Straight to SessionsController#failure. The default redirects there with the
+# failure's message in the query string -- for a provider whose configuration
+# could not be read, the whole configuration, a Location too long for the proxy
+# in front of us, which answered 502 in place of it.
+OmniAuth.config.on_failure = ->(env) { SessionsController.action(:failure).call(env) }
+
 keycloak     = Rails.application.config_for(:keycloak)
 keycloak_url = URI.parse(keycloak.url!)
 
