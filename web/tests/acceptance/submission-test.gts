@@ -120,6 +120,12 @@ function stallDigest() {
   return digest;
 }
 
+function importAgainButton() {
+  return findAll('button').find((button) =>
+    button.textContent?.includes('Import from the directory again'),
+  ) as HTMLButtonElement;
+}
+
 module('Acceptance | submission', function (hooks) {
   setupApplicationTest(hooks);
   setupAuthentication(hooks);
@@ -638,13 +644,46 @@ module('Acceptance | submission', function (hooks) {
     assert.dom('.alert-danger').containsText('Files imported from the directory cannot be corrected here.');
     assert.dom('button[type="submit"]').isDisabled();
 
-    await click('button[type="button"].btn-outline-primary');
+    await click(importAgainButton());
 
     await waitUntil(() => findAll('.list-group-item').length === 2);
 
     assert.strictEqual(extractions, 2, 'the directory is looked in again');
     assert.dom('.alert-danger').doesNotExist();
     assert.dom('button[type="submit"]').isNotDisabled();
+  });
+
+  test('a directory import that fails to start shows the error modal and can be tried again', async function (assert) {
+    worker.use(
+      http.get('/submissions', ({ response }) => {
+        return response(200).json({
+          submissions: [],
+        });
+      }),
+
+      http.get('/submissions/last_submitted', () => {
+        return new HttpResponse(null, { status: 404 });
+      }),
+
+      http.post('/mass_directory_extractions', () => {
+        return new HttpResponse(null, { status: 500 });
+      }),
+    );
+
+    await visit('/home/submissions/new');
+
+    await clickRadio('Yes, I have determined the nucleotide sequence');
+    await click('button[type="submit"]');
+
+    await clickRadio('Submit all files');
+
+    await waitFor('.modal-body');
+
+    // Surfaced in the error modal, not leaked as an unhandled rejection (which
+    // fails this test), and the submitter is not left without a way to retry.
+    await waitUntil(() => !importAgainButton().disabled);
+
+    assert.dom('button[type="submit"]').isDisabled();
   });
 
   test('new submission via GGS job ID', async function (assert) {

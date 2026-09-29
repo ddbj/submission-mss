@@ -9,6 +9,7 @@ import { t } from 'ember-intl';
 import ExtractedFiles from 'mssform/components/extracted-files';
 import SubmissionFileItem from 'mssform/components/submission-file-item';
 import Extraction from 'mssform/models/extraction';
+import isRequestError from 'mssform/utils/is-request-error';
 
 import type { ExtractionPayload } from 'mssform/models/extraction';
 import type ErrorModalService from 'mssform/services/error-modal';
@@ -72,7 +73,10 @@ export default class JobIdExtractorComponent extends Component<Signature> {
         this.#abort.signal,
       );
     } catch (e) {
-      if (e instanceof DOMException && e.name === 'AbortError') return;
+      // The error modal has shown what went wrong with the request, and an
+      // abort means the submitter has left: nothing is left to handle here.
+      if (isRequestError(e) || (e instanceof DOMException && e.name === 'AbortError')) return;
+
       throw e;
     } finally {
       this.extracting = false;
