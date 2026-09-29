@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { concat, uniqueId } from '@ember/helper';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 
@@ -104,17 +105,25 @@ export default class SubmissionFormFilesComponent extends Component<Signature> {
 
       <hr />
 
-      <div class="hstack gap-3 justify-content-end">
-        <button type="button" class="btn btn-outline-primary px-4" {{on "click" @nav.goPrev}}>
-          {{t "submission-form.nav.back"}}
-        </button>
+      {{#let (uniqueId) @state.selection.whyNotSubmittable as |whyId why|}}
+        {{! Always there, so that a reason appearing or changing is read out. }}
+        <p id={{whyId}} class="small text-body-secondary text-end mb-2" role="status">
+          {{#if why}}{{t (concat "file-selection.why-not-submittable." why)}}{{/if}}
+        </p>
 
-        <button
-          type="submit"
-          class="btn btn-primary px-5"
-          disabled={{not (and @state.selection.isSubmittable this.goNext.isIdle)}}
-        >{{t "submission-form.nav.next"}}</button>
-      </div>
+        <div class="hstack gap-3 justify-content-end">
+          <button type="button" class="btn btn-outline-primary px-4" {{on "click" @nav.goPrev}}>
+            {{t "submission-form.nav.back"}}
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary px-5"
+            disabled={{not (and @state.selection.isSubmittable this.goNext.isIdle)}}
+            aria-describedby={{if why whyId}}
+          >{{t "submission-form.nav.next"}}</button>
+        </div>
+      {{/let}}
     </form>
   </template>
 }

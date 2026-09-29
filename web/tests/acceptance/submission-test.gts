@@ -2,6 +2,7 @@ import { module, test } from 'qunit';
 import {
   visit,
   click,
+  find,
   findAll,
   getRootElement,
   settled,
@@ -119,6 +120,11 @@ function stallDigest() {
   };
 
   return digest;
+}
+
+// What the send button says it is waiting for, found through the button itself.
+function whyNotYet() {
+  return `#${find('button.px-5[type="submit"]')!.getAttribute('aria-describedby')}`;
 }
 
 module('Acceptance | submission', function (hooks) {
@@ -720,6 +726,9 @@ module('Acceptance | submission', function (hooks) {
     await clickRadio('Yes, I have determined the nucleotide sequence');
     await click('button[type="submit"]');
 
+    assert.dom('button.px-5[type="submit"]').isDisabled();
+    assert.dom(whyNotYet()).hasText('Choose how to send the submission files.');
+
     await clickRadio('Submit all files');
 
     await waitFor('.alert-danger');
@@ -961,6 +970,7 @@ module('Acceptance | submission', function (hooks) {
 
     assert.dom('.modal.show').doesNotExist();
     assert.dom('button.px-5[type="submit"]').isDisabled('nothing to send');
+    assert.dom(whyNotYet()).hasText('The submission files could not be imported. See the message above.');
 
     // Once put right, the explanation goes as soon as the next attempt starts,
     // not when it ends.
@@ -971,6 +981,7 @@ module('Acceptance | submission', function (hooks) {
     await waitFor('.spinner-border');
 
     assert.dom('.alert-danger').doesNotExist();
+    assert.dom(whyNotYet()).hasText('The submission files are being imported. Please wait.');
   });
 
   test('a failed webui upload shows the error modal instead of leaking an unhandled rejection', async function (assert) {

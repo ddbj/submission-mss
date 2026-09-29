@@ -3,7 +3,6 @@ import { setupTest } from 'mssform/tests/helpers';
 
 import {
   collectCrossoverErrors,
-  hasBlockingErrors,
   hasErrors,
   validateDuplicates,
   validatePairs,
@@ -119,26 +118,20 @@ module('Unit | Utility | crossover errors', function (hooks) {
     assert.deepEqual(idsFor(errors, reordered), []);
   });
 
-  test('files that are still being read block', function (assert) {
-    const files = [file('foo', 'annotation', { isParsing: true })];
-
-    assert.true(hasBlockingErrors(files, collectCrossoverErrors(files, [])));
-  });
-
-  test('a warning does not block', function (assert) {
+  test('a warning is not an error', function (assert) {
     const files = [file('foo', 'annotation', { errors: [{ severity: 'warning', id: 'whatever' }] })];
 
-    assert.false(hasBlockingErrors(files, collectCrossoverErrors(files, [])));
+    assert.false(hasErrors(files, collectCrossoverErrors(files, [])));
   });
 
-  test('an error blocks, wherever it comes from', function (assert) {
+  test('an error is an error, wherever it comes from', function (assert) {
     const withOwnError = [file('foo', 'annotation', { errors: [{ severity: 'error', id: 'whatever' }] })];
 
-    assert.true(hasBlockingErrors(withOwnError, collectCrossoverErrors(withOwnError, [])));
+    assert.true(hasErrors(withOwnError, collectCrossoverErrors(withOwnError, [])));
 
     const duplicated = [file('foo', 'annotation'), file('foo', 'annotation')];
 
-    assert.true(hasBlockingErrors(duplicated, collectCrossoverErrors(duplicated, [validateDuplicates])));
+    assert.true(hasErrors(duplicated, collectCrossoverErrors(duplicated, [validateDuplicates])));
   });
 
   test('files that are still being read are not wrong for it', function (assert) {

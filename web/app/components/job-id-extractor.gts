@@ -16,6 +16,7 @@ export interface Signature {
     i18nPrefix: string;
     onStart: () => void;
     onPoll: (payload: ExtractionPayload) => void;
+    onEnd: () => void;
     crossoverErrors: Map<SubmissionFileData, SubmissionError[]>;
   };
 }
@@ -71,6 +72,7 @@ export default class JobIdExtractorComponent extends Component<Signature> {
       @onNothingToExtract={{this.askForIds}}
       @onStart={{this.start}}
       @onPoll={{@onPoll}}
+      @onEnd={{@onEnd}}
       @crossoverErrors={{@crossoverErrors}}
     >
       <:fields as |extracting|>

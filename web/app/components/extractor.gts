@@ -29,6 +29,7 @@ export interface Signature {
 
     onStart: () => void;
     onPoll: (payload: ExtractionPayload) => void;
+    onEnd: () => void;
     crossoverErrors: Map<SubmissionFileData, SubmissionError[]>;
   };
 
@@ -95,6 +96,9 @@ export default class ExtractorComponent extends Component<Signature> {
       throw e;
     } finally {
       this.extracting = false;
+
+      // Not when torn down: whoever took its place may be extracting already.
+      if (!this.#abort.signal.aborted) this.args.onEnd();
     }
   }
 
