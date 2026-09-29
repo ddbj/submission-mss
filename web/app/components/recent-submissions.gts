@@ -3,7 +3,7 @@ import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { formatDate } from 'ember-intl';
+import { formatDate, t } from 'ember-intl';
 import { task } from 'ember-concurrency';
 
 import type { components, paths } from 'schema/openapi';
@@ -47,16 +47,16 @@ export default class RecentSubmissions extends Component {
 
   <template>
     {{#if this.loadSubmissions.isRunning}}
-      <p>Loading...</p>
+      <p>{{t "recent-submissions.loading"}}</p>
     {{else}}
       <table class="table">
         <thead>
           <tr>
-            <th>Mass ID</th>
-            <th>Submission Date</th>
-            <th>Job IDs</th>
-            <th>Status</th>
-            <th>Accession</th>
+            <th>{{t "recent-submissions.mass-id"}}</th>
+            <th>{{t "recent-submissions.submitted-at"}}</th>
+            <th>{{t "recent-submissions.job-ids"}}</th>
+            <th>{{t "recent-submissions.status"}}</th>
+            <th>{{t "recent-submissions.accessions"}}</th>
           </tr>
         </thead>
 
@@ -81,7 +81,7 @@ export default class RecentSubmissions extends Component {
 
                   {{#if (gt jobIds.length 3)}}
                     <details>
-                      <summary>View all</summary>
+                      <summary>{{t "recent-submissions.view-all"}}</summary>
 
                       <ul class="list-unstyled m-0">
                         {{#each (drop 3 jobIds) as |jobId|}}
@@ -94,6 +94,8 @@ export default class RecentSubmissions extends Component {
               </td>
 
               <td>
+                {{! As the curators write it in the working list: there is no set
+                    of values to translate. }}
                 {{submission.status}}
               </td>
 
@@ -106,7 +108,7 @@ export default class RecentSubmissions extends Component {
 
                 {{#if (gt submission.accessions.length 3)}}
                   <details>
-                    <summary>View all</summary>
+                    <summary>{{t "recent-submissions.view-all"}}</summary>
 
                     <ul class="list-unstyled m-0">
                       {{#each (drop 3 submission.accessions) as |accession|}}

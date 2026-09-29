@@ -58,6 +58,23 @@ home:
   help: Help
   change-email: If you want to change email addresses of Contact and Other Person
   change-email-url: https://www.ddbj.nig.ac.jp/faq/en/mss-submission-change-email-e.html
+  recent-submissions: Recent Submissions
+
+error:
+  title: Error
+  details: Details
+  something-went-wrong: Something went wrong. Please try again later.
+  page-not-found: "Error: Page not found."
+  close: Close
+
+recent-submissions:
+  loading: Loading...
+  mass-id: MSS Submission ID
+  submitted-at: Submission Date
+  job-ids: Job IDs
+  status: Status
+  accessions: Accessions
+  view-all: View all
 
 submission-form:
   title: New Submission
@@ -204,7 +221,7 @@ submission-form:
 
   complete:
     complete-message-html: |
-      <p>Your application has been accepted. The MSS application ID is <b>{massId}</b>.<br />
+      <p>Your application has been accepted. The MSS Submission ID is <b>{massId}</b>.<br />
       Email from mass@ddbj.nig.ac.jp will be sent to the email address(es) filled in the form and to the address registered in your D-way account. Please do not send additional submission file(s) by e-mail attachments.</p>
 
 upload-form:

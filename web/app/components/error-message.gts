@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import { t } from 'ember-intl';
 
 import type Owner from '@ember/owner';
 
@@ -42,7 +43,7 @@ export default class ErrorMessageComponent extends Component<Signature> {
     <p>{{this.message}}</p>
 
     <details>
-      <summary>Details</summary>
+      <summary>{{t "error.details"}}</summary>
       <pre class="text-bg-dark text-pre-wrap p-3"><code>{{this.details}}</code></pre>
     </details>
   </template>

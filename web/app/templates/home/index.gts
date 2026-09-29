@@ -34,7 +34,7 @@ interface Signature {
     <li><a href={{t "home.change-email-url"}}>{{t "home.change-email"}}</a></li>
   </ul>
 
-  <h2 class="mt-5">Recent Submissions</h2>
+  <h2 class="mt-5">{{t "home.recent-submissions"}}</h2>
 
   <RecentSubmissions />
 </template> satisfies TOC<Signature>;

@@ -1,6 +1,7 @@
 import { LinkTo } from '@ember/routing';
 import { t } from 'ember-intl';
 import { formatTime } from 'ember-intl';
+import pageTitle from 'ember-page-title/helpers/page-title';
 import type { TOC } from '@ember/component/template-only';
 
 interface Upload {
@@ -23,6 +24,8 @@ interface Signature {
 }
 
 <template>
+  {{pageTitle @model.id}}
+
   <h1 class="display-6 my-4">{{@model.id}}</h1>
 
   <LinkTo @route="submission.upload" @model={{@model}} class="btn btn-outline-primary">
