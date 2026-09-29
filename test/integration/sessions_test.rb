@@ -22,6 +22,21 @@ class SessionsTest < ActionDispatch::IntegrationTest
     assert_equal users(:alice).uid, response.parsed_body['uid']
   end
 
+  # Everywhere else the sign-in is mocked up to the callback. Here it goes to
+  # the identity provider for real, up to reading how to reach it -- which a
+  # JSON gem that Faraday called the wrong way once broke, unnoticed until
+  # nobody could sign in.
+  test 'signing in starts at the identity provider' do
+    stub_discovery
+
+    without_omniauth_test_mode do
+      post '/auth/keycloak'
+    end
+
+    assert_response :redirect
+    assert_match %r{\A#{Regexp.escape(ISSUER)}/protocol/openid-connect/auth\?}, response.headers['Location']
+  end
+
   test 'signing out' do
     sign_in users(:alice)
 
@@ -96,5 +111,34 @@ class SessionsTest < ActionDispatch::IntegrationTest
     get '/api/me'
 
     assert_conform_schema 401
+  end
+
+  private
+
+  ISSUER = 'http://keycloak.example.com/realms/master'
+
+  def stub_discovery
+    stub_request(:get, "#{ISSUER}/.well-known/openid-configuration").to_return(
+      headers: {'Content-Type' => 'application/json'},
+
+      body: {
+        issuer:                                ISSUER,
+        authorization_endpoint:                "#{ISSUER}/protocol/openid-connect/auth",
+        token_endpoint:                        "#{ISSUER}/protocol/openid-connect/token",
+        userinfo_endpoint:                     "#{ISSUER}/protocol/openid-connect/userinfo",
+        jwks_uri:                              "#{ISSUER}/protocol/openid-connect/certs",
+        response_types_supported:              %w[code],
+        subject_types_supported:               %w[public],
+        id_token_signing_alg_values_supported: %w[RS256]
+      }.to_json
+    )
+  end
+
+  def without_omniauth_test_mode
+    OmniAuth.config.test_mode = false
+
+    yield
+  ensure
+    OmniAuth.config.test_mode = true
   end
 end
