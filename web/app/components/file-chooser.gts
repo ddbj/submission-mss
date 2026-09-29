@@ -1,10 +1,10 @@
 import { t } from 'ember-intl';
 import svgJar from 'ember-svg-jar/helpers/svg-jar';
 
+import Extractor from 'mssform/components/extractor';
 import FileList from 'mssform/components/file-list';
 import JobIdExtractor from 'mssform/components/job-id-extractor';
 import SupportedFileTypes from 'mssform/components/file-list/supported-file-types';
-import MassDirectoryExtractor from 'mssform/components/mass-directory-extractor';
 import RadioGroup from 'mssform/components/radio-group';
 import escapeHtml from 'mssform/helpers/escape-html';
 import userMassDir from 'mssform/helpers/user-mass-dir';
@@ -142,11 +142,18 @@ interface Signature {
         </div>
       </div>
     {{else if (eq @selection.via "mass_directory")}}
-      <MassDirectoryExtractor
+      {{! The directory is the submitter's own, so there is nothing to ask before
+          looking in it. }}
+      <Extractor
+        @endpoint="/mass_directory_extractions"
+        @extractOnInsert={{true}}
         @onStart={{@selection.onExtractStart}}
         @onPoll={{@selection.onExtractProgress}}
         @crossoverErrors={{@selection.crossoverErrors}}
-      />
+      >
+        <:button>{{t "mass-directory-extractor.extract-again"}}</:button>
+        <:whereToFix>{{t "mass-directory-extractor.where-to-fix"}}</:whereToFix>
+      </Extractor>
     {{/if}}
   </div>
 </template> satisfies TOC<Signature>;

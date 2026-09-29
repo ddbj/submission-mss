@@ -275,6 +275,9 @@ extraction-error:
   unreadable_file: Could not read "{file}". Check the permissions of the file.
   unexpected: An unexpected error occurred. Please try again later.
 
+extractor:
+  extracting: Importing...
+
 dfast-extractor:
   ids-label: DFAST job IDs
 
@@ -282,7 +285,7 @@ dfast-extractor:
     <p>36-digits ID including hyphen. You need to <a href="https://dfast.ddbj.nig.ac.jp/help_login" target="_blank" rel="noopener noreferrer">fill the metadata and run "Format Check" in DFAST</a> before submitting the data.<br />
     You can specify multiple job IDs by delimiting each ID with the line feed.</p>
 
-  submit: Retrieve submission files from DFAST
+  extract: Retrieve submission files from DFAST
 
   where-to-fix-html: |
     Files imported from DFAST cannot be corrected here. <a href="https://dfast.ddbj.nig.ac.jp/help_login" target="_blank" rel="noopener noreferrer">Fill or correct the metadata and run "Format Check" in DFAST</a>, or review the job IDs, then retrieve the files again.
@@ -294,7 +297,7 @@ ggs-extractor:
     <p>36-digits ID including hyphen. Specify the Job ID of a completed <a href="https://gss.ddbj.nig.ac.jp" target="_blank" rel="noopener noreferrer">GGS (Gene/genome submission tool)</a> job.<br />
     You can specify multiple job IDs by delimiting each ID with the line feed.</p>
 
-  submit: Retrieve submission files from GGS
+  extract: Retrieve submission files from GGS
 
   where-to-fix-html: |
     Files imported from GGS cannot be corrected here. Correct them in <a href="https://gss.ddbj.nig.ac.jp" target="_blank" rel="noopener noreferrer">GGS</a>, or review the job IDs, then retrieve the files again.

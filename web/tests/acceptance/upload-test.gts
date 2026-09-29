@@ -13,6 +13,7 @@ import {
 import { setupApplicationTest } from 'mssform/tests/helpers';
 import { setupAuthentication } from 'mssform/tests/helpers/setup-auth';
 import clickRadio from 'mssform/tests/helpers/click-radio';
+import findButton from 'mssform/tests/helpers/find-button';
 
 import { HttpResponse } from 'msw';
 import { http } from '../msw/http';
@@ -161,12 +162,19 @@ module('Acceptance | upload', function (hooks) {
     await visit('/home/submission/NSUB000001/upload');
 
     await clickRadio('Import the submission files from DFAST Job ID');
+
+    assert.dom(findButton('Retrieve submission files')).isDisabled('no job to retrieve from yet');
+
     await fillIn('textarea', '01234567-89ab-cdef-0000-000000000001');
-    await click('.card-body button[type="submit"]');
+    await click(findButton('Retrieve submission files'));
 
     await waitFor('.list-group-item');
 
     assert.dom('.alert-danger').doesNotExist('nothing to correct, so nowhere to be sent');
+
+    // The job IDs are the extractor's, not the form's: clearing them after the
+    // files have come does not stand in the way of sending those files.
+    await fillIn('textarea', '');
 
     await click('button.px-5[type="submit"]');
 
@@ -216,7 +224,7 @@ module('Acceptance | upload', function (hooks) {
 
     await clickRadio('Import the submission files from DFAST Job ID');
     await fillIn('textarea', '01234567-89ab-cdef-0000-000000000001');
-    await click('.card-body button[type="submit"]');
+    await click(findButton('Retrieve submission files'));
 
     await waitFor('.list-group-item');
 
