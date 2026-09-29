@@ -559,6 +559,94 @@ module('Acceptance | submission', function (hooks) {
     assert.dom().containsText('NSUB000003', 'MASS ID is displayed');
   });
 
+  test('files corrected in the directory are imported again', async function (assert) {
+    const annotation = {
+      name: 'test.ann',
+      basename: 'test',
+      size: 100,
+      isParsing: false,
+      parsedData: {
+        contactPerson: { fullName: 'Alice Liddell', email: 'alice@example.com', affiliation: 'Wonderland Inc.' },
+        holdDate: null,
+      },
+      isParseSucceeded: true,
+      errors: [],
+      fileType: 'annotation' as const,
+    };
+
+    const sequence = {
+      name: 'test.fasta',
+      basename: 'test',
+      size: 50,
+      isParsing: false,
+      parsedData: { entriesCount: 1 },
+      isParseSucceeded: true,
+      errors: [],
+      fileType: 'sequence' as const,
+    };
+
+    // The submitter forgot the sequence file at first, and put it in the
+    // directory before importing again.
+    const found = [[annotation], [annotation, sequence]];
+    let extractions = 0;
+
+    worker.use(
+      http.get('/submissions', ({ response }) => {
+        return response(200).json({
+          submissions: [],
+        });
+      }),
+
+      http.get('/submissions/last_submitted', () => {
+        return new HttpResponse(null, { status: 404 });
+      }),
+
+      http.post('/mass_directory_extractions', ({ response }) => {
+        extractions += 1;
+
+        return response(201).json({
+          _self: `/mass_directory_extractions/${extractions}`,
+          id: extractions,
+          state: 'pending',
+          error: null,
+          files: [],
+        });
+      }),
+
+      http.get('/mass_directory_extractions/{id}', ({ params, response }) => {
+        const id = Number(params.id);
+
+        return response(200).json({
+          _self: `/mass_directory_extractions/${id}`,
+          id,
+          state: 'fulfilled',
+          error: null,
+          files: found[id - 1]!,
+        });
+      }),
+    );
+
+    await visit('/home/submissions/new');
+
+    await clickRadio('Yes, I have determined the nucleotide sequence');
+    await click('button[type="submit"]');
+
+    await clickRadio('Submit all files');
+
+    await waitFor('.list-group-item');
+
+    assert.dom('.alert-danger').containsText('Files imported from the directory cannot be corrected here.');
+    assert.dom('button[type="submit"]').isDisabled();
+
+    await click('button[type="button"].btn-outline-primary');
+
+    await waitUntil(() => findAll('.list-group-item').length === 2);
+
+    assert.strictEqual(extractions, 2, 'the directory is looked in again');
+    assert.dom('.alert-danger').doesNotExist();
+    assert.dom('button[type="submit"]').isNotDisabled();
+  });
+
   test('new submission via GGS job ID', async function (assert) {
     const extractionFiles = [
       {

@@ -273,6 +273,9 @@ dfast-extractor:
 
   submit: Retrieve submission files from DFAST
 
+  where-to-fix-html: |
+    取り込んだファイルはこの画面では修正できません。<a href="https://dfast.ddbj.nig.ac.jp/help_login" target="_blank" rel="noopener noreferrer">DFASTにてメタデータを入力・修正してFormat Check</a>をするか、指定するjob IDを見直してから、もう一度取り込んでください。
+
 ggs-extractor:
   ids-label: GGS job IDs
 
@@ -281,6 +284,13 @@ ggs-extractor:
     複数のjob IDを指定する場合は改行で区切ってください。</p>
 
   submit: Retrieve submission files from GGS
+
+  where-to-fix-html: |
+    取り込んだファイルはこの画面では修正できません。<a href="https://gss.ddbj.nig.ac.jp" target="_blank" rel="noopener noreferrer">GGS</a> で修正するか、指定するjob IDを見直してから、もう一度取り込んでください。
+
+mass-directory-extractor:
+  extract-again: ディレクトリから取り込み直す
+  where-to-fix: 取り込んだファイルはこの画面では修正できません。ディレクトリ内のファイルを修正してから、「ディレクトリから取り込み直す」を押してください。
 
 submission.show:
   re-upload: 再アップロード

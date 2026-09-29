@@ -272,6 +272,9 @@ dfast-extractor:
 
   submit: Retrieve submission files from DFAST
 
+  where-to-fix-html: |
+    Files imported from DFAST cannot be corrected here. <a href="https://dfast.ddbj.nig.ac.jp/help_login" target="_blank" rel="noopener noreferrer">Fill or correct the metadata and run "Format Check" in DFAST</a>, or review the job IDs, then retrieve the files again.
+
 ggs-extractor:
   ids-label: GGS job IDs
 
@@ -280,6 +283,13 @@ ggs-extractor:
     You can specify multiple job IDs by delimiting each ID with the line feed.</p>
 
   submit: Retrieve submission files from GGS
+
+  where-to-fix-html: |
+    Files imported from GGS cannot be corrected here. Correct them in <a href="https://gss.ddbj.nig.ac.jp" target="_blank" rel="noopener noreferrer">GGS</a>, or review the job IDs, then retrieve the files again.
+
+mass-directory-extractor:
+  extract-again: Import from the directory again
+  where-to-fix: Files imported from the directory cannot be corrected here. Correct the files in the directory, then press "Import from the directory again".
 
 submission.show:
   re-upload: Re-upload

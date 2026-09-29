@@ -143,6 +143,7 @@ interface Signature {
       </div>
     {{else if (eq @selection.via "mass_directory")}}
       <MassDirectoryExtractor
+        @onStart={{@selection.onExtractStart}}
         @onPoll={{@selection.onExtractProgress}}
         @crossoverErrors={{@selection.crossoverErrors}}
       />

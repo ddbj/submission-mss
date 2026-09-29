@@ -112,8 +112,14 @@ export default class JobIdExtractorComponent extends Component<Signature> {
       </form>
 
       {{#if this.files.length}}
-        <ExtractedFiles @files={{this.files}} @crossoverErrors={{@crossoverErrors}} as |file errors|>
-          <SubmissionFileItem @file={{file}} @errors={{errors}} />
+        <ExtractedFiles @files={{this.files}} @crossoverErrors={{@crossoverErrors}}>
+          <:default as |file errors|>
+            <SubmissionFileItem @file={{file}} @errors={{errors}} />
+          </:default>
+
+          <:whereToFix>
+            {{t (concat @i18nPrefix ".where-to-fix-html") htmlSafe=true}}
+          </:whereToFix>
         </ExtractedFiles>
       {{/if}}
     </div>
