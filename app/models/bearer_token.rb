@@ -15,25 +15,33 @@ class BearerToken
   JWKS_TTL           = 1.hour
   JWKS_REFETCH_AFTER = 60.seconds
   JWKS_TIMEOUT       = 5 # seconds
+  JWKS_RETRY_AFTER   = 30.seconds
 
   @jwks_mutex = Mutex.new
 
   class << self
     def verify(token:)
+      keycloak   = Rails.application.config_for(:keycloak)
+      client_ids = Array(keycloak.bearer_client_ids)
+
+      # Off unless some client is trusted; then not even the realm is asked.
+      raise Invalid, 'no client is trusted with Bearer tokens' if client_ids.empty?
       raise Invalid, 'not a token' unless token.is_a?(String) && token.present?
 
       header = decode_header(token)
 
-      raise Invalid, "unexpected alg #{header['alg'].inspect}" unless header['alg'] == ALGORITHM
+      raise Invalid, "unexpected alg #{header['alg'].to_s.truncate(64).inspect}" unless header['alg'] == ALGORITHM
 
       kid = header['kid']
 
       raise Invalid, 'no kid' unless kid.is_a?(String) && kid.present?
 
-      keycloak = Rails.application.config_for(:keycloak)
-      claims   = decode(token, key_for(kid), keycloak)
+      claims = decode(token, key_for(kid), keycloak)
 
-      raise Invalid, "untrusted azp #{claims['azp'].inspect}" unless Array(keycloak.bearer_client_ids).include?(claims['azp'])
+      # Keycloak marks its access tokens so; an ID token is meant for the
+      # client that signed the user in, not for calling us.
+      raise Invalid, "unexpected typ #{claims['typ'].to_s.truncate(64).inspect}" unless claims['typ'] == 'Bearer'
+      raise Invalid, "untrusted azp #{claims['azp'].to_s.truncate(64).inspect}" unless client_ids.include?(claims['azp'])
       raise Invalid, 'blank preferred_username' unless claims['preferred_username'].is_a?(String) && claims['preferred_username'].present?
 
       claims
@@ -44,6 +52,7 @@ class BearerToken
         @jwks              = nil
         @jwks_fetched_at   = nil
         @jwks_refetched_at = nil
+        @jwks_failed_at    = nil
       end
     end
 
@@ -92,7 +101,7 @@ class BearerToken
           jwk                = find_key(kid)
         end
 
-        raise Invalid, "unknown kid #{kid.inspect}" unless jwk
+        raise Invalid, "unknown kid #{kid.to_s.truncate(64).inspect}" unless jwk
 
         jwk.verify_key
       end
@@ -102,7 +111,23 @@ class BearerToken
       @jwks.find { it[:kid] == kid }
     end
 
+    # Called with the mutex held. A realm that just failed us is not asked
+    # again for a while, so that requests do not queue up behind the timeout.
     def fetch_jwks(now)
+      raise Invalid, 'JWKS unavailable (recently failed)' if @jwks_failed_at && now - @jwks_failed_at < JWKS_RETRY_AFTER
+
+      begin
+        jwks = fetch_jwks!(now)
+      rescue Invalid
+        @jwks_failed_at = now
+        raise
+      end
+
+      @jwks_failed_at = nil
+      jwks
+    end
+
+    def fetch_jwks!(now)
       uri = URI("#{issuer}/protocol/openid-connect/certs")
 
       res = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https', open_timeout: JWKS_TIMEOUT, read_timeout: JWKS_TIMEOUT, write_timeout: JWKS_TIMEOUT) {|http|

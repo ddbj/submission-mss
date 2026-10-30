@@ -4,7 +4,7 @@ development:
   url:           <%= ENV.fetch('KEYCLOAK_URL', 'http://localhost:8080') %>
 
   bearer_audience:   mssform
-  bearer_client_ids: <%= ENV.fetch('KEYCLOAK_BEARER_CLIENT_IDS', 'msstools-web').split(',') %>
+  bearer_client_ids: <%= ENV.fetch('KEYCLOAK_BEARER_CLIENT_IDS', '').split(',').map(&:strip).reject(&:blank?) %>
 
 test:
   client_id:     mssform

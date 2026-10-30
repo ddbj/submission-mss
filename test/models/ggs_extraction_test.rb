@@ -324,6 +324,28 @@ class GgsExtractionTest < ActiveSupport::TestCase
     assert_equal :not_owner, error.id
   end
 
+  test 'owner_file_unreadable_fails_closed' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id
+    owner_file(job_id).write 'alice'
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id], require_owner: true)
+    open       = File.method(:open)
+
+    # Root in the test container reads past a chmod, so the refusal is staged.
+    File.stub :open, ->(path, *args, **kwargs, &block) {
+      raise Errno::EACCES, path.to_s if path.to_s == owner_file(job_id).to_s
+
+      open.call(path, *args, **kwargs, &block)
+    } do
+      error = assert_raises(Extraction::Error) { extraction.prepare_files }
+
+      assert_equal :not_owner, error.id
+    end
+
+    assert_equal 0, extraction.files.count
+  end
+
   test 'no_owner_file_is_allowed' do
     job_id = '01234567-89ab-cdef-0000-000000000001'
     write_job job_id

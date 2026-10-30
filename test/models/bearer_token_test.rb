@@ -87,13 +87,55 @@ class BearerTokenTest < ActiveSupport::TestCase
   test 'rejects every client when none is configured' do
     stub_jwks!
 
-    keycloak = Rails.application.config_for(:keycloak).merge(bearer_client_ids: [])
+    keycloak = Rails.application.config_for(:keycloak).dup.tap { it.bearer_client_ids = [] }
 
-    Rails.application.stub :config_for, keycloak do
+    # A lambda: OrderedOptions answers to #call, so stub would call it instead.
+    Rails.application.stub :config_for, ->(*) { keycloak } do
       assert_raises BearerToken::Invalid do
         BearerToken.verify token: bearer_token_for('alice')
       end
     end
+  end
+
+  test 'no_clients_short_circuits_without_jwks' do
+    stub_jwks!
+
+    keycloak = Rails.application.config_for(:keycloak).dup.tap { it.bearer_client_ids = [] }
+
+    # A lambda: OrderedOptions answers to #call, so stub would call it instead.
+    Rails.application.stub :config_for, ->(*) { keycloak } do
+      error = assert_raises(BearerToken::Invalid) { BearerToken.verify token: bearer_token_for('alice') }
+
+      assert_match(/client/i, error.message)
+    end
+
+    assert_not_requested :get, BearerTokenHelper::JWKS_URL
+  end
+
+  test 'rejects_id_token' do
+    stub_jwks!
+
+    assert_raises BearerToken::Invalid do
+      BearerToken.verify token: bearer_token_for('alice', typ: 'ID')
+    end
+
+    assert_raises BearerToken::Invalid do
+      BearerToken.verify token: bearer_token_for('alice', typ: nil)
+    end
+  end
+
+  test 'long_kid_is_truncated_in_message' do
+    stub_jwks!
+
+    token = JWT.encode({preferred_username: 'alice'}, bearer_test_jwk.signing_key, 'RS256', kid: 'k' * 1000)
+    error = assert_raises(BearerToken::Invalid) { BearerToken.verify token: }
+
+    assert_operator error.message.length, :<, 300
+
+    token = JWT.encode({preferred_username: 'alice'}, 'secret', 'HS256', alg: 'a' * 1000)
+    error = assert_raises(BearerToken::Invalid) { BearerToken.verify token: }
+
+    assert_operator error.message.length, :<, 300
   end
 
   test 'rejects unsigned or hs256' do
@@ -230,6 +272,50 @@ class BearerTokenTest < ActiveSupport::TestCase
     assert_raises BearerToken::Invalid do
       BearerToken.verify token: bearer_token_for('alice')
     end
+  end
+
+  test 'failed_fetch_is_negatively_cached' do
+    stub_request(:get, BearerTokenHelper::JWKS_URL).to_timeout
+
+    2.times do
+      assert_raises BearerToken::Invalid do
+        BearerToken.verify token: bearer_token_for('alice')
+      end
+    end
+
+    assert_requested :get, BearerTokenHelper::JWKS_URL, times: 1
+
+    travel 31.seconds do
+      assert_raises BearerToken::Invalid do
+        BearerToken.verify token: bearer_token_for('alice')
+      end
+    end
+
+    assert_requested :get, BearerTokenHelper::JWKS_URL, times: 2
+  end
+
+  test 'a successful fetch clears the failure' do
+    stub_request(:get, BearerTokenHelper::JWKS_URL).to_timeout.then.to_return(
+      status:  200,
+      headers: {'Content-Type' => 'application/json'},
+      body:    JWT::JWK::Set.new([bearer_test_jwk]).export.to_json
+    )
+
+    assert_raises BearerToken::Invalid do
+      BearerToken.verify token: bearer_token_for('alice')
+    end
+
+    travel 31.seconds do
+      assert_equal 'alice', BearerToken.verify(token: bearer_token_for('alice'))['preferred_username']
+
+      # A key the realm does not publish asks again (the 60-second refetch
+      # rule), not refused as if the realm were still down.
+      assert_raises BearerToken::Invalid do
+        BearerToken.verify token: bearer_token_for('alice', jwk: bearer_test_jwk(:other))
+      end
+    end
+
+    assert_requested :get, BearerTokenHelper::JWKS_URL, times: 3
   end
 
   test 'jwks answering with an error is invalid' do

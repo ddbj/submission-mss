@@ -33,6 +33,7 @@ module BearerTokenHelper
       iss:                ISSUER,
       aud:                ['mssform'],
       azp:                'ggs-test',
+      typ:                'Bearer',
       exp:                5.minutes.from_now.to_i,
       iat:                Time.current.to_i,
       preferred_username: uid,

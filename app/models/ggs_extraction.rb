@@ -66,6 +66,7 @@ class GgsExtraction < ApplicationRecord
   # as they always have. Anything else that is not a plain small file naming
   # this user -- or that we cannot read -- counts as someone else's.
   def owner_matches?(job_id)
+    # .ggs-owner sits next to output/: the path template is expected to end in /{job_id}/output.
     path = job_output_dir(job_id).parent.join('.ggs-owner')
     stat = File.lstat(path)
 

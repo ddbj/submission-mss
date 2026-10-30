@@ -179,6 +179,13 @@ class BearerAuthTest < ActionDispatch::IntegrationTest
     get '/api/me', headers: {Authorization: 'Basic xxx'}
 
     assert_conform_schema 401
+
+    # Left to the session, which still signs the user in.
+    sign_in users(:alice)
+
+    get '/api/me', headers: {Authorization: 'Basic xxx'}
+
+    assert_conform_schema 200
   end
 
   test 'wrong scheme does not get past csrf' do
