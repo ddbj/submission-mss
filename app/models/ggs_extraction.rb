@@ -2,6 +2,8 @@ class GgsExtraction < ApplicationRecord
   include Extraction
   include ArchiveExtraction
 
+  OWNER_FILE_MAX_BYTES = 256
+
   validates :ggs_job_ids, presence: true
 
   def prepare_files
@@ -20,6 +22,7 @@ class GgsExtraction < ApplicationRecord
     src_dir = job_output_dir(job_id)
 
     raise Extraction::Error.new(:directory_not_found, job_id:) unless src_dir.directory?
+    raise Extraction::Error.new(:not_owner, job_id:)           if require_owner && !owner_matches?(job_id)
 
     # Corrected files live under output/fixed/ and take priority over the same-named
     # files in output/. Pick a single source per file name (fixed winning, unmatched
@@ -54,6 +57,38 @@ class GgsExtraction < ApplicationRecord
         files.create!(name:, parsing: true, ggs_job_id: job_id)
       end
     end
+  end
+
+  # The GGS portal leaves the uid of whoever ran the job in .ggs-owner, next to
+  # output/ rather than in it, so it is never copied. A token carries no proof
+  # that its holder ran the job, so an extraction made with one has to match it.
+  # Jobs from before the portal, or run outside it, have no such file and pass
+  # as they always have. Anything else that is not a plain small file naming
+  # this user -- or that we cannot read -- counts as someone else's.
+  def owner_matches?(job_id)
+    path = job_output_dir(job_id).parent.join('.ggs-owner')
+    stat = File.lstat(path)
+
+    return false unless stat.file?
+    return false if stat.size > OWNER_FILE_MAX_BYTES
+
+    # Opened without following a link or waiting on a pipe, in case the file
+    # was swapped since the look above.
+    owner = File.open(path, File::RDONLY | File::NOFOLLOW | File::NONBLOCK) {|f|
+      next unless f.stat.file?
+
+      f.read(OWNER_FILE_MAX_BYTES + 1)
+    }
+
+    return false if owner.nil? || owner.bytesize > OWNER_FILE_MAX_BYTES
+
+    owner = owner.force_encoding(Encoding::UTF_8)
+
+    owner.valid_encoding? && owner.strip == user.uid
+  rescue Errno::ENOENT
+    true
+  rescue SystemCallError, IOError
+    false
   end
 
   # The same file can be plain in output/ and compressed in output/fixed/, or

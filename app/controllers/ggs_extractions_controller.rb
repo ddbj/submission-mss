@@ -4,7 +4,7 @@ class GgsExtractionsController < ApplicationController
   end
 
   def create
-    @extraction = current_user.ggs_extractions.create!(ggs_job_ids: params[:ids])
+    @extraction = current_user.ggs_extractions.create!(ggs_job_ids: params[:ids], require_owner: bearer_authenticated?)
 
     ExtractMetadataJob.perform_later @extraction
 

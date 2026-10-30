@@ -13,6 +13,7 @@ module Extraction
       invalid_job_id
       failed_to_fetch
       directory_not_found
+      not_owner
       duplicate_file_name
       duplicate_file_name_across_jobs
       invalid_archive
