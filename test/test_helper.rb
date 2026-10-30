@@ -15,6 +15,8 @@ class ActiveSupport::TestCase
 
   fixtures :all
 
+  include BearerTokenHelper
+
   setup do
     Rails.root.glob('tmp/storage/*', &:rmtree)
   end
@@ -25,4 +27,5 @@ OmniAuth.config.test_mode = true
 class ActionDispatch::IntegrationTest
   include Skooma::Minitest[Rails.root.join('schema/openapi.yml'), path_prefix: '/api']
   include SignInHelper
+  include BearerTokenHelper
 end

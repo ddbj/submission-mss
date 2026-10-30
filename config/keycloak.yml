@@ -3,17 +3,29 @@ development:
   client_secret: <%= ENV['KEYCLOAK_CLIENT_SECRET'] %>
   url:           <%= ENV.fetch('KEYCLOAK_URL', 'http://localhost:8080') %>
 
+  bearer_audience:   mssform
+  bearer_client_ids: <%= ENV.fetch('KEYCLOAK_BEARER_CLIENT_IDS', 'msstools-web').split(',') %>
+
 test:
   client_id:     mssform
   client_secret: notasecret
   url:           http://keycloak.example.com
+
+  bearer_audience:   mssform
+  bearer_client_ids: [ggs-test]
 
 production:
   client_id:     <%= Rails.application.credentials.dig(:keycloak, :client_id) %>
   client_secret: <%= Rails.application.credentials.dig(:keycloak, :client_secret) %>
   url:           https://idp.ddbj.nig.ac.jp
 
+  bearer_audience:   mssform
+  bearer_client_ids: <%= Rails.application.credentials.dig(:keycloak, :bearer_client_ids) || [] %>
+
 staging:
   client_id:     <%= Rails.application.credentials.dig(:keycloak, :client_id) %>
   client_secret: <%= Rails.application.credentials.dig(:keycloak, :client_secret) %>
   url:           https://idp-staging.ddbj.nig.ac.jp
+
+  bearer_audience:   mssform
+  bearer_client_ids: <%= Rails.application.credentials.dig(:keycloak, :bearer_client_ids) || [] %>
