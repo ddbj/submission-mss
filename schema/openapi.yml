@@ -9,6 +9,7 @@ servers:
   - url: https://mss-staging.ddbj.nig.ac.jp/api
 
 security:
+  - CookieAuth: []
   - BearerAuth: []
 
 paths:
@@ -1008,6 +1009,19 @@ components:
       description: Invalid parameter or payload was specified.
 
   securitySchemes:
+    CookieAuth:
+      type: apiKey
+      in: cookie
+      name: _mssform
+      description: |
+        The session our frontend signs in to. Every request that writes must
+        also send the csrf_token from GET /me as X-CSRF-Token.
+
     BearerAuth:
       type: http
       scheme: bearer
+      bearerFormat: JWT
+      description: |
+        An access token the realm issued to another trusted client, on behalf of
+        the user it names. No session cookie is read or issued and no
+        X-CSRF-Token is required.
