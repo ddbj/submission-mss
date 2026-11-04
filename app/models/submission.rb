@@ -48,6 +48,26 @@ class Submission < ApplicationRecord
     root_dir.join('disable-upload').exist?
   end
 
+  # Where the GGS submission portal keeps a submission it made, for our pages
+  # to send the submitter to. Nil for the ones made here, and when no
+  # portal_submission_url_template is set -- or one that is not https, which is
+  # not a link we would give anyone.
+  def portal_url
+    return nil unless portal_managed?
+
+    template = Rails.application.config_for(:app).portal_submission_url_template.presence
+
+    return nil unless template
+
+    unless template.start_with?('https://')
+      Rails.logger.error "portal_submission_url_template must start with https://: #{template.inspect}"
+
+      return nil
+    end
+
+    template.gsub('{mass_id}', mass_id)
+  end
+
   def set_mass_id(seq)
     self.mass_id = "NSUB#{seq.to_s.rjust(6, '0')}"
   end

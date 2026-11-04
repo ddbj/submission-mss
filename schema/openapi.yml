@@ -604,6 +604,8 @@ components:
         - created_at
         - status
         - accessions
+        - portal_managed
+        - portal_url
         - uploads
 
       properties:
@@ -624,6 +626,21 @@ components:
 
           items:
             type: string
+
+        portal_managed:
+          type: boolean
+          description: |
+            Made by the GGS submission portal with the submitter's token. The
+            portal takes any further files (an upload through the session is
+            refused with 403) and writes to the submitter itself.
+
+        portal_url:
+          type:
+            - string
+            - 'null'
+          description: |
+            Where the portal keeps this submission, to send the submitter to.
+            Null unless portal_managed, or when no portal URL is configured.
 
         uploads:
           type: array

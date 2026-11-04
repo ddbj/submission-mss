@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_30_034136) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_04_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -158,6 +158,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_034136) do
     t.integer "entries_count", null: false
     t.date "hold_date"
     t.string "mass_id", null: false
+    t.boolean "portal_managed", default: false, null: false
     t.string "sequencer", null: false
     t.boolean "tpa", null: false
     t.datetime "updated_at", null: false

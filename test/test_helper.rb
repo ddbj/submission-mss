@@ -15,6 +15,7 @@ class ActiveSupport::TestCase
 
   fixtures :all
 
+  include AppConfigHelper
   include BearerTokenHelper
 
   setup do

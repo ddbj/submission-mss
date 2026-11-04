@@ -7,6 +7,9 @@ state = working_list_states[submission.mass_id]
   status:        state&.status,
   accessions:    state&.accessions || [],
 
+  portal_managed: submission.portal_managed?,
+  portal_url:     submission.portal_url,
+
   uploads: submission.uploads.map {|upload|
     {
       id:         upload.id,
