@@ -336,6 +336,10 @@ mass-directory-extractor:
   extract-again: ディレクトリから取り込み直す
   where-to-fix: 取り込んだファイルはこの画面では修正できません。ディレクトリ内のファイルを修正してから、「ディレクトリから取り込み直す」を押してください。
 
+portal-notice:
+  text: この登録は DDBJ 登録ポータルから行われました。追加のファイルは、このページではなく登録ポータルから送ってください。
+  open: 登録ポータルで開く
+
 submission.show:
   re-upload: 再アップロード
   submission-files: 登録ファイル

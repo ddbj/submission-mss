@@ -335,6 +335,10 @@ mass-directory-extractor:
   extract-again: Import from the directory again
   where-to-fix: Files imported from the directory cannot be corrected here. Correct the files in the directory, then press "Import from the directory again".
 
+portal-notice:
+  text: This submission was made through the DDBJ submission portal. Please send any further files from the portal, not from this page.
+  open: Open in the submission portal
+
 submission.show:
   re-upload: Re-upload
   submission-files: Submission files

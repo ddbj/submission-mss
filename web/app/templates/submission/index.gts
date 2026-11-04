@@ -2,6 +2,7 @@ import { LinkTo } from '@ember/routing';
 import { t } from 'ember-intl';
 import { formatTime } from 'ember-intl';
 import pageTitle from 'ember-page-title/helpers/page-title';
+import PortalNotice from 'mssform/components/portal-notice';
 import type { TOC } from '@ember/component/template-only';
 
 interface Upload {
@@ -18,6 +19,8 @@ interface Signature {
   Args: {
     model: {
       id: string;
+      portal_managed: boolean;
+      portal_url: string | null;
       uploads: Upload[];
     };
   };
@@ -28,9 +31,13 @@ interface Signature {
 
   <h1 class="display-6 my-4">{{@model.id}}</h1>
 
-  <LinkTo @route="submission.upload" @model={{@model}} class="btn btn-outline-primary">
-    {{t "submission.show.re-upload"}}
-  </LinkTo>
+  {{#if @model.portal_managed}}
+    <PortalNotice @url={{@model.portal_url}} />
+  {{else}}
+    <LinkTo @route="submission.upload" @model={{@model}} class="btn btn-outline-primary">
+      {{t "submission.show.re-upload"}}
+    </LinkTo>
+  {{/if}}
 
   <h2 class="mt-4">{{t "submission.show.submission-files"}}</h2>
 
