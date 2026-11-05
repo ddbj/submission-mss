@@ -64,7 +64,7 @@ class GgsExtraction < ApplicationRecord
   # they signed in: the job ID alone is no proof of having run it.
   #
   # TRANSITIONAL: a job without the file is let through. GGS writes it only for
-  # jobs made through the submission portal for now; once it writes it for every
+  # jobs made through the Nucleotide submission portal for now; once it writes it for every
   # job run by a logged-in user, a follow-up change (tracked in an issue) removes
   # this allowance and a missing file is refused like a mismatch.
   def owner_matches?(job_id)

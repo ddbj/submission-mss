@@ -26,15 +26,15 @@ Neither SeaweedFS nor Keycloak is started by `bin/dev` — the application talks
 to instances running outside it (in development, the host's SeaweedFS and
 cloakman's Keycloak). Point it at them through the environment:
 
-| Variable                     | Default                 | Notes                                                                                                                   |
-| ---------------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `KEYCLOAK_URL`               | `http://localhost:8080` | Base URL of the Keycloak instance                                                                                       |
-| `KEYCLOAK_CLIENT_SECRET`     | —                       | Secret of the `mssform` client                                                                                          |
-| `KEYCLOAK_BEARER_CLIENT_IDS` | — (empty: off)          | Comma-separated client IDs whose access tokens may call the API (see [Bearer tokens](#bearer-tokens-submission-portal)) |
-| `SEAWEEDFS_ACCESS_KEY`       | —                       | Access key of the `mssform` identity                                                                                    |
-| `SEAWEEDFS_SECRET_KEY`       | —                       | Secret key of the `mssform` identity                                                                                    |
-| `APP_URL`                    | `http://localhost:3000` | Origin of the Rails API                                                                                                 |
-| `WEB_URL`                    | `http://localhost:4200` | Origin of the Ember SPA                                                                                                 |
+| Variable                     | Default                 | Notes                                                                                                                              |
+| ---------------------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `KEYCLOAK_URL`               | `http://localhost:8080` | Base URL of the Keycloak instance                                                                                                  |
+| `KEYCLOAK_CLIENT_SECRET`     | —                       | Secret of the `mssform` client                                                                                                     |
+| `KEYCLOAK_BEARER_CLIENT_IDS` | — (empty: off)          | Comma-separated client IDs whose access tokens may call the API (see [Bearer tokens](#bearer-tokens-nucleotide-submission-portal)) |
+| `SEAWEEDFS_ACCESS_KEY`       | —                       | Access key of the `mssform` identity                                                                                               |
+| `SEAWEEDFS_SECRET_KEY`       | —                       | Secret key of the `mssform` identity                                                                                               |
+| `APP_URL`                    | `http://localhost:3000` | Origin of the Rails API                                                                                                            |
+| `WEB_URL`                    | `http://localhost:4200` | Origin of the Ember SPA                                                                                                            |
 
 ### SeaweedFS
 
@@ -119,9 +119,9 @@ web/                       Ember.js frontend
 └── tests/                 QUnit + MSW tests
 ```
 
-## Bearer tokens (submission portal)
+## Bearer tokens (Nucleotide submission portal)
 
-Another client of the same Keycloak realm -- the GGS submission portal -- may
+Another client of the same Keycloak realm -- the Nucleotide submission portal (GGS) -- may
 call a few endpoints on a signed-in user's behalf, with the access token the
 realm issued to it in `Authorization: Bearer <token>`. Such a request is
 authenticated by the token alone: no session cookie is read or issued, and no
@@ -196,7 +196,7 @@ exists, the import is accepted only if its content is the importing user's uid,
 however they signed in; otherwise the extraction is rejected with `not_owner`.
 
 **Transitional:** a job without `.ggs-owner` is still imported. GGS currently
-writes the file only for jobs created through the submission portal; once it
+writes the file only for jobs created through the Nucleotide submission portal; once it
 writes it for every job run by a logged-in user, a follow-up change will remove
 this allowance and refuse jobs without the file (tracked in an issue).
 
