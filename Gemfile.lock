@@ -116,7 +116,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.8)
-    dalli (5.2.2)
+    dalli (5.2.6)
       logger
     date (3.5.1)
     debug (1.11.1)
