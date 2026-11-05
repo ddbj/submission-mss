@@ -74,16 +74,11 @@ class BearerAuthTest < ActionDispatch::IntegrationTest
     assert_nil User.find_by(uid: 'newcomer')
   end
 
-  test 'bearer updates a changed email but keeps it when the claim is absent' do
-    get '/api/me', headers: bearer(users(:alice), email: 'alice@new.example.com')
+  test 'a Bearer token does not change the address of a user we already know' do
+    get '/api/me', headers: bearer(users(:alice), email: 'alice@elsewhere.example.com')
 
     assert_conform_schema 200
-    assert_equal 'alice@new.example.com', users(:alice).reload.email
-
-    get '/api/me', headers: bearer(users(:alice), email: nil)
-
-    assert_conform_schema 200
-    assert_equal 'alice@new.example.com', users(:alice).reload.email
+    assert_equal 'alice@example.com', users(:alice).reload.email
   end
 
   test 'bearer invalid does not fall back to session' do

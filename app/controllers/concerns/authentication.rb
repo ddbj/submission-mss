@@ -63,22 +63,13 @@ module Authentication
   def bearer_user
     return nil unless (claims = bearer_claims)
 
-    uid   = claims['preferred_username']
-    email = claims['email'].presence
-    email = nil unless email.is_a?(String)
-    user  = User.find_or_initialize_by(uid:)
+    # Only a newcomer takes the token's address. An existing user's is the one
+    # their own sign-in keeps up to date.
+    User.from_claims!(uid: claims['preferred_username'], email: claims['email'])
+  rescue User::IncompleteClaims => e
+    Rails.logger.info "Bearer token rejected: #{e.message}"
 
-    # Without an address there is no one to tell about their submission, and
-    # the token is all we would know them by.
-    return nil if user.new_record? && email.nil?
-
-    user.email = email if email
-    user.save! if user.changed?
-
-    user
-  rescue ActiveRecord::RecordNotUnique
-    # Two first requests from the same newcomer at once, and the other won.
-    User.find_by(uid:)
+    nil
   end
 
   # A page on another origin cannot attach an Authorization header without a
