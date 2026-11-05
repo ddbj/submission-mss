@@ -7,16 +7,25 @@ module BearerTokenHelper
   ISSUER   = 'http://keycloak.example.com/realms/master'
   JWKS_URL = "#{ISSUER}/protocol/openid-connect/certs"
 
-  # Generating an RSA key takes long enough to notice; one pair serves the whole run.
+  # Generating an RSA key takes long enough to notice; these serve the whole run.
   KEYS = {
     primary: JWT::JWK.new(OpenSSL::PKey::RSA.generate(2048), kid: 'test-key-a'),
-    other:   JWT::JWK.new(OpenSSL::PKey::RSA.generate(2048), kid: 'test-key-b')
+    other:   JWT::JWK.new(OpenSSL::PKey::RSA.generate(2048), kid: 'test-key-b'),
+
+    # Not published anywhere, under the kid of the primary key.
+    impostor: JWT::JWK.new(OpenSSL::PKey::RSA.generate(2048), kid: 'test-key-a')
   }.freeze
 
   included do
-    # The JWKS a test stubs is the one the next verification sees.
+    # The cached JWKS is shared across requests, so the tests need a cache that
+    # keeps things (the test environment's does not), and a fresh one each.
     setup do
-      BearerToken.reset_jwks_cache!
+      @cache_before_bearer_test = Rails.cache
+      Rails.cache               = ActiveSupport::Cache::MemoryStore.new
+    end
+
+    teardown do
+      Rails.cache = @cache_before_bearer_test
     end
   end
 
@@ -34,6 +43,8 @@ module BearerTokenHelper
       aud:                ['mssform'],
       azp:                'ggs-test',
       typ:                'Bearer',
+      scope:              'openid email profile mss-submission',
+      sid:                'a-user-session',
       exp:                5.minutes.from_now.to_i,
       iat:                Time.current.to_i,
       preferred_username: uid,

@@ -2,30 +2,34 @@ development:
   client_id:     mssform
   client_secret: <%= ENV['KEYCLOAK_CLIENT_SECRET'] %>
   url:           <%= ENV.fetch('KEYCLOAK_URL', 'http://localhost:8080') %>
+  issuer:        <%= URI.join(ENV.fetch('KEYCLOAK_URL', 'http://localhost:8080'), '/realms/master') %>
 
-  bearer_audience:   mssform
-  bearer_client_ids: <%= ENV.fetch('KEYCLOAK_BEARER_CLIENT_IDS', '').split(',').map(&:strip).reject(&:blank?) %>
+  bearer_client_ids: <%= ENV.fetch('KEYCLOAK_BEARER_CLIENT_IDS', '').split(',').map(&:strip).reject(&:empty?).to_json %>
+  bearer_scope:      mss-submission
 
 test:
   client_id:     mssform
   client_secret: notasecret
   url:           http://keycloak.example.com
+  issuer:        http://keycloak.example.com/realms/master
 
-  bearer_audience:   mssform
   bearer_client_ids: [ggs-test]
+  bearer_scope:      mss-submission
 
 production:
   client_id:     <%= Rails.application.credentials.dig(:keycloak, :client_id) %>
   client_secret: <%= Rails.application.credentials.dig(:keycloak, :client_secret) %>
   url:           https://idp.ddbj.nig.ac.jp
+  issuer:        https://idp.ddbj.nig.ac.jp/realms/master
 
-  bearer_audience:   mssform
-  bearer_client_ids: <%= Rails.application.credentials.dig(:keycloak, :bearer_client_ids) || [] %>
+  bearer_client_ids: <%= Array(Rails.application.credentials.dig(:keycloak, :bearer_client_ids)).map(&:to_s).to_json %>
+  bearer_scope:      mss-submission
 
 staging:
   client_id:     <%= Rails.application.credentials.dig(:keycloak, :client_id) %>
   client_secret: <%= Rails.application.credentials.dig(:keycloak, :client_secret) %>
   url:           https://idp-staging.ddbj.nig.ac.jp
+  issuer:        https://idp-staging.ddbj.nig.ac.jp/realms/master
 
-  bearer_audience:   mssform
-  bearer_client_ids: <%= Rails.application.credentials.dig(:keycloak, :bearer_client_ids) || [] %>
+  bearer_client_ids: <%= Array(Rails.application.credentials.dig(:keycloak, :bearer_client_ids)).map(&:to_s).to_json %>
+  bearer_scope:      mss-submission

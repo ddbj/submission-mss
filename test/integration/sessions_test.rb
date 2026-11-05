@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class SessionsTest < ActionDispatch::IntegrationTest
-  ISSUER = URI.join(Rails.application.config_for(:keycloak).url!, '/realms/master').to_s
+  ISSUER = Rails.application.config_for(:keycloak).issuer!
 
   test 'signing in leaves the credential in the cookie and nowhere else' do
     visit_provider_callback users(:alice)

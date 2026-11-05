@@ -12,7 +12,7 @@ keycloak_url = URI.parse(keycloak.url!)
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :openid_connect, **{
     name:      'keycloak',
-    issuer:    URI.join(keycloak_url, '/realms/master').to_s,
+    issuer:    keycloak.issuer!,
     discovery: true,
     scope:     %i[openid email profile],
     prompt:    'login',

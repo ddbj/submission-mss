@@ -27,5 +27,4 @@ OmniAuth.config.test_mode = true
 class ActionDispatch::IntegrationTest
   include Skooma::Minitest[Rails.root.join('schema/openapi.yml'), path_prefix: '/api']
   include SignInHelper
-  include BearerTokenHelper
 end
