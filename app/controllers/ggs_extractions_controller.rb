@@ -1,4 +1,6 @@
 class GgsExtractionsController < ApplicationController
+  allow_bearer only: %i[create show]
+
   def show
     @extraction = current_user.ggs_extractions.find(params[:id])
   end
