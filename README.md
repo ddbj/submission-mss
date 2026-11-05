@@ -26,15 +26,15 @@ Neither SeaweedFS nor Keycloak is started by `bin/dev` — the application talks
 to instances running outside it (in development, the host's SeaweedFS and
 cloakman's Keycloak). Point it at them through the environment:
 
-| Variable                     | Default                 | Notes                                                                                                                                         |
-| ---------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `KEYCLOAK_URL`               | `http://localhost:8080` | Base URL of the Keycloak instance                                                                                                             |
-| `KEYCLOAK_CLIENT_SECRET`     | —                       | Secret of the `mssform` client                                                                                                                |
-| `KEYCLOAK_BEARER_CLIENT_IDS` | — (empty: off)          | Comma-separated Keycloak client IDs whose access tokens may call the API as `Authorization: Bearer`; the token's `aud` must contain `mssform` |
-| `SEAWEEDFS_ACCESS_KEY`       | —                       | Access key of the `mssform` identity                                                                                                          |
-| `SEAWEEDFS_SECRET_KEY`       | —                       | Secret key of the `mssform` identity                                                                                                          |
-| `APP_URL`                    | `http://localhost:3000` | Origin of the Rails API                                                                                                                       |
-| `WEB_URL`                    | `http://localhost:4200` | Origin of the Ember SPA                                                                                                                       |
+| Variable                     | Default                 | Notes                                                                                                                   |
+| ---------------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `KEYCLOAK_URL`               | `http://localhost:8080` | Base URL of the Keycloak instance                                                                                       |
+| `KEYCLOAK_CLIENT_SECRET`     | —                       | Secret of the `mssform` client                                                                                          |
+| `KEYCLOAK_BEARER_CLIENT_IDS` | — (empty: off)          | Comma-separated client IDs whose access tokens may call the API (see [Bearer tokens](#bearer-tokens-submission-portal)) |
+| `SEAWEEDFS_ACCESS_KEY`       | —                       | Access key of the `mssform` identity                                                                                    |
+| `SEAWEEDFS_SECRET_KEY`       | —                       | Secret key of the `mssform` identity                                                                                    |
+| `APP_URL`                    | `http://localhost:3000` | Origin of the Rails API                                                                                                 |
+| `WEB_URL`                    | `http://localhost:4200` | Origin of the Ember SPA                                                                                                 |
 
 ### SeaweedFS
 
@@ -118,6 +118,74 @@ web/                       Ember.js frontend
 ├── workers/               Web Workers (file parsers), bundled by Vite
 └── tests/                 QUnit + MSW tests
 ```
+
+## Bearer tokens (submission portal)
+
+Another client of the same Keycloak realm -- the GGS submission portal -- may
+call a few endpoints on a signed-in user's behalf, with the access token the
+realm issued to it in `Authorization: Bearer <token>`. Such a request is
+authenticated by the token alone: no session cookie is read or issued, and no
+`X-CSRF-Token` is needed.
+
+**Only the actions that opt in accept a token** (`allow_bearer only: ...` in the
+controller). Any other action answers a request carrying a token with 401, even
+when a valid session cookie comes with it. Today these are:
+
+| Endpoint                                 | Controller                              |
+| ---------------------------------------- | --------------------------------------- |
+| `GET /api/me`                            | `MesController#show`                    |
+| `POST /api/ggs_extractions`              | `GgsExtractionsController#create`       |
+| `GET /api/ggs_extractions/:id`           | `GgsExtractionsController#show`         |
+| `POST /api/submissions`                  | `SubmissionsController#create`          |
+| `GET /api/submissions/:mass_id`          | `SubmissionsController#show`            |
+| `POST /api/submissions/:mass_id/uploads` | `Submissions::UploadsController#create` |
+| `POST /api/direct_uploads`               | `DirectUploadsController#create`        |
+
+A token is accepted only if it is signed (RS256) by a key the realm publishes,
+and its `iss` is `issuer`, its `aud` contains `client_id` (`mssform`), its `typ`
+is `Bearer`, its `azp` is one of `bearer_client_ids`, its space-separated
+`scope` contains `bearer_scope` (`mss-submission`), it carries a `sid` (tokens
+of service accounts have none and are refused) and a non-blank
+`preferred_username`, and it has not expired (30 seconds of leeway). The
+settings live in `config/keycloak.yml`; in production and staging,
+`bearer_client_ids` comes from the credentials as a list
+(`keycloak.bearer_client_ids: [ggs-portal]`). The realm's keys are cached in
+`Rails.cache` for an hour, and the realm is asked for them at most once a minute.
+
+### User identity
+
+As with the session login (`SessionsController#create`), the user is identified
+by the token's `preferred_username`. A user MSS has not seen yet is created
+with the token's `email` (a token without one is refused); an existing user's
+address is never changed by a token -- only their own sign-in to MSS updates it.
+
+`preferred_username` in the portal's tokens therefore has to be the realm
+username and nothing else:
+
+- It comes from an explicit mapper in the `mss-submission` client scope (below),
+  not from whatever mappers the portal client happens to have.
+- The portal client, its scopes and their mappers are administered by the DDBJ
+  Keycloak administrators, like MSS's own `mssform` client.
+- The realm has **Edit username** OFF (Realm settings → Login), so users cannot
+  change their username.
+
+### Keycloak setup
+
+1. **Client scope** `mss-submission` (Client scopes → Create client scope):
+   - Protocol: OpenID Connect.
+   - **Include in token scope: ON.** Without it the scope's name does not appear
+     in the token's `scope` claim, and MSS refuses every token.
+   - Mappers (Add mapper → By configuration):
+     - **Audience**: Included Client Audience `mssform` (MSS's client), Add to
+       access token ON. This puts `mssform` in `aud`.
+     - **User Attribute** (User Property in older Keycloak) for `username`:
+       Token Claim Name `preferred_username`, Claim JSON Type String, Add to
+       access token ON.
+2. **Portal client**: add `mss-submission` to its client scopes (Optional, and
+   requested by the portal as `scope=openid mss-submission`, or Default). Keep
+   the realm's `basic` scope assigned so that access tokens carry `sid`.
+3. **MSS**: add the portal client's ID to `bearer_client_ids`
+   (`KEYCLOAK_BEARER_CLIENT_IDS` in development, the credentials elsewhere).
 
 ## GGS job ownership
 
