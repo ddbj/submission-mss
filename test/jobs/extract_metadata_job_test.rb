@@ -523,6 +523,31 @@ class ExtractMetadataJobTest < ActiveJob::TestCase
     assert_not @extraction.working_dir.exist?
   end
 
+  test 'ggs: a job someone else ran rejects the extraction and keeps nothing' do
+    config = Rails.application.config_for(:app)
+    mine   = '01234567-89ab-cdef-0000-000000000001'
+    theirs = '01234567-89ab-cdef-0000-000000000002'
+
+    {mine => 'alice', theirs => 'bob'}.each do |job_id, owner|
+      Pathname.new(config.ggs_jobs_dir_template!.gsub('{job_id}', job_id)).tap(&:mkpath).join("#{job_id}.fa").write ">CLN01\nACGT\n"
+      Pathname.new(config.ggs_owner_template!.gsub('{job_id}', job_id)).write owner
+    end
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [mine, theirs])
+
+    ExtractMetadataJob.perform_now extraction
+
+    extraction.reload
+
+    assert_equal 'rejected', extraction.state
+    assert_equal({'id' => 'not_owner', 'job_id' => theirs}, extraction.error)
+
+    # The first job was copied before the second was turned down; neither its
+    # records nor its files outlive the rejection.
+    assert_empty extraction.files
+    assert_not extraction.working_dir.exist?
+  end
+
   test 'an extraction no longer pending is left alone' do
     @extraction.update! state: 'rejected', error: {id: 'unexpected'}
 

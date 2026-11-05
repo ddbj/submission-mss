@@ -33,12 +33,6 @@ module Authentication
     }, status: :unauthorized
   end
 
-  # Whether this request was let in on a valid realm token rather than the
-  # session cookie.
-  def bearer_authenticated?
-    bearer_request? && !current_user.nil?
-  end
-
   private
 
   # Another client of the realm calling on a submitter's behalf. Any other

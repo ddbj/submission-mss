@@ -2,6 +2,7 @@ development:
   app_url:                <%= ENV.fetch('APP_URL', 'http://localhost:3000') %>
   extracts_dir:           <%= Rails.root.join("storage/extracts") %>
   ggs_jobs_dir_template:  <%= Rails.root.join("storage/ggs/{job_id}/output") %>
+  ggs_owner_template:     <%= Rails.root.join("storage/ggs/{job_id}/.ggs-owner") %>
   mass_dir_path_template: <%= Rails.root.join("storage/mass/{user}") %>
   submissions_dir:        <%= Rails.root.join("storage/submissions") %>
   upload_events_log:      <%= Rails.root.join("storage/upload_events.jsonl") %>
@@ -11,6 +12,7 @@ test:
   app_url:                http://mssform.example.com:3000
   extracts_dir:           <%= Rails.root.join("tmp/storage/extracts") %>
   ggs_jobs_dir_template:  <%= Rails.root.join("tmp/storage/ggs/{job_id}/output") %>
+  ggs_owner_template:     <%= Rails.root.join("tmp/storage/ggs/{job_id}/.ggs-owner") %>
   mass_dir_path_template: <%= Rails.root.join("tmp/storage/mass/{user}") %>
   submissions_dir:        <%= Rails.root.join("tmp/storage/submissions") %>
   upload_events_log:      <%= Rails.root.join("tmp/storage/upload_events.jsonl") %>
@@ -21,6 +23,7 @@ production: &production
   sentry_dsn:             https://d0a88749c20cf46d63f4bb1028e427dc@o4506770361024512.ingest.sentry.io/4506770364891136
   extracts_dir:           <%= Rails.root.join("storage/extracts") %>
   ggs_jobs_dir_template:  /lustre9/open/home/w3dfast/ggs_volumes/jobs/{job_id}/output
+  ggs_owner_template:     /lustre9/open/home/w3dfast/ggs_volumes/jobs/{job_id}/.ggs-owner
   mass_dir_path_template: /submission/{user}/submission/{user}/mass
   submissions_dir:        <%= Rails.root.join("storage/submissions") %>
   upload_events_log:      <%= Rails.root.join("storage/upload_events.jsonl") %>
@@ -30,5 +33,6 @@ staging:
   <<: *production
   app_url:               https://mss-staging.ddbj.nig.ac.jp
   ggs_jobs_dir_template: /lustre9/open/home/w3dfast/ggs_volumes/test_jobs/{job_id}/output
+  ggs_owner_template:    /lustre9/open/home/w3dfast/ggs_volumes/test_jobs/{job_id}/.ggs-owner
   mail_allowed_domains:  ddbj.nig.ac.jp,ursm.jp
   web_url:               https://mss-staging.ddbj.nig.ac.jp

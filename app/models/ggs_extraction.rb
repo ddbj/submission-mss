@@ -22,7 +22,7 @@ class GgsExtraction < ApplicationRecord
     src_dir = job_output_dir(job_id)
 
     raise Extraction::Error.new(:directory_not_found, job_id:) unless src_dir.directory?
-    raise Extraction::Error.new(:not_owner, job_id:)           if require_owner && !owner_matches?(job_id)
+    raise Extraction::Error.new(:not_owner, job_id:)           unless owner_matches?(job_id)
 
     # Corrected files live under output/fixed/ and take priority over the same-named
     # files in output/. Pick a single source per file name (fixed winning, unmatched
@@ -59,37 +59,20 @@ class GgsExtraction < ApplicationRecord
     end
   end
 
-  # The GGS portal leaves the uid of whoever ran the job in .ggs-owner, next to
-  # output/ rather than in it, so it is never copied. A token carries no proof
-  # that its holder ran the job, so an extraction made with one has to match it.
-  # Jobs from before the portal, or run outside it, have no such file and pass
-  # as they always have. Anything else that is not a plain small file naming
-  # this user -- or that we cannot read -- counts as someone else's.
+  # GGS leaves the uid of whoever ran the job in .ggs-owner, outside output/ so
+  # that it is never copied. Whoever imports the job has to be that user, however
+  # they signed in: the job ID alone is no proof of having run it.
+  #
+  # TRANSITIONAL: a job without the file is let through. GGS writes it only for
+  # jobs made through the submission portal for now; once it writes it for every
+  # job run by a logged-in user, a follow-up change (tracked in an issue) removes
+  # this allowance and a missing file is refused like a mismatch.
   def owner_matches?(job_id)
-    # .ggs-owner sits next to output/: the path template is expected to end in /{job_id}/output.
-    path = job_output_dir(job_id).parent.join('.ggs-owner')
-    stat = File.lstat(path)
+    path = template_path(:ggs_owner_template, job_id)
 
-    return false unless stat.file?
-    return false if stat.size > OWNER_FILE_MAX_BYTES
+    return true unless path.exist?
 
-    # Opened without following a link or waiting on a pipe, in case the file
-    # was swapped since the look above.
-    owner = File.open(path, File::RDONLY | File::NOFOLLOW | File::NONBLOCK) {|f|
-      next unless f.stat.file?
-
-      f.read(OWNER_FILE_MAX_BYTES + 1)
-    }
-
-    return false if owner.nil? || owner.bytesize > OWNER_FILE_MAX_BYTES
-
-    owner = owner.force_encoding(Encoding::UTF_8)
-
-    owner.valid_encoding? && owner.strip == user.uid
-  rescue Errno::ENOENT
-    true
-  rescue SystemCallError, IOError
-    false
+    path.file? && path.size <= OWNER_FILE_MAX_BYTES && path.read.scrub.strip == user.uid
   end
 
   # The same file can be plain in output/ and compressed in output/fixed/, or
@@ -103,10 +86,13 @@ class GgsExtraction < ApplicationRecord
   end
 
   def job_output_dir(job_id)
-    template = Rails.application.config_for(:app).ggs_jobs_dir_template!
-    path     = template.gsub('{job_id}', job_id)
+    template_path(:ggs_jobs_dir_template, job_id)
+  end
 
-    raise "malformed directory path: #{path}" unless path == File.expand_path(path)
+  def template_path(key, job_id)
+    path = Rails.application.config_for(:app).fetch(key).gsub('{job_id}', job_id)
+
+    raise "malformed path: #{path}" unless path == File.expand_path(path)
 
     Pathname.new(path)
   end

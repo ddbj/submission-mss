@@ -30,15 +30,6 @@ class BearerAuthTest < ActionDispatch::IntegrationTest
     assert_equal users(:alice), GgsExtraction.find(response.parsed_body['id']).user
   end
 
-  test 'bearer_extraction_requires_owner' do
-    post '/api/ggs_extractions', params: {
-      ids: ['01234567-89ab-cdef-0000-000000000001']
-    }, as: :json, headers: bearer(users(:alice))
-
-    assert_conform_schema 201
-    assert GgsExtraction.find(response.parsed_body['id']).require_owner
-  end
-
   test 'bearer lists own submissions only' do
     bob = User.create!(uid: 'bob', email: 'bob@example.com')
     bob.submissions.create!(mass_id: 'NSUB000002', tpa: false, entries_count: 1, sequencer: 'ngs', data_type: 'wgs', description: 'bob', email_language: 'en')
