@@ -200,8 +200,8 @@ importers:
         specifier: ^4.6.9
         version: 4.6.9(@glint/template@1.11.1)(supports-color@10.2.2)
       '@embroider/macros':
-        specifier: ^1.21.3
-        version: 1.21.3(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
+        specifier: ^1.21.4
+        version: 1.21.4(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
       '@embroider/vite':
         specifier: ^1.7.15
         version: 1.7.15(@babel/core@7.29.7(supports-color@10.2.2))(@embroider/core@4.6.9(@glint/template@1.11.1)(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)(vite@8.3.4(@types/node@26.6.5)(terser@5.51.2)(yaml@2.9.1))
@@ -258,7 +258,7 @@ importers:
         version: 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
       '@warp-drive/ember':
         specifier: ~5.9.1
-        version: 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@ember/test-waiters@4.1.2(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
+        version: 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@ember/test-waiters@4.1.2)(@glint/template@1.11.1)(supports-color@10.2.2)
       '@warp-drive/json-api':
         specifier: ~5.9.1
         version: 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(@warp-drive/core@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2))(supports-color@10.2.2)
@@ -1154,6 +1154,15 @@ packages:
       '@glint/template':
         optional: true
 
+  '@embroider/macros@1.21.4':
+    resolution: {integrity: sha512-5fPpOtQyQCK9RsMdtXZliUPKWAkdzJ8jCWIQotq9ZaeLMsvT4OkMBaSiZz5uED8GwDRmOXsJt2Ub3Zq6WtKqcw==}
+    engines: {node: 12.* || 14.* || >= 16}
+    peerDependencies:
+      '@glint/template': ^1.0.0
+    peerDependenciesMeta:
+      '@glint/template':
+        optional: true
+
   '@embroider/reverse-exports@0.2.0':
     resolution: {integrity: sha512-WFsw8nQpHZiWGEDYpa/A79KEFfTisqteXbY+jg9eZiww1r1G+LZvsmdszDp86TkotUSCqrMbK/ewn0jR1CJmqg==}
     engines: {node: 12.* || 14.* || >= 16}
@@ -1164,6 +1173,10 @@ packages:
 
   '@embroider/shared-internals@3.2.0':
     resolution: {integrity: sha512-TzLZnwfhhrNkdTVGGyysovvciFCwyxEgMbzF9AZMzNbFlXirhocQSpGjy9V4AQArklu4wDFRYqqe5GMKULGIkw==}
+    engines: {node: 12.* || 14.* || >= 16}
+
+  '@embroider/shared-internals@3.2.1':
+    resolution: {integrity: sha512-ZHTVF1Md6HiPPdpi5ESU5JlG2m4HRXIVebCka6BoMIfzyPlSjgYmpflv6Cmiq9UUyhe+/3LTMdx53vAV7O9g2Q==}
     engines: {node: 12.* || 14.* || >= 16}
 
   '@embroider/vite@1.7.15':
@@ -7450,7 +7463,7 @@ snapshots:
 
   '@ember/test-helpers@5.7.0(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2)':
     dependencies:
-      '@ember/test-waiters': 4.1.2(supports-color@10.2.2)
+      '@ember/test-waiters': 4.1.2
       '@embroider/addon-shim': 1.10.3(supports-color@10.2.2)
       '@simple-dom/interface': 1.4.0
       decorator-transforms: 2.4.0(@babel/core@7.29.7(supports-color@10.2.2))
@@ -7459,11 +7472,9 @@ snapshots:
       - '@babel/core'
       - supports-color
 
-  '@ember/test-waiters@4.1.2(supports-color@10.2.2)':
+  '@ember/test-waiters@4.1.2':
     dependencies:
-      '@embroider/addon-shim': 1.10.3(supports-color@10.2.2)
-    transitivePeerDependencies:
-      - supports-color
+      '@embroider/addon-shim': 1.11.0
 
   '@embroider/addon-shim@1.10.3(supports-color@10.2.2)':
     dependencies:
@@ -7583,6 +7594,22 @@ snapshots:
       - '@babel/core'
       - supports-color
 
+  '@embroider/macros@1.21.4(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)':
+    dependencies:
+      '@embroider/shared-internals': 3.2.1(supports-color@10.2.2)
+      assert-never: 1.4.0
+      babel-import-util: 3.0.1
+      ember-cli-babel: 8.3.2(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2)
+      find-up: 5.0.0
+      lodash: 4.18.1
+      resolve: 1.22.13
+      semver: 7.8.5
+    optionalDependencies:
+      '@glint/template': 1.11.1
+    transitivePeerDependencies:
+      - '@babel/core'
+      - supports-color
+
   '@embroider/reverse-exports@0.2.0':
     dependencies:
       mem: 8.1.1
@@ -7606,6 +7633,24 @@ snapshots:
       - supports-color
 
   '@embroider/shared-internals@3.2.0(supports-color@10.2.2)':
+    dependencies:
+      babel-import-util: 3.0.1
+      debug: 4.4.3(supports-color@10.2.2)
+      ember-rfc176-data: 0.3.18
+      fs-extra: 9.1.0
+      is-subdir: 1.2.0
+      js-string-escape: 1.0.1
+      lodash: 4.18.1
+      minimatch: 3.1.5
+      pkg-entry-points: 1.1.2
+      resolve-package-path: 4.0.3
+      resolve.exports: 2.0.4
+      semver: 7.8.5
+      typescript-memoize: 1.1.1
+    transitivePeerDependencies:
+      - supports-color
+
+  '@embroider/shared-internals@3.2.1(supports-color@10.2.2)':
     dependencies:
       babel-import-util: 3.0.1
       debug: 4.4.3(supports-color@10.2.2)
@@ -8206,7 +8251,7 @@ snapshots:
   '@sentry/ember@11.10.0(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)':
     dependencies:
       '@embroider/addon-shim': 1.10.3(supports-color@10.2.2)
-      '@embroider/macros': 1.21.3(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
+      '@embroider/macros': 1.21.4(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
       '@sentry/browser': 11.10.0
       '@sentry/conventions': 0.29.0
       '@sentry/core': 11.10.0
@@ -8446,7 +8491,7 @@ snapshots:
   '@warp-drive/build-config@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)':
     dependencies:
       '@embroider/addon-shim': 1.10.3(supports-color@10.2.2)
-      '@embroider/macros': 1.21.3(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
+      '@embroider/macros': 1.21.4(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
       babel-import-util: 3.0.1
       babel-plugin-debug-macros: 2.0.0(@babel/core@7.29.7(supports-color@10.2.2))
       semver: 7.8.5
@@ -8457,17 +8502,17 @@ snapshots:
 
   '@warp-drive/core@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)':
     dependencies:
-      '@embroider/macros': 1.21.3(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
+      '@embroider/macros': 1.21.4(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
       '@warp-drive/build-config': 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
     transitivePeerDependencies:
       - '@babel/core'
       - '@glint/template'
       - supports-color
 
-  '@warp-drive/ember@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@ember/test-waiters@4.1.2(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)':
+  '@warp-drive/ember@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@ember/test-waiters@4.1.2)(@glint/template@1.11.1)(supports-color@10.2.2)':
     dependencies:
-      '@ember/test-waiters': 4.1.2(supports-color@10.2.2)
-      '@embroider/macros': 1.21.3(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
+      '@ember/test-waiters': 4.1.2
+      '@embroider/macros': 1.21.4(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
       '@warp-drive/core': 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
     transitivePeerDependencies:
       - '@babel/core'
@@ -8476,7 +8521,7 @@ snapshots:
 
   '@warp-drive/json-api@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(@warp-drive/core@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2))(supports-color@10.2.2)':
     dependencies:
-      '@embroider/macros': 1.21.3(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
+      '@embroider/macros': 1.21.4(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
       '@warp-drive/core': 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
       fuse.js: 7.5.0
       json-to-ast: 2.1.0
@@ -8487,7 +8532,7 @@ snapshots:
 
   '@warp-drive/legacy@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(@warp-drive/core@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2))(@warp-drive/utilities@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(@warp-drive/core@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2))(supports-color@10.2.2))(supports-color@10.2.2)':
     dependencies:
-      '@embroider/macros': 1.21.3(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
+      '@embroider/macros': 1.21.4(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
       '@warp-drive/core': 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
       '@warp-drive/utilities': 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(@warp-drive/core@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2))(supports-color@10.2.2)
     transitivePeerDependencies:
@@ -8497,7 +8542,7 @@ snapshots:
 
   '@warp-drive/utilities@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(@warp-drive/core@5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2))(supports-color@10.2.2)':
     dependencies:
-      '@embroider/macros': 1.21.3(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
+      '@embroider/macros': 1.21.4(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
       '@warp-drive/core': 5.9.1(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
     transitivePeerDependencies:
       - '@babel/core'
@@ -9797,7 +9842,7 @@ snapshots:
       '@babel/plugin-proposal-private-methods': 7.18.6(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2)
       '@babel/plugin-transform-class-static-block': 7.29.7(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2)
       '@babel/preset-env': 7.29.7(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2)
-      '@embroider/macros': 1.21.3(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
+      '@embroider/macros': 1.21.4(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
       '@embroider/reverse-exports': 0.2.0
       '@embroider/shared-internals': 2.9.2(supports-color@10.2.2)
       babel-loader: 8.4.1(@babel/core@7.29.7(supports-color@10.2.2))(webpack@5.111.1(csso@5.0.5)(lightningcss@1.33.0)(postcss@8.5.30)(svgo@4.1.0)(uglify-js@3.19.3))
@@ -10189,7 +10234,7 @@ snapshots:
   ember-svg-jar@3.0.0(@glint/template@1.11.1)(ember-source@7.3.1(@glimmer/component@2.1.1(supports-color@10.2.2))(supports-color@10.2.2))(supports-color@10.2.2):
     dependencies:
       '@babel/core': 7.29.7(supports-color@10.2.2)
-      '@embroider/macros': 1.21.3(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
+      '@embroider/macros': 1.21.4(@babel/core@7.29.7(supports-color@10.2.2))(@glint/template@1.11.1)(supports-color@10.2.2)
       broccoli-caching-writer: 3.1.0(supports-color@10.2.2)
       broccoli-concat: 4.2.7(supports-color@10.2.2)
       broccoli-funnel: 4.0.0(supports-color@10.2.2)
