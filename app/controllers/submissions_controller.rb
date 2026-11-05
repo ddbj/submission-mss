@@ -18,6 +18,7 @@ class SubmissionsController < ApplicationController
 
       @submission = current_user.submissions.create!(submission_params.except(:upload_via, :contact_person, :other_people, :extraction_id, :files)) {|submission|
         submission.set_mass_id Submission.last_mass_id_seq.succ
+        submission.portal_managed = bearer_authenticated?
         submission.build_contact_person contact_person
 
         other_people.each_with_index do |person, i|
@@ -34,6 +35,9 @@ class SubmissionsController < ApplicationController
 
     CopySubmissionFilesJob.perform_later upload
     AddToWorkingListJob.perform_later    @submission
+
+    # The portal writes to them itself.
+    return if @submission.portal_managed?
 
     SubmissionMailer.with(submission: @submission).submitter_confirmation.deliver_later
     SubmissionMailer.with(submission: @submission).curator_notification.deliver_later

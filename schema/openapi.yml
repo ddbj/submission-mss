@@ -9,6 +9,7 @@ servers:
   - url: https://mss-staging.ddbj.nig.ac.jp/api
 
 security:
+  - CookieAuth: []
   - BearerAuth: []
 
 paths:
@@ -603,6 +604,8 @@ components:
         - created_at
         - status
         - accessions
+        - portal_managed
+        - portal_url
         - uploads
 
       properties:
@@ -623,6 +626,21 @@ components:
 
           items:
             type: string
+
+        portal_managed:
+          type: boolean
+          description: |
+            Made by the GGS submission portal with the submitter's token. The
+            portal takes any further files (an upload through the session is
+            refused with 403) and writes to the submitter itself.
+
+        portal_url:
+          type:
+            - string
+            - 'null'
+          description: |
+            Where the portal keeps this submission, to send the submitter to.
+            Null unless portal_managed, or when no portal URL is configured.
 
         uploads:
           type: array
@@ -745,6 +763,7 @@ components:
             - invalid_job_id
             - failed_to_fetch
             - directory_not_found
+            - not_owner
             - duplicate_file_name
             - duplicate_file_name_across_jobs
             - invalid_archive
@@ -1008,6 +1027,19 @@ components:
       description: Invalid parameter or payload was specified.
 
   securitySchemes:
+    CookieAuth:
+      type: apiKey
+      in: cookie
+      name: _mssform
+      description: |
+        The session our frontend signs in to. Every request that writes must
+        also send the csrf_token from GET /me as X-CSRF-Token.
+
     BearerAuth:
       type: http
       scheme: bearer
+      bearerFormat: JWT
+      description: |
+        An access token the realm issued to another trusted client, on behalf of
+        the user it names. No session cookie is read or issued and no
+        X-CSRF-Token is required.

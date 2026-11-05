@@ -47,9 +47,13 @@ module('Acceptance | upload', function (hooks) {
   setupAuthentication(hooks);
 
   let uploads: { id: number; created_at: string; files: string[]; job_ids: string[] }[];
+  let portalManaged: boolean;
+  let portalUrl: string | null;
 
   hooks.beforeEach(function () {
     uploads = [];
+    portalManaged = false;
+    portalUrl = null;
 
     worker.use(
       http.get('/submissions/{mass_id}', ({ response }) => {
@@ -59,11 +63,47 @@ module('Acceptance | upload', function (hooks) {
             created_at: '2026-08-14T00:00:00Z',
             status: null,
             accessions: [],
+            portal_managed: portalManaged,
+            portal_url: portalUrl,
             uploads,
           },
         });
       }),
     );
+  });
+
+  test('a submission the portal made takes its files there', async function (assert) {
+    portalManaged = true;
+    portalUrl = 'https://portal.example.org/submissions/NSUB000001';
+
+    await visit('/home/submission/NSUB000001');
+
+    assert.dom('a[href*="/home/submission/NSUB000001/upload"]').doesNotExist('no re-upload here');
+    assert.dom('.alert-info').exists('the portal is named instead');
+    assert.dom('.alert-info a').hasAttribute('href', 'https://portal.example.org/submissions/NSUB000001');
+
+    // A link from before, or one typed in, reaches the upload page all the same.
+    await visit('/home/submission/NSUB000001/upload');
+
+    assert.dom('input[type="file"]').doesNotExist('there is nothing to upload with');
+    assert.dom('.alert-info a').hasAttribute('href', 'https://portal.example.org/submissions/NSUB000001');
+  });
+
+  test('a submission the portal made, with no address for the portal', async function (assert) {
+    portalManaged = true;
+
+    await visit('/home/submission/NSUB000001');
+
+    assert.dom('a[href*="/home/submission/NSUB000001/upload"]').doesNotExist('no re-upload here');
+    assert.dom('.alert-info').exists('the portal is named');
+    assert.dom('.alert-info a').doesNotExist('but not linked to');
+  });
+
+  test('a submission made here can be re-uploaded to', async function (assert) {
+    await visit('/home/submission/NSUB000001');
+
+    assert.dom('a[href*="/home/submission/NSUB000001/upload"]').exists();
+    assert.dom('.alert-info').doesNotExist();
   });
 
   test('adding the half of a pair that changed', async function (assert) {

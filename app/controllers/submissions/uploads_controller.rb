@@ -7,6 +7,13 @@ class Submissions::UploadsController < ApplicationController
       return
     end
 
+    # The portal keeps the versions of the ones it made, and would never hear of
+    # files sent here.
+    if submission.portal_managed? && !bearer_authenticated?
+      head :forbidden
+      return
+    end
+
     upload = submission.uploads.create!(
       via: Upload.build_via(user: current_user, **upload_params.to_h.symbolize_keys)
     )
@@ -16,8 +23,11 @@ class Submissions::UploadsController < ApplicationController
     CopySubmissionFilesJob.perform_later upload
     UpdateWorkingListJob.perform_later   submission
 
-    SubmissionMailer.with(submission:).submitter_confirmation.deliver_later
-    SubmissionMailer.with(submission:).curator_notification.deliver_later
+    # The portal writes to them itself.
+    unless submission.portal_managed?
+      SubmissionMailer.with(submission:).submitter_confirmation.deliver_later
+      SubmissionMailer.with(submission:).curator_notification.deliver_later
+    end
 
     head :no_content
   end

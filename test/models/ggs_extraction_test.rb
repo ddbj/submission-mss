@@ -261,6 +261,155 @@ class GgsExtractionTest < ActiveSupport::TestCase
     assert_equal :invalid_job_id, error.id
   end
 
+  def write_job(job_id)
+    dir = output_dir(job_id)
+
+    dir.join('foo.ann').write "COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n"
+    dir.join('foo.fa').write  ">CLN01\nACGT\n"
+
+    dir
+  end
+
+  def owner_file(job_id)
+    output_dir(job_id).parent.join('.ggs-owner')
+  end
+
+  test 'owner_file_matches' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id
+    owner_file(job_id).write "alice\n"
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id], require_owner: true)
+    extraction.prepare_files
+
+    assert_equal %w[foo.ann foo.fa], extraction.files.order(:name).map(&:name)
+  end
+
+  test 'owner_file_mismatch_rejects' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id
+    owner_file(job_id).write 'bob'
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id], require_owner: true)
+
+    error = assert_raises(Extraction::Error) { extraction.prepare_files }
+
+    assert_equal :not_owner,        error.id
+    assert_equal({job_id:},         error.data)
+    assert_equal 0,                 extraction.files.count
+    assert_not extraction.working_dir.join(job_id).exist?
+  end
+
+  test 'owner_file_is_case_sensitive' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id
+    owner_file(job_id).write 'Alice'
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id], require_owner: true)
+
+    error = assert_raises(Extraction::Error) { extraction.prepare_files }
+
+    assert_equal :not_owner, error.id
+  end
+
+  test 'owner_file_with_invalid_utf8_rejects' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id
+    owner_file(job_id).binwrite "alice\xff".b
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id], require_owner: true)
+
+    error = assert_raises(Extraction::Error) { extraction.prepare_files }
+
+    assert_equal :not_owner, error.id
+  end
+
+  test 'owner_file_unreadable_fails_closed' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id
+    owner_file(job_id).write 'alice'
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id], require_owner: true)
+    open       = File.method(:open)
+
+    # Root in the test container reads past a chmod, so the refusal is staged.
+    File.stub :open, ->(path, *args, **kwargs, &block) {
+      raise Errno::EACCES, path.to_s if path.to_s == owner_file(job_id).to_s
+
+      open.call(path, *args, **kwargs, &block)
+    } do
+      error = assert_raises(Extraction::Error) { extraction.prepare_files }
+
+      assert_equal :not_owner, error.id
+    end
+
+    assert_equal 0, extraction.files.count
+  end
+
+  test 'no_owner_file_is_allowed' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id], require_owner: true)
+    extraction.prepare_files
+
+    assert_equal %w[foo.ann foo.fa], extraction.files.order(:name).map(&:name)
+  end
+
+  test 'symlink_owner_file_rejects' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    dir    = write_job(job_id)
+    target = dir.parent.join('owner-target').tap { _1.write 'alice' }
+
+    owner_file(job_id).make_symlink target
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id], require_owner: true)
+
+    error = assert_raises(Extraction::Error) { extraction.prepare_files }
+
+    assert_equal :not_owner, error.id
+  end
+
+  test 'non_regular_owner_file_rejects' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id
+    owner_file(job_id).mkpath
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id], require_owner: true)
+
+    error = assert_raises(Extraction::Error) { extraction.prepare_files }
+
+    assert_equal :not_owner, error.id
+  end
+
+  test 'oversize_owner_file_rejects' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id
+    owner_file(job_id).write "alice#{' ' * 252}"
+
+    assert_equal 257, owner_file(job_id).size
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id], require_owner: true)
+
+    error = assert_raises(Extraction::Error) { extraction.prepare_files }
+
+    assert_equal :not_owner, error.id
+  end
+
+  test 'session_extraction_ignores_owner_file' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id
+    owner_file(job_id).write 'bob'
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id])
+
+    assert_not extraction.require_owner
+
+    extraction.prepare_files
+
+    assert_equal %w[foo.ann foo.fa], extraction.files.order(:name).map(&:name)
+  end
+
   test 'rejects blank job IDs without raising' do
     extraction = GgsExtraction.new(user: users(:alice), ggs_job_ids: nil)
 

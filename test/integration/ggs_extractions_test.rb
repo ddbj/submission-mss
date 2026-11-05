@@ -11,6 +11,7 @@ class GgsExtractionsTest < ActionDispatch::IntegrationTest
     }, as: :json
 
     assert_conform_schema 201
+    assert_not GgsExtraction.find(response.parsed_body['id']).require_owner
   end
 
   test 'show' do

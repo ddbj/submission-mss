@@ -26,14 +26,16 @@ Neither SeaweedFS nor Keycloak is started by `bin/dev` — the application talks
 to instances running outside it (in development, the host's SeaweedFS and
 cloakman's Keycloak). Point it at them through the environment:
 
-| Variable                 | Default                 | Notes                                  |
-| ------------------------ | ----------------------- | -------------------------------------- |
-| `KEYCLOAK_URL`           | `http://localhost:8080` | Base URL of the Keycloak instance      |
-| `KEYCLOAK_CLIENT_SECRET` | —                       | Secret of the `mssform` client         |
-| `SEAWEEDFS_ACCESS_KEY`   | —                       | Access key of the `mssform` identity   |
-| `SEAWEEDFS_SECRET_KEY`   | —                       | Secret key of the `mssform` identity   |
-| `APP_URL`                | `http://localhost:3000` | Origin of the Rails API                |
-| `WEB_URL`                | `http://localhost:4200` | Origin of the Ember SPA                |
+| Variable                         | Default                 | Notes                                                                                                                                                                      |
+| -------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `KEYCLOAK_URL`                   | `http://localhost:8080` | Base URL of the Keycloak instance                                                                                                                                          |
+| `KEYCLOAK_CLIENT_SECRET`         | —                       | Secret of the `mssform` client                                                                                                                                             |
+| `KEYCLOAK_BEARER_CLIENT_IDS`     | — (empty: off)          | Comma-separated Keycloak client IDs whose access tokens may call the API as `Authorization: Bearer`; the token's `aud` must contain `mssform`                              |
+| `SEAWEEDFS_ACCESS_KEY`           | —                       | Access key of the `mssform` identity                                                                                                                                       |
+| `SEAWEEDFS_SECRET_KEY`           | —                       | Secret key of the `mssform` identity                                                                                                                                       |
+| `APP_URL`                        | `http://localhost:3000` | Origin of the Rails API                                                                                                                                                    |
+| `WEB_URL`                        | `http://localhost:4200` | Origin of the Ember SPA                                                                                                                                                    |
+| `PORTAL_SUBMISSION_URL_TEMPLATE` | — (empty: no link)      | Where the GGS submission portal keeps a submission it made, `https://` only; `{mass_id}` is filled in. Our pages send the submitter there instead of to the re-upload page |
 
 ### SeaweedFS
 
