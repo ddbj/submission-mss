@@ -1,4 +1,6 @@
 class Submissions::UploadsController < ApplicationController
+  allow_bearer only: :create
+
   def create
     submission = current_user.submissions.find_by!(mass_id: params[:submission_mass_id])
 

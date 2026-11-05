@@ -1,4 +1,6 @@
 class SubmissionsController < ApplicationController
+  allow_bearer only: %i[create show]
+
   def index
     @submissions         = current_user.submissions.order(id: :desc)
     @working_list_states = WorkingList.instance.collect_statuses_and_accessions(current_user.submissions.map(&:mass_id))

@@ -15,6 +15,8 @@ class ActiveSupport::TestCase
 
   fixtures :all
 
+  include BearerTokenHelper
+
   setup do
     Rails.root.glob('tmp/storage/*', &:rmtree)
   end

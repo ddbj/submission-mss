@@ -8,13 +8,18 @@ servers:
   - url: https://mss.ddbj.nig.ac.jp/api
   - url: https://mss-staging.ddbj.nig.ac.jp/api
 
+# BearerAuth only where an operation says so; see its description.
 security:
-  - BearerAuth: []
+  - CookieAuth: []
 
 paths:
   /me:
     get:
       description: Get current user information.
+
+      security:
+        - CookieAuth: []
+        - BearerAuth: []
 
       tags:
         - Authentication
@@ -88,6 +93,10 @@ paths:
 
     post:
       description: Create a new submission.
+
+      security:
+        - CookieAuth: []
+        - BearerAuth: []
 
       tags:
         - Submissions
@@ -305,6 +314,10 @@ paths:
     get:
       description: Get a submission.
 
+      security:
+        - CookieAuth: []
+        - BearerAuth: []
+
       tags:
         - Submissions
 
@@ -343,6 +356,10 @@ paths:
   /submissions/{mass_id}/uploads:
     post:
       description: Add an upload to an existing submission.
+
+      security:
+        - CookieAuth: []
+        - BearerAuth: []
 
       tags:
         - Submissions
@@ -526,6 +543,10 @@ paths:
     post:
       description: Create a GGS extraction.
 
+      security:
+        - CookieAuth: []
+        - BearerAuth: []
+
       tags:
         - Extractions
 
@@ -565,6 +586,10 @@ paths:
   /ggs_extractions/{id}:
     get:
       description: Get a GGS extraction.
+
+      security:
+        - CookieAuth: []
+        - BearerAuth: []
 
       tags:
         - Extractions
@@ -745,6 +770,7 @@ components:
             - invalid_job_id
             - failed_to_fetch
             - directory_not_found
+            - not_owner
             - duplicate_file_name
             - duplicate_file_name_across_jobs
             - invalid_archive
@@ -1008,6 +1034,22 @@ components:
       description: Invalid parameter or payload was specified.
 
   securitySchemes:
+    CookieAuth:
+      type: apiKey
+      in: cookie
+      name: _mssform
+      description: |
+        The session our frontend signs in to. Every request that writes must
+        also send the csrf_token from GET /me as X-CSRF-Token.
+
     BearerAuth:
       type: http
       scheme: bearer
+      bearerFormat: JWT
+      description: |
+        An access token the realm issued to another trusted client, on behalf of
+        the user it names, carrying the dedicated client scope (mss-submission).
+        Accepted only by the operations that list it (and by POST
+        /direct_uploads, which Active Storage describes); any other operation
+        answers a request carrying one with 401, whatever cookie comes with it.
+        No session cookie is read or issued and no X-CSRF-Token is required.

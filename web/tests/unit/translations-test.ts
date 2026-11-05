@@ -44,6 +44,7 @@ module('Unit | translations', function (hooks) {
       invalid_job_id: true,
       failed_to_fetch: true,
       directory_not_found: true,
+      not_owner: true,
       duplicate_file_name: true,
       duplicate_file_name_across_jobs: true,
       invalid_archive: true,

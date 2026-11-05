@@ -261,6 +261,126 @@ class GgsExtractionTest < ActiveSupport::TestCase
     assert_equal :invalid_job_id, error.id
   end
 
+  def write_job(job_id, owner: nil)
+    dir = output_dir(job_id)
+
+    dir.join('foo.ann').write "COMMON\tSUBMITTER\t\tcontact\tAlice Liddell\n"
+    dir.join('foo.fa').write  ">CLN01\nACGT\n"
+
+    owner_file(job_id).write owner if owner
+
+    dir
+  end
+
+  def owner_file(job_id)
+    Pathname.new(Rails.application.config_for(:app).ggs_owner_template!.gsub('{job_id}', job_id))
+  end
+
+  test 'prepare_files imports a job whose .ggs-owner names the user' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id, owner: "alice\n"
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id])
+    extraction.prepare_files
+
+    assert_equal %w[foo.ann foo.fa], extraction.files.order(:name).map(&:name)
+  end
+
+  test 'prepare_files rejects a job whose .ggs-owner names someone else' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id, owner: 'bob'
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id])
+
+    error = assert_raises(Extraction::Error) { extraction.prepare_files }
+
+    assert_equal :not_owner, error.id
+    assert_equal({job_id:},  error.data)
+    assert_equal 0,          extraction.files.count
+    assert_not extraction.working_dir.join(job_id).exist?
+  end
+
+  test 'prepare_files compares .ggs-owner case-sensitively' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id, owner: 'Alice'
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id])
+
+    error = assert_raises(Extraction::Error) { extraction.prepare_files }
+
+    assert_equal :not_owner, error.id
+  end
+
+  test 'prepare_files rejects a .ggs-owner that is not valid UTF-8' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id
+    owner_file(job_id).binwrite "alice\xff".b
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id])
+
+    error = assert_raises(Extraction::Error) { extraction.prepare_files }
+
+    assert_equal :not_owner, error.id
+  end
+
+  test 'prepare_files rejects a .ggs-owner that is not a regular file' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id
+    owner_file(job_id).mkpath
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id])
+
+    error = assert_raises(Extraction::Error) { extraction.prepare_files }
+
+    assert_equal :not_owner, error.id
+  end
+
+  test 'prepare_files rejects an oversized .ggs-owner' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id, owner: "alice#{' ' * 252}"
+
+    assert_equal 257, owner_file(job_id).size
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id])
+
+    error = assert_raises(Extraction::Error) { extraction.prepare_files }
+
+    assert_equal :not_owner, error.id
+  end
+
+  # Transitional: GGS writes .ggs-owner only for jobs made through the portal
+  # for now. See GgsExtraction#owner_matches?.
+  test 'prepare_files imports a job without .ggs-owner' do
+    job_id = '01234567-89ab-cdef-0000-000000000001'
+    write_job job_id
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job_id])
+    extraction.prepare_files
+
+    assert_equal %w[foo.ann foo.fa], extraction.files.order(:name).map(&:name)
+  end
+
+  test 'prepare_files leaves the earlier job on disk, but not in the database, when a later one is not the user\'s' do
+    job1 = '01234567-89ab-cdef-0000-000000000001'
+    job2 = '01234567-89ab-cdef-0000-000000000002'
+
+    write_job job1, owner: 'alice'
+    write_job job2, owner: 'bob'
+
+    extraction = GgsExtraction.create!(user: users(:alice), ggs_job_ids: [job1, job2])
+
+    error = assert_raises(Extraction::Error) { extraction.prepare_files }
+
+    assert_equal :not_owner,  error.id
+    assert_equal({job_id: job2}, error.data)
+
+    # The transaction takes back the records; the copies are ExtractMetadataJob's
+    # to discard (see its test).
+    assert_equal 0, extraction.files.count
+    assert_equal [job1], extraction.working_dir.children.map { it.basename.to_s }
+    assert_equal %w[foo.ann foo.fa], extraction.working_dir.join(job1).children.map { it.basename.to_s }.sort
+  end
+
   test 'rejects blank job IDs without raising' do
     extraction = GgsExtraction.new(user: users(:alice), ggs_job_ids: nil)
 

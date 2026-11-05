@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class SessionsTest < ActionDispatch::IntegrationTest
-  ISSUER = URI.join(Rails.application.config_for(:keycloak).url!, '/realms/master').to_s
+  ISSUER = Rails.application.config_for(:keycloak).issuer!
 
   test 'signing in leaves the credential in the cookie and nowhere else' do
     visit_provider_callback users(:alice)
@@ -127,6 +127,34 @@ class SessionsTest < ActionDispatch::IntegrationTest
     get '/api/me'
 
     assert_conform_schema 401
+  end
+
+  test 'signing in without an address keeps the one we have' do
+    visit_provider_callback User.new(uid: users(:alice).uid, email: nil)
+
+    get '/api/me'
+
+    assert_conform_schema 200
+    assert_equal 'alice@example.com', users(:alice).reload.email
+  end
+
+  test 'signing in for the first time without an address signs nobody in' do
+    assert_error_reported User::IncompleteClaims do
+      visit_provider_callback User.new(uid: 'newcomer', email: nil)
+    end
+
+    assert_equal Rails.application.config_for(:app).web_url!, response.headers['Location']
+    assert_nil User.find_by(uid: 'newcomer')
+
+    get '/api/me'
+
+    assert_conform_schema 401
+  end
+
+  test 'signing in brings the address up to date' do
+    visit_provider_callback User.new(uid: users(:alice).uid, email: 'alice@elsewhere.example.com')
+
+    assert_equal 'alice@elsewhere.example.com', users(:alice).reload.email
   end
 
   test 'signing out' do

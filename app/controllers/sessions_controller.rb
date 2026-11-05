@@ -6,10 +6,13 @@ class SessionsController < ApplicationController
   skip_forgery_protection only: :failure
 
   def create
-    uid  = request.env.dig('omniauth.auth', 'extra', 'raw_info', 'preferred_username')
-    user = User.find_or_initialize_by(uid:)
+    uid   = request.env.dig('omniauth.auth', 'extra', 'raw_info', 'preferred_username')
+    email = request.env.dig('omniauth.auth', 'info', 'email')
+    user  = User.from_claims!(uid:, email:)
 
-    user.update! email: request.env.dig('omniauth.auth', 'info', 'email')
+    # The realm is where submitters keep their address, so signing in brings
+    # ours up to date -- when it has one to give.
+    user.update!(email:) if email.present?
 
     # Whatever the visitor arrived holding, they leave with a session of their
     # own, so nothing carried in from before this login can be spent after it.
@@ -17,6 +20,13 @@ class SessionsController < ApplicationController
 
     session[:user_id] = user.id
 
+    redirect_to_frontend
+  rescue User::IncompleteClaims => e
+    # An account we cannot make a user of: there would be nobody to write to
+    # about a submission. Whoever was signed in before is not left signed in.
+    Rails.error.report e, severity: :warning
+
+    reset_session
     redirect_to_frontend
   end
 

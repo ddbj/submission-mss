@@ -610,7 +610,7 @@ export interface components {
         ExtractionState: "pending" | "fulfilled" | "rejected";
         ExtractionError: {
             /** @enum {string} */
-            id: "invalid_job_id" | "failed_to_fetch" | "directory_not_found" | "duplicate_file_name" | "duplicate_file_name_across_jobs" | "invalid_archive" | "broken_symlink" | "unreadable_file" | "unexpected";
+            id: "invalid_job_id" | "failed_to_fetch" | "directory_not_found" | "not_owner" | "duplicate_file_name" | "duplicate_file_name_across_jobs" | "invalid_archive" | "broken_symlink" | "unreadable_file" | "unexpected";
             job_id?: string;
             other_job_id?: string;
             file?: string;

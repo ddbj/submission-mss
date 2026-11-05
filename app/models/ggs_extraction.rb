@@ -2,6 +2,8 @@ class GgsExtraction < ApplicationRecord
   include Extraction
   include ArchiveExtraction
 
+  OWNER_FILE_MAX_BYTES = 256
+
   validates :ggs_job_ids, presence: true
 
   def prepare_files
@@ -20,6 +22,7 @@ class GgsExtraction < ApplicationRecord
     src_dir = job_output_dir(job_id)
 
     raise Extraction::Error.new(:directory_not_found, job_id:) unless src_dir.directory?
+    raise Extraction::Error.new(:not_owner, job_id:)           unless owner_matches?(job_id)
 
     # Corrected files live under output/fixed/ and take priority over the same-named
     # files in output/. Pick a single source per file name (fixed winning, unmatched
@@ -56,6 +59,22 @@ class GgsExtraction < ApplicationRecord
     end
   end
 
+  # GGS leaves the uid of whoever ran the job in .ggs-owner, outside output/ so
+  # that it is never copied. Whoever imports the job has to be that user, however
+  # they signed in: the job ID alone is no proof of having run it.
+  #
+  # TRANSITIONAL: a job without the file is let through. GGS writes it only for
+  # jobs made through the Nucleotide submission portal for now; once it writes it for every
+  # job run by a logged-in user, a follow-up change (#1773) removes
+  # this allowance and a missing file is refused like a mismatch.
+  def owner_matches?(job_id)
+    path = template_path(:ggs_owner_template, job_id)
+
+    return true unless path.exist?
+
+    path.file? && path.size <= OWNER_FILE_MAX_BYTES && path.read.scrub.strip == user.uid
+  end
+
   # The same file can be plain in output/ and compressed in output/fixed/, or
   # the other way round. Key both on the name the import would store, so the
   # two are recognised as one file instead of colliding once expanded.
@@ -67,10 +86,13 @@ class GgsExtraction < ApplicationRecord
   end
 
   def job_output_dir(job_id)
-    template = Rails.application.config_for(:app).ggs_jobs_dir_template!
-    path     = template.gsub('{job_id}', job_id)
+    template_path(:ggs_jobs_dir_template, job_id)
+  end
 
-    raise "malformed directory path: #{path}" unless path == File.expand_path(path)
+  def template_path(key, job_id)
+    path = Rails.application.config_for(:app).fetch(key).gsub('{job_id}', job_id)
+
+    raise "malformed path: #{path}" unless path == File.expand_path(path)
 
     Pathname.new(path)
   end
