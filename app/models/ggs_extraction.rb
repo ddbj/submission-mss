@@ -65,7 +65,7 @@ class GgsExtraction < ApplicationRecord
   #
   # TRANSITIONAL: a job without the file is let through. GGS writes it only for
   # jobs made through the Nucleotide submission portal for now; once it writes it for every
-  # job run by a logged-in user, a follow-up change (tracked in an issue) removes
+  # job run by a logged-in user, a follow-up change (#1773) removes
   # this allowance and a missing file is refused like a mismatch.
   def owner_matches?(job_id)
     path = template_path(:ggs_owner_template, job_id)

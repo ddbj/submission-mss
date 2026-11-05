@@ -198,7 +198,7 @@ however they signed in; otherwise the extraction is rejected with `not_owner`.
 **Transitional:** a job without `.ggs-owner` is still imported. GGS currently
 writes the file only for jobs created through the Nucleotide submission portal; once it
 writes it for every job run by a logged-in user, a follow-up change will remove
-this allowance and refuse jobs without the file (tracked in an issue).
+this allowance and refuse jobs without the file (#1773).
 
 ## Deployment
 
