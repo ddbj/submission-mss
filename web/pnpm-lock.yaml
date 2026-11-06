@@ -353,8 +353,8 @@ importers:
         specifier: ^4.12.0
         version: 4.12.0
       js-yaml:
-        specifier: ^5.4.3
-        version: 5.4.3
+        specifier: ^5.5.0
+        version: 5.5.0
       jwt-decode:
         specifier: ^4.0.0
         version: 4.0.0
@@ -4422,10 +4422,6 @@ packages:
 
   js-yaml@4.3.2:
     resolution: {integrity: sha512-SFNOvSJ+Dgf/9An904Yx+CgSlIPCkIpao4qo51lpee25TIRejdH3rhR4EZMGoNx3/TP3O+wzWuiTFl4sqbltzA==}
-    hasBin: true
-
-  js-yaml@5.4.3:
-    resolution: {integrity: sha512-yzzNtgczwgoVHNigCyKTXcQJU4Y8t/ikU4UxXW0BvrLfHTGWZhsNcOT2s/a7vn81/4KqVnNmHjaUEPlvWnNwVw==}
     hasBin: true
 
   js-yaml@5.5.0:
@@ -10471,7 +10467,7 @@ snapshots:
       globals: 15.15.0
       globrex: 0.1.2
       ignore: 5.3.2
-      js-yaml: 5.4.3
+      js-yaml: 5.5.0
       semver: 7.8.5
     optionalDependencies:
       typescript: 6.0.3
@@ -11552,10 +11548,6 @@ snapshots:
   js-tokens@4.0.0: {}
 
   js-yaml@4.3.2:
-    dependencies:
-      argparse: 2.0.1
-
-  js-yaml@5.4.3:
     dependencies:
       argparse: 2.0.1
 
@@ -13187,7 +13179,7 @@ snapshots:
       express: 5.3.0(supports-color@10.2.2)
       glob: 13.0.6
       httpxy: 0.5.5
-      js-yaml: 5.4.3
+      js-yaml: 5.5.0
       lodash: 4.18.1
       minimatch: 10.2.6
       mustache: 4.2.0
