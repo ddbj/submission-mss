@@ -46,7 +46,7 @@
     "@glint/ember-tsc": "^1.14.3",
     "@glint/template": "^1.11.1",
     "@popperjs/core": "^2.11.8",
-    "@primer/octicons": "^19.40.0",
+    "@primer/octicons": "^19.42.0",
     "@rails/activestorage": "^8.1.400",
     "@rollup/plugin-babel": "^7.1.0",
     "@sentry/ember": "^11.10.0",

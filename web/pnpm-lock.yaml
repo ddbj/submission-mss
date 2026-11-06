@@ -224,8 +224,8 @@ importers:
         specifier: ^2.11.8
         version: 2.11.8
       '@primer/octicons':
-        specifier: ^19.40.0
-        version: 19.40.0
+        specifier: ^19.42.0
+        version: 19.42.0
       '@rails/activestorage':
         specifier: ^8.1.400
         version: 8.1.400
@@ -1686,8 +1686,8 @@ packages:
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
 
-  '@primer/octicons@19.40.0':
-    resolution: {integrity: sha512-IHzIw98WUf+APnzjryvS1MT9MDlqmHqn5JG1Mi/SlrGScXofERS3lS/hatVgReCoDYvHbeh2E5S/1MGWldmtoQ==}
+  '@primer/octicons@19.42.0':
+    resolution: {integrity: sha512-MEcHxVxNHu1I2Ndk5Mcwp7tfBiDk/EpytDJgKOfE2ldqIczWucVrZNeNU4wtEN5mnNudZ0YL5G0spax3bSMT4w==}
 
   '@rails/activestorage@8.1.400':
     resolution: {integrity: sha512-ScpkkHXTQ7QByvzLbnrnubpsWRKhlu08kXyRhSV+Hh1s1X43lv5T0PFLhXAvmqrIcq8nQ2up8iyuCmIzacPDDw==}
@@ -8155,7 +8155,7 @@ snapshots:
 
   '@popperjs/core@2.11.8': {}
 
-  '@primer/octicons@19.40.0':
+  '@primer/octicons@19.42.0':
     dependencies:
       object-assign: 4.1.1
 
