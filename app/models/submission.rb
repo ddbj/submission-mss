@@ -3,7 +3,7 @@ class Submission < ApplicationRecord
 
   belongs_to :user
 
-  has_many :uploads,        dependent: :destroy
+  has_many :uploads, -> { order(:id) }, dependent: :destroy
   has_one  :contact_person, dependent: :destroy
   has_many :other_people,   dependent: :destroy
 

@@ -19,8 +19,10 @@ class UpdateWorkingListJobTest < ActiveJob::TestCase
       )
     )
 
-    ['2022-01-02 12:34:56', '2022-01-05 09:00:00'].each do |created_at|
-      Upload.create!(submission: @submission, via: WebuiUpload.new, created_at:)
+    # Inserted out of order, because the rows only came back backwards every so
+    # often when nothing asked for an order.
+    {2 => '2022-01-05 09:00:00', 1 => '2022-01-02 12:34:56'}.each do |id, created_at|
+      Upload.create!(id:, submission: @submission, via: WebuiUpload.new, created_at:)
     end
 
     stub_request(:post, 'https://www.googleapis.com/oauth2/v4/token').to_return(
