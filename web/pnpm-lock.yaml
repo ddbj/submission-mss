@@ -362,8 +362,8 @@ importers:
         specifier: ^2.15.0
         version: 2.15.0(@types/node@26.6.5)(typescript@6.0.3)
       openapi-msw:
-        specifier: ^2.1.0
-        version: 2.1.0(msw@2.15.0(@types/node@26.6.5)(typescript@6.0.3))
+        specifier: ^2.1.1
+        version: 2.1.1(msw@2.15.0(@types/node@26.6.5)(typescript@6.0.3))
       outdent:
         specifier: ^0.8.0
         version: 0.8.0
@@ -5010,8 +5010,8 @@ packages:
     resolution: {integrity: sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==}
     engines: {node: '>=6'}
 
-  openapi-msw@2.1.0:
-    resolution: {integrity: sha512-kuaz8BM024tVNZLEvJ9QCoasdcLohlfLk+P4VUZpdBDwQItsmSN+WLpHwVffylLscyB5eXqpaRfv4LuMmMUIIQ==}
+  openapi-msw@2.1.1:
+    resolution: {integrity: sha512-i1VM4ZbM5r0bS2w/sVv0MuUjfRw+ub68LKO+oqUeVC9QVTjghytDGy+GVEFrb3FUV7l5BwAVbpiqlWjZ9RIALw==}
     peerDependencies:
       msw: ^2.10.5 || ^3.0.0
 
@@ -12086,7 +12086,7 @@ snapshots:
     dependencies:
       mimic-fn: 2.1.0
 
-  openapi-msw@2.1.0(msw@2.15.0(@types/node@26.6.5)(typescript@6.0.3)):
+  openapi-msw@2.1.1(msw@2.15.0(@types/node@26.6.5)(typescript@6.0.3)):
     dependencies:
       msw: 2.15.0(@types/node@26.6.5)(typescript@6.0.3)
 
